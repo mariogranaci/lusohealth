@@ -56,3 +56,28 @@ nav a {
 .nav-li-spacer{
     width: 25px;
 }
+
+
+.dropdown-content.active {
+  display: block;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 75px;
+  left: auto;
+  width: auto;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  z-index: 1;
+}
+
+  
+  .dropdown-menu a {  
+    display: block;
+    padding: 10px;
+    color: #333;
+    text-decoration: none;
+  }

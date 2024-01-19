@@ -5,13 +5,14 @@
       </a>
 </div>
     <ul>
+      
 
       <li>
-        <a routerLink=" " class="nav-link" routerLinkActive="active " (click)="toggleDropdown('marcacoes')">
+        <a routerLink="" class="nav-link" routerLinkActive="active" (click)="toggleDropdown('marcacoes')">
           <img class="menu-icons" src="assets/images/NavBar/doctor-icon.png" alt="Ícone Marcações" />
           <div class="nav-text"> Marcações </div>
         </a>
-        <ul class="dropdown-content" *ngIf="isDropdownOpen">
+        <ul class="dropdown-content" *ngIf="isDropdownOpen && activeDropdown === 'marcacoes'">
           <li class="dropdown-menu">
             <a routerLink="" class="nav-link" routerLinkActive="active">Mapa</a>
           </li>
@@ -21,11 +22,11 @@
       <div class="nav-li-spacer"></div>
 
       <li>
-        <a routerLink=" " class="nav-link" routerLinkActive="active" (click)="toggleDropdown('agenda')">
+        <a routerLink="" class="nav-link" routerLinkActive="active" (click)="toggleDropdown('agenda')">
           <img class="menu-icons" src="assets/images/NavBar/agenda-icon.png" alt="Ícone Agenda" />
-          <div class="nav-text">  Agenda </div>
+          <div class="nav-text"> Agenda </div>
         </a>
-        <ul class="dropdown-content" *ngIf="isDropdownOpen">
+        <ul class="dropdown-content" *ngIf="isDropdownOpen && activeDropdown === 'agenda'">
           <li class="dropdown-menu">
             <a routerLink="" class="nav-link" routerLinkActive="active">Histórico</a>
           </li>
@@ -34,18 +35,20 @@
 
       <div class="nav-li-spacer"></div>
 
-
       <li>
-        <a routerLink=" " class="nav-link" routerLinkActive="active" (click)="toggleDropdown('perfil')">
+        <a routerLink="" class="nav-link" routerLinkActive="active" (click)="toggleDropdown('perfil')">
           <img class="menu-icons" src="assets/images/NavBar/user-icon.png" alt="Ícone Perfil" />
           <div class="nav-text"> Perfil </div>
         </a>
-        <ul class="dropdown-content" *ngIf="isDropdownOpen">
+        <ul class="dropdown-content" *ngIf="isDropdownOpen && activeDropdown === 'perfil'">
           <li class="dropdown-menu">
             <a routerLink="" class="nav-link" routerLinkActive="active">Terminar Sessão</a>
           </li>
         </ul>
       </li>
+
+  
+
 
     </ul>
   </nav>

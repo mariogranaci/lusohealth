@@ -1,49 +1,53 @@
-  <h2>Registo</h2>
+<h2>Registo</h2>
 
-  <form>
-  
-    <label for="nome">Nome:</label>
-    <input type="text" id="nome" name="nome" required>
+<form>
+  <div class="form-row">
 
-  
-    <label for="apelido">Apelido:</label>
-    <input type="text" id="apelido" name="apelido" required>
+    <div class="column-left">
+      <label for="nome">Nome:</label>
+      <input type="text" id="nome" name="nome" required>
 
-  
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" required>
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required>
 
-  
-    <label for="telemovel">Telemóvel:</label>
-    <input type="tel" id="telemovel" name="telemovel" required>
+      <label for="dataNascimento">Data de Nascimento:</label>
+      <input type="date" id="dataNascimento" name="dataNascimento" required>
 
-  
-    <label for="dataNascimento">Data de Nascimento:</label>
-    <input type="date" id="dataNascimento" name="dataNascimento" required>
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required>
 
-  
-    <label for="nif">NIF:</label>
-    <input type="text" id="nif" name="nif" pattern="[0-9]{9}" required>
-    
+      <div class="gender">
+        <label >Género:</label>
+        <label ><input type="radio" name="sexo" value="masculino"> Masculino</label>
+        <label ><input type="radio" name="sexo" value="feminino"> Feminino</label>
+      </div>
 
-  
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required>
+    </div>
 
-  
-    <label for="confirmPassword">Confirmar Password:</label>
-    <input type="password" id="confirmPassword" name="confirmPassword" required>
+    <div class="column-right">
+      <label for="apelido">Apelido:</label>
+      <input type="text" id="apelido" name="apelido" required>
 
-  
-    <label>Género:</label>
-    <label><input type="radio" name="sexo" value="masculino"> Masculino</label>
-    <label><input type="radio" name="sexo" value="feminino"> Feminino</label>
+      <label for="telemovel">Telemóvel:</label>
+      <input type="tel" id="telemovel" name="telemovel" required>
 
-  
-    <label>Tipo de Conta:</label>
-    <label><input type="radio" name="tipoConta" value="paciente"> Paciente</label>
-    <label><input type="radio" name="tipoConta" value="profissionalSaude"> Profissional de Saúde</label>
+      <label for="nif">NIF:</label>
+      <input type="text" id="nif" name="nif" pattern="[0-9]{9}" required>
 
-  
+      <label for="confirmPassword">Confirmar Password:</label>
+      <input type="password" id="confirmPassword" name="confirmPassword" required>
+
+      <div class="type-acount">
+        <label >Tipo de Conta:</label>
+        <label for="type-radio-pacient"><input id="type-radio-pacient" type="radio" name="tipoConta" value="paciente"> Paciente</label>
+        <label for="type-radio-professional"><input id="type-radio-professional" type="radio" name="tipoConta" value="profissionalSaude"> Profissional de Saúde</label>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="submit-button">
     <button type="submit">Registar</button>
-  </form>
+  </div>
+
+</form>

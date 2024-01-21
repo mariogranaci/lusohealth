@@ -7,13 +7,15 @@ import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { RecuperarPassComponent } from './recuperar-pass/recuperar-pass.component';
 import { AlterarPassComponent } from './alterar-pass/alterar-pass.component';
+import { RecuperarContaComponent } from './recuperar-conta/recuperar-conta.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
     RecuperarPassComponent,
-    AlterarPassComponent
+    AlterarPassComponent,
+    RecuperarContaComponent
   ],
   imports: [
     BrowserModule, HttpClientModule,

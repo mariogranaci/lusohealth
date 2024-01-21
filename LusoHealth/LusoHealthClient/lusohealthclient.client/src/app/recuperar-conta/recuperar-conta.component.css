@@ -1,0 +1,51 @@
+#password-reset-container {
+  width: 22%;
+  height: 500px;
+  border: 1px solid black;
+  text-align: center;
+  margin: 80px auto;
+  border-radius: 5px;
+  background-color: #ECEEF0;
+}
+
+h2 {
+  margin-bottom: 10px;
+}
+
+hr {
+  margin: 15px 0;
+  border: none;
+  border-top: 1px solid black;
+}
+
+img {
+  max-width: 200px;
+  height: auto;
+  margin-bottom: 15px;
+}
+
+input {
+  width: 85%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 0;
+  font-size: 20px;
+  margin-top: 20px;
+}
+
+button {
+  background-color: #1875e7;
+  color: white;
+  padding: 10px;
+  border: none;
+  margin: 50px;
+  cursor: pointer;
+  width: 51%;
+  border-radius: 5px;
+  font-size: 20px;
+  transition: background-color 0.3s ease;
+}
+
+  button:hover {
+    background-color: #1b69c8;
+  }

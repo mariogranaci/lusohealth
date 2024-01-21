@@ -1,4 +1,4 @@
-<h2>Registo</h2>
+<h1>Registo</h1>
 
 <form>
   <div class="form-row">
@@ -18,8 +18,8 @@
 
       <div class="gender">
         <label >Género:</label>
-        <label ><input type="radio" name="sexo" value="masculino"> Masculino</label>
-        <label ><input type="radio" name="sexo" value="feminino"> Feminino</label>
+        <label for="male" class="radio-label"><input type="radio" name="sexo" value="masculino" id="male"> Masculino</label>
+        <label for="female" class="radio-label"><input type="radio" name="sexo" value="feminino" id="female"> Feminino</label>
       </div>
 
     </div>
@@ -37,17 +37,19 @@
       <label for="confirmPassword">Confirmar Password:</label>
       <input type="password" id="confirmPassword" name="confirmPassword" required>
 
+
       <div class="type-acount">
-        <label >Tipo de Conta:</label>
-        <label for="type-radio-pacient"><input id="type-radio-pacient" type="radio" name="tipoConta" value="paciente"> Paciente</label>
-        <label for="type-radio-professional"><input id="type-radio-professional" type="radio" name="tipoConta" value="profissionalSaude"> Profissional de Saúde</label>
+        <label>Tipo de Conta:</label>
+        <label for="type-radio-pacient" class="radio-label"><input id="type-radio-pacient" type="radio" name="tipoConta" value="paciente">Paciente</label>
+        <label for="type-radio-professional" class="radio-label"><input id="type-radio-professional" type="radio" name="tipoConta"value="profissionalSaude"> Profissional de Saúde</label>
       </div>
 
     </div>
   </div>
 
   <div id="submit-button">
-    <button type="submit">Registar</button>
+    <button type="submit" class="btn-regist">Registar</button>
+     <p id="btn-text"><a routerLink="" class="nav-link" routerLinkActive="active" > Já Possui Conta? <b>Login</b></a></p>  
   </div>
 
 </form>

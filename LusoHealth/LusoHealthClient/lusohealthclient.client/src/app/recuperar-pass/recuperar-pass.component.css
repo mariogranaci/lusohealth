@@ -1,57 +1,50 @@
-.column-left, .column-right {
-  display: flex;
-  flex-direction: column;
-  width: 35%;
-  margin: 0px 30px;
-  font-size: 20px;
+#password-reset-container {
+  width: 22%;
+  height: 500px;
+  border: 1px solid black;
+  text-align: center;
+  margin: 80px auto;
+  border-radius: 5px;
 }
 
-.form-row {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin: 30px 50px;
+h2 {
+  margin-bottom: 10px;
+}
+
+hr {
+  margin: 15px 0;
+  border: none;
+  border-top: 1px solid black;
+}
+
+img {
+  max-width: 200px;
+  height: auto;
+  margin-bottom: 15px;
 }
 
 input {
-  height: 40px;
-  margin-bottom: 25px;
-  border: none;
-  border-radius: 5px;
+  width: 85%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 0;
   font-size: 20px;
-}
-
-#submit-button {
-  margin: 0 auto;
-  text-align: center;
-  padding: 30px;
+  margin-top: 20px;
 }
 
 button {
-  height: 40px;
-  color: #fff;
   background-color: #1875e7;
-  width: 30%;
-  border-radius: 10px;
+  color: white;
+  padding: 10px;
   border: none;
+  margin: 50px;
+  cursor: pointer;
+  width: 51%;
+  border-radius: 5px;
   font-size: 20px;
+  transition: background-color 0.3s ease;
 }
 
-h1 {
-  text-align: center;
-  font-size: 50px;
-}
-
-.type-acount, .gender {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 10px;
-  font-size: 20px;
-}
-
-
-input[type="radio"] {
-  width: 20px;
-}
+  button:hover {
+    background-color: #1b69c8;
+  }

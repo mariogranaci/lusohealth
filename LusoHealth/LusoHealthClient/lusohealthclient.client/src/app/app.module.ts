@@ -6,12 +6,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { RecuperarPassComponent } from './recuperar-pass/recuperar-pass.component';
+import { AlterarPassComponent } from './alterar-pass/alterar-pass.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
-    RecuperarPassComponent
+    RecuperarPassComponent,
+    AlterarPassComponent
   ],
   imports: [
     BrowserModule, HttpClientModule,

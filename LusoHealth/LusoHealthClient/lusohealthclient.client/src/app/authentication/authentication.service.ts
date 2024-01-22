@@ -10,26 +10,11 @@ import { Register } from '../shared/models/register';
   providedIn: 'root'
 })
 export class AuthenticationService {
-  private userSource = new ReplaySubject<User | null>(1);
-  user$ = this.userSource.asObservable();
 
   constructor(private http: HttpClient) { }
 
   login(model: Login) {
-    return this.http.post<User>(`${environment.appUrl}/api/login`, model).pipe(
-      map((user: User) => {
-        if (user) {
-          this.setUser(user);
-          return user;
-        }
-        return null;
-      })
-    );
-  }
-
-  private setUser(user: User) {
-    localStorage.setItem(environment.userKey, JSON.stringify(user));
-    this.userSource.next(user);
+    return this.http.post(`${environment.appUrl}/api/login`, model);
   }
 
   register(model: Register) {

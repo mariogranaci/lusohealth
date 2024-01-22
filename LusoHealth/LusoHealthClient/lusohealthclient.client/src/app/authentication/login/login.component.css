@@ -1,0 +1,188 @@
+
+.top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.page-title {
+  width: fit-content;
+  margin: 0 auto;
+}
+
+  .page-title h1 {
+    font-size: 50px;
+  }
+
+.login-form {
+  width: 500px;
+  margin: 0px auto 0 auto;
+}
+
+
+  .login-form .box {
+    position: relative;
+    margin-bottom: 40px;
+  }
+
+#password-box {
+  margin-bottom: 20px;
+}
+
+.login-form .box .textbox {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 0;
+  font-size: 1.4rem;
+}
+
+  .login-form .box .textbox:placeholder-shown + label {
+    top: 12px;
+    font-size: 1.4rem;
+  }
+
+  .login-form .box .textbox:not(:placeholder-shown) + label,
+  .login-form .box .textbox:focus + label,
+  .login-form .box .textbox:valid + label {
+    color: #2b2626;
+    font-size: 1.4rem;
+    font-weight: 500;
+    top: -30px;
+  }
+
+    .login-form .box .textbox:focus + label:after,
+    .login-form .box .textbox:valid + label:after {
+      content: ':';
+    }
+
+.login-form label {
+  position: absolute;
+  top: 12px;
+  left: 10px;
+  color: #2b2626;
+  font-size: 1.4rem;
+  transition: all 0.1s ease-in-out;
+}
+
+.link-area {
+  width: 100%;
+  text-align: right;
+  font-weight: 500;
+  margin: 0;
+  margin-bottom: 35px;
+}
+
+  .link-area a {
+    color: #2b2626;
+    font-size: 20px;
+    width: fit-content;
+  }
+
+.login-divider {
+  display: flex;
+  align-items: center;
+  width: 80%;
+  margin: 50px auto;
+}
+
+  .login-divider hr {
+    flex: 1;
+    margin: 0 10px;
+    border: 1px solid #2b26267a;
+    border-radius: 8px;
+  }
+
+  .login-divider h2 {
+    margin: 0 5vh;
+  }
+
+.login-button {
+  width: 100%;
+  height: 50px;
+  border: none;
+  color: #fff;
+  font-size: 1.4rem;
+  border-radius: 7px;
+  padding: 10px 25px;
+  font-weight: 500;
+  background: #1875E7;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  display: inline-block;
+  box-shadow: inset 2px 2px 2px 0px rgba(37, 80, 209, 0.5), 7px 7px 20px 0px rgba(0, 0, 0, .1), 4px 4px 5px 0px rgba(0, 0, 0, .1);
+  outline: none;
+}
+
+.login-button-animation:after {
+  position: absolute;
+  content: "";
+  width: 0;
+  height: 100%;
+  top: 0;
+  left: 0;
+  direction: rtl;
+  z-index: -1;
+  box-shadow: -7px -7px 20px 0px #165bef99, -4px -4px 5px 0px #165bef99, 7px 7px 20px 0px #0002, 4px 4px 5px 0px #0001;
+  transition: all 0.3s ease;
+}
+
+.login-button-animation:hover {
+  color: #ffffff;
+}
+
+  .login-button-animation:hover:after {
+    left: auto;
+    right: 0;
+    width: 100%;
+  }
+
+.login-button-animation:active {
+  top: 2px;
+}
+
+.button:active {
+  top: 2px;
+}
+
+.button:hover {
+  background-color: #1b69c8;
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#google-login-button {
+  height: fit-content;
+  height: 50px;
+}
+
+.google-logo {
+  width: 40px;
+  height: 40px;
+  margin-right: 20px;
+  border-radius: 50%;
+}
+
+.recover-account-button {
+  width: fit-content;
+  height: 50px;
+  border: none;
+  color: #fff;
+  font-size: 1.4rem;
+  border-radius: 30px;
+  padding: 10px 25px;
+  font-weight: 500;
+  background: #1875E7;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: absolute;
+  right: 30px;
+  display: inline-block;
+  box-shadow: inset 2px 2px 2px 0px rgba(37, 80, 209, 0.5), 7px 7px 20px 0px rgba(0, 0, 0, .1), 4px 4px 5px 0px rgba(0, 0, 0, .1);
+  outline: none;
+}

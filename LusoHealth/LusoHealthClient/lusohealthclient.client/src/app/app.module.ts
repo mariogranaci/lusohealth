@@ -5,21 +5,18 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
-import { RecuperarPassComponent } from './recuperar-pass/recuperar-pass.component';
-import { AlterarPassComponent } from './alterar-pass/alterar-pass.component';
-import { RecuperarContaComponent } from './recuperar-conta/recuperar-conta.component';
+import { FormsModule } from '@angular/forms';
+import { AuthenticationModule } from './authentication/authentication.module';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
-    RecuperarPassComponent,
-    AlterarPassComponent,
-    RecuperarContaComponent
   ],
   imports: [
     BrowserModule, HttpClientModule,
-    AppRoutingModule
+    AppRoutingModule, FormsModule,
+    AuthenticationModule
   ],
   providers: [],
   bootstrap: [AppComponent]

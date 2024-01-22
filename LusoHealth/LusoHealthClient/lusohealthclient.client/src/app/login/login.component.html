@@ -1,0 +1,57 @@
+<main>
+  <div class="top-row">
+    <div class="page-title">
+      <h1>Login</h1>
+    </div>
+    <button class="recover-account-button button" name="recover-account" id="recover-account">Recuperar Conta</button>
+  </div>
+
+  <div class="login-form">
+    <form method="post" enctype="multipart/form-data">
+      <p class="box">
+        <input type="email" class="textbox" placeholder=" " name="email" id="email" required
+               pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.[a-z0-9](?:[a-z0-9-]*[a-z0-9])?[a-z0-9](?:[a-z0-9-]*[a-z0-9])?">
+
+        <label for="email">Email</label>
+      </p>
+
+      <p class="box" id="password-box">
+        <input type="password" class="textbox" placeholder=" " name="password" id="password" required pattern="^(?=.*[a-zA-Z0-9]).{8,}$">
+        <label for="password">Password</label>
+      </p>
+
+      <p class="link-area"><a href="#">Esqueceu-se da password? </a></p>
+
+      <p class="box">
+        <button type="submit" class="login-button login-button-animation" name="submit-login"
+                id="submit-login">
+          Login
+        </button>
+      </p>
+    </form>
+
+    <p class="link-area"><a [routerLink]="['/register']">Não Possui Conta? <b>Registe-se</b> </a></p>
+
+  </div>
+
+  <div class="login-divider">
+    <hr>
+    <h2> OU </h2>
+    <hr>
+  </div>
+
+  <div class="login-form">
+    <p class="box">
+      <!-- <input type="submit" class="login-button btn-16" name="submit-login" id="submit-login" value="Entrar"> -->
+
+      <button class="login-button button" name="google-login-button" id="google-login-button">
+        <img src="assets/images/login/google-login.jpg" alt="Google Logo" class="google-logo">
+        Continuar com Google
+      </button>
+      <!-- <a href="#">Submit</a> -->
+    </p>
+  </div>
+
+
+
+</main>

@@ -3,7 +3,7 @@
     <div class="page-title">
       <h1>Login</h1>
     </div>
-    <button class="recover-account-button button" name="recover-account" id="recover-account">Recuperar Conta</button>
+    <button class="recover-account-button" name="recover-account" id="recover-account" (click)="openPopup()">Recuperar Conta</button>
   </div>
 
   <div class="login-form">
@@ -52,6 +52,11 @@
     </p>
   </div>
 
-
+  <div class="overlay" id="overlay">
+    <div class="popup">
+      <p>This is your popup content.</p>
+      <button (click)="closePopup()">Close</button>
+    </div>
+  </div>
 
 </main>

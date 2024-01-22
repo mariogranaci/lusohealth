@@ -396,3 +396,5 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+LusoHealth/LusoHealthClient/lusohealthclient.client/.angular/cache/

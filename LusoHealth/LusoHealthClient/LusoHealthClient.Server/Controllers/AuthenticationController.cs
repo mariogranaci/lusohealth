@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace LusoHealthClient.Server.Controllers
@@ -47,6 +48,27 @@ namespace LusoHealthClient.Server.Controllers
             return CreateApplicationUserDto(user);
         }
 
+        [HttpPost("register")]
+        public async Task<ActionResult<UserDto>> Register(RegisterDto model)
+        {
+            if (await CheckEmailExistsAsync(model.Email)) 
+            {
+                return BadRequest($"{model.Email} is already being used. Please try another email address");
+            }
+
+            var userToAdd = new User
+            {
+                Name = model.FirstName.ToLower(),
+                Email = model.Email.ToLower(),
+                EmailConfirmed = true
+            };
+
+            var result = await _userManager.CreateAsync(userToAdd, model.Password);
+            if (result.Succeeded) return BadRequest(result.Errors);
+
+            return Ok("Your account has been created.");
+        }
+
         #region Private Helper Methods
         private UserDto CreateApplicationUserDto(User user)
         {
@@ -55,6 +77,11 @@ namespace LusoHealthClient.Server.Controllers
                 Name = user.Name,
                 JWT = _jwtService.CreateJWT(user)
             };
+        }
+
+        private async Task<bool> CheckEmailExistsAsync(string email)
+        {
+            return await _userManager.Users.AnyAsync(x => x.Email == email.ToLower());
         }
         #endregion
     }

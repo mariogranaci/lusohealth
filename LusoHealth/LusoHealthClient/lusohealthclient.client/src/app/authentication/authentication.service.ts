@@ -4,6 +4,7 @@ import { Login } from '../shared/models/login';
 import { environment } from '../../environments/environment.development';
 import { User } from '../shared/models/user';
 import { ReplaySubject, map } from 'rxjs';
+import { Register } from '../shared/models/register';
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +30,10 @@ export class AuthenticationService {
   private setUser(user: User) {
     localStorage.setItem(environment.userKey, JSON.stringify(user));
     this.userSource.next(user);
+  }
+
+  register(model: Register) {
+    return this.http.post(`${environment.appUrl}/api/register`, model);
   }
 
 }

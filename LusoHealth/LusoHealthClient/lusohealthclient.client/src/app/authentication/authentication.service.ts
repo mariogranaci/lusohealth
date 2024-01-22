@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Login } from '../shared/models/login';
 import { environment } from '../../environments/environment.development';
+import { Register } from '../shared/models/register';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,10 @@ export class AuthenticationService {
 
   login(model: Login) {
     return this.http.post(`${environment.appUrl}/api/login`, model);
+  }
+
+  register(model: Register) {
+    return this.http.post(`${environment.appUrl}/api/register`, model);
   }
 
 }

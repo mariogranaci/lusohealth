@@ -53,20 +53,38 @@ namespace LusoHealthClient.Server.Controllers
         {
             if (await CheckEmailExistsAsync(model.Email)) 
             {
-                return BadRequest($"{model.Email} is already being used. Please try another email address");
+                return BadRequest($"{model.Email} já se encontra em uso, ta ai o ip dele 293.451.863.");
+            }
+
+            if (model.Password == model.ConfirmarPassword) 
+            {
+                return BadRequest($"As passwords têm que condizer.");
             }
 
             var userToAdd = new User
             {
-                Name = model.FirstName.ToLower(),
+                Name = model.FirstName.ToUpper() + " " + model.LastName.ToUpper(),
                 Email = model.Email.ToLower(),
-                EmailConfirmed = true
+                NormalizedEmail = model.Email.ToLower(),
+                Gender = model.Genero,
+                Nif = model.Nif,
+                UserType = model.TipoUser,
+                PhoneNumber = model.Telemovel,
+                PasswordHash = model.Password,
+                EmailConfirmed = true,
+                PhoneNumberConfirmed = false,
+                IsSuspended = false,
+                IsBlocked = false,
+                ProfilePicPath = null,
+                TwoFactorEnabled = false,
+                LockoutEnabled = false,
+                AccessFailedCount = 0,
             };
 
             var result = await _userManager.CreateAsync(userToAdd, model.Password);
             if (result.Succeeded) return BadRequest(result.Errors);
 
-            return Ok("Your account has been created.");
+            return Ok("Conta criada com sucesso.");
         }
 
         #region Private Helper Methods

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
-namespace LusoHealthClient.Server.Models
+namespace LusoHealthClient.Server.Models.Authentication
 {
     public class User : IdentityUser
     {

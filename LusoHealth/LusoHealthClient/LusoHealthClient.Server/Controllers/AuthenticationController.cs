@@ -1,5 +1,5 @@
 ﻿using LusoHealthClient.Server.DTOs.Authentication;
-using LusoHealthClient.Server.Models;
+using LusoHealthClient.Server.Models.Authentication;
 using LusoHealthClient.Server.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;

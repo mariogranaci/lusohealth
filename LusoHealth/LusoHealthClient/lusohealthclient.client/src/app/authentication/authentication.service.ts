@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Login } from '../shared/models/login';
 import { environment } from '../../environments/environment.development';
-import { User } from '../shared/models/user';
 import { ReplaySubject, map } from 'rxjs';
 import { Register } from '../shared/models/register';
 
@@ -18,7 +17,7 @@ export class AuthenticationService {
   }
 
   register(model: Register) {
-    return this.http.post(`${environment.appUrl}/api/register`, model);
+    return this.http.post(`${environment.appUrl}/api//register`, model);
   }
 
 }

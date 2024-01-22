@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthenticationService } from '../authentication.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -11,12 +13,35 @@ export class LoginComponent implements OnInit {
   submitted = false;
   errorMessages: string[] = [];
 
-  constructor() {
+  constructor(private service: AuthenticationService,
+    private formBuilder: FormBuilder,
+    private router: Router) { }
 
+  ngOnInit(): void {
+    this.initializeForm();
   }
 
-    ngOnInit(): void {
-        throw new Error('Method not implemented.');
-    }
+  initializeForm() {
+    this.loginForm = this.formBuilder.group({
+      email: ['', Validators.required],
+      password: ['', Validators.required]
+    });
+  }
 
+  login() {
+    this.submitted = true;
+    this.errorMessages = [];
+
+    if (this.loginForm.valid) {
+      this.service.login(this.loginForm.value).subscribe({
+        next: (response) => {
+          console.log(response);
+        },
+        error: (err) => {
+          console.log(err);
+        }
+      },
+      );
+    }
+  }
 }

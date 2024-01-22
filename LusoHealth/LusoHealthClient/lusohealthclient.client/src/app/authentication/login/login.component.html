@@ -7,16 +7,16 @@
   </div>
 
   <div class="login-form">
-    <form method="post" enctype="multipart/form-data">
+    <form [formGroup]="loginForm" (ngSubmit)="login()" enctype="multipart/form-data">
       <p class="box">
-        <input type="email" class="textbox" placeholder=" " name="email" id="email" required
+        <input formControlName="email" type="email" class="textbox" placeholder=" " name="email" id="email" required
                pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.[a-z0-9](?:[a-z0-9-]*[a-z0-9])?[a-z0-9](?:[a-z0-9-]*[a-z0-9])?">
 
         <label for="email">Email</label>
       </p>
 
       <p class="box" id="password-box">
-        <input type="password" class="textbox" placeholder=" " name="password" id="password" required pattern="^(?=.*[a-zA-Z0-9]).{8,}$">
+        <input formControlName="password" type="password" class="textbox" placeholder=" " name="password" id="password" required pattern="^(?=.*[a-zA-Z0-9]).{8,}$">
         <label for="password">Password</label>
       </p>
 

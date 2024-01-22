@@ -1,7 +1,11 @@
-body * {
-  box-sizing: border-box;
-}
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap');
 
 body {
-  background-color: #ECEEF0;
+  padding: 0;
+  margin: 0;
+  background-color: #eceef0;
+}
+
+body, * {
+  font-family: 'Inter', sans-serif;
 }

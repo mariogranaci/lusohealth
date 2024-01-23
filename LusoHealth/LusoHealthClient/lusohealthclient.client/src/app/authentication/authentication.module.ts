@@ -6,9 +6,6 @@ import { RegistoComponent } from './registo/registo.component';
 import { SharedModule } from '../shared/shared.module';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
-
-
-
 import { RecuperarContaComponent } from './recuperar-conta/recuperar-conta.component';
 import { RecuperarPassComponent } from './recuperar-pass/recuperar-pass.component';
 

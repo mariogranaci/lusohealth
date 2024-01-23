@@ -7,16 +7,21 @@
   </div>
 
   <div class="login-form">
-    <form [formGroup]="loginForm" (ngSubmit)="login()" enctype="multipart/form-data">
+    <form [formGroup]="loginForm" (ngSubmit)="login()" autocomplete="off">
       <p class="box">
         <input formControlName="email" type="email" class="textbox" placeholder=" " name="email" id="email" required>
-
         <label for="email">Email</label>
+        <!--<span class="text-danger" *ngIf="submitted && loginForm.get('email')?hasError('required')">
+          Email é obrigatória
+        </span>-->
       </p>
 
       <p class="box" id="password-box">
         <input formControlName="password" type="password" class="textbox" placeholder=" " name="password" id="password" required>
         <label for="password">Password</label>
+        <!--<span class="text-danger" *ngIf="submitted && loginForm.get('password')?hasError('required')"> 
+          Password é obrigatória
+        </span>-->
       </p>
 
       <p class="link-area"><a (click)="openPopup('pass')">Esqueceu-se da password? </a></p>

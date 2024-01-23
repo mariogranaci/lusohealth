@@ -54,9 +54,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             //validar o token baseado na key dada no development.json JWT:Key
             ValidateIssuerSigningKey = true,
             //o issuer signing key baseada na JWT:Key
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("FdXVMXvrvBTmBrqPKpvN9a6cp5EwJjP7")),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"])),
             //o issuer é o link do projeto api 
-            ValidIssuer = "http://localhost:5184",
+            ValidIssuer = builder.Configuration["JWT:Issuer"],
             ValidateIssuer = true,
             ValidateAudience = false,
         };

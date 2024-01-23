@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from '../authentication.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-registo',
@@ -14,7 +15,8 @@ export class RegistoComponent implements OnInit{
   errorsMessages: string[] = [];
 
   constructor(private authenticationService: AuthenticationService,
-    private formBuilder: FormBuilder) { }
+    private formBuilder: FormBuilder,
+    private router: Router) { }
 
   ngOnInit(): void
   {
@@ -46,7 +48,7 @@ export class RegistoComponent implements OnInit{
     this.authenticationService.register(this.registerForm.value).subscribe({
 
       next: (response) => {
-        console.log(response);
+        this.router.navigateByUrl('/login');
       },
       error: (error) => {
         console.log(error);

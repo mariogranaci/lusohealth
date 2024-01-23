@@ -28,7 +28,7 @@ namespace LusoHealthClient.Server.Services
                 new Claim(ClaimTypes.Name, user.Name),
             };
 
-            var credentials = new SigningCredentials(_jwtKey, SecurityAlgorithms.HmacSha512Signature);
+            var credentials = new SigningCredentials(_jwtKey, SecurityAlgorithms.HmacSha256Signature);
             var tokenDescriptor = new SecurityTokenDescriptor()
             {
                 Subject = new ClaimsIdentity(userClaims),

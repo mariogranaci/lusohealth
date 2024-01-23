@@ -224,3 +224,7 @@
 .close-image {
     height: 50px;
 }
+
+.text-danger {
+    color: red;
+}

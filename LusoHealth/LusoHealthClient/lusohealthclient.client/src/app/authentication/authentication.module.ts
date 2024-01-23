@@ -5,6 +5,7 @@ import { LoginComponent } from './login/login.component';
 import { RegistoComponent } from './registo/registo.component';
 import { SharedModule } from '../shared/shared.module';
 import { RouterModule } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
 
 
 
@@ -19,6 +20,9 @@ import { RouterModule } from '@angular/router';
     AuthenticationRoutingModule,
     RouterModule,
     SharedModule
+  ],
+  exports: [
+    HttpClientModule
   ]
 })
 export class AuthenticationModule { }

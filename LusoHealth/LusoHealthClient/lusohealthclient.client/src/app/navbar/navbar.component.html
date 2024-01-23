@@ -38,7 +38,7 @@
       <div class="nav-li-spacer"></div>
 
       <li>
-        <a routerLink="" class="nav-link" routerLinkActive="active" (click)="toggleDropdown('perfil')">
+        <a [routerLink]="['/authentication/login']" class="nav-link" routerLinkActive="active" (click)="toggleDropdown('perfil')">
           <img class="menu-icons" src="assets/images/NavBar/user-icon.png" alt="Ícone Perfil" />
           <div class="nav-text"> Perfil </div>
         </a>

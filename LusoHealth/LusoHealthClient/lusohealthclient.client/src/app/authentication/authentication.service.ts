@@ -13,11 +13,11 @@ export class AuthenticationService {
   constructor(private http: HttpClient) { }
 
   login(model: Login) {
-    return this.http.post(`${environment.appUrl}/api/login`, model);
+    return this.http.post(`${environment.appUrl}/api/authentication/login`, model);
   }
 
   register(model: Register) {
-    return this.http.post(`${environment.appUrl}/api//register`, model);
+    return this.http.post(`${environment.appUrl}/api/authentication/register`, model);
   }
 
 }

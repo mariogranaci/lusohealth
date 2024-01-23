@@ -54,9 +54,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             //validar o token baseado na key dada no development.json JWT:Key
             ValidateIssuerSigningKey = true,
             //o issuer signing key baseada na JWT:Key
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"])),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("FdXVMXvrvBTmBrqPKpvN9a6cp5EwJjP7")),
             //o issuer é o link do projeto api 
-            ValidIssuer = builder.Configuration["JWT:Issuer"],
+            ValidIssuer = "http://localhost:5184",
             ValidateIssuer = true,
             ValidateAudience = false,
         };
@@ -87,19 +87,49 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 
 });
 
-var app = builder.Build();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins", builder =>
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader());
+});
 
+var app = builder.Build();
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
-app.UseCors(options =>
-{
-    options.AllowAnyHeader()
-           .AllowAnyMethod()
-           .AllowCredentials()
-           .WithOrigins(builder.Configuration["JWT:ClientURL"]);
-});
+app.UseCors("AllowAllOrigins");
+
+//app.UseCors("AllowAllOrigins");
+
+//app.Use(async (context, next) =>
+//{
+//    if (context.Request.Method == "OPTIONS")
+//    {
+//        context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+//        context.Response.Headers.Add("Access-Control-Allow-Headers", "*");
+//        context.Response.Headers.Add("Access-Control-Allow-Methods", "*");
+//        context.Response.StatusCode = 200;
+//    }
+//    else
+//    {
+//        await next();
+//    }
+//});
+
+//app.UseCors(options =>
+//{
+//    options.AllowAnyHeader()
+//           .AllowAnyMethod()
+//           .AllowCredentials()
+//           .WithOrigins("http://localhost:4200");
+//});
+
+
+
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

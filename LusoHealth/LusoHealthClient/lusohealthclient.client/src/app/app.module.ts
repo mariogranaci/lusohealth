@@ -15,8 +15,7 @@ import { AuthenticationModule } from './authentication/authentication.module';
   ],
   imports: [
     BrowserModule, HttpClientModule,
-    AppRoutingModule, FormsModule,
-    AuthenticationModule
+    AppRoutingModule, FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,4 +1,4 @@
-﻿using LusoHealthClient.Server.Models;
+﻿using LusoHealthClient.Server.Models.Authentication;
 using Microsoft.IdentityModel.Tokens;
 using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;

@@ -1,10 +1,11 @@
 ﻿using LusoHealthClient.Server.DTOs.Authentication;
-using LusoHealthClient.Server.Models;
+using LusoHealthClient.Server.Models.Authentication;
 using LusoHealthClient.Server.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace LusoHealthClient.Server.Controllers
@@ -47,6 +48,46 @@ namespace LusoHealthClient.Server.Controllers
             return CreateApplicationUserDto(user);
         }
 
+        [HttpPost("register")]
+        public async Task<ActionResult<UserDto>> Register(RegisterDto model)
+        {
+            if (await CheckEmailExistsAsync(model.Email)) 
+            {
+                return BadRequest($"{model.Email} já se encontra em uso, ta ai o ip dele 293.451.863.");
+            }
+
+            if (model.Password != model.ConfirmarPassword) 
+            {
+                return BadRequest($"As passwords têm que condizer.");
+            }
+
+            var userToAdd = new User
+            {
+                Name = model.FirstName.Trim() + " " + model.LastName.Trim(),
+                Email = model.Email.ToLower().Trim(),
+                NormalizedEmail = model.Email.ToLower().Trim(),
+                Gender = model.Genero,
+                Nif = model.Nif.Trim(),
+                UserType = model.TipoUser,
+                PhoneNumber = model.Telemovel.Trim(),
+                PasswordHash = model.Password.Trim(),
+                EmailConfirmed = true,
+                PhoneNumberConfirmed = false,
+                IsSuspended = false,
+                IsBlocked = false,
+                ProfilePicPath = null,
+                TwoFactorEnabled = false,
+                LockoutEnabled = false,
+                AccessFailedCount = 0,
+                UserName = model.Nif.Trim(),
+            };
+
+            var result = await _userManager.CreateAsync(userToAdd, model.Password);
+            if (!result.Succeeded) return BadRequest(result.Errors);
+
+            return Ok(new JsonResult(new {title="Account Created", message="A tua conta foi criada com sucesso!"}));
+        }
+
         #region Private Helper Methods
         private UserDto CreateApplicationUserDto(User user)
         {
@@ -55,6 +96,11 @@ namespace LusoHealthClient.Server.Controllers
                 Name = user.Name,
                 JWT = _jwtService.CreateJWT(user)
             };
+        }
+
+        private async Task<bool> CheckEmailExistsAsync(string email)
+        {
+            return await _userManager.Users.AnyAsync(x => x.Email == email.ToLower());
         }
         #endregion
     }

@@ -1,77 +1,134 @@
-using LusoHealthClient.Server.Data;
-using LusoHealthClient.Server.Models;
-using LusoHealthClient.Server.Services;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.AspNetCore.Mvc;
+using LusoHealthClient.Server.Services;
+using LusoHealthClient.Server.Data;
+using LusoHealthClient.Server.Models.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString)
-);
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
 
-// be able to inject the JWTService class inside the controllers
 builder.Services.AddScoped<JWTService>();
 
 builder.Services.AddIdentityCore<User>(options =>
 {
-    // Password settings 
-    options.Password.RequireDigit = false;
-    options.Password.RequiredLength = 6;
+    //configurações email
+    options.Password.RequiredLength = 8;
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireUppercase = true;
     options.Password.RequireNonAlphanumeric = false;
-    options.Password.RequireUppercase = false;
-    options.Password.RequireLowercase = false;
 
-    options.SignIn.RequireConfirmedAccount = true;
+    //para confirmar email
+    options.SignIn.RequireConfirmedEmail = true;
 })
-    .AddRoles<IdentityRole>()
-    .AddRoleManager<RoleManager<IdentityRole>>()
-    .AddEntityFrameworkStores<ApplicationDbContext>()
-    .AddSignInManager<SignInManager<User>>()
-    .AddUserManager<UserManager<User>>()
-    .AddDefaultTokenProviders();
+    .AddRoles<IdentityRole>() //para adicionar roles
+    .AddRoleManager<RoleManager<IdentityRole>>() //usar o RoleManager
+    .AddEntityFrameworkStores<ApplicationDbContext>() //usar o nosso context
+    .AddSignInManager<SignInManager<User>>() //usar o SignInManager
+    .AddUserManager<UserManager<User>>() //usar o UserManager
+    .AddDefaultTokenProviders(); //Usado para criar os tokens de confirmação de email
 
-// be able to authenticate the user with JWT
+//Permite fazer a autenticação usando os JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters
         {
-            // validate the token based on the key we have in appsettings.json JWT:Key
+            //validar o token baseado na key dada no development.json JWT:Key
             ValidateIssuerSigningKey = true,
-            // the issuer singning key based on JWT:Key
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
-            // the issuer which in here is the api project url we are using
-            ValidIssuer = builder.Configuration["Jwt:Issuer"],
-            // validadate the issuer (who ever is issuing the JWT)
+            //o issuer signing key baseada na JWT:Key
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("FdXVMXvrvBTmBrqPKpvN9a6cp5EwJjP7")),
+            //o issuer é o link do projeto api 
+            ValidIssuer = "http://localhost:5184",
             ValidateIssuer = true,
-            // dont validate the audience (angular side)
-            ValidateAudience = false
+            ValidateAudience = false,
         };
     });
 
 builder.Services.AddCors();
 
-var app = builder.Build();
-
-app.UseCors(options =>
+builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
-    options.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins(builder.Configuration["JWT:ClientUrl"]);
+    options.InvalidModelStateResponseFactory = actionContext =>
+    {
+        var errors = actionContext.ModelState
+            .Where(e => e.Value.Errors.Count > 0)
+            .SelectMany(kvp => kvp.Value.Errors.Select(error => new
+            {
+                Message = error.ErrorMessage,
+                Field = kvp.Key
+            }))
+            .ToArray();
+
+        var toReturn = new
+        {
+            Errors = errors
+        };
+
+        return new BadRequestObjectResult(toReturn);
+    };
+
 });
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins", builder =>
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader());
+});
+
+var app = builder.Build();
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
+
+app.UseCors("AllowAllOrigins");
+
+//app.UseCors("AllowAllOrigins");
+
+//app.Use(async (context, next) =>
+//{
+//    if (context.Request.Method == "OPTIONS")
+//    {
+//        context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+//        context.Response.Headers.Add("Access-Control-Allow-Headers", "*");
+//        context.Response.Headers.Add("Access-Control-Allow-Methods", "*");
+//        context.Response.StatusCode = 200;
+//    }
+//    else
+//    {
+//        await next();
+//    }
+//});
+
+//app.UseCors(options =>
+//{
+//    options.AllowAnyHeader()
+//           .AllowAnyMethod()
+//           .AllowCredentials()
+//           .WithOrigins("http://localhost:4200");
+//});
+
+
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -81,10 +138,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-// adding UseAuthentication into our pipeline and should be before UseAuthorization
-// Authentication verifies the identity of the user or service, and authorization determines their access rights.
-app.UseAuthentication();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

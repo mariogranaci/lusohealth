@@ -44,4 +44,18 @@ export class LoginComponent implements OnInit {
       );
     }
   }
+
+  openPopup() {
+    const overlay = document.getElementById('overlay');
+    if (overlay) {
+      overlay.style.display = 'flex';
+    }
+  }
+
+  closePopup() {
+    const overlay = document.getElementById('overlay');
+    if (overlay) {
+      overlay.style.display = 'none';
+    }
+  }
 }

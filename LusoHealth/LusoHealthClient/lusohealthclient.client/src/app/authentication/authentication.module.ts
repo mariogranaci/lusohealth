@@ -9,11 +9,15 @@ import { HttpClientModule } from '@angular/common/http';
 
 
 
+import { RecuperarContaComponent } from './recuperar-conta/recuperar-conta.component';
+import { RecuperarPassComponent } from './recuperar-pass/recuperar-pass.component';
 
 @NgModule({
   declarations: [
     LoginComponent,
-    RegistoComponent
+    RegistoComponent,
+    RecuperarContaComponent,
+    RecuperarPassComponent,
   ],
   imports: [
     CommonModule,

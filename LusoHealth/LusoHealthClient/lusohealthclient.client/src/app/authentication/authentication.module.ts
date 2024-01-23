@@ -5,14 +5,15 @@ import { LoginComponent } from './login/login.component';
 import { RegistoComponent } from './registo/registo.component';
 import { SharedModule } from '../shared/shared.module';
 import { RouterModule } from '@angular/router';
-
-
-
+import { RecuperarContaComponent } from './recuperar-conta/recuperar-conta.component';
+import { RecuperarPassComponent } from './recuperar-pass/recuperar-pass.component';
 
 @NgModule({
   declarations: [
     LoginComponent,
-    RegistoComponent
+    RegistoComponent,
+    RecuperarContaComponent,
+    RecuperarPassComponent,
   ],
   imports: [
     CommonModule,

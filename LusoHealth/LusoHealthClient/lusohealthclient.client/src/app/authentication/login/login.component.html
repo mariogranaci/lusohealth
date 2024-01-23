@@ -3,7 +3,7 @@
     <div class="page-title">
       <h1>Login</h1>
     </div>
-    <button class="recover-account-button" name="recover-account" id="recover-account" (click)="openPopup()">Recuperar Conta</button>
+    <button class="recover-account-button" name="recover-account" id="recover-account" (click)="openPopup('conta')">Recuperar Conta</button>
   </div>
 
   <div class="login-form">
@@ -20,7 +20,7 @@
         <label for="password">Password</label>
       </p>
 
-      <p class="link-area"><a [routerLink]="['/recuperar-pass']">Esqueceu-se da password? </a></p>
+      <p class="link-area"><a (click)="openPopup('pass')">Esqueceu-se da password? </a></p>
 
       <p class="box">
         <button type="submit" class="login-button login-button-animation" name="submit-login"
@@ -52,11 +52,10 @@
     </p>
   </div>
 
-  <div class="overlay" id="overlay">
-    <div class="popup">
-      <p>This is your popup content.</p>
-      <button (click)="closePopup()">Close</button>
-    </div>
+  <div class="overlay" id="overlay" (click)="closePopup()">
+    <a class="close-button" (click)="closePopup()"><img src="assets/images/login/close.png" alt="Close button" class="close-image"></a>
+    <app-recuperar-pass (click)="stopPropagation($event)" id="recuperar-pass"></app-recuperar-pass>
+    <app-recuperar-conta (click)="stopPropagation($event)" id="recuperar-conta"></app-recuperar-conta>
   </div>
 
 </main>

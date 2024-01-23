@@ -199,16 +199,26 @@
 	width: 100%;
 	height: 100%;
 	background: rgba(0, 0, 0, 0.7);
-	/* Adjust the alpha value for darkness */
 	justify-content: center;
 	align-items: center;
 }
-
+/*
 .popup {
-  heigth: 100px;
-  width: 100px;
-	background: #fff;
-	padding: 20px;
-	border-radius: 10px;
-	box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  height: 500px;
+  width: fit-content;
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}*/
+
+.close-button {
+    position: absolute;
+    top: 70px;
+    right: 60px;
+    cursor: pointer;
+}
+
+.close-image {
+    height: 50px;
 }

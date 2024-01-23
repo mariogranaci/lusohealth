@@ -7,6 +7,10 @@ import { SharedModule } from '../shared/shared.module';
 import { RouterModule } from '@angular/router';
 import { RecuperarContaComponent } from './recuperar-conta/recuperar-conta.component';
 import { RecuperarPassComponent } from './recuperar-pass/recuperar-pass.component';
+import { HttpClientModule } from '@angular/common/http';
+
+
+
 
 @NgModule({
   declarations: [
@@ -20,6 +24,9 @@ import { RecuperarPassComponent } from './recuperar-pass/recuperar-pass.componen
     AuthenticationRoutingModule,
     RouterModule,
     SharedModule
+  ],
+  exports: [
+    HttpClientModule
   ]
 })
 export class AuthenticationModule { }

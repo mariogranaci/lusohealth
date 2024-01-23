@@ -20,14 +20,20 @@ h1 {
   margin: 20px 50px;
 }
 
-.column-left input,.column-right input {
+.column-left input, .column-right input {
   min-height: 40px;
   margin-bottom: 25px;
   border: none;
   border-radius: 7px;
   font-size: 20px;
+  padding: 0 10px;
 }
 
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
 
 .type-acount, .gender {
   display: flex;
@@ -37,17 +43,16 @@ h1 {
   font-size: 20px;
 }
 
-.radio-label{
-    display:flex;
-    align-items:center;
+.radio-label {
+  display: flex;
+  align-items: center;
 }
 
 input[type="radio"] {
   width: 20px;
-  margin: 0 10px 0 0!important;
+  margin: 0 10px 0 0 !important;
   min-height: none !important;
   max-height: 20px;
-  
 }
 
 
@@ -56,14 +61,15 @@ input[type="radio"] {
   text-align: center;
 }
 
-#submit-button p {
+  #submit-button p {
     margin: 3px auto;
     width: 30%;
-    text-align:end;
-}
+    text-align: end;
+  }
 
 
 .btn-regist {
+
   height: 40px;
   color: #fff;
   background-color: #1875e7;
@@ -74,13 +80,11 @@ input[type="radio"] {
   transition: background-color 0.3s ease;
 }
 
-.btn-regist:hover {
+  .btn-regist:hover {
     background-color: #1b69c8;
-}
+    cursor: pointer;
+  }
 
 #btn-text, a {
   color: black;
 }
-
-
-

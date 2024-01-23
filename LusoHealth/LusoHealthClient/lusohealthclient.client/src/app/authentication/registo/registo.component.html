@@ -29,10 +29,10 @@
       <input formControlName="lastName" type="text" id="apelido" name="apelido" required>
 
       <label for="telemovel">Telemóvel:</label>
-      <input formControlName="telemovel" type="tel" id="telemovel" name="telemovel" required>
+      <input maxlength="9" formControlName="telemovel" type="tel" id="telemovel" name="telemovel" required>
 
       <label for="nif">NIF:</label>
-      <input formControlName="nif" type="text" id="nif" name="nif" pattern="[0-9]{9}" required>
+      <input formControlName="nif" maxlength="9" type="text" id="nif" name="nif" pattern="[0-9]{9}" oninput="this.value = this.value.replace(/[^0-9]/g, '');" required>
 
       <label for="confirmPassword">Confirmar Password:</label>
       <input formControlName="confirmarPassword" type="password" id="confirmPassword" name="confirmPassword" required>
@@ -49,7 +49,7 @@
 
   <div id="submit-button">
     <button type="submit" class="btn-regist">Registar</button>
-     <p id="btn-text"><a [routerLink]="['/login']" class="nav-link"> Já Possui Conta? <b>Login</b></a></p>  
+     <p id="btn-text"><a [routerLink]="['/authentication/login']" class="nav-link"> Já Possui Conta? <b>Login</b></a></p>  
   </div>
 
 </form>

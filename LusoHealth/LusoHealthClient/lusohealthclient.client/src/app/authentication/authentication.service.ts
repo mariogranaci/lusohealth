@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Login } from '../shared/models/login';
 import { environment } from '../../environments/environment.development';
+import { ReplaySubject, map } from 'rxjs';
 import { Register } from '../shared/models/register';
 
 @Injectable({
@@ -12,11 +13,11 @@ export class AuthenticationService {
   constructor(private http: HttpClient) { }
 
   login(model: Login) {
-    return this.http.post(`${environment.appUrl}/api/login`, model);
+    return this.http.post(`${environment.appUrl}/api/authentication/login`, model);
   }
 
   register(model: Register) {
-    return this.http.post(`${environment.appUrl}/api/register`, model);
+    return this.http.post(`${environment.appUrl}/api/authentication/register`, model);
   }
 
 }

@@ -1,6 +1,7 @@
 <div class="alert" id="alert-signup" *ngIf="showAlert">
   <span id="closebtn" (click)="closeAlert()">&times;</span>
   <div id="alert-text">
-    <p *ngFor="let error of errorMessages">{{ error }}</p>
+    <p> {{ message }}</p>
   </div>
 </div>
+

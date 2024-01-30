@@ -8,6 +8,7 @@ import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { RecuperarContaComponent } from './recuperar-conta/recuperar-conta.component';
 import { RecuperarPassComponent } from './recuperar-pass/recuperar-pass.component';
+import { ValidationMessagesComponent } from '../shared/components/errors/validation-messages/validation-messages.component';
 
 @NgModule({
   declarations: [

@@ -16,5 +16,7 @@ namespace LusoHealthClient.Server.Models.Authentication
         public string? ProfilePicPath { get; set; }
         [Required]
         public char UserType { get; set; }
+        [Required]
+        public DateTime BirthDate { get; set; }
     }
 }

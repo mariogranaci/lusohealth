@@ -53,12 +53,12 @@ namespace LusoHealthClient.Server.Controllers
         {
             if (await CheckEmailExistsAsync(model.Email)) 
             {
-                return BadRequest($"{model.Email} já se encontra em uso, ta ai o ip dele 293.451.863.");
+                return BadRequest($"O email já se encontra em uso");
             }
 
             if (model.Password != model.ConfirmarPassword) 
             {
-                return BadRequest($"As passwords têm que condizer.");
+                return BadRequest($"As passwords não condizem");
             }
 
             var userToAdd = new User
@@ -80,12 +80,13 @@ namespace LusoHealthClient.Server.Controllers
                 LockoutEnabled = false,
                 AccessFailedCount = 0,
                 UserName = model.Nif.Trim(),
+                BirthDate = model.DataNascimento
             };
 
             var result = await _userManager.CreateAsync(userToAdd, model.Password);
             if (!result.Succeeded) return BadRequest(result.Errors);
 
-            return Ok(new JsonResult(new {title="Account Created", message="A tua conta foi criada com sucesso!"}));
+            return Ok(new JsonResult(new {title="Conta Criada", message="A sua conta foi criada com sucesso!"}));
         }
 
         #region Private Helper Methods

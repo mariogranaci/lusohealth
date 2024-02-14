@@ -1,6 +1,7 @@
 h1 {
   text-align: center;
   font-size: 50px;
+  margin: 25px 0;
 }
 
 .form-row {
@@ -83,10 +84,10 @@ input[type="radio"] {
   transition: background-color 0.3s ease;
 }
 
-  .btn-regist:hover {
+.btn-regist:hover {
     background-color: #1b69c8;
     cursor: pointer;
-  }
+}
 
 #btn-text, a {
   color: black;

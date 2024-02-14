@@ -1,24 +1,18 @@
-div {
+main {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   height: 90vh;
   flex-direction: column;
 }
 
-h1 {
-  margin-bottom: 10px;
-  font-size: 150px;
-  text-align: center;
-  color: #1b69c8
-}
-
 p {
-  font-size: 22px;
-  margin-bottom: 20px;
+  text-align: center;
+  font-size: 20px;
 }
 
 button {
+    margin-top: 20px;
   min-width: 280px;
   width: 20%;
   height: 50px;

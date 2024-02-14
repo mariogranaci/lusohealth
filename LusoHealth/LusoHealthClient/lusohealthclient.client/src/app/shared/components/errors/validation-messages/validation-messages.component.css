@@ -38,8 +38,15 @@
     color: lightgray;
   }
 
-p {
+p, #reenviar {
   margin: 4px !important;
   overflow-wrap: anywhere;
   width: 100%;
+}
+
+#reenviar {
+  display: block;
+  text-align: end;
+  cursor: pointer;
+  text-decoration: underline;
 }

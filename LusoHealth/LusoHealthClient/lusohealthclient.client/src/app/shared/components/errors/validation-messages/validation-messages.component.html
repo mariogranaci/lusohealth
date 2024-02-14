@@ -2,5 +2,7 @@
   <span id="closebtn" (click)="closeAlert()">&times;</span>
   <div id="alert-text">
     <p *ngFor="let error of errorMessages">{{ error }}</p>
+    <a id="reenviar" *ngIf="errorMessages && errorMessages[0].includes('Necessita confirmar o seu email para efetuar autenticação')"
+       (click)="resendEmailConfirmationLink()">Reenviar email</a>
   </div>
 </div>

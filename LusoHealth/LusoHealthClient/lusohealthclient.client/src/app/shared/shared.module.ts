@@ -23,13 +23,13 @@ import { PopUpSuccessComponent } from './components/pop-up-success/pop-up-succes
     ReactiveFormsModule,
     RouterModule
   ],
-exports: [
-  HttpClientModule,
-  ReactiveFormsModule,
-  RouterModule,
-  ValidationMessagesComponent,
-  LoadingSpinnerComponent,
-  PopUpSuccessComponent
+  exports: [
+    HttpClientModule,
+    ReactiveFormsModule,
+    RouterModule,
+    ValidationMessagesComponent,
+    LoadingSpinnerComponent,
+    PopUpSuccessComponent
   ]
 })
 export class SharedModule { }

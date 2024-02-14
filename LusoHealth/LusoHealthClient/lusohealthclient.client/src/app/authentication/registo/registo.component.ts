@@ -2,6 +2,8 @@ import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
 import { AuthenticationService } from '../authentication.service';
 import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { User } from '../../shared/models/authentication/user';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-registo',
@@ -9,7 +11,7 @@ import { Router } from '@angular/router';
   styleUrl: './registo.component.css'
 })
 
-export class RegistoComponent implements OnInit{
+export class RegistoComponent implements OnInit {
   registerForm: FormGroup = new FormGroup({});
   submitted = false;
   loading = false;
@@ -20,10 +22,17 @@ export class RegistoComponent implements OnInit{
     private formBuilder: FormBuilder,
     private router: Router,
     private renderer: Renderer2,
-    private elem: ElementRef) { }
+    private elem: ElementRef) {
+    this.authenticationService.user$.pipe(take(1)).subscribe({
+      next: (user: User | null) => {
+        if (user) {
+          this.router.navigateByUrl('/');
+        }
+      }
+    });
+  }
 
-  ngOnInit(): void
-  {
+  ngOnInit(): void {
     this.initializeForm();
   }
 
@@ -35,9 +44,8 @@ export class RegistoComponent implements OnInit{
     this.renderer.setAttribute(dateInput, 'max', maxDate);
   }
 
-  initializeForm()
-  {
-    
+  initializeForm() {
+
     this.registerForm = this.formBuilder.group({
 
       firstName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
@@ -64,12 +72,9 @@ export class RegistoComponent implements OnInit{
     if (this.registerForm.valid) {
       this.loading = true;
       this.authenticationService.register(this.registerForm.value).subscribe({
-        next: (response : any) => {
+        next: (response: any) => {
           this.loading = false;
           this.responseText = response.value.message;
-          setTimeout(() => {
-            this.router.navigateByUrl('authentication/login');
-          }, 1500); 
         },
         error: (error) => {
           this.loading = false;
@@ -83,19 +88,19 @@ export class RegistoComponent implements OnInit{
     }
   }
 
- passwordPatternValidator(): ValidatorFn {
-  return (control: AbstractControl): { [key: string]: any } | null => {
-    const value: string = control.value || '';
+  passwordPatternValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const value: string = control.value || '';
 
-    const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/;
+      const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/;
 
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve(pattern.test(value) ? null : { passwordPattern: true });
-      }, 0);
-    });
-  };
-}
+      return new Promise(resolve => {
+        setTimeout(() => {
+          resolve(pattern.test(value) ? null : { passwordPattern: true });
+        }, 0);
+      });
+    };
+  }
 
   idadeValidator(control: AbstractControl): { [key: string]: any } | null {
     if (control.value) {

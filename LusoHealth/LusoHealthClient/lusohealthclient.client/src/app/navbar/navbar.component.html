@@ -1,54 +1,46 @@
-  <nav>
-    <div class="logo">
-      <a routerLink=" " class="nav-link" routerLinkActive="active ">
-        <img src="assets/images/NavBar/navbar-icon.png" alt="Logo LusoHealth">
+<nav>
+  <div class="logo">
+    <a routerLink="" class="nav-link" routerLinkActive="active ">
+      <img src="assets/images/NavBar/navbar-icon.png" alt="Logo LusoHealth">
+    </a>
+  </div>
+  <ul id="menu">
+    <li class="sub-menu-parent">
+      <a routerLink="" class="nav-link" routerLinkActive="active">
+        <img class="menu-icons" src="assets/images/NavBar/doctor-icon.png" alt="Ícone Marcações" />
+        <div class="nav-text"> Marcações </div>
       </a>
-</div>
-    <ul>
-     
-
-      <li>
-        <a routerLink="" class="nav-link" routerLinkActive="active" (click)="toggleDropdown('marcacoes')">
-          <img class="menu-icons" src="assets/images/NavBar/doctor-icon.png" alt="Ícone Marcações" />
-          <div class="nav-text"> Marcações </div>
-        </a>
-        <ul class="dropdown-content" *ngIf="isDropdownOpen && activeDropdown === 'marcacoes'">
-          <li class="dropdown-menu">
-            <img class="dropdown-menu.icons" src="assets/images/NavBar/maps.png" />
-            <a routerLink="" class="nav-link" routerLinkActive="active">Mapa</a>
-          </li>
-        </ul>
-      </li>
-
-      <div class="nav-li-spacer"></div>
-
-      <li>
-        <a routerLink="" class="nav-link" routerLinkActive="active" (click)="toggleDropdown('agenda')">
-          <img class="menu-icons" src="assets/images/NavBar/agenda-icon.png" alt="Ícone Agenda" />
-          <div class="nav-text"> Agenda </div>
-        </a>
-        <ul class="dropdown-content" *ngIf="isDropdownOpen && activeDropdown === 'agenda'">
-          <li class="dropdown-menu">
-            <img class="dropdown-menu.icons" src="assets/images/NavBar/paper.png" />
-            <a routerLink="" class="nav-link" routerLinkActive="active">Histórico</a>
-          </li>
-        </ul>
-      </li>
-
-      <div class="nav-li-spacer"></div>
-
-      <li>
-        <a routerLink="" class="nav-link" routerLinkActive="active" (click)="toggleDropdown('perfil')">
-          <img class="menu-icons" src="assets/images/NavBar/user-icon.png" alt="Ícone Perfil" />
-          <div class="nav-text"> Perfil </div>
-        </a>
-        <ul class="dropdown-content" *ngIf="isDropdownOpen && activeDropdown === 'perfil'">
-          <li class="dropdown-menu">
-            <img class="dropdown-menu.icons" src="assets/images/NavBar/logout.png"/>
-            <a routerLink="" class="nav-link" routerLinkActive="active">Terminar Sessão</a>
-          </li>
-        </ul>
-      </li>
-
-    </ul>
-  </nav>
+      <ul class="sub-menu">
+        <li class="dropdown-element">
+          <img src="assets/images/NavBar/maps.png" />
+          <a routerLink="" class="nav-link" routerLinkActive="active">Mapa</a>
+        </li>
+      </ul>
+    </li>
+    <li class="sub-menu-parent">
+      <a routerLink="" class="nav-link" routerLinkActive="active">
+        <img class="menu-icons" src="assets/images/NavBar/agenda-icon.png" alt="Ícone Agenda" />
+        <div id="agenda-text" class="nav-text"> Agenda </div>
+      </a>
+      <ul class="sub-menu">
+        <li class="dropdown-element">
+          <img src="assets/images/NavBar/paper.png" />
+          <a routerLink="" class="nav-link" routerLinkActive="active">Histórico</a>
+        </li>
+      </ul>
+    </li>
+    <li class="sub-menu-parent">
+      <a [routerLink]="['/login']" class="nav-link" routerLinkActive="active">
+        <img class="menu-icons" src="assets/images/NavBar/user-icon.png" alt="Ícone Perfil" />
+        <div id="login-text" class="nav-text" *ngIf="(authenticationService.user$ | async) === null">Login</div>
+        <div id="perfil-text" class="nav-text" *ngIf="(authenticationService.user$ | async) as user">Perfil</div>
+      </a>
+      <ul class="sub-menu">
+        <li class="dropdown-element" (click)="logout()" *ngIf="(authenticationService.user$ | async) as user">
+          <img src="assets/images/NavBar/logout.png" />
+          <a routerLink="" class="nav-link" routerLinkActive="active">Terminar Sessão</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>

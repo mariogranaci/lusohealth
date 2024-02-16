@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AuthenticationService } from '../authentication/authentication.service';
 
 @Component({
   selector: 'app-navbar',
@@ -6,11 +7,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent {
-  isDropdownOpen = false;
-  activeDropdown: string | null = null;
 
-  toggleDropdown(dropdown: string) {
-    this.isDropdownOpen = !this.isDropdownOpen;
-    this.activeDropdown = this.isDropdownOpen ? dropdown : null;
+  constructor(public authenticationService: AuthenticationService) { }
+
+  logout() {
+    this.authenticationService.logout();
   }
 }

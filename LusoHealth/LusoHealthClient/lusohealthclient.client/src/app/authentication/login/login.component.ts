@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthenticationService } from '../authentication.service';
 import { Router } from '@angular/router';
-import { RecuperarContaComponent } from '../recuperar-conta/recuperar-conta.component';
+import { take } from 'rxjs';
+import { User } from '../../shared/models/authentication/user';
 
 @Component({
   selector: 'app-login',
@@ -12,11 +13,20 @@ import { RecuperarContaComponent } from '../recuperar-conta/recuperar-conta.comp
 export class LoginComponent implements OnInit {
   loginForm: FormGroup = new FormGroup({});
   submitted = false;
+  loading = false;
   errorMessages: string[] = [];
 
   constructor(private service: AuthenticationService,
     private formBuilder: FormBuilder,
-    private router: Router) { }
+    private router: Router) {
+    this.service.user$.pipe(take(1)).subscribe({
+      next: (user: User | null) => {
+        if (user) {
+          this.router.navigateByUrl('/');
+        }
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.initializeForm();
@@ -34,12 +44,19 @@ export class LoginComponent implements OnInit {
     this.errorMessages = [];
 
     if (this.loginForm.valid) {
+      this.loading = true;
       this.service.login(this.loginForm.value).subscribe({
-        next: (response) => {
-          console.log(response);
+        next: (response: any) => {
+          this.loading = false;
+          this.router.navigateByUrl('/');
         },
-        error: (err) => {
-          console.log(err);
+        error: (error) => {
+          this.loading = false;
+          if (error.error.errors) {
+            this.errorMessages = error.error.errors;
+          } else {
+            this.errorMessages.push(error.error);
+          }
         }
       },
       );
@@ -65,13 +82,11 @@ export class LoginComponent implements OnInit {
           recuperarPass.style.display = "block";
         }
       }
-      else if (opcao == "conta")
-      {
+      else if (opcao == "conta") {
         if (recuperarConta) {
           recuperarConta.style.display = "block";
         }
       }
-
     }
   }
 

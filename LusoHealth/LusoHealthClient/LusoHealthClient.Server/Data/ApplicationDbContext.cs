@@ -1,4 +1,4 @@
-﻿using LusoHealthClient.Server.Models;
+﻿using LusoHealthClient.Server.Models.Authentication;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 

@@ -1,0 +1,45 @@
+.alert {
+  min-width: 390px;
+  min-height: 80px;
+  max-width: 50%;
+  position: absolute;
+  padding: 10px 15px;
+  background-color: #3f9443;
+  color: white;
+  opacity: 1;
+  transition: opacity 0.6s;
+  border-radius: 10px;
+  top: 50%; /* Centraliza verticalmente */
+  left: 50%; /* Centraliza horizontalmente */
+  transform: translate(-50%, -50%); /* Corrige o deslocamento pela metade da largura e altura */
+  /*z-index: 1;*/
+  /*top: 400px;*/
+  /*margin: 0 auto;*/
+}
+
+#alert-text {
+  margin-top: 25px;
+  margin-right: 20px;
+  color: white;
+}
+
+#closebtn {
+  margin-left: 15px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+  #closebtn:hover {
+    color: lightgray;
+  }
+
+p {
+  margin: 4px !important;
+  overflow-wrap: anywhere;
+  width: 100%;
+}

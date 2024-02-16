@@ -1,0 +1,9 @@
+<main>
+  <div *ngIf="loading">
+    <loading-spinner></loading-spinner>
+  </div>
+  <p> {{ responseText }}</p>
+  <div *ngIf="!success">
+    <button (click)="resendEmailConfirmationLink()">Reenviar email</button>
+  </div>
+</main>

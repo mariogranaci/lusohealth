@@ -1,5 +1,5 @@
 #password-reset-container {
-  min-width: 400px;
+  min-width: 500px;
   max-width: 500px;
   height: 500px;
   border: 1px solid transparent;
@@ -10,7 +10,7 @@
 }
 
 h2 {
-  margin-bottom: 10px;
+  margin: 15px 0;
 }
 
 hr {
@@ -25,13 +25,20 @@ img {
   margin-bottom: 15px;
 }
 
-input {
+#email-div {
+  margin: 20px auto 0 auto;
   width: 85%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+input {
+  width: 100%;
   padding: 12px;
   border-radius: 10px;
   border: 0;
   font-size: 20px;
-  margin-top: 20px;
 }
 
 button {
@@ -39,9 +46,9 @@ button {
   color: white;
   padding: 10px;
   border: none;
-  margin: 50px;
+  margin-top: 50px;
   cursor: pointer;
-  width: 51%;
+  width: fit-content;
   border-radius: 5px;
   font-size: 20px;
   transition: background-color 0.3s ease;
@@ -50,3 +57,21 @@ button {
   button:hover {
     background-color: #1b69c8;
   }
+
+.is-invalid {
+  border: 2px solid #cc0000 !important;
+}
+
+.text-danger {
+  width: 100%;
+  margin-top: 5px;
+  color: #cc0000;
+  display: block;
+  text-align: left;
+}
+
+@media only screen and (max-width: 550px) {
+  #password-reset-container {
+    min-width: 400px;
+  }
+}

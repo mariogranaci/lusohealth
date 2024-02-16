@@ -2,11 +2,12 @@
 using LusoHealthClient.Server.Models.Authentication;
 using LusoHealthClient.Server.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using System.Text;
 
 namespace LusoHealthClient.Server.Controllers
 {
@@ -17,26 +18,33 @@ namespace LusoHealthClient.Server.Controllers
         private readonly JWTService _jwtService;
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
+        private readonly EmailService _emailService;
+        private readonly IConfiguration _config;
 
         public AuthenticationController(JWTService jwtService,
             SignInManager<User> signInManager,
-            UserManager<User> userManager)
+            UserManager<User> userManager,
+            EmailService emailService,
+            IConfiguration config)
         {
             _jwtService = jwtService;
             _signInManager = signInManager;
             _userManager = userManager;
+            _emailService = emailService;
+            _config = config;
         }
 
         [Authorize]
         [HttpGet("refresh-user-token")]
         public async Task<ActionResult<UserDto>> RefreshUserToken()
         {
+
             var user = await _userManager.FindByEmailAsync(User.FindFirst(ClaimTypes.Email)?.Value);
             return CreateApplicationUserDto(user);
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<UserDto>> Login (LoginDto model)
+        public async Task<ActionResult<UserDto>> Login(LoginDto model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user == null) return Unauthorized("Email ou password inválidos");
@@ -51,14 +59,14 @@ namespace LusoHealthClient.Server.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<UserDto>> Register(RegisterDto model)
         {
-            if (await CheckEmailExistsAsync(model.Email)) 
+            if (await CheckEmailExistsAsync(model.Email))
             {
-                return BadRequest($"{model.Email} já se encontra em uso, ta ai o ip dele 293.451.863.");
+                return BadRequest($"O email já se encontra em uso");
             }
 
-            if (model.Password != model.ConfirmarPassword) 
+            if (model.Password != model.ConfirmarPassword)
             {
-                return BadRequest($"As passwords têm que condizer.");
+                return BadRequest($"As passwords não condizem");
             }
 
             var userToAdd = new User
@@ -71,7 +79,6 @@ namespace LusoHealthClient.Server.Controllers
                 UserType = model.TipoUser,
                 PhoneNumber = model.Telemovel.Trim(),
                 PasswordHash = model.Password.Trim(),
-                EmailConfirmed = true,
                 PhoneNumberConfirmed = false,
                 IsSuspended = false,
                 IsBlocked = false,
@@ -80,12 +87,121 @@ namespace LusoHealthClient.Server.Controllers
                 LockoutEnabled = false,
                 AccessFailedCount = 0,
                 UserName = model.Nif.Trim(),
+                BirthDate = model.DataNascimento
             };
 
             var result = await _userManager.CreateAsync(userToAdd, model.Password);
             if (!result.Succeeded) return BadRequest(result.Errors);
 
-            return Ok(new JsonResult(new {title="Account Created", message="A tua conta foi criada com sucesso!"}));
+            try
+            {
+                if (await SendConfirmEmailAsync(userToAdd))
+                {
+                    return Ok(new JsonResult(new { title = "Conta Criada", message = "A sua conta foi criada com sucesso. Por favor, confirme o seu endereço de email" }));
+                }
+                return BadRequest("Houve um problema a enviar o email. Tente mais tarde.");
+            }
+            catch (Exception)
+            {
+                return BadRequest("Houve um problema a enviar o email. Tente mais tarde.");
+            }
+        }
+
+        [HttpPut("confirm-email")]
+        public async Task<ActionResult> ConfirmEmail(ConfirmEmailDto model)
+        {
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null) return Unauthorized("Este endereço de email ainda não foi registado");
+
+            if (user.EmailConfirmed) return Ok(new JsonResult(new { title = "Email Confirmado", message = "O email já foi confirmado. Faça login na sua conta" }));
+
+            try
+            {
+                var decodedTokenBytes = WebEncoders.Base64UrlDecode(model.Token);
+                var decodedToken = Encoding.UTF8.GetString(decodedTokenBytes);
+                var result = await _userManager.ConfirmEmailAsync(user, decodedToken);
+                if (result.Succeeded)
+                    return Ok(new JsonResult(new { title = "Email Confirmado", message = "O seu email foi confirmado com sucesso. Faça login na sua conta" }));
+                return BadRequest("Token inválido. Tente novamente");
+            }
+            catch (Exception)
+            {
+                return BadRequest("Token inválido. Tente novamente");
+            }
+        }
+
+        [HttpPost("resend-email-confirmation-link/{email}")]
+        public async Task<ActionResult> ResendEmailConfirmationLink(string email)
+        {
+            if (string.IsNullOrEmpty(email)) return BadRequest("Email inválido");
+
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null) return Unauthorized("Este endereço de email ainda não foi registado");
+
+            if (user.EmailConfirmed) return BadRequest("O email já foi confirmado. Faça login na sua conta");
+
+            try
+            {
+                if (await SendConfirmEmailAsync(user))
+                {
+                    return Ok(new JsonResult(new { title = "Email Enviado", message = "O email de confirmação foi reenviado com sucesso" }));
+                }
+                return BadRequest("Houve um problema a enviar o email. Tente mais tarde.");
+            }
+            catch (Exception)
+            {
+                return BadRequest("Houve um problema a enviar o email. Tente mais tarde.");
+            }
+        }
+
+        [HttpPost("forgot-password")]
+        public async Task<ActionResult> ForgotPassword(EmailDto model)
+        {
+            var email = model.Email;
+            if (string.IsNullOrEmpty(email)) return BadRequest("Email inválido");
+
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null) return Unauthorized("Este endereço de email ainda não foi registado");
+
+            if (!user.EmailConfirmed) return BadRequest("O email ainda não foi confirmado. Confirme o seu email para poder recuperar a sua password");
+
+            try
+            {
+                if (await SendForgotPasswordEmail(user))
+                {
+                    return Ok(new JsonResult(new { title = "Email Enviado", message = "Verifique o seu email" }));
+                }
+                return BadRequest("Houve um problema a enviar o email. Tente mais tarde.");
+            }
+            catch (Exception)
+            {
+                return BadRequest("Houve um problema a enviar o email. Tente mais tarde.");
+            }
+        }
+
+        [HttpPut("reset-password")]
+        public async Task<ActionResult> ResetPassword(ResetPasswordDto model)
+        {
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null) return Unauthorized("Este endereço de email ainda não foi registado");
+            if (!user.EmailConfirmed) return BadRequest("O email ainda não foi confirmado. Confirme o seu email para poder recuperar a sua password");
+
+            try
+            {
+                var decodedTokenBytes = WebEncoders.Base64UrlDecode(model.Token);
+                var decodedToken = Encoding.UTF8.GetString(decodedTokenBytes);
+
+                if (model.NewPassword != model.ConfirmarPassword) return BadRequest($"As passwords não condizem");
+
+                var result = await _userManager.ResetPasswordAsync(user, decodedToken, model.NewPassword);
+                if (result.Succeeded)
+                    return Ok(new JsonResult(new { title = "Password Alterada", message = "A sua password foi alterada com sucesso. Faça login na sua conta" }));
+                return BadRequest("Token inválido. Tente novamente");
+            }
+            catch (Exception)
+            {
+                return BadRequest("Token inválido. Tente novamente");
+            }
         }
 
         #region Private Helper Methods
@@ -101,6 +217,41 @@ namespace LusoHealthClient.Server.Controllers
         private async Task<bool> CheckEmailExistsAsync(string email)
         {
             return await _userManager.Users.AnyAsync(x => x.Email == email.ToLower());
+        }
+
+        private async Task<bool> SendConfirmEmailAsync(User user)
+        {
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            token = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
+            var url = $"{_config["JWT:ClientUrl"]}/{_config["Email:ConfirmEmailPath"]}?token={token}&email={user.Email}";
+
+            var body = $"Olá {user.Name}, <br/>" +
+                $"Por favor, confirme o seu email clicando no link abaixo: <br/>" +
+                $"<a href='{url}'>Confirmar email</a> <br/>" +
+                "<p>Obrigado,</p> <br/>" +
+                $"{_config["Email:ApplicationName"]}";
+
+            var emailSend = new EmailSendDto(user.Email, "Confirme o seu email", body);
+
+            return await _emailService.SendEmailAsync(emailSend);
+        }
+
+
+        private async Task<bool> SendForgotPasswordEmail(User user)
+        {
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            token = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
+            var url = $"{_config["JWT:ClientUrl"]}/{_config["Email:ResetPasswordPath"]}?token={token}&email={user.Email}";
+
+            var body = $"Olá {user.Name}, <br/>" +
+                $"Clique no link abaixo para recuperar a sua password: <br/>" +
+                $"<a href='{url}'>Recuperar password</a> <br/>" +
+                "<p>Obrigado,</p> <br/>" +
+                $"{_config["Email:ApplicationName"]}";
+
+            var emailSend = new EmailSendDto(user.Email, "Recuperar Password", body);
+
+            return await _emailService.SendEmailAsync(emailSend);
         }
         #endregion
     }

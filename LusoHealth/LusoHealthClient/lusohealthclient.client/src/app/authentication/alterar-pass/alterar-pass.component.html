@@ -1,0 +1,32 @@
+<h1>Alterar Password</h1>
+<form [formGroup]="resetPasswordForm" (ngSubmit)="resetPassword()" autocomplete="off" id="password-reset-container" >
+  <img src="assets/images/Recuperation/LusoIcon.png" alt="Image">
+  <input formControlName="password" type="password" id="password" name="password" placeholder="Password" required [class.is-invalid]="submitted && resetPasswordForm.get('password')?.errors">
+  <span class="text-danger" *ngIf="submitted && resetPasswordForm.get('password')?.hasError('required')">
+    Introduza uma password
+  </span>
+  <span class="text-danger" *ngIf="submitted && (resetPasswordForm.get('password')?.hasError('maxlength') ||  resetPasswordForm.get('password')?.hasError('minlength'))">
+    A password deve conter entre 8 e 50 caracteres
+  </span>
+  <span class="text-danger" *ngIf="submitted && (resetPasswordForm.get('password')?.hasError('passwordPattern'))">
+    A password deve conter pelo menos uma letra minúscula, uma letra maiúscula e um dígito.
+  </span>
+  <input formControlName="confirmarPassword" type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirmar Password" required [class.is-invalid]="submitted && resetPasswordForm.get('confirmarPassword')?.errors">
+  <span class="text-danger" *ngIf="submitted && resetPasswordForm.get('confirmarPassword')?.hasError('required')">
+    Confirme a password
+  </span>
+  <span class="text-danger" *ngIf="submitted && (resetPasswordForm.get('confirmarPassword')?.hasError('maxlength') ||  resetPasswordForm.get('confirmarPassword')?.hasError('minlength'))">
+    A password deve conter entre 8 e 50 caracteres
+  </span>
+  <span class="text-danger" *ngIf="submitted && (resetPasswordForm.get('confirmarPassword')?.hasError('passwordPattern'))">
+    A password deve conter pelo menos uma letra minúscula, uma letra maiúscula e um dígito.
+  </span>
+  <button>Confirmar</button>
+</form>
+<div *ngIf="responseText">
+  <pop-up-success [message]=responseText></pop-up-success>
+</div>
+<div *ngIf="errorMessages.length > 0">
+  <app-validation-messages [errorMessages]="errorMessages"></app-validation-messages>
+</div>
+

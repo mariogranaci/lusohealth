@@ -1,55 +1,141 @@
 <h1>Registo</h1>
-
-<form [formGroup]="registerForm" (ngSubmit)="register()" autocomplete="off">
+<div *ngIf="errorMessages.length > 0">
+  <app-validation-messages [errorMessages]="errorMessages"></app-validation-messages>
+</div>
+<form [formGroup]="registerForm" (ngSubmit)="register()" autocomplete="off" *ngIf="!loading">
   <div class="form-row">
 
-    <div class="column-left">
-      <label for="name">Nome:</label>
-      <input formControlName="firstName" type="text" id="nome" name="nome" required>
-
-      <label for="email">Email:</label>
-      <input formControlName="email" type="email" id="email" name="email" required>
-
-      <label for="dataNascimento">Data de Nascimento:</label>
-      <input formControlName="dataNascimento" type="date" id="dataNascimento" name="dataNascimento" required>
-
-      <label for="password">Password:</label>
-      <input formControlName="password" type="password" id="password" name="password" required>
-
-      <div class="gender">
-        <label >Género:</label>
-        <label for="male" class="radio-label"><input formControlName="genero" type="radio" name="genero" value="M" id="male"> Masculino</label>
-        <label for="female" class="radio-label"><input formControlName="genero" type="radio" name="genero" value="F" id="female"> Feminino</label>
+    <div class="row">
+      <div class="left">
+        <label for="name">Nome:</label>
+        <input formControlName="firstName" type="text" id="nome" name="nome" required [class.is-invalid]="submitted && registerForm.get('firstName')?.errors">
+        <span class="text-danger" *ngIf="submitted && registerForm.get('firstName')?.hasError('required')">
+          Introduza o seu nome
+        </span>
+        <span class="text-danger" *ngIf="submitted && registerForm.get('firstName')?.hasError('maxlength')">
+          Não pode introduzir mais de 50 caracteres
+        </span>
+        <span class="text-danger" *ngIf="submitted && registerForm.get('firstName')?.hasError('minlength')">
+          O nome tem um mínimo de 3 caracteres
+        </span>
       </div>
-
+      <div class="right">
+        <label for="apelido">Apelido:</label>
+        <input formControlName="lastName" type="text" id="apelido" name="apelido" required [class.is-invalid]="submitted && registerForm.get('lastName')?.errors">
+        <span class="text-danger" *ngIf="submitted && registerForm.get('lastName')?.hasError('required')">
+          Introduza o seu apelido
+        </span>
+        <span class="text-danger" *ngIf="submitted && registerForm.get('lastName')?.hasError('maxlength')">
+          Não pode introduzir mais de 50 caracteres
+        </span>
+        <span class="text-danger" *ngIf="submitted && registerForm.get('lastName')?.hasError('minlength')">
+          O apelido tem um mínimo de 3 caracteres
+        </span>
+      </div>
     </div>
-
-    <div class="column-right">
-      <label for="apelido">Apelido:</label>
-      <input formControlName="lastName" type="text" id="apelido" name="apelido" required>
-
-      <label for="telemovel">Telemóvel:</label>
-      <input maxlength="9" formControlName="telemovel" type="tel" id="telemovel" name="telemovel" required>
-
-      <label for="nif">NIF:</label>
-      <input formControlName="nif" maxlength="9" type="text" id="nif" name="nif" pattern="[0-9]{9}" oninput="this.value = this.value.replace(/[^0-9]/g, '');" required>
-
-      <label for="confirmPassword">Confirmar Password:</label>
-      <input formControlName="confirmarPassword" type="password" id="confirmPassword" name="confirmPassword" required>
-
-
-      <div class="type-acount">
-        <label>Tipo de Conta:</label>
-        <label for="type-radio-pacient" class="radio-label"><input formControlName="tipoUser" id="type-radio-pacient" type="radio" name="tipoUser" value="U">Paciente</label>
-        <label for="type-radio-professional" class="radio-label"><input formControlName="tipoUser" id="type-radio-professional" type="radio" name="tipoUser"value="P"> Profissional de Saúde</label>
+    <div class="row">
+      <div class="left">
+        <label for="email">Email:</label>
+        <input formControlName="email" type="email" id="email" name="email" required [class.is-invalid]="submitted && registerForm.get('email')?.errors">
+        <span class="text-danger" *ngIf="submitted && registerForm.get('email')?.hasError('required')">
+          O email é obrigatório
+        </span>
+        <span class="text-danger" *ngIf="submitted && registerForm.get('email')?.hasError('email')">
+          Email inválido
+        </span>
       </div>
-
+      <div class="right">
+        <label for="telemovel">Telemóvel:</label>
+        <input maxlength="9" formControlName="telemovel" type="tel" id="telemovel" name="telemovel" oninput="this.value = this.value.replace(/[^0-9]/g, '');" [class.is-invalid]="submitted && registerForm.get('telemovel')?.errors">
+        <span class="text-danger" *ngIf="submitted && (registerForm.get('telemovel')?.hasError('maxlength') ||  registerForm.get('telemovel')?.hasError('minlength'))">
+          O telemóvel deve ter 9 dígitos
+        </span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="left">
+        <label for="dataNascimento">Data de Nascimento:</label>
+        <input formControlName="dataNascimento" type="date" id="dataNascimento" name="dataNascimento" required [class.is-invalid]="submitted && registerForm.get('dataNascimento')?.errors">
+        <span class="text-danger" *ngIf="submitted && registerForm.get('dataNascimento')?.hasError('required')">
+          Introduza uma data de nascimento
+        </span>
+        <span class="text-danger" *ngIf="submitted && registerForm.get('dataNascimento')?.hasError('error')">
+          Introduza uma data válida
+        </span>
+        <span class="text-danger" *ngIf="submitted && registerForm.get('dataNascimento')?.hasError('idade')">
+          A idade deve ser maior que 18 anos.
+        </span>
+      </div>
+      <div class="right">
+        <label for="nif">NIF:</label>
+        <input formControlName="nif" maxlength="9" type="text" id="nif" name="nif" oninput="this.value = this.value.replace(/[^0-9]/g, '');" required [class.is-invalid]="submitted && registerForm.get('nif')?.errors">
+        <span class="text-danger" *ngIf="submitted && registerForm.get('nif')?.hasError('required')">
+          O NIF é obrigatório
+        </span>
+        <span class="text-danger" *ngIf="submitted && (registerForm.get('nif')?.hasError('maxlength') ||  registerForm.get('nif')?.hasError('minlength'))">
+          NIF deve ter 9 dígitos
+        </span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="left">
+        <label for="password">Password:</label>
+        <input formControlName="password" type="password" id="password" name="password" required [class.is-invalid]="submitted && registerForm.get('password')?.errors">
+        <span class="text-danger" *ngIf="submitted && registerForm.get('password')?.hasError('required')">
+          Introduza uma password
+        </span>
+        <span class="text-danger" *ngIf="submitted && (registerForm.get('password')?.hasError('maxlength') ||  registerForm.get('password')?.hasError('minlength'))">
+          A password deve conter entre 8 e 50 caracteres
+        </span>
+        <span class="text-danger" *ngIf="submitted && (registerForm.get('password')?.hasError('passwordPattern'))">
+          A password deve conter pelo menos uma letra minúscula, uma letra maiúscula e um dígito.
+        </span>
+      </div>
+      <div class="right">
+        <label for="confirmPassword">Confirmar Password:</label>
+        <input formControlName="confirmarPassword" type="password" id="confirmPassword" name="confirmPassword" required [class.is-invalid]="submitted && registerForm.get('confirmarPassword')?.errors">
+        <span class="text-danger" *ngIf="submitted && registerForm.get('confirmarPassword')?.hasError('required')">
+          Confirme a password
+        </span>
+        <span class="text-danger" *ngIf="submitted && (registerForm.get('confirmarPassword')?.hasError('maxlength') ||  registerForm.get('confirmarPassword')?.hasError('minlength'))">
+          A password deve conter entre 8 e 50 caracteres
+        </span>
+        <span class="text-danger" *ngIf="submitted && (registerForm.get('confirmarPassword')?.hasError('passwordPattern'))">
+          A password deve conter pelo menos uma letra minúscula, uma letra maiúscula e um dígito.
+        </span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="left">
+        <div class="gender">
+          <label>Género:</label>
+          <label for="male" class="radio-label"><input formControlName="genero" type="radio" name="genero" value="M" id="male"> Masculino</label>
+          <label for="female" class="radio-label"><input formControlName="genero" type="radio" name="genero" value="F" id="female"> Feminino</label>
+        </div>
+        <span class="text-danger" *ngIf="submitted && registerForm.get('genero')?.hasError('required')">
+          Selecione um género
+        </span>
+      </div>
+      <div class="right">
+        <div class="type-acount">
+          <label>Tipo de Conta:</label>
+          <label for="type-radio-pacient" class="radio-label"><input formControlName="tipoUser" id="type-radio-pacient" type="radio" name="tipoUser" value="U">Paciente</label>
+          <label for="type-radio-professional" class="radio-label"><input formControlName="tipoUser" id="type-radio-professional" type="radio" name="tipoUser" value="P"> Profissional de Saúde</label>
+        </div>
+        <span class="text-danger" *ngIf="submitted && registerForm.get('tipoUser')?.hasError('required')">
+          Escolha um tipo de conta
+        </span>
+      </div>
     </div>
   </div>
-
+  <div *ngIf="responseText">
+    <pop-up-success [message]=responseText></pop-up-success>
+  </div>
   <div id="submit-button">
     <button type="submit" class="btn-regist">Registar</button>
-     <p id="btn-text"><a [routerLink]="['/authentication/login']" class="nav-link"> Já Possui Conta? <b>Login</b></a></p>  
+    <p id="btn-text"><a [routerLink]="['/login']" class="nav-link"> Já Possui Conta? <b>Login</b></a></p>
   </div>
-
 </form>
+<div *ngIf="loading">
+  <loading-spinner></loading-spinner>
+</div>

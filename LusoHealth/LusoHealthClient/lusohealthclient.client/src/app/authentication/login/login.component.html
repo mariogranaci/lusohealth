@@ -5,29 +5,33 @@
     </div>
     <button class="recover-account-button" name="recover-account" id="recover-account" (click)="openPopup('conta')">Recuperar Conta</button>
   </div>
-
   <div class="login-form">
-    <form [formGroup]="loginForm" (ngSubmit)="login()" enctype="multipart/form-data">
-      <p class="box">
-        <input formControlName="email" type="email" class="textbox" placeholder=" " name="email" id="email" required>
-
+    <form [formGroup]="loginForm" (ngSubmit)="login()" autocomplete="off" *ngIf="!loading">
+      <div class="box">
+        <input formControlName="email" type="email" class="textbox" placeholder=" " name="email" id="email" [class.is-invalid]="submitted && loginForm.get('email')?.errors" required>
         <label for="email">Email</label>
-      </p>
+        <span class="text-danger" *ngIf="submitted && loginForm.get('email')?.hasError('required')">
+          Introduza o seu email
+        </span>
+      </div>
 
-      <p class="box" id="password-box">
-        <input formControlName="password" type="password" class="textbox" placeholder=" " name="password" id="password" required>
+      <div class="box" id="password-box">
+        <input formControlName="password" type="password" class="textbox" placeholder=" " name="password" id="password" [class.is-invalid]="submitted && loginForm.get('password')?.errors" required>
         <label for="password">Password</label>
-      </p>
+        <span class="text-danger" *ngIf="submitted && loginForm.get('password')?.hasError('required')">
+          Introduza a sua password
+        </span>
+      </div>
 
-      <p class="link-area"><a (click)="openPopup('pass')">Esqueceu-se da password? </a></p>
+      <div class="link-area"><a (click)="openPopup('pass')">Esqueceu-se da password? </a></div>
 
-      <p class="box">
-        <button type="submit" class="login-button login-button-animation" name="submit-login" id="submit-login">
+      <div class="box">
+        <button type="submit" class="login-button button" name="submit-login" id="submit-login">
           Login
         </button>
-      </p>
+      </div>
     </form>
-    <p class="link-area"><a [routerLink]="['/authentication/register']">Não Possui Conta? <b>Registe-se</b> </a></p>
+    <div class="link-area"><a [routerLink]="['/register']">Não Possui Conta? <b>Registe-se</b> </a></div>
 
   </div>
 
@@ -38,21 +42,25 @@
   </div>
 
   <div class="login-form">
-    <p class="box">
-     
-
+    <div class="box">
       <button class="login-button button" name="google-login-button" id="google-login-button">
         <img src="assets/images/login/google-login.jpg" alt="Google Logo" class="google-logo">
         Continuar com Google
       </button>
-      <!-- <a href="#">Submit</a> -->
-    </p>
+    </div>
   </div>
-
+  <div *ngIf="errorMessages.length > 0">
+    <app-validation-messages [errorMessages]="errorMessages" [email]="loginForm.get('email')?.value"></app-validation-messages>
+  </div>
   <div class="overlay" id="overlay" (click)="closePopup()">
-    <a class="close-button" (click)="closePopup()"><img src="assets/images/login/close.png" alt="Close button" class="close-image"></a>
+    <a class="close-button" (click)="closePopup()">
+      <img src="assets/images/login/close.png" alt="Close button" class="close-image">
+    </a>
     <app-recuperar-pass (click)="stopPropagation($event)" id="recuperar-pass"></app-recuperar-pass>
     <app-recuperar-conta (click)="stopPropagation($event)" id="recuperar-conta"></app-recuperar-conta>
+  </div>
+  <div *ngIf="loading">
+    <loading-spinner></loading-spinner>
   </div>
 
 </main>

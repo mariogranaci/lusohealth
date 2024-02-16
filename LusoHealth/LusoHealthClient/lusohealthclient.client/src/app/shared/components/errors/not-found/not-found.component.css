@@ -1,0 +1,40 @@
+div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90vh;
+  flex-direction: column;
+}
+
+h1 {
+  margin-bottom: 10px;
+  font-size: 150px;
+  text-align: center;
+  color: #1b69c8
+}
+
+p {
+  font-size: 22px;
+  margin-bottom: 20px;
+}
+
+button {
+  min-width: 280px;
+  width: 20%;
+  height: 50px;
+  border: none;
+  color: #fff;
+  font-size: 17px;
+  border-radius: 7px;
+  padding: 10px 25px;
+  font-weight: 500;
+  background-color: #1875E7;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: inset 2px 2px 2px 0px rgba(37, 80, 209, 0.5), 7px 7px 20px 0px rgba(0, 0, 0, .1), 4px 4px 5px 0px rgba(0, 0, 0, .1);
+  outline: none;
+}
+
+  button:hover {
+    background-color: #1b69c8;
+  }

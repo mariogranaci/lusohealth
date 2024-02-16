@@ -1,21 +1,18 @@
-#password-reset-container {
-  width: 22%;
-  height: 600px;
-  border: 1px solid black;
+h1 {
   text-align: center;
-  margin: 80px auto;
-  border-radius: 5px;
-  background-color: #ECEEF0;
+  font-size: 50px;
+  margin: 25px 0 0 0;
 }
 
-h2 {
-  margin-bottom: 10px;
-}
-
-hr {
-  margin: 15px 0;
-  border: none;
-  border-top: 1px solid black;
+#password-reset-container {
+  width: 400px;
+  text-align: center;
+  margin: 20px auto;
+  height: 70vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 img {
@@ -25,7 +22,7 @@ img {
 }
 
 input {
-  width: 85%;
+  width: 100%;
   padding: 12px;
   border-radius: 10px;
   border: 0;
@@ -40,7 +37,7 @@ button {
   border: none;
   margin: 50px;
   cursor: pointer;
-  width: 51%;
+  width: 50%;
   border-radius: 5px;
   font-size: 20px;
   transition: background-color 0.3s ease;
@@ -49,3 +46,15 @@ button {
   button:hover {
     background-color: #1b69c8;
   }
+
+.is-invalid {
+  border: 2px solid #cc0000 !important;
+}
+
+.text-danger {
+  width: 100%;
+  margin-top: 5px;
+  color: #cc0000;
+  display: block;
+  text-align: left;
+}

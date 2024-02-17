@@ -6,11 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace LusoHealthClient.Server.Migrations
 {
     /// <inheritdoc />
-<<<<<<<< HEAD:LusoHealth/LusoHealthClient/LusoHealthClient.Server/Migrations/20240216185644_LusoHealth.cs
     public partial class LusoHealth : Migration
-========
-    public partial class lusohealth : Migration
->>>>>>>> main:LusoHealth/LusoHealthClient/LusoHealthClient.Server/Migrations/20240217192633_lusohealth.cs
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

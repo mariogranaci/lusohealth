@@ -6,6 +6,7 @@ import { HomePageComponent } from './home-page/home-page.component';
 const routes: Routes = [
   { path: 'home', component: HomePageComponent },
   { path: '', component: HomePageComponent },
+  { path: '', loadChildren: () => import('./profile/profile.module').then(m => m.ProfileModule) },
   { path: '', loadChildren: () => import('./authentication/authentication.module').then(m => m.AuthenticationModule) },
   { path: 'not-found', component: NotFoundComponent },
   { path: '**', component: NotFoundComponent, pathMatch: 'full' },

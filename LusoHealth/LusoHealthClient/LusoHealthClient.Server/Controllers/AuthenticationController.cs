@@ -39,7 +39,6 @@ namespace LusoHealthClient.Server.Controllers
         [HttpGet("refresh-user-token")]
         public async Task<ActionResult<UserDto>> RefreshUserToken()
         {
-
             var user = await _userManager.FindByEmailAsync(User.FindFirst(ClaimTypes.Email)?.Value);
             return CreateApplicationUserDto(user);
         }
@@ -106,6 +105,62 @@ namespace LusoHealthClient.Server.Controllers
             {
                 return BadRequest("Houve um problema a enviar o email. Tente mais tarde.");
             }
+        }
+
+        [HttpPost("login-with-google")]
+        public async Task<ActionResult<UserDto>> LoginWithGoogle(LoginWithGoogleDto model)
+        {
+            if (model.Provider.Equals("google"))
+            {
+                try
+                {
+                    if (!GoogleValidatedAsync(model.AccessToken, model.UserId).GetAwaiter().GetResult())
+                    {
+                        return Unauthorized("Não foi possível continuar com o Google");
+                    }
+                }
+                catch (Exception)
+                {
+                    return Unauthorized("Não foi possível continuar com o Google");
+                }
+
+            }
+            else
+            {
+                return BadRequest("Provedor Inválido");
+            }
+
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user != null) return Unauthorized("O email já está a ser utilizado.");
+
+            var userToAdd = new User
+            {
+
+                Name = model.FirstName.Trim() + " " + model.LastName.Trim(),
+                Email = model.Email.ToLower().Trim(),
+                NormalizedEmail = model.Email.ToLower().Trim(),
+                Gender = model.Genero,
+                Nif = model.Nif.Trim(),
+                UserType = model.TipoUser,
+                PhoneNumber = model.Telemovel.Trim(),
+                PhoneNumberConfirmed = false,
+                EmailConfirmed = true,
+                IsSuspended = false,
+                IsBlocked = false,
+                ProfilePicPath = model.ProfilePicPath,
+                TwoFactorEnabled = false,
+                LockoutEnabled = false,
+                AccessFailedCount = 0,
+                UserName = model.UserId,
+                BirthDate = model.DataNascimento,
+                Provider = model.Provider,
+
+            };
+
+            var result = await _userManager.CreateAsync(userToAdd);
+            if (!result.Succeeded) return BadRequest(result.Errors);
+
+            return CreateApplicationUserDto(userToAdd);
         }
 
         [HttpPost("register-with-google")]

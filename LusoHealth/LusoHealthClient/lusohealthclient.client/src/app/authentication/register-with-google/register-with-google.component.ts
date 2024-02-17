@@ -1,28 +1,36 @@
 import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
 import { AuthenticationService } from '../authentication.service';
 import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { User } from '../../shared/models/authentication/user';
 import { take } from 'rxjs';
+import { RegisterWithGoogle } from '../../shared/models/authentication/registerWithGoogle';
 
 @Component({
-  selector: 'app-registo',
-  templateUrl: './registo.component.html',
-  styleUrl: './registo.component.css'
+  selector: 'app-register-with-google',
+  templateUrl: './register-with-google.component.html',
+  styleUrl: './register-with-google.component.css'
 })
-
-export class RegistoComponent implements OnInit {
+export class RegisterWithGoogleComponent implements OnInit {
   registerForm: FormGroup = new FormGroup({});
   submitted = false;
   loading = false;
   errorMessages: string[] = [];
   responseText: string | undefined;
+  provider: string | null = null;
+  accessToken: string | null = null;
+  email: string | null = null;
+  userId: string | null = null;
+  familyName: string | null = null;
+  givenName: string | null = null;
+  picture : string = '';
 
   constructor(private authenticationService: AuthenticationService,
     private formBuilder: FormBuilder,
     private router: Router,
     private renderer: Renderer2,
-    private elem: ElementRef) {
+    private elem: ElementRef,
+    private activatedRoute: ActivatedRoute) {
     this.authenticationService.user$.pipe(take(1)).subscribe({
       next: (user: User | null) => {
         if (user) {
@@ -33,7 +41,31 @@ export class RegistoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.initializeForm();
+    this.authenticationService.user$.pipe(take(1)).subscribe({
+      next: (user: User | null) => {
+        if (user) {
+          this.router.navigateByUrl('/');
+        } else {
+          this.activatedRoute.queryParamMap.subscribe({
+            next: (params: any) => {
+              this.provider = this.activatedRoute.snapshot.paramMap.get('provider');
+              this.accessToken = params.get('access_token');
+              this.userId = params.get('user_id');
+              this.email = params.get('email');
+              this.givenName = params.get('given_name');
+              this.familyName = params.get('family_name');
+              this.picture = params.get('picture');
+
+              if (this.provider && this.accessToken && this.email && this.provider === 'google') {
+                this.initializeForm();
+              } else {
+                this.router.navigateByUrl('/');
+              }
+            }
+          });
+        }
+      }
+    });
   }
 
   ngAfterViewInit(): void {
@@ -47,14 +79,11 @@ export class RegistoComponent implements OnInit {
   initializeForm() {
 
     this.registerForm = this.formBuilder.group({
-
-      firstName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
-      lastName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
+      firstName: [this.givenName, [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
+      lastName: [this.familyName, [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
+      email: [this.email],
       nif: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(9)]],
       telemovel: ['', [Validators.minLength(9), Validators.maxLength(9)]],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(50)], [this.passwordPatternValidator()]],
-      confirmarPassword: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(50)], [this.passwordPatternValidator()]],
       dataNascimento: ['', [Validators.required, this.idadeValidator]],
       genero: ['', [Validators.required]],
       tipoUser: ['', [Validators.required]],
@@ -69,15 +98,23 @@ export class RegistoComponent implements OnInit {
     this.responseText = '';
 
 
-    if (this.registerForm.valid) {
+    if (this.registerForm.valid && this.userId && this.email && this.accessToken && this.provider) {
       this.loading = true;
-      this.authenticationService.register(this.registerForm.value).subscribe({
+      const firstName = this.registerForm.get('firstName')?.value;
+      const lastName = this.registerForm.get('lastName')?.value;
+      const nif = this.registerForm.get('nif')?.value;
+      const telemovel = this.registerForm.get('telemovel')?.value;
+      const dataNascimento = this.registerForm.get('dataNascimento')?.value;
+      const genero = this.registerForm.get('genero')?.value;
+      const tipoUser = this.registerForm.get('tipoUser')?.value;
+
+      const model = new RegisterWithGoogle(firstName, lastName, nif, telemovel, dataNascimento, genero, tipoUser, this.email, this.accessToken, this.provider, this.picture, this.userId);
+      this.authenticationService.registerWithGoogle(model).subscribe({
         next: (response: any) => {
           this.loading = false;
-          this.responseText = response.value.message;
+          this.router.navigateByUrl('/');
         },
         error: (error) => {
-          console.log(error.error);
           this.loading = false;
           if (error.error.errors) {
             this.errorMessages = error.error.errors;
@@ -87,20 +124,6 @@ export class RegistoComponent implements OnInit {
         }
       })
     }
-  }
-
-  passwordPatternValidator(): ValidatorFn {
-    return (control: AbstractControl): { [key: string]: any } | null => {
-      const value: string = control.value || '';
-
-      const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/;
-
-      return new Promise(resolve => {
-        setTimeout(() => {
-          resolve(pattern.test(value) ? null : { passwordPattern: true });
-        }, 0);
-      });
-    };
   }
 
   idadeValidator(control: AbstractControl): { [key: string]: any } | null {

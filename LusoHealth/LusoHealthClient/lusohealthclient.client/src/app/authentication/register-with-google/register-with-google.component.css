@@ -1,0 +1,112 @@
+h1 {
+  text-align: center;
+  font-size: 50px;
+  margin: 25px 0;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  margin: 20px 50px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+  margin-bottom: 25px;
+}
+
+.right, .left {
+  width: 40%;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="date"],
+input[type="password"],
+input[type="tel"] {
+  min-height: 40px;
+  border: none;
+  border-radius: 7px;
+  font-size: 20px;
+  padding: 0 10px;
+  width: 100%;
+}
+
+#email {
+    cursor: not-allowed;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+.type-acount, .gender {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 20px;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+}
+
+input[type="radio"] {
+  width: 20px;
+  margin: 0 10px 0 0;
+  height: 20px;
+}
+
+
+#submit-button {
+  margin: 0 auto;
+  text-align: center;
+}
+
+  #submit-button p {
+    margin: 3px auto;
+    width: 30%;
+    text-align: end;
+  }
+
+
+.btn-regist {
+  height: 40px;
+  color: #fff;
+  background-color: #1875e7;
+  width: 30%;
+  border: none;
+  border-radius: 7px;
+  font-size: 20px;
+  transition: background-color 0.3s ease;
+}
+
+  .btn-regist:hover {
+    background-color: #1b69c8;
+    cursor: pointer;
+  }
+
+#btn-text, a {
+  color: black;
+}
+
+.is-invalid {
+  border: 2px solid #cc0000 !important;
+}
+
+.text-danger {
+  color: #cc0000;
+}
+
+loading-spinner {
+  position: absolute;
+  top: 50%; /* Centraliza verticalmente */
+  left: 50%; /* Centraliza horizontalmente */
+  transform: translate(-50%, -50%); /* Corrige o deslocamento pela metade da largura e altura */
+}

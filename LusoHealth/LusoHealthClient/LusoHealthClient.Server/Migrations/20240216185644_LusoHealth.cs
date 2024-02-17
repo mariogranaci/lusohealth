@@ -6,7 +6,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace LusoHealthClient.Server.Migrations
 {
     /// <inheritdoc />
+<<<<<<<< HEAD:LusoHealth/LusoHealthClient/LusoHealthClient.Server/Migrations/20240216185644_LusoHealth.cs
     public partial class LusoHealth : Migration
+========
+    public partial class lusohealth : Migration
+>>>>>>>> main:LusoHealth/LusoHealthClient/LusoHealthClient.Server/Migrations/20240217192633_lusohealth.cs
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -38,6 +42,7 @@ namespace LusoHealthClient.Server.Migrations
                     ProfilePicPath = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserType = table.Column<string>(type: "nvarchar(1)", nullable: false),
                     BirthDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Provider = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),

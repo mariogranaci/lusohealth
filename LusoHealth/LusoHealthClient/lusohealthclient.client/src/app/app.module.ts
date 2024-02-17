@@ -9,15 +9,19 @@ import { FormsModule } from '@angular/forms';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { HomePageComponent } from './home-page/home-page.component';
 
+
+
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
-    HomePageComponent,
+    HomePageComponent
+  
   ],
   imports: [
     BrowserModule, HttpClientModule,
     AppRoutingModule, FormsModule
+   
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,4 +1,5 @@
-﻿using LusoHealthClient.Server.DTOs.Authentication;
+﻿using Google.Apis.Auth;
+using LusoHealthClient.Server.DTOs.Authentication;
 using LusoHealthClient.Server.Models.Authentication;
 using LusoHealthClient.Server.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -86,7 +87,7 @@ namespace LusoHealthClient.Server.Controllers
                 TwoFactorEnabled = false,
                 LockoutEnabled = false,
                 AccessFailedCount = 0,
-                UserName = model.Nif.Trim(),
+                UserName = model.Nif.Trim() + '_' + DateTime.Now.Millisecond,
                 BirthDate = model.DataNascimento
             };
 
@@ -105,6 +106,62 @@ namespace LusoHealthClient.Server.Controllers
             {
                 return BadRequest("Houve um problema a enviar o email. Tente mais tarde.");
             }
+        }
+
+        [HttpPost("register-with-google")]
+        public async Task<ActionResult<UserDto>> RegisterWithGoogle(RegisterWithGoogleDto model)
+        {
+            if (model.Provider.Equals("google"))
+            {
+                try
+                {
+                    if (!GoogleValidatedAsync(model.AccessToken, model.UserId).GetAwaiter().GetResult())
+                    {
+                        return Unauthorized("Não foi possível continuar com o Google");
+                    }
+                }
+                catch (Exception)
+                {
+                    return Unauthorized("Não foi possível continuar com o Google");
+                }
+
+            }
+            else
+            {
+                return BadRequest("Provedor Inválido");
+            }
+
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user != null) return Unauthorized("O email já está a ser utilizado.");
+
+            var userToAdd = new User
+            {
+
+                Name = model.FirstName.Trim() + " " + model.LastName.Trim(),
+                Email = model.Email.ToLower().Trim(),
+                NormalizedEmail = model.Email.ToLower().Trim(),
+                Gender = model.Genero,
+                Nif = model.Nif.Trim(),
+                UserType = model.TipoUser,
+                PhoneNumber = model.Telemovel.Trim(),
+                PhoneNumberConfirmed = false,
+                EmailConfirmed = true,
+                IsSuspended = false,
+                IsBlocked = false,
+                ProfilePicPath = model.ProfilePicPath,
+                TwoFactorEnabled = false,
+                LockoutEnabled = false,
+                AccessFailedCount = 0,
+                UserName = model.UserId,
+                BirthDate = model.DataNascimento,
+                Provider = model.Provider,
+
+            };
+
+            var result = await _userManager.CreateAsync(userToAdd);
+            if (!result.Succeeded) return BadRequest(result.Errors);
+
+            return CreateApplicationUserDto(userToAdd);
         }
 
         [HttpPut("confirm-email")]
@@ -207,7 +264,8 @@ namespace LusoHealthClient.Server.Controllers
         #region Private Helper Methods
         private UserDto CreateApplicationUserDto(User user)
         {
-            return new UserDto
+			if (user == null) return null;
+			return new UserDto
             {
                 Name = user.Name,
                 JWT = _jwtService.CreateJWT(user)
@@ -252,6 +310,34 @@ namespace LusoHealthClient.Server.Controllers
             var emailSend = new EmailSendDto(user.Email, "Recuperar Password", body);
 
             return await _emailService.SendEmailAsync(emailSend);
+        }
+
+        private async Task<bool> GoogleValidatedAsync(string accessToken, string userId)
+        {
+            var payload = await GoogleJsonWebSignature.ValidateAsync(accessToken);
+            if (!payload.Audience.Equals(_config["Google:ClientId"]))
+            {
+                return false;
+            }
+            if (!payload.Issuer.Equals("accounts.google.com") && !payload.Issuer.Equals("https://accounts.google.com"))
+            {
+                return false;
+            }
+            if (payload.ExpirationTimeSeconds == null)
+            {
+                return false;
+            }
+            DateTime now = DateTime.Now.ToUniversalTime();
+            DateTime expiration = DateTimeOffset.FromUnixTimeSeconds((long)payload.ExpirationTimeSeconds).DateTime;
+            if (now > expiration)
+            {
+                return false;
+            }
+            if (!payload.Subject.Equals(userId))
+            {
+                return false;
+            }
+            return true;
         }
         #endregion
     }

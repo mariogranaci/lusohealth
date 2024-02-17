@@ -10,6 +10,7 @@ import { RecuperarContaComponent } from './recuperar-conta/recuperar-conta.compo
 import { RecuperarPassComponent } from './recuperar-pass/recuperar-pass.component';
 import { ConfirmEmailComponent } from './confirm-email/confirm-email.component';
 import { AlterarPassComponent } from './alterar-pass/alterar-pass.component';
+import { RegisterWithGoogleComponent } from './register-with-google/register-with-google.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { AlterarPassComponent } from './alterar-pass/alterar-pass.component';
     RecuperarContaComponent,
     RecuperarPassComponent,
     ConfirmEmailComponent,
-    AlterarPassComponent
+    AlterarPassComponent,
+    RegisterWithGoogleComponent
   ],
   imports: [
     CommonModule,

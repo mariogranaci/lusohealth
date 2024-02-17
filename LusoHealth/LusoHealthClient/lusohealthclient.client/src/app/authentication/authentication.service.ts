@@ -107,6 +107,10 @@ export class AuthenticationService {
     return this.http.post(`${environment.appUrl}/api/authentication/forgot-password`, model);
   }
 
+  recoverAccount(model: EmailModel) {
+    return this.http.post(`${environment.appUrl}/api/authentication/recover-account`, model);
+  }
+
   resetPassword(model: ResetPassword) {
     return this.http.put(`${environment.appUrl}/api/authentication/reset-password`, model);
   }

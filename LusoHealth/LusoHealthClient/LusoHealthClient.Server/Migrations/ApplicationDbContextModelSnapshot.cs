@@ -88,6 +88,9 @@ namespace LusoHealthClient.Server.Migrations
                     b.Property<string>("ProfilePicPath")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Provider")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 

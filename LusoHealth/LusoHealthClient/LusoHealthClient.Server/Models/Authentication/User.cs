@@ -18,5 +18,7 @@ namespace LusoHealthClient.Server.Models.Authentication
         public char UserType { get; set; }
         [Required]
         public DateTime BirthDate { get; set; }
+        public string? Provider { get; set; }
+        
     }
 }

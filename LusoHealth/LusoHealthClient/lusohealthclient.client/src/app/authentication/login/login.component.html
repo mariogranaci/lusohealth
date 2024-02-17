@@ -43,10 +43,11 @@
 
   <div class="login-form">
     <div class="box">
-      <button class="login-button button" name="google-login-button" id="google-login-button">
+      <div id="google-div" #googleButton></div>
+      <!--<button #googleButton class="login-button button" name="google-login-button" id="google-login-button">
         <img src="assets/images/login/google-login.jpg" alt="Google Logo" class="google-logo">
         Continuar com Google
-      </button>
+      </button>-->
     </div>
   </div>
   <div *ngIf="errorMessages.length > 0">

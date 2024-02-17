@@ -111,10 +111,11 @@
   background-color: #1875E7;
   cursor: pointer;
   transition: all 0.3s ease;
-/*  position: relative;*/
+  /*  position: relative;*/
   display: inline-block;
   box-shadow: inset 2px 2px 2px 0px rgba(37, 80, 209, 0.5), 7px 7px 20px 0px rgba(0, 0, 0, .1), 4px 4px 5px 0px rgba(0, 0, 0, .1);
   outline: none;
+  transition: transform 0s;
 }
 
 /*.login-button-animation:after {
@@ -145,7 +146,7 @@
 }*/
 
 .button:active {
-  top: 2px;
+  transform: translateY(2px);
 }
 
 button:hover {

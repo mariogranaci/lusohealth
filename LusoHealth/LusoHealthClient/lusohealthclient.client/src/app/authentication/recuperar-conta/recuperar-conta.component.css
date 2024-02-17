@@ -44,9 +44,13 @@ button {
   width: 51%;
   border-radius: 5px;
   font-size: 20px;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0s;
 }
 
   button:hover {
     background-color: #1b69c8;
+  }
+
+  button:active {
+    transform: translateY(2px);
   }

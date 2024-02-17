@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using LusoHealthClient.Server.Data;
+using LusoHealthClient.Server.Models.Authentication;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LusoHealthClient.Server.Controllers
@@ -7,5 +10,8 @@ namespace LusoHealthClient.Server.Controllers
 	[ApiController]
 	public class ProfileController : ControllerBase
 	{
+
+		private readonly ApplicationDbContext _context;
+
 	}
 }

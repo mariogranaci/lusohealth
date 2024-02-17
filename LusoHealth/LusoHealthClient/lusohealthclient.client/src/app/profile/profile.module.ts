@@ -5,6 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
+import { ProfileRoutingModule } from './profile-routing.module';
 
 
 
@@ -15,7 +16,7 @@ import { HttpClientModule } from '@angular/common/http';
   ],
   imports: [
     CommonModule,
-    ReactiveFormsModule,
+    ProfileRoutingModule,
     RouterModule,
     SharedModule
   ],

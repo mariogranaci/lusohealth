@@ -264,6 +264,7 @@ namespace LusoHealthClient.Server.Controllers
         #region Private Helper Methods
         private UserDto CreateApplicationUserDto(User user)
         {
+            if (user == null) return null;
             return new UserDto
             {
                 Name = user.Name,

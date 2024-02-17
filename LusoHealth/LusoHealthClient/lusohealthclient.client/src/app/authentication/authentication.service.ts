@@ -10,6 +10,7 @@ import { ConfirmEmail } from '../shared/models/authentication/confirmEmail';
 import { EmailModel } from '../shared/models/authentication/emailModel';
 import { ResetPassword } from '../shared/models/authentication/resetPassword';
 import { RegisterWithGoogle } from '../shared/models/authentication/registerWithGoogle';
+import { LoginWithGoogle } from '../shared/models/authentication/LoginWithGoogle';
 
 @Injectable({
   providedIn: 'root'
@@ -38,6 +39,16 @@ export class AuthenticationService {
 
   registerWithGoogle(model: RegisterWithGoogle) {
     return this.http.post<User>(`${environment.appUrl}/api/authentication/register-with-google`, model).pipe(
+      map((user: User) => {
+        if (user) {
+          this.setUser(user);
+        }
+      })
+    );
+  }
+
+  loginWithGoogle(model: LoginWithGoogle) {
+    return this.http.post<User>(`${environment.appUrl}/api/authentication/login-with-google`, model).pipe(
       map((user: User) => {
         if (user) {
           this.setUser(user);

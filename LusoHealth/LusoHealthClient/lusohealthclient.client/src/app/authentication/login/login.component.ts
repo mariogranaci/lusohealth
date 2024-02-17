@@ -104,18 +104,18 @@ export class LoginComponent implements OnInit {
 
   private async googleCallback(response: CredentialResponse) {
     const decodedToken: any = jwtDecode(response.credential);
-    this.service.loginWithGoogle().subscribe({
-      next: (response: any) => {
-        this.router.navigateByUrl('/');
-      },
-      error: (error) => {
-        if (error.error.errors) {
-          this.errorMessages = error.error.errors;
-        } else {
-          this.errorMessages.push(error.error);
-        }
-      }
-    });
+    //this.service.loginWithGoogle().subscribe({
+    //  next: (response: any) => {
+    //    this.router.navigateByUrl('/');
+    //  },
+    //  error: (error) => {
+    //    if (error.error.errors) {
+    //      this.errorMessages = error.error.errors;
+    //    } else {
+    //      this.errorMessages.push(error.error);
+    //    }
+    //  }
+    //});
 
 
     this.router.navigateByUrl(`/external-register/google?access_token=${response.credential}&user_id=${decodedToken.sub}&email=${decodedToken.email}&given_name=${decodedToken.given_name}&family_name=${decodedToken.family_name}&picture=${decodedToken.picture}`);

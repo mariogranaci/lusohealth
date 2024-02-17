@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LusoHealthClient.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240217181221_lusohealth")]
+    [Migration("20240217192633_lusohealth")]
     partial class lusohealth
     {
         /// <inheritdoc />
@@ -89,6 +89,9 @@ namespace LusoHealthClient.Server.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("ProfilePicPath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Provider")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")

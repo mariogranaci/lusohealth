@@ -264,7 +264,8 @@ namespace LusoHealthClient.Server.Controllers
         #region Private Helper Methods
         private UserDto CreateApplicationUserDto(User user)
         {
-            return new UserDto
+			if (user == null) return null;
+			return new UserDto
             {
                 Name = user.Name,
                 JWT = _jwtService.CreateJWT(user)

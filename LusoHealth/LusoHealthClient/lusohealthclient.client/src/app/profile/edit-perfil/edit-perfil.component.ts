@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { User } from '../../shared/models/authentication/user';
+import { environment } from '../../../environments/environment.development';
+import { jwtDecode } from 'jwt-decode';
 
 
 @Component({
@@ -15,6 +18,25 @@ export class EditPerfilComponent implements OnInit {
 
 
   constructor(private fb: FormBuilder) { }
+
+  private getJWT() {
+    const key = localStorage.getItem(environment.userKey);
+    if (key) {
+      const user = JSON.parse(key) as User;
+      return user.jwt;
+    } else {
+      return null;
+    }
+  }
+
+  getEmailFromToken() {
+    const jwt = this.getJWT();
+    if (jwt != null) {
+      const decodedToken: any = jwtDecode(jwt);
+      console.log(decodedToken);
+    }
+    
+  }
 
   ngOnInit() {
     // Inicialize os formulários com dados da base de dados

@@ -1,7 +1,20 @@
-<div id="password-reset-container">
+<form id="recover-account-container" [formGroup]="recoverAccountForm" (ngSubmit)="forgotPassword()" autocomplete="on">
   <h2>Recuperar Conta</h2>
   <hr>
   <img src="assets/images/Recuperation/LusoIcon.png" alt="Image">
-  <input type="email" placeholder="Email">
-  <button >Recuperar Conta</button>
-</div>
+  <div id="email-div">
+    <input formControlName="email" type="email" placeholder="Email" required [class.is-invalid]="submitted && recoverAccountForm.get('email')?.errors">
+    <span class="text-danger" *ngIf="submitted && recoverAccountForm.get('email')?.hasError('required')">
+      O email é obrigatório
+    </span>
+  </div>
+  <button type="submit">Recuperar Conta</button>
+
+
+  <div *ngIf="responseText">
+    <pop-up-success [message]=responseText></pop-up-success>
+  </div>
+  <div *ngIf="errorMessages.length > 0">
+    <app-validation-messages [errorMessages]="errorMessages"></app-validation-messages>
+  </div>
+</form>

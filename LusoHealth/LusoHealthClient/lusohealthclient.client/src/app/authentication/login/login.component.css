@@ -207,6 +207,7 @@ button:hover {
   top: 70px;
   right: 60px;
   cursor: pointer;
+  user-select: none;
 }
 
 .close-image {

@@ -92,18 +92,16 @@ export class EditPerfilComponent implements OnInit {
 
   
   atualizarPerfil() {
-    console.log(this.perfilForm.value);
     this.profileService.getUserData().subscribe({
       next: (response: any) => {
         console.log(response);
       },
       error: (error) => {
-        console.log(error);
-        //if (error.error.errors) {
-        //  this.errorMessages = error.error.errors;
-        //} else {
-        //  this.errorMessages.push(error.error);
-        //}
+        if (error.error.errors) {
+          this.errorMessages = error.error.errors;
+        } else {
+          this.errorMessages.push(error.error);
+        }
       }
     },
     );

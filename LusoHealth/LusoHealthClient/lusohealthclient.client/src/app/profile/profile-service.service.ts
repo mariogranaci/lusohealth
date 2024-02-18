@@ -21,8 +21,7 @@ export class ProfileService {
     }
   }
 
-  getUserData() {
-
+  getHeaders() {
     const jwt = this.getJWT();
 
     // Set up the headers with the authentication token
@@ -30,7 +29,13 @@ export class ProfileService {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${jwt}`
     });
-    console.log('headers object', headers);
+
+    return headers;
+  }
+
+  getUserData() {
+
+    const headers = this.getHeaders();
 
     // Make the HTTP request with the headers
     return this.http.get<EditarPerfil>(`${environment.appUrl}/api/profile/get-patient`, { headers });

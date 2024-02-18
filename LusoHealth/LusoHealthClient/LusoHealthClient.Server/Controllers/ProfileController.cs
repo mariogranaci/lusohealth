@@ -28,18 +28,10 @@ namespace LusoHealthClient.Server.Controllers
             _logger = logger;
         }
 
-        [HttpGet("get-patient")]
-        public async Task<ActionResult<User>> GetUser()
+        [HttpGet("get-user")]
+        public async Task<ActionResult<UserProfileDto>> GetUser()
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            Console.WriteLine($"IsAuthenticated: {User.Identity.IsAuthenticated}");
-
-            foreach (var claim in User.Claims)
-            {
-                Console.WriteLine($"{claim.Type}: {claim.Value}");
-            }
-
-            await Console.Out.WriteLineAsync("Teste: " + userIdClaim);
 
             if (userIdClaim == null)
             {
@@ -47,8 +39,6 @@ namespace LusoHealthClient.Server.Controllers
                 return BadRequest("Email claim not found for the current user.");
             }
 
-            // Search for the user by email
-            //var user = await _userManager.FindByEmailAsync(userEmailClaim?.Value);
             var user = await _userManager.FindByIdAsync(userIdClaim);
 
             if (user == null)
@@ -57,13 +47,18 @@ namespace LusoHealthClient.Server.Controllers
                 return NotFound();
             }
 
-            return user;
-        }
+            UserProfileDto userProfileDto = new UserProfileDto {
+                //FirstName = user.FirstName,
+                //LastName = user.LastName,
+                Email = user.Email,
+                Nif = user.Nif,
+                Telemovel = user.PhoneNumber,
+                DataNascimento = user.BirthDate,
+                Genero = user.Gender,
+                Picture = user.ProfilePicPath
+            };
 
-        /*[HttpGet("user")]
-        public async Task<ActionResult<IEnumerable<User>>> GetMario()
-        {
-            return await _context.Users.ToListAsync();
-        }*/
+            return userProfileDto;
+        }
     }
 }

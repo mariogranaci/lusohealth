@@ -30,7 +30,8 @@ namespace LusoHealthClient.Server.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Gender = table.Column<string>(type: "nvarchar(1)", nullable: false),
                     Nif = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsSuspended = table.Column<bool>(type: "bit", nullable: false),

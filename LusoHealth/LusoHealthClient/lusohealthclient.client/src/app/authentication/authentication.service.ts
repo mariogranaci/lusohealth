@@ -10,7 +10,7 @@ import { ConfirmEmail } from '../shared/models/authentication/confirmEmail';
 import { EmailModel } from '../shared/models/authentication/emailModel';
 import { ResetPassword } from '../shared/models/authentication/resetPassword';
 import { RegisterWithGoogle } from '../shared/models/authentication/registerWithGoogle';
-import { LoginWithGoogle } from '../shared/models/authentication/LoginWithGoogle';
+import { LoginWithGoogle } from '../shared/models/authentication/loginWithGoogle';
 
 @Injectable({
   providedIn: 'root'

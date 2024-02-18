@@ -12,11 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LusoHealthClient.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-<<<<<<<< HEAD:LusoHealth/LusoHealthClient/LusoHealthClient.Server/Migrations/20240217215243_luso.Designer.cs
-    [Migration("20240217215243_luso")]
-========
-    [Migration("20240217013001_luso")]
->>>>>>>> parent of ee8ead1 (Registo Google):LusoHealth/LusoHealthClient/LusoHealthClient.Server/Migrations/20240217013001_luso.Designer.cs
+    [Migration("20240218142406_luso")]
     partial class luso
     {
         /// <inheritdoc />

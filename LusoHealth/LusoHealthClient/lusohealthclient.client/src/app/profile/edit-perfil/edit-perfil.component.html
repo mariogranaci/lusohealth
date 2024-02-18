@@ -9,15 +9,12 @@
     <div class="row">
       <div class="left">
         <label for="name">Nome:</label>
-        <input formControlName="firstName" type="text" id="nome" name="nome" required>   
+        <input formControlName="firstName" type="text" id="nome" name="nome" >   
       </div>
 
       <div class="right">
         <label for="apelido">Apelido:</label>
-        <input  formControlName="lastName" type="text" id="apelido" name="apelido" required [class.is-invalid]=" perfilForm.get('apelido')?.errors">
-        <span class="text-danger" *ngIf=" perfilForm.get('apelido')?.hasError('required')">
-          Introduza o seu apelido
-        </span>
+        <input  formControlName="lastName" type="text" id="apelido" name="apelido" [class.is-invalid]=" perfilForm.get('apelido')?.errors">
         <span class="text-danger" *ngIf="perfilForm.get('apelido')?.hasError('maxlength')">
           Não pode introduzir mais de 50 caracteres
         </span>
@@ -29,18 +26,18 @@
 
     <div class="row">
       <div class="left">
-        <label for="email">Email:</label>
-        <input formControlName="email" type="email" id="email" name="email" required [class.is-invalid]="perfilForm.get('email')?.errors">
-        <span class="text-danger" *ngIf="perfilForm.get('email')?.hasError('required')">
-          O email é obrigatório
-        </span>
+        <label for="email">Emails:</label>
+        <input formControlName="email" type="email" id="email" name="email" [class.is-invalid]="perfilForm.get('email')?.errors">
         <span class="text-danger" *ngIf="perfilForm.get('email')?.hasError('email')">
           Email inválido
         </span>
       </div>
       <div class="right">
-        <label formControlName="telemovel" for="telemovel">Telemóvel:</label>
-        <input maxlength="9"  type="tel" id="telemovel" name="telemovel">
+        <label for="telemovel">Telemóvel:</label>
+        <input maxlength="9" formControlName="telemovel" type="tel" id="telemovel" name="telemovel" oninput="this.value = this.value.replace(/[^0-9]/g, '');" [class.is-invalid]="perfilForm.get('telemovel')?.errors">
+        <span class="text-danger" *ngIf="(perfilForm.get('telemovel')?.hasError('maxlength') ||  perfilForm.get('telemovel')?.hasError('minlength'))">
+          O telemóvel deve ter 9 dígitos
+        </span>
       </div>
     </div>
 

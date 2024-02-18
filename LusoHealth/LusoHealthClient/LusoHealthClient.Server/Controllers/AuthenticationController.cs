@@ -131,36 +131,9 @@ namespace LusoHealthClient.Server.Controllers
             }
 
             var user = await _userManager.FindByEmailAsync(model.Email);
-            if (user != null) return Unauthorized("O email já está a ser utilizado.");
+            if (user == null) return BadRequest("O email não está registado");
 
-            var userToAdd = new User
-            {
-
-                Name = model.FirstName.Trim() + " " + model.LastName.Trim(),
-                Email = model.Email.ToLower().Trim(),
-                NormalizedEmail = model.Email.ToLower().Trim(),
-                Gender = model.Genero,
-                Nif = model.Nif.Trim(),
-                UserType = model.TipoUser,
-                PhoneNumber = model.Telemovel.Trim(),
-                PhoneNumberConfirmed = false,
-                EmailConfirmed = true,
-                IsSuspended = false,
-                IsBlocked = false,
-                ProfilePicPath = model.ProfilePicPath,
-                TwoFactorEnabled = false,
-                LockoutEnabled = false,
-                AccessFailedCount = 0,
-                UserName = model.UserId,
-                BirthDate = model.DataNascimento,
-                Provider = model.Provider,
-
-            };
-
-            var result = await _userManager.CreateAsync(userToAdd);
-            if (!result.Succeeded) return BadRequest(result.Errors);
-
-            return CreateApplicationUserDto(userToAdd);
+            return CreateApplicationUserDto(user);
         }
 
         [HttpPost("register-with-google")]

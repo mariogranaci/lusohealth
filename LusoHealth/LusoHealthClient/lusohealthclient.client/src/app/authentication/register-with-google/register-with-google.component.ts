@@ -23,7 +23,7 @@ export class RegisterWithGoogleComponent implements OnInit {
   userId: string | null = null;
   familyName: string | null = null;
   givenName: string | null = null;
-  picture : string = '';
+  picture: string = '';
 
   constructor(private authenticationService: AuthenticationService,
     private formBuilder: FormBuilder,

@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { User } from '../../shared/models/authentication/user';
 import { environment } from '../../../environments/environment.development';
 import { jwtDecode } from 'jwt-decode';
+import { EditarPerfil } from '../../shared/models/profile/editarPerfil';
 
 
 @Component({
@@ -16,8 +17,33 @@ export class EditPerfilComponent implements OnInit {
   passwordForm: FormGroup = new FormGroup({});
   errorMessages: string[] = [];
 
+  caminhoDaImagem: string | null = null;
+  arquivoSelecionado: File | null = null;
 
+ 
   constructor(private fb: FormBuilder) { }
+
+  selecionarArquivo(event: any) {
+    const arquivoInput = event.target;
+    if (arquivoInput.files && arquivoInput.files.length > 0) {
+      this.arquivoSelecionado = arquivoInput.files[0];
+
+      // Para exibir a imagem imediatamente após a seleção
+      const leitor = new FileReader();
+      leitor.onload = (e: any) => {
+        this.caminhoDaImagem = e.target.result;
+      };
+      if (this.arquivoSelecionado) {
+        leitor.readAsDataURL(this.arquivoSelecionado);
+      }
+    }
+  }
+
+  enviarFormulario() {
+    // Aqui você pode enviar o arquivo para o servidor ou realizar outras ações
+    // Certifique-se de manipular o arquivo conforme necessário.
+    console.log('Arquivo selecionado:', this.arquivoSelecionado);
+  }
 
   private getJWT() {
     const key = localStorage.getItem(environment.userKey);
@@ -33,17 +59,41 @@ export class EditPerfilComponent implements OnInit {
     const jwt = this.getJWT();
     if (jwt != null) {
       const decodedToken: any = jwtDecode(jwt);
-      console.log(decodedToken);
+     return decodedToken.email;
     }
     
   }
 
+  getFirstNameFromToken() {
+    const jwt = this.getJWT();
+    if (jwt != null) {
+      const decodedToken: any = jwtDecode(jwt);
+      const fullName = decodedToken.unique_name; 
+      const firstName = fullName?.split(' ')[0];
+      return firstName;
+    }
+
+  }
+
+  getLastNameFromToken() {
+    const jwt = this.getJWT();
+    if (jwt != null) {
+      const decodedToken: any = jwtDecode(jwt);
+      const fullName = decodedToken.unique_name;
+      const lastName = fullName?.split(' ')[1];
+      return lastName;
+    }
+
+  }
+
+  
+
   ngOnInit() {
-    // Inicialize os formulários com dados da base de dados
+    
     this.perfilForm = this.fb.group({
-      firstName: ['', [ Validators.minLength(3), Validators.maxLength(50)]],
-      lastName: ['', [Validators.minLength(3), Validators.maxLength(50)]],
-      email: ['', [ Validators.email]],
+      firstName: [this.getFirstNameFromToken(), [ Validators.minLength(3), Validators.maxLength(50)]],
+      lastName: [this.getLastNameFromToken(), [Validators.minLength(3), Validators.maxLength(50)]],
+      email: [this.getEmailFromToken(), [ Validators.email]],
       telemovel: ['', [Validators.minLength(9), Validators.maxLength(9)]],
       nif: ['', [ Validators.minLength(9), Validators.maxLength(9)]],
       genero: ['']

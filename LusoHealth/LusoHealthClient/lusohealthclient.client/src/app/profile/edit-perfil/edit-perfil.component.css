@@ -45,6 +45,7 @@ h3 {
 
 .right, .left {
   width: 40%;
+  margin: auto 0;
 }
 
 input[type="text"],

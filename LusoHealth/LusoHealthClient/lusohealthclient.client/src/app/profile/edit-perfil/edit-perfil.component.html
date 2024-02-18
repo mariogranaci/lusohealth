@@ -12,8 +12,8 @@
     <div class="row">
       <div class="left">
         <label for="name">Nome:</label>
-        <input formControlName="firstName" type="text" id="nome" name="nome" required>
-        <span class="text-danger" *ngIf="perfilForm.get('firstName')?.hasError('required')" [class.is-invalid]="perfilForm.get('firstName')?.errors">
+        <input formControlName="firstName" type="text" id="nome" name="nome" required [class.is-invalid]="perfilForm.get('firstName')?.errors">
+        <span class="text-danger" *ngIf="perfilForm.get('firstName')?.hasError('required')">
           Introduza o seu nome
         </span>
         <span class="text-danger" *ngIf="perfilForm.get('firstName')?.hasError('maxlength')">

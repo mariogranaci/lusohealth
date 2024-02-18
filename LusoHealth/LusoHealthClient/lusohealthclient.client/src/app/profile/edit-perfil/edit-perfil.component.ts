@@ -45,55 +45,39 @@ export class EditPerfilComponent implements OnInit {
     console.log('Arquivo selecionado:', this.arquivoSelecionado);
   }
 
-  private getJWT() {
-    const key = localStorage.getItem(environment.userKey);
-    if (key) {
-      const user = JSON.parse(key) as User;
-      return user.jwt;
-    } else {
-      return null;
-    }
+  getUserProfileInfo() {
+    this.profileService.getUserData().subscribe({
+      next: (response: any) => {
+        return response;
+      },
+      error: (error) => {
+        console.log(error);
+        if (error.error.errors) {
+          this.errorMessages = error.error.errors;
+        } else {
+          this.errorMessages.push(error.error);
+        }
+        return null;
+      }
+    },
+    );
+    return null;
   }
 
-  getEmailFromToken() {
-    const jwt = this.getJWT();
-    if (jwt != null) {
-      const decodedToken: any = jwtDecode(jwt);
-     return decodedToken.email;
-    }
-    
-  }
-
-  getFirstNameFromToken() {
-    const jwt = this.getJWT();
-    if (jwt != null) {
-      const decodedToken: any = jwtDecode(jwt);
-      const fullName = decodedToken.unique_name; 
-      const firstName = fullName?.split(' ')[0];
-      return firstName;
-    }
-
-  }
-
-  getLastNameFromToken() {
-    const jwt = this.getJWT();
-    if (jwt != null) {
-      const decodedToken: any = jwtDecode(jwt);
-      const fullName = decodedToken.unique_name;
-      const lastName = fullName?.split(' ')[1];
-      return lastName;
-    }
-
-  }
-
-  
 
   ngOnInit() {
+
+    const userInfo = this.getUserProfileInfo();
+   
+      const nome = userInfo.firstName;
+    }
     
+
+
     this.perfilForm = this.fb.group({
-      firstName: [this.getFirstNameFromToken(), [ Validators.minLength(3), Validators.maxLength(50)]],
-      lastName: [this.getLastNameFromToken(), [Validators.minLength(3), Validators.maxLength(50)]],
-      email: [this.getEmailFromToken(), [ Validators.email]],
+      firstName: ['', [ Validators.minLength(3), Validators.maxLength(50)]],
+      lastName: ['', [Validators.minLength(3), Validators.maxLength(50)]],
+      email: ['', [ Validators.email]],
       telemovel: ['', [Validators.minLength(9), Validators.maxLength(9)]],
       nif: ['', [ Validators.minLength(9), Validators.maxLength(9)]],
       genero: ['']

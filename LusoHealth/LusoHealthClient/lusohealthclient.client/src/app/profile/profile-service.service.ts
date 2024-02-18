@@ -33,7 +33,7 @@ export class ProfileService {
     console.log('headers object', headers);
 
     // Make the HTTP request with the headers
-    return this.http.get<any>(`${environment.appUrl}/api/profile/get-patient`, { headers });
+    return this.http.get<EditarPerfil>(`${environment.appUrl}/api/profile/get-patient`, { headers });
   }
 
   editarPerfil(model: EditarPerfil) {

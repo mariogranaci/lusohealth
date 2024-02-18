@@ -71,7 +71,8 @@ namespace LusoHealthClient.Server.Controllers
 
             var userToAdd = new User
             {
-                Name = model.FirstName.Trim() + " " + model.LastName.Trim(),
+                FirstName = model.FirstName.Trim(),
+                LastName = model.LastName.Trim(),
                 Email = model.Email.ToLower().Trim(),
                 NormalizedEmail = model.Email.ToLower().Trim(),
                 Gender = model.Genero,
@@ -165,7 +166,8 @@ namespace LusoHealthClient.Server.Controllers
             var userToAdd = new User
             {
 
-                Name = model.FirstName.Trim() + " " + model.LastName.Trim(),
+                FirstName = model.FirstName.Trim(),
+                LastName = model.LastName.Trim(),
                 Email = model.Email.ToLower().Trim(),
                 NormalizedEmail = model.Email.ToLower().Trim(),
                 Gender = model.Genero,
@@ -295,7 +297,7 @@ namespace LusoHealthClient.Server.Controllers
             if (user == null) return null;
             return new UserDto
             {
-                Name = user.Name,
+                Name = user.FirstName + " " + user.LastName,
                 JWT = _jwtService.CreateJWT(user)
             };
         }
@@ -311,7 +313,7 @@ namespace LusoHealthClient.Server.Controllers
             token = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
             var url = $"{_config["JWT:ClientUrl"]}/{_config["Email:ConfirmEmailPath"]}?token={token}&email={user.Email}";
 
-            var body = $"Olá {user.Name}, <br/>" +
+            var body = $"Olá {user.FirstName + " " + user.LastName}, <br/>" +
                 $"Por favor, confirme o seu email clicando no link abaixo: <br/>" +
                 $"<a href='{url}'>Confirmar email</a> <br/>" +
                 "<p>Obrigado,</p> <br/>" +
@@ -329,7 +331,7 @@ namespace LusoHealthClient.Server.Controllers
             token = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
             var url = $"{_config["JWT:ClientUrl"]}/{_config["Email:ResetPasswordPath"]}?token={token}&email={user.Email}";
 
-            var body = $"Olá {user.Name}, <br/>" +
+            var body = $"Olá {user.FirstName + " " + user.LastName}, <br/>" +
                 $"Clique no link abaixo para recuperar a sua password: <br/>" +
                 $"<a href='{url}'>Recuperar password</a> <br/>" +
                 "<p>Obrigado,</p> <br/>" +

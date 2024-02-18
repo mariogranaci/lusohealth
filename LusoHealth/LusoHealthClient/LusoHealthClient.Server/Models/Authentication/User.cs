@@ -6,7 +6,9 @@ namespace LusoHealthClient.Server.Models.Authentication
     public class User : IdentityUser
     {
         [Required]
-        public string Name { get; set; }
+        public string FirstName { get; set; }
+        [Required]
+        public string LastName { get; set; }
         [Required]
         public char Gender { get; set; }
         [Required]

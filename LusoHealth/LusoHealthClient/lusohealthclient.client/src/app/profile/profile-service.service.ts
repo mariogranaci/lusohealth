@@ -8,8 +8,7 @@ import { User } from '../shared/models/authentication/user';
 @Injectable({
   providedIn: 'root'
 })
-export class ProfileServiceService {
-
+export class ProfileService {
   constructor(private http: HttpClient, private router: Router) { }
 
   getJWT() {
@@ -18,7 +17,7 @@ export class ProfileServiceService {
       const user = JSON.parse(key) as User;
       return user.jwt;
     } else {
-      return null;
+      return 'No JWT';
     }
   }
 
@@ -26,15 +25,12 @@ export class ProfileServiceService {
 
     const jwt = this.getJWT();
 
-    if (jwt == null) {
-      return null;
-    }
-
     // Set up the headers with the authentication token
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${jwt}`
     });
+    console.log('headers object', headers);
 
     // Make the HTTP request with the headers
     return this.http.get<any>(`${environment.appUrl}/api/profile/get-patient`, { headers });

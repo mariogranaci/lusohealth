@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LusoHealthClient.Server.Controllers
 {
+    [Authorize]
 	[Route("api/[controller]")]
 	[ApiController]
 	public class ProfileController : ControllerBase
@@ -27,11 +28,11 @@ namespace LusoHealthClient.Server.Controllers
             _logger = logger;
         }
 
-        [Authorize]
         [HttpGet("get-patient")]
         public async Task<ActionResult<User>> GetUser()
         {
-            var userIdClaim = User.FindFirst("NameIdentifier")?.Value;
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            Console.WriteLine($"IsAuthenticated: {User.Identity.IsAuthenticated}");
 
             foreach (var claim in User.Claims)
             {

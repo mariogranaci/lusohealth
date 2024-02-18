@@ -19,26 +19,7 @@ export class EditPerfilComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
     private profileService: ProfileService) { }
-
-  private getJWT() {
-    const key = localStorage.getItem(environment.userKey);
-    if (key) {
-      const user = JSON.parse(key) as User;
-      return user.jwt;
-    } else {
-      return null;
-    }
-  }
-
-  getEmailFromToken() {
-    const jwt = this.getJWT();
-    if (jwt != null) {
-      const decodedToken: any = jwtDecode(jwt);
-      console.log(decodedToken);
-    }
     
-  }
-
   ngOnInit() {
     // Inicialize os formulários com dados da base de dados
     this.perfilForm = this.fb.group({
@@ -59,18 +40,16 @@ export class EditPerfilComponent implements OnInit {
 
   
   atualizarPerfil() {
-    console.log(this.perfilForm.value);
     this.profileService.getUserData().subscribe({
       next: (response: any) => {
         console.log(response);
       },
       error: (error) => {
-        console.log(error);
-        //if (error.error.errors) {
-        //  this.errorMessages = error.error.errors;
-        //} else {
-        //  this.errorMessages.push(error.error);
-        //}
+        if (error.error.errors) {
+          this.errorMessages = error.error.errors;
+        } else {
+          this.errorMessages.push(error.error);
+        }
       }
     },
     );

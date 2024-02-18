@@ -39,7 +39,6 @@ namespace LusoHealthClient.Server.Controllers
         [HttpGet("refresh-user-token")]
         public async Task<ActionResult<UserDto>> RefreshUserToken()
         {
-
             var user = await _userManager.FindByEmailAsync(User.FindFirst(ClaimTypes.Email)?.Value);
             return CreateApplicationUserDto(user);
         }
@@ -106,6 +105,35 @@ namespace LusoHealthClient.Server.Controllers
             {
                 return BadRequest("Houve um problema a enviar o email. Tente mais tarde.");
             }
+        }
+
+        [HttpPost("login-with-google")]
+        public async Task<ActionResult<UserDto>> LoginWithGoogle(LoginWithGoogleDto model)
+        {
+            if (model.Provider.Equals("google"))
+            {
+                try
+                {
+                    if (!GoogleValidatedAsync(model.AccessToken, model.UserId).GetAwaiter().GetResult())
+                    {
+                        return Unauthorized("Não foi possível continuar com o Google");
+                    }
+                }
+                catch (Exception)
+                {
+                    return Unauthorized("Não foi possível continuar com o Google");
+                }
+
+            }
+            else
+            {
+                return BadRequest("Provedor Inválido");
+            }
+
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null) return BadRequest("O email não está registado");
+
+            return CreateApplicationUserDto(user);
         }
 
         [HttpPost("register-with-google")]
@@ -264,8 +292,8 @@ namespace LusoHealthClient.Server.Controllers
         #region Private Helper Methods
         private UserDto CreateApplicationUserDto(User user)
         {
-			if (user == null) return null;
-			return new UserDto
+            if (user == null) return null;
+            return new UserDto
             {
                 Name = user.Name,
                 JWT = _jwtService.CreateJWT(user)

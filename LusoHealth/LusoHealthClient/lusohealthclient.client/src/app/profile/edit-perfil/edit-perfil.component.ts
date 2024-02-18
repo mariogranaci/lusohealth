@@ -4,6 +4,7 @@ import { User } from '../../shared/models/authentication/user';
 import { environment } from '../../../environments/environment.development';
 import { jwtDecode } from 'jwt-decode';
 import { EditarPerfil } from '../../shared/models/profile/editarPerfil';
+import { ProfileService } from '../profile-service.service';
 
 
 @Component({
@@ -12,7 +13,6 @@ import { EditarPerfil } from '../../shared/models/profile/editarPerfil';
   styleUrl: './edit-perfil.component.css'
 })
 export class EditPerfilComponent implements OnInit {
- 
   perfilForm: FormGroup = new FormGroup({});
   passwordForm: FormGroup = new FormGroup({});
   errorMessages: string[] = [];
@@ -20,8 +20,8 @@ export class EditPerfilComponent implements OnInit {
   caminhoDaImagem: string | null = null;
   arquivoSelecionado: File | null = null;
 
- 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder,
+    private profileService: ProfileService) { }
 
   selecionarArquivo(event: any) {
     const arquivoInput = event.target;
@@ -108,8 +108,21 @@ export class EditPerfilComponent implements OnInit {
 
   
   atualizarPerfil() {
-    
     console.log(this.perfilForm.value);
+    this.profileService.getUserData().subscribe({
+      next: (response: any) => {
+        console.log(response);
+      },
+      error: (error) => {
+        console.log(error);
+        //if (error.error.errors) {
+        //  this.errorMessages = error.error.errors;
+        //} else {
+        //  this.errorMessages.push(error.error);
+        //}
+      }
+    },
+    );
   }
 
   alterarPassword() {

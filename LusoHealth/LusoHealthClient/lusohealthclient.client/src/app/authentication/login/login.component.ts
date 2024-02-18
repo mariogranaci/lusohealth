@@ -7,6 +7,7 @@ import { User } from '../../shared/models/authentication/user';
 import { CredentialResponse } from 'google-one-tap';
 import { jwtDecode } from "jwt-decode";
 import { DOCUMENT } from '@angular/common';
+import { LoginWithGoogle } from '../../shared/models/authentication/loginWithGoogle';
 
 @Component({
   selector: 'app-login',
@@ -103,22 +104,28 @@ export class LoginComponent implements OnInit {
   }
 
   private async googleCallback(response: CredentialResponse) {
+    this.submitted = true;
+    this.errorMessages = [];
     const decodedToken: any = jwtDecode(response.credential);
-    //this.service.loginWithGoogle().subscribe({
-    //  next: (response: any) => {
-    //    this.router.navigateByUrl('/');
-    //  },
-    //  error: (error) => {
-    //    if (error.error.errors) {
-    //      this.errorMessages = error.error.errors;
-    //    } else {
-    //      this.errorMessages.push(error.error);
-    //    }
-    //  }
-    //});
+    this.service.loginWithGoogle(new LoginWithGoogle(response.credential, 'google', decodedToken.sub, decodedToken.email))
+      .subscribe({
+        next: (response: any) => {
+          this.router.navigateByUrl('/');
+        },
+        error: (error) => {
+          if (error.error.errors) {
+            this.errorMessages = error.error.errors;
+          } else {
+            if (error.error === 'O email não está registado') {
+              this.router.navigateByUrl(`/external-register/google?access_token=${response.credential}&user_id=${decodedToken.sub}&email=${decodedToken.email}&given_name=${decodedToken.given_name}&family_name=${decodedToken.family_name}&picture=${decodedToken.picture}`);
+
+            }
+            this.errorMessages.push(error.error);
+          }
+        }
+      });
 
 
-    this.router.navigateByUrl(`/external-register/google?access_token=${response.credential}&user_id=${decodedToken.sub}&email=${decodedToken.email}&given_name=${decodedToken.given_name}&family_name=${decodedToken.family_name}&picture=${decodedToken.picture}`);
   }
 
   openPopup(opcao: string) {

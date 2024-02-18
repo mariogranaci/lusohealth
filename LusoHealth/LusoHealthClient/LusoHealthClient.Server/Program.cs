@@ -103,34 +103,6 @@ app.UseStaticFiles();
 
 app.UseCors("AllowAllOrigins");
 
-//app.UseCors("AllowAllOrigins");
-
-//app.Use(async (context, next) =>
-//{
-//    if (context.Request.Method == "OPTIONS")
-//    {
-//        context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
-//        context.Response.Headers.Add("Access-Control-Allow-Headers", "*");
-//        context.Response.Headers.Add("Access-Control-Allow-Methods", "*");
-//        context.Response.StatusCode = 200;
-//    }
-//    else
-//    {
-//        await next();
-//    }
-//});
-
-//app.UseCors(options =>
-//{
-//    options.AllowAnyHeader()
-//           .AllowAnyMethod()
-//           .AllowCredentials()
-//           .WithOrigins("http://localhost:4200");
-//});
-
-
-
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

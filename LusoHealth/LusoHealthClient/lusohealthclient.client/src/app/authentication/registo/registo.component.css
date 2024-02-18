@@ -81,13 +81,17 @@ input[type="radio"] {
   border: none;
   border-radius: 7px;
   font-size: 20px;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0s;
 }
 
-.btn-regist:hover {
+  .btn-regist:active {
+    transform: translateY(2px);
+  }
+
+  .btn-regist:hover {
     background-color: #1b69c8;
     cursor: pointer;
-}
+  }
 
 #btn-text, a {
   color: black;

@@ -7,6 +7,14 @@ nav {
   height: 65px;
 }
 
+#logo-navbar {
+  transition: transform 0.3s ease-in-out;
+}
+
+#logo-navbar:hover {
+    transform: scale(1.1);
+}
+
 .logo {
   display: flex;
   align-items: center;

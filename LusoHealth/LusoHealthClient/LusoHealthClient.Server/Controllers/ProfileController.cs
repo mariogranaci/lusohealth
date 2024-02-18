@@ -3,6 +3,7 @@ using System.Security.Claims;
 using LusoHealthClient.Server.Data;
 using LusoHealthClient.Server.DTOs.Profile;
 using LusoHealthClient.Server.Models.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -26,23 +27,32 @@ namespace LusoHealthClient.Server.Controllers
             _logger = logger;
         }
 
+        [Authorize]
         [HttpGet("get-patient")]
         public async Task<ActionResult<User>> GetUser()
         {
-            var userEmailClaim = User.FindFirst(ClaimTypes.Email);
+            var userIdClaim = User.FindFirst("NameIdentifier")?.Value;
 
-            if (userEmailClaim == null)
+            foreach (var claim in User.Claims)
+            {
+                Console.WriteLine($"{claim.Type}: {claim.Value}");
+            }
+
+            await Console.Out.WriteLineAsync("Teste: " + userIdClaim);
+
+            if (userIdClaim == null)
             {
                 _logger.LogError("Email claim not found for the current user.");
                 return BadRequest("Email claim not found for the current user.");
             }
 
             // Search for the user by email
-            var user = await _userManager.FindByEmailAsync(userEmailClaim?.Value);
+            //var user = await _userManager.FindByEmailAsync(userEmailClaim?.Value);
+            var user = await _userManager.FindByIdAsync(userIdClaim);
 
             if (user == null)
             {
-                _logger.LogInformation($"User with email '{userEmailClaim}' not found.");
+                _logger.LogInformation($"User with email '{userIdClaim}' not found.");
                 return NotFound();
             }
 

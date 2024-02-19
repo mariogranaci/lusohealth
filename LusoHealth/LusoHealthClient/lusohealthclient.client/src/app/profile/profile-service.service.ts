@@ -38,9 +38,26 @@ export class ProfileService {
 
     const headers = this.getHeaders();
 
-    // Make the HTTP request with the headers
+    // Make the HTTP request with the headers                            get-user
     return this.http.get<UserProfile>(`${environment.appUrl}/api/profile/get-patient`, { headers });
   }
+
+  updateUserData() {
+
+    const headers = this.getHeaders();
+
+    // Make the HTTP request with the headers
+    return this.http.get<UserProfile>(`${environment.appUrl}/api/profile/update-user-info`, { headers });
+  }
+
+  updatePassword() {
+
+    const headers = this.getHeaders();
+
+    // Make the HTTP request with the headers
+    return this.http.get<UserProfile>(`${environment.appUrl}/api/profile/update-password`, { headers });
+  }
+
 
   editarPerfil(model: EditarPerfil) {
     return this.http.put(`${environment.appUrl}/api/authentication/confirm-email`, model);

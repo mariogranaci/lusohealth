@@ -5,6 +5,7 @@ import { environment } from '../../../environments/environment.development';
 import { jwtDecode } from 'jwt-decode';
 import { EditarPerfil } from '../../shared/models/profile/editarPerfil';
 import { ProfileService } from '../profile-service.service';
+import { UserProfile } from '../../shared/models/profile/userProfile';
 
 
 @Component({
@@ -67,10 +68,8 @@ export class EditPerfilComponent implements OnInit {
 
   ngOnInit() {
 
-    const userInfo = this.getUserProfileInfo();
     
-      
-   
+
 
     this.perfilForm = this.fb.group({
       firstName: ['', [ Validators.minLength(3), Validators.maxLength(50)]],
@@ -86,8 +85,9 @@ export class EditPerfilComponent implements OnInit {
       novaPassword: [''],
       repetirNovaPassword: ['']
     });
-  }
 
+  }
+  
   
   atualizarPerfil() {
     this.profileService.getUserData().subscribe({

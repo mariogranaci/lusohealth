@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { EditarPerfil } from '../shared/models/profile/editarPerfil';
 import { environment } from '../../environments/environment.development';
 import { User } from '../shared/models/authentication/user';
+import { UserProfile } from '../shared/models/profile/userProfile';
 
 @Injectable({
   providedIn: 'root'
@@ -38,7 +39,7 @@ export class ProfileService {
     const headers = this.getHeaders();
 
     // Make the HTTP request with the headers
-    return this.http.get<EditarPerfil>(`${environment.appUrl}/api/profile/get-patient`, { headers });
+    return this.http.get<UserProfile>(`${environment.appUrl}/api/profile/get-patient`, { headers });
   }
 
   editarPerfil(model: EditarPerfil) {

@@ -65,32 +65,53 @@ namespace LusoHealthClient.Server.Controllers
 		public async Task<ActionResult> UpdateUserInfo(UserProfileDto model)
 		{
 			var user = await _userManager.FindByEmailAsync(model.Email);
+			if (user == null) return Unauthorized("Este endereço de email ainda não foi registado");
+			if (!user.EmailConfirmed) return BadRequest("O email ainda não foi confirmado. Confirme o seu email para poder recuperar a sua password");
 
-			if (user == null)
+			try
 			{
-				_logger.LogInformation($"User with email '{userIdClaim}' not found.");
-				return NotFound();
+				user.FirstName = model.FirstName;
+				user.LastName = model.LastName;
+				user.Email = model.Email;
+				user.PhoneNumber = model.Telemovel;
+				user.Nif = model.Nif;
+				user.Gender = model.Genero;
+
+				var result = await _userManager.UpdateAsync(user);
+
+				if (result.Succeeded)
+					return Ok(new JsonResult(new { title = "Perfil Alterado", message = "Os seus dados foram alterados com sucesso." }));
+				return BadRequest("Não foi possivel alterar os seus dados.Tente Novamente.");
 			}
-
-			// Atualizar informações do usuário com base nos dados fornecidos
-			user.nif = userProfileUpdateDto.nif;
-			user.PhoneNumber = userProfileUpdateDto.Telemovel;
-			user.BirthDate = userProfileUpdateDto.DataNascimento;
-			user.Gender = userProfileUpdateDto.Genero;
-
-			// Salvar as alterações no banco de dados
-			var result = await _userManager.UpdateAsync(user);
-
-			if (result.Succeeded)
+			catch (Exception)
 			{
-				return Ok("User information updated successfully.");
-			}
-			else
-			{
-				_logger.LogError("Failed to update user information.");
-				return BadRequest("Failed to update user information.");
+				return BadRequest("Não foi possivel alterar os seus dados.Tente Novamente.");
 			}
 		}
+
+		[HttpPut("update-password")]
+		public async Task<ActionResult> UpdatePassword(UpdatePasswordDto model)
+		{
+			var user = await _userManager.FindByEmailAsync(model.Email);
+			if (user == null) return Unauthorized("Este endereço de email ainda não foi registado");
+
+			try
+			{
+				if (model.NewPassword != model.ConfirmNewPassword)
+					return BadRequest("As novas passwords não condizem.");
+
+				var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+
+				if (result.Succeeded)
+					return Ok(new JsonResult(new { title = "Password Alterada", message = "A sua password foi alterada com sucesso." }));
+				return BadRequest("Falha ao atualizar a password. Tente novamente.");
+			}
+			catch (Exception)
+			{
+				return BadRequest("Falha ao atualizar a password. Tente novamente.");
+			}
+		}
+
 	}
 }
 

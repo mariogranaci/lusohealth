@@ -60,5 +60,37 @@ namespace LusoHealthClient.Server.Controllers
 
             return userProfileDto;
         }
-    }
+
+		[HttpPut("update-user-info")]
+		public async Task<ActionResult> UpdateUserInfo(UserProfileDto model)
+		{
+			var user = await _userManager.FindByEmailAsync(model.Email);
+
+			if (user == null)
+			{
+				_logger.LogInformation($"User with email '{userIdClaim}' not found.");
+				return NotFound();
+			}
+
+			// Atualizar informações do usuário com base nos dados fornecidos
+			user.nif = userProfileUpdateDto.nif;
+			user.PhoneNumber = userProfileUpdateDto.Telemovel;
+			user.BirthDate = userProfileUpdateDto.DataNascimento;
+			user.Gender = userProfileUpdateDto.Genero;
+
+			// Salvar as alterações no banco de dados
+			var result = await _userManager.UpdateAsync(user);
+
+			if (result.Succeeded)
+			{
+				return Ok("User information updated successfully.");
+			}
+			else
+			{
+				_logger.LogError("Failed to update user information.");
+				return BadRequest("Failed to update user information.");
+			}
+		}
+	}
 }
+

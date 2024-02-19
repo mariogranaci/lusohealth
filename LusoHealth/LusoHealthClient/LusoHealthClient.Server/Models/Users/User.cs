@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
-namespace LusoHealthClient.Server.Models.Authentication
+namespace LusoHealthClient.Server.Models.Users
 {
     public class User : IdentityUser
     {
@@ -21,6 +21,6 @@ namespace LusoHealthClient.Server.Models.Authentication
         [Required]
         public DateTime BirthDate { get; set; }
         public string? Provider { get; set; }
-        
+
     }
 }

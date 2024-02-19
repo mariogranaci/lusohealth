@@ -2,7 +2,7 @@
 using System.Security.Claims;
 using LusoHealthClient.Server.Data;
 using LusoHealthClient.Server.DTOs.Profile;
-using LusoHealthClient.Server.Models.Authentication;
+using LusoHealthClient.Server.Models.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;

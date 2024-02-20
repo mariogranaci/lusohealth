@@ -1,24 +1,39 @@
-<div class="perfil">
-  <a href=""><img src="perfil.jpeg" alt="imagem teste" id="img-perfil"></a>
-  <button type="submit" class="btn-regist">Alterar Foto</button>
-</div>
 
-<form [formGroup]="perfilForm" (ngSubmit)="atualizarPerfil()">
+
+<form (ngSubmit)="enviarFormulario()" class="perfil">
+
+  <span class="btn-regist" >Alterar Foto <input type="file" (change)="selecionarArquivo($event)" accept="image/*" id="btn-image"></span>
+  <img *ngIf="caminhoDaImagem" [src]="caminhoDaImagem" alt="Imagem selecionada" id="img-perfil">
+</form>
+
+<form [formGroup]="perfilForm" (ngSubmit)="atualizarPerfil()" autocomplete="off">
   <div class="form-row">
 
     <div class="row">
       <div class="left">
         <label for="name">Nome:</label>
-        <input formControlName="firstName" type="text" id="nome" name="nome" >   
+        <input formControlName="firstName" type="text" id="nome" name="nome" required [class.is-invalid]="submittedProfile && perfilForm.get('firstName')?.errors">
+        <span class="text-danger" *ngIf="submittedProfile && perfilForm.get('firstName')?.hasError('required')">
+          Introduza o seu nome
+        </span>
+        <span class="text-danger" *ngIf="submittedProfile && perfilForm.get('firstName')?.hasError('maxlength')">
+          Não pode introduzir mais de 50 caracteres
+        </span>
+        <span class="text-danger" *ngIf="submittedProfile && perfilForm.get('firstName')?.hasError('minlength')">
+          O nome tem um mínimo de 3 caracteres
+        </span>
       </div>
 
       <div class="right">
         <label for="apelido">Apelido:</label>
-        <input  formControlName="lastName" type="text" id="apelido" name="apelido" [class.is-invalid]=" perfilForm.get('apelido')?.errors">
-        <span class="text-danger" *ngIf="perfilForm.get('apelido')?.hasError('maxlength')">
+        <input  formControlName="lastName" type="text" id="apelido" name="apelido" required [class.is-invalid]="submittedProfile && perfilForm.get('lastName')?.errors">
+        <span class="text-danger" *ngIf="submittedProfile && perfilForm.get('lastName')?.hasError('required')">
+          Introduza o seu apelido
+        </span>
+        <span class="text-danger" *ngIf="submittedProfile && perfilForm.get('lastName')?.hasError('maxlength')">
           Não pode introduzir mais de 50 caracteres
         </span>
-        <span class="text-danger" *ngIf="perfilForm.get('apelido')?.hasError('minlength')">
+        <span class="text-danger" *ngIf="submittedProfile && perfilForm.get('lastName')?.hasError('minlength')">
           O apelido tem um mínimo de 3 caracteres
         </span>
       </div>
@@ -26,16 +41,19 @@
 
     <div class="row">
       <div class="left">
-        <label for="email">Emails:</label>
-        <input formControlName="email" type="email" id="email" name="email" [class.is-invalid]="perfilForm.get('email')?.errors">
-        <span class="text-danger" *ngIf="perfilForm.get('email')?.hasError('email')">
+        <label for="email">Email:</label>
+        <input formControlName="email" type="email" id="email" name="email" required [class.is-invalid]="submittedProfile && perfilForm.get('email')?.errors">
+        <span class="text-danger" *ngIf="submittedProfile && perfilForm.get('email')?.hasError('required')">
+          O email é obrigatório
+        </span>
+        <span class="text-danger" *ngIf="submittedProfile && perfilForm.get('email')?.hasError('email')">
           Email inválido
         </span>
       </div>
       <div class="right">
-        <label for="telemovel">Telemóvel:</label>
-        <input maxlength="9" formControlName="telemovel" type="tel" id="telemovel" name="telemovel" oninput="this.value = this.value.replace(/[^0-9]/g, '');" [class.is-invalid]="perfilForm.get('telemovel')?.errors">
-        <span class="text-danger" *ngIf="(perfilForm.get('telemovel')?.hasError('maxlength') ||  perfilForm.get('telemovel')?.hasError('minlength'))">
+        <label formControlName="telemovel" for="telemovel">Telemóvel:</label>
+        <input maxlength="9" type="tel" id="telemovel" name="telemovel" oninput="this.value = this.value.replace(/[^0-9]/g, '');" [class.is-invalid]="submittedProfile && perfilForm.get('telemovel')?.errors">
+        <span class="text-danger" *ngIf="submittedProfile && (perfilForm.get('telemovel')?.hasError('maxlength') || submittedProfile && perfilForm.get('telemovel')?.hasError('minlength'))">
           O telemóvel deve ter 9 dígitos
         </span>
       </div>
@@ -46,51 +64,85 @@
         <div class="gender">
           <label>Género:</label>
           <label for="male" class="radio-label">
-            <input type="radio" name="genero"
+            <input formControlName="genero" type="radio" name="genero"
                    value="M" id="male"> Masculino
           </label>
           <label for="female" class="radio-label">
-            <input  type="radio"
+            <input formControlName="genero" type="radio"
                    name="genero" value="F" id="female"> Feminino
           </label>
         </div>
+        <span class="text-danger" *ngIf="submittedProfile && perfilForm.get('genero')?.hasError('required')">
+          Selecione um género
+        </span>
       </div>
       <div class="right">
         <label for="nif">NIF:</label>
-        <input  formControlName="nif" maxlength="9" type="text" id="nif" name="nif">
+        <input formControlName="nif" maxlength="9" type="text" id="nif" name="nif" oninput="this.value = this.value.replace(/[^0-9]/g, '');" required [class.is-invalid]="submittedProfile && perfilForm.get('nif')?.errors">
+        <span class="text-danger" *ngIf="submittedProfile && perfilForm.get('nif')?.hasError('required')">
+          O NIF é obrigatório
+        </span>
+        <span class="text-danger" *ngIf="submittedProfile && (perfilForm.get('nif')?.hasError('maxlength') || submittedProfile && perfilForm.get('nif')?.hasError('minlength'))">
+          NIF deve ter 9 dígitos
+        </span>
       </div>
     </div>
 
   </div>
 
   <div id="submit-button">
-    <button type="submit" class="btn-regist">Atualizar</button>
+    <button type="submit"  class="btn-regist">Atualizar</button>
   </div>
 
 </form>
 
 
-<form [formGroup]="passwordForm" (ngSubmit)="alterarPassword()">
+<form [formGroup]="passwordForm" (ngSubmit)="alterarPassword()" autocomplete="off" >
   <div class="form-pass">
 
 
     <div class="row-pass">
       <h3>Alteração de Password</h3>
       <label for="name">Password Atual:</label>
-      <input  type="password" id="passwordAtual" name="passwordAtual" required>
+      <input formControlName="password" type="password" id="passwordAtual" name="passwordAtual" required [class.is-invalid]="submittedPassword && passwordForm.get('password')?.errors">
+      <span class="text-danger" *ngIf="submittedPassword && passwordForm.get('password')?.hasError('required')">
+        Introduza uma password
+      </span>
+      <span class="text-danger" *ngIf="submittedPassword && (passwordForm.get('password')?.hasError('maxlength') ||  passwordForm.get('password')?.hasError('minlength'))">
+        A password deve conter entre 8 e 50 caracteres
+      </span>
+      <span class="text-danger" *ngIf="submittedPassword && (passwordForm.get('password')?.hasError('passwordPattern'))">
+        A password deve conter pelo menos uma letra minúscula, uma letra maiúscula e um dígito.
+      </span>
     </div>
 
     <div class="row">
       <div class="left">
         <label for="novaPassword">Nova Password:</label>
-        <input  type="password" id="novaPassword" name="novaPassword"
-               required>
+        <input formControlName="novaPassword" type="password" id="novaPassword" name="novaPassword" required [class.is-invalid]="submittedPassword && passwordForm.get('novaPassword')?.errors">
+        <span class="text-danger" *ngIf="submittedPassword && passwordForm.get('novaPassword')?.hasError('required')">
+          Confirme a password
+        </span>
+        <span class="text-danger" *ngIf="submittedPassword && (passwordForm.get('novaPassword')?.hasError('maxlength') || submittedPassword && passwordForm.get('novaPassword')?.hasError('minlength'))">
+          A password deve conter entre 8 e 50 caracteres
+        </span>
+        <span class="text-danger" *ngIf="submittedPassword && (passwordForm.get('novaPassword')?.hasError('passwordPattern'))">
+          A password deve conter pelo menos uma letra minúscula, uma letra maiúscula e um dígito.
+        </span>
       </div>
 
       <div class="right">
         <label for="repetirNovaPassword">Repetir Nova Password:</label>
-        <input  type="password" id="repetirNovaPassword"
-               name="repetirNovaPassword" required>
+        <input formControlName="repetirNovaPassword" type="password" id="repetirNovaPassword" name="repetirNovaPassword" required [class.is-invalid]="submittedPassword && passwordForm.get('repetirNovaPassword')?.errors">
+        <span class="text-danger" *ngIf="submittedPassword && passwordForm.get('repetirNovaPassword')?.hasError('required')">
+          Confirme a password
+        </span>
+        <span class="text-danger" *ngIf="submittedPassword && (passwordForm.get('repetirNovaPassword')?.hasError('maxlength') || submittedPassword && passwordForm.get('repetirNovaPassword')?.hasError('minlength'))">
+          A password deve conter entre 8 e 50 caracteres
+        </span>
+        <span class="text-danger" *ngIf="submittedPassword && (passwordForm.get('repetirNovaPassword')?.hasError('passwordPattern'))">
+          A password deve conter pelo menos uma letra minúscula, uma letra maiúscula e um dígito.
+        </span>
       </div>
     </div>
   </div>

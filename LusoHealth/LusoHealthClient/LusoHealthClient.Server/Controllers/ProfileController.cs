@@ -35,7 +35,6 @@ namespace LusoHealthClient.Server.Controllers
 
             if (userIdClaim == null)
             {
-                _logger.LogError("Email claim not found for the current user.");
                 return BadRequest("Email claim not found for the current user.");
             }
 
@@ -48,8 +47,8 @@ namespace LusoHealthClient.Server.Controllers
             }
 
             UserProfileDto userProfileDto = new UserProfileDto {
-                //FirstName = user.FirstName,
-                //LastName = user.LastName,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
                 Email = user.Email,
                 Nif = user.Nif,
                 Telemovel = user.PhoneNumber,

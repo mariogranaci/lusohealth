@@ -48,8 +48,8 @@ namespace LusoHealthClient.Server.Controllers
             }
 
             UserProfileDto userProfileDto = new UserProfileDto {
-                //FirstName = user.FirstName,
-                //LastName = user.LastName,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
                 Email = user.Email,
                 Nif = user.Nif,
                 Telemovel = user.PhoneNumber,

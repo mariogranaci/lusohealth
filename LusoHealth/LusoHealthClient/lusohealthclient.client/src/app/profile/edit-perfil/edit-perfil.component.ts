@@ -17,6 +17,8 @@ export class EditPerfilComponent implements OnInit {
   perfilForm: FormGroup = new FormGroup({});
   passwordForm: FormGroup = new FormGroup({});
   errorMessages: string[] = [];
+  submittedProfile = false;
+  submittedPassword = false;
 
   caminhoDaImagem: string | null = null;
   arquivoSelecionado: File | null = null;
@@ -69,16 +71,16 @@ export class EditPerfilComponent implements OnInit {
   ngOnInit() {
 
     this.perfilForm = this.fb.group({
-      firstName: ['', [ Validators.minLength(3), Validators.maxLength(50)]],
-      lastName: ['', [Validators.minLength(3), Validators.maxLength(50)]],
-      email: ['', [ Validators.email]],
-      telemovel: ['', [Validators.minLength(9), Validators.maxLength(9)]],
-      nif: ['', [ Validators.minLength(9), Validators.maxLength(9)]],
-      genero: ['']
+      firstName: ['Francisco', [ Validators.minLength(3), Validators.maxLength(50)]],
+      lastName: ['Vaz', [Validators.minLength(3), Validators.maxLength(50)]],
+      email: ['franciscocaeirovaz@gmail.com', [ Validators.email]],
+      telemovel: ['123456789', [Validators.minLength(9), Validators.maxLength(9)]],
+      nif: ['123456789', [ Validators.minLength(9), Validators.maxLength(9)]],
+      genero: ['M']
     });
 
     this.passwordForm = this.fb.group({
-      passwordAtual: [''],
+      password: ['Pass1234'],
       novaPassword: [''],
       repetirNovaPassword: ['']
     });
@@ -87,6 +89,9 @@ export class EditPerfilComponent implements OnInit {
   
   
   atualizarPerfil() {
+    this.submittedProfile = true;
+    this.submittedPassword = false;
+    this.errorMessages = [];
     this.profileService.getUserData().subscribe({
       next: (response: any) => {
         console.log(response);
@@ -103,7 +108,9 @@ export class EditPerfilComponent implements OnInit {
   }
 
   alterarPassword() {
-    
+    this.submittedProfile = false;
+    this.submittedPassword = true;
+    this.errorMessages = [];
     console.log(this.passwordForm.value);
   }
 }

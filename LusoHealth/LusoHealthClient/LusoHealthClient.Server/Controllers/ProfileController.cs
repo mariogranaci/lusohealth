@@ -70,11 +70,11 @@ namespace LusoHealthClient.Server.Controllers
 
 			try
 			{
-				user.FirstName = model.FirstName;
-				user.LastName = model.LastName;
-				user.Email = model.Email;
-				user.PhoneNumber = model.Telemovel;
-				user.Nif = model.Nif;
+				user.FirstName = model.FirstName.Trim();
+				user.LastName = model.LastName.Trim();
+				user.Email = model.Email.ToLower().Trim();
+				user.PhoneNumber = model.Telemovel.Trim();
+				user.Nif = model.Nif.Trim();
 				user.Gender = model.Genero;
 
 				var result = await _userManager.UpdateAsync(user);

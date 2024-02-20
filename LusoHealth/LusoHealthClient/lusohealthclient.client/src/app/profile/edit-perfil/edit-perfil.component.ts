@@ -68,9 +68,6 @@ export class EditPerfilComponent implements OnInit {
 
   ngOnInit() {
 
-    
-
-
     this.perfilForm = this.fb.group({
       firstName: ['', [ Validators.minLength(3), Validators.maxLength(50)]],
       lastName: ['', [Validators.minLength(3), Validators.maxLength(50)]],

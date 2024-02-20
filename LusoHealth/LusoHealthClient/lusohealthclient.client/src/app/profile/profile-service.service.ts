@@ -5,6 +5,7 @@ import { EditarPerfil } from '../shared/models/profile/editarPerfil';
 import { environment } from '../../environments/environment.development';
 import { User } from '../shared/models/authentication/user';
 import { UserProfile } from '../shared/models/profile/userProfile';
+import { UpdatePassword } from '../shared/models/profile/updatePassword';
 
 @Injectable({
   providedIn: 'root'
@@ -42,24 +43,14 @@ export class ProfileService {
     return this.http.get<UserProfile>(`${environment.appUrl}/api/profile/get-patient`, { headers });
   }
 
-  updateUserData() {
-
-    const headers = this.getHeaders();
-
-    // Make the HTTP request with the headers
-    return this.http.get<UserProfile>(`${environment.appUrl}/api/profile/update-user-info`, { headers });
-  }
-
-  updatePassword() {
-
-    const headers = this.getHeaders();
-
-    // Make the HTTP request with the headers
-    return this.http.get<UserProfile>(`${environment.appUrl}/api/profile/update-password`, { headers });
+  updateUserData(model : UserProfile) {
+    return this.http.put(`${environment.appUrl}/api/profile/update-user-info`, model);
   }
 
 
-  editarPerfil(model: EditarPerfil) {
-    return this.http.put(`${environment.appUrl}/api/authentication/confirm-email`, model);
+  updatePassword(model:UpdatePassword) {
+    return this.http.put(`${environment.appUrl}/api/profile/update-password`, model);
   }
+
+
 }

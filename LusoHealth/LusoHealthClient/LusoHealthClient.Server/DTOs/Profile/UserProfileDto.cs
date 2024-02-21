@@ -22,11 +22,11 @@ namespace LusoHealthClient.Server.DTOs.Profile
         [OptionalStringLength(MinLength = 9, MaxLength = 9, ErrorMessage = "O telemóvel deve ter 9 dígitos")]
         public string Telemovel { get; set; }
 
-        [DataType(DataType.Date, ErrorMessage = "Introduza uma data válida")]
-        [AgeOver18Validation(ErrorMessage = "O usuário deve ter mais de 18 anos.")]
+        /*[DataType(DataType.Date, ErrorMessage = "Introduza uma data válida")]
+        [AgeOver18Validation(ErrorMessage = "O usuário deve ter mais de 18 anos.")]*/
         public DateTime DataNascimento { get; set; }
         public char Genero { get; set; }
         public string Picture { get; set; }
-        
+
     }
 }

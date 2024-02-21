@@ -12,7 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LusoHealthClient.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
+<<<<<<<< HEAD:LusoHealth/LusoHealthClient/LusoHealthClient.Server/Migrations/20240219190902_luso.Designer.cs
     [Migration("20240219190902_luso")]
+========
+    [Migration("20240221014829_luso")]
+>>>>>>>> main:LusoHealth/LusoHealthClient/LusoHealthClient.Server/Migrations/20240221014829_luso.Designer.cs
     partial class luso
     {
         /// <inheritdoc />
@@ -25,7 +29,66 @@ namespace LusoHealthClient.Server.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("LusoHealthClient.Server.Models.Authentication.User", b =>
+            modelBuilder.Entity("LusoHealthClient.Server.Models.Professionals.ProfessionalType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ProfessionalTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Medicina"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Enfermagem"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Medicina Dentária"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Fisioterapia"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Nutricionismo"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "Psicologia"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "Fisiologia"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Name = "Outros"
+                        });
+                });
+
+            modelBuilder.Entity("LusoHealthClient.Server.Models.Users.User", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -269,7 +332,7 @@ namespace LusoHealthClient.Server.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("LusoHealthClient.Server.Models.Authentication.User", null)
+                    b.HasOne("LusoHealthClient.Server.Models.Users.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -278,7 +341,7 @@ namespace LusoHealthClient.Server.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("LusoHealthClient.Server.Models.Authentication.User", null)
+                    b.HasOne("LusoHealthClient.Server.Models.Users.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -293,7 +356,7 @@ namespace LusoHealthClient.Server.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LusoHealthClient.Server.Models.Authentication.User", null)
+                    b.HasOne("LusoHealthClient.Server.Models.Users.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -302,7 +365,7 @@ namespace LusoHealthClient.Server.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("LusoHealthClient.Server.Models.Authentication.User", null)
+                    b.HasOne("LusoHealthClient.Server.Models.Users.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

@@ -46,7 +46,7 @@ export class ProfileService {
 
   updateUserData(model: UserProfile) {
     const headers = this.getHeaders();
-    return this.http.put(`${environment.appUrl}/api/profile/update-user-info`,model, { headers });
+    return this.http.put(`${environment.appUrl}/api/profile/update-user-info`,model, { headers : headers });
   }
 
 

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LusoHealthClient.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240218224104_luso")]
+    [Migration("20240219190902_luso")]
     partial class luso
     {
         /// <inheritdoc />

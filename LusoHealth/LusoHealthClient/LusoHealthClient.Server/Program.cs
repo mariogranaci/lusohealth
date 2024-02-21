@@ -10,7 +10,7 @@ using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using LusoHealthClient.Server.Services;
 using LusoHealthClient.Server.Data;
-using LusoHealthClient.Server.Models.Authentication;
+using LusoHealthClient.Server.Models.Users;
 
 var builder = WebApplication.CreateBuilder(args);
 

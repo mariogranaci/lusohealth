@@ -1,12 +1,13 @@
 ﻿using Google.Apis.Auth;
 using LusoHealthClient.Server.DTOs.Authentication;
-using LusoHealthClient.Server.Models.Authentication;
+using LusoHealthClient.Server.Models.Users;
 using LusoHealthClient.Server.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.Text;
 
@@ -78,7 +79,7 @@ namespace LusoHealthClient.Server.Controllers
                 Gender = model.Genero,
                 Nif = model.Nif.Trim(),
                 UserType = model.TipoUser,
-                PhoneNumber = model.Telemovel.Trim(),
+                PhoneNumber = model.Telemovel.Trim().IsNullOrEmpty() ? null : model.Telemovel.Trim(),
                 PasswordHash = model.Password.Trim(),
                 PhoneNumberConfirmed = false,
                 IsSuspended = false,
@@ -173,7 +174,7 @@ namespace LusoHealthClient.Server.Controllers
                 Gender = model.Genero,
                 Nif = model.Nif.Trim(),
                 UserType = model.TipoUser,
-                PhoneNumber = model.Telemovel.Trim(),
+                PhoneNumber = model.Telemovel.Trim().IsNullOrEmpty() ? null : model.Telemovel.Trim(),
                 PhoneNumberConfirmed = false,
                 EmailConfirmed = true,
                 IsSuspended = false,

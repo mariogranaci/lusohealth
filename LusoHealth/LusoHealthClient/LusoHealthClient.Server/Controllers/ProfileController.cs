@@ -86,7 +86,8 @@ namespace LusoHealthClient.Server.Controllers
                 Telemovel = user.PhoneNumber,
                 DataNascimento = user.BirthDate,
                 Genero = user.Gender,
-                Picture = user.ProfilePicPath
+                Picture = user.ProfilePicPath,
+                Provider = user.Provider
             };
 
             return userProfileDto;
@@ -108,7 +109,8 @@ namespace LusoHealthClient.Server.Controllers
             {
                 return NotFound("Não foi possível encontrar o utilizador");
             }
-			if (!user.EmailConfirmed) return BadRequest("O email ainda não foi confirmado. Confirme o seu email para poder recuperar a sua password");
+			
+            if (!user.EmailConfirmed) return BadRequest("O email ainda não foi confirmado. Confirme o seu email para poder recuperar a sua password");
 
 			try
 			{
@@ -136,29 +138,38 @@ namespace LusoHealthClient.Server.Controllers
 		[HttpPut("update-password")]
 		public async Task<ActionResult> UpdatePassword(UpdatePasswordDto model)
 		{
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+			var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            if (userIdClaim == null)
-            {
-                return BadRequest("Não foi possível encontrar o utilizador");
-            }
+			if (userIdClaim == null)
+			{
+				return BadRequest("Não foi possível encontrar o utilizador");
+			}
 
-            var user = await _userManager.FindByIdAsync(userIdClaim);
+			var user = await _userManager.FindByIdAsync(userIdClaim);
 
-            if (user == null)
-            {
-                return NotFound("Não foi possível encontrar o utilizador");
-            }
+			if (user == null)
+			{
+				return NotFound("Não foi possível encontrar o utilizador");
+			}
 
 			try
 			{
-				if (model.NewPassword != model.ConfirmNewPassword)
+				var isCurrentPasswordValid = await _userManager.CheckPasswordAsync(user, model.CurrentPassword);
+				if (!isCurrentPasswordValid)
+                {
+					return BadRequest("A password atual está incorreta.");
+				}
+				else if (model.NewPassword != model.ConfirmNewPassword)
+				{
 					return BadRequest("As novas passwords não condizem.");
+				}
 
 				var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
 
 				if (result.Succeeded)
+				{
 					return Ok(new JsonResult(new { title = "Password Alterada", message = "A sua password foi alterada com sucesso." }));
+				}
 				return BadRequest("Falha ao atualizar a password. Tente novamente.");
 			}
 			catch (Exception)

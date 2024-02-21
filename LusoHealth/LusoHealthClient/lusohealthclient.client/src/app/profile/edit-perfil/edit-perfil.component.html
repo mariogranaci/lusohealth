@@ -96,9 +96,6 @@
 <div *ngIf="responseText">
   <pop-up-success [message]=responseText></pop-up-success>
 </div>
-<div *ngIf="errorMessages.length > 0">
-  <app-validation-messages [errorMessages]="errorMessages"></app-validation-messages>
-</div>
 <form [formGroup]="passwordForm" (ngSubmit)="alterarPassword()" autocomplete="off" *ngIf="!loading">
   <div class="form-pass">
 

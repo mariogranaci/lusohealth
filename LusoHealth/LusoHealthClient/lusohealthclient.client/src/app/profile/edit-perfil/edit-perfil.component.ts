@@ -24,6 +24,13 @@ export class EditPerfilComponent implements OnInit {
   loading = false;
   private unsubscribe$ = new Subject<void>();
 
+  firstName: string | null = null;
+  lastName: string | null = null;
+  email: string | null = null;
+  telemovel: string | null = null;
+  nif: string | null = null;
+  genero: string | null = null;
+
   caminhoDaImagem: string | null = null;
   arquivoSelecionado: File | null = null;
 
@@ -47,8 +54,7 @@ export class EditPerfilComponent implements OnInit {
   }
 
   enviarFormulario() {
-    // Aqui você pode enviar o arquivo para o servidor ou realizar outras ações
-    // Certifique-se de manipular o arquivo conforme necessário.
+
     console.log('Arquivo selecionado:', this.arquivoSelecionado);
   }
 
@@ -85,14 +91,20 @@ export class EditPerfilComponent implements OnInit {
   setFields() {
     this.profileService.getUserData().pipe(takeUntil(this.unsubscribe$)).subscribe(
       (userData: UserProfile) => {
+        this.firstName = userData.firstName;
+        this.lastName = userData.lastName;
+        this.email = userData.email;
+        this.telemovel = userData.telemovel;
+        this.nif = userData.nif;
+        this.genero = userData.genero;
 
           this.perfilForm.setValue({
             firstName: userData.firstName,
-            lastName: userData['lastName'],
+            lastName: userData.lastName,
             email: userData.email,
-            telemovel: userData['telemovel'],
-            nif: userData['nif'],
-            genero: userData['genero']
+            telemovel: userData.telemovel,
+            nif: userData.nif,
+            genero: userData.genero
           });
       },
       error => {
@@ -116,16 +128,14 @@ export class EditPerfilComponent implements OnInit {
       });
 
     this.passwordForm = this.fb.group({
-      password: [''],
-      novaPassword: [''],
-      repetirNovaPassword: ['']
+      password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(50)], [this.passwordPatternValidator()]],
+      novaPassword: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(50)], [this.passwordPatternValidator()]],
+      repetirNovaPassword: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(50)], [this.passwordPatternValidator()]]
     });
   }
 
-  
   atualizarPerfil() {
     this.submittedProfile = true;
-    this.submittedPassword = false;
     this.errorMessages = [];
     this.responseText = '';
     
@@ -136,60 +146,77 @@ export class EditPerfilComponent implements OnInit {
     const telemovel = this.perfilForm.get('telemovel')?.value;
     const genero = this.perfilForm.get('genero')?.value;
 
-    const model = new UserProfile(firstName, lastName, email, nif, telemovel, null, genero, null);
+    if (!(this.firstName === firstName && this.lastName === lastName && this.email === email
+      && this.nif === nif && this.telemovel === telemovel && this.genero === genero)) {
 
-    if (this.perfilForm.valid) {
-      this.profileService.updateUserData(model).subscribe({
+
+      const model = new UserProfile(firstName, lastName, email, nif, telemovel, null, genero, null, null);
+
+      if (this.perfilForm.valid) {
+        this.profileService.updateUserData(model).subscribe({
+          next: (response: any) => {
+            console.log(response);
+            this.setFields();
+            this.responseText = response.value.message;
+          },
+          error: (error) => {
+            console.log(error);
+            if (error.error.errors) {
+              this.errorMessages = error.error.errors;
+            } else {
+              this.errorMessages.push(error.error);
+            }
+          }
+        },
+        );
+      }
+    }
+    else {
+      this.errorMessages.push("Para atualizar os dados é necessário modificá-los.");
+      console.log(this.errorMessages.length);
+    }
+  }
+
+  alterarPassword() {
+    this.submittedPassword = true;
+    this.errorMessages = [];
+    this.responseText = '';
+   
+    
+
+    if (this.passwordForm.valid) {
+      this.profileService.updatePassword({
+        currentPassword: this.passwordForm.value.password,
+        newPassword: this.passwordForm.value.novaPassword,
+        confirmNewPassword: this.passwordForm.value.repetirNovaPassword
+      }).subscribe({
         next: (response: any) => {
-          console.log(response);
-          this.setFields();
           this.responseText = response.value.message;
         },
         error: (error) => {
-          console.log(error);
           if (error.error.errors) {
             this.errorMessages = error.error.errors;
           } else {
             this.errorMessages.push(error.error);
           }
         }
-      },
-      );
+      });
     }
     
   }
 
-  alterarPassword() {
-    this.submittedProfile = false;
-    this.submittedPassword = true;
-    this.errorMessages = [];
-    
+  passwordPatternValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const value: string = control.value || '';
 
-    if (this.passwordForm.value.novaPassword !== this.passwordForm.value.repetirNovaPassword) {
-      this.errorMessages.push("As novas passwords não condizem.");
-      return; 
-    }
+      const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/;
 
-    this.profileService.updatePassword({
-      email: this.perfilForm.value.email,
-      currentPassword: this.passwordForm.value.password,
-      newPassword: this.passwordForm.value.novaPassword,
-      confirmNewPassword: this.passwordForm.value.repetirNovaPassword
-    }).subscribe({
-      next: (response: any) => {
-        console.log(response);
-        this.passwordForm.reset(); // Clear the password form
-        // Display success message or perform any additional actions
-        this.errorMessages.push("Password alterada com sucesso.");
-      },
-      error: (error) => {
-        if (error.error.errors) {
-          this.errorMessages = error.error.errors;
-        } else {
-          this.errorMessages.push(error.error);
-        }
-      }
-    });
+      return new Promise(resolve => {
+        setTimeout(() => {
+          resolve(pattern.test(value) ? null : { passwordPattern: true });
+        }, 0);
+      });
+    };
   }
 
  

@@ -39,8 +39,7 @@ export class ProfileService {
   getUserData(): Observable<UserProfile> {
 
     const headers = this.getHeaders();
-
-    // Make the HTTP request with the headers                            
+                               
     return this.http.get<UserProfile>(`${environment.appUrl}/api/profile/get-user`, { headers });
   }
 
@@ -50,9 +49,11 @@ export class ProfileService {
   }
 
 
-  updatePassword(model:UpdatePassword) {
-    return this.http.put(`${environment.appUrl}/api/profile/update-password`, model);
+  updatePassword(model: UpdatePassword) {
+    const headers = this.getHeaders();
+    return this.http.put(`${environment.appUrl}/api/profile/update-password`, model, { headers });
   }
+
 
 
 }

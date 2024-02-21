@@ -2,10 +2,14 @@
 
 <form (ngSubmit)="enviarFormulario()" class="perfil">
 
-  <span class="btn-regist" >Alterar Foto <input type="file" (change)="selecionarArquivo($event)" accept="image/*" id="btn-image"></span>
+  <input type="file" (change)="selecionarArquivo($event)" accept="image/*" id="btn-image">
   <img *ngIf="caminhoDaImagem" [src]="caminhoDaImagem" alt="Imagem selecionada" id="img-perfil">
 </form>
 
+
+<div *ngIf="errorMessages.length > 0">
+  <app-validation-messages [errorMessages]="errorMessages"></app-validation-messages>
+</div>
 <form [formGroup]="perfilForm" (ngSubmit)="atualizarPerfil()" autocomplete="off">
   <div class="form-row">
 
@@ -26,7 +30,7 @@
 
       <div class="right">
         <label for="apelido">Apelido:</label>
-        <input  formControlName="lastName" type="text" id="apelido" name="apelido" required [class.is-invalid]="submittedProfile && perfilForm.get('lastName')?.errors">
+        <input formControlName="lastName" type="text" id="apelido" name="apelido" required [class.is-invalid]="submittedProfile && perfilForm.get('lastName')?.errors">
         <span class="text-danger" *ngIf="submittedProfile && perfilForm.get('lastName')?.hasError('required')">
           Introduza o seu apelido
         </span>
@@ -51,8 +55,8 @@
         </span>
       </div>
       <div class="right">
-        <label formControlName="telemovel" for="telemovel">Telemóvel:</label>
-        <input maxlength="9" type="tel" id="telemovel" name="telemovel" oninput="this.value = this.value.replace(/[^0-9]/g, '');" [class.is-invalid]="submittedProfile && perfilForm.get('telemovel')?.errors">
+        <label for="telemovel">Telemóvel:</label>
+        <input formControlName="telemovel"  maxlength="9" type="tel" id="telemovel" name="telemovel" oninput="this.value = this.value.replace(/[^0-9]/g, '');" [class.is-invalid]="submittedProfile && perfilForm.get('telemovel')?.errors">
         <span class="text-danger" *ngIf="submittedProfile && (perfilForm.get('telemovel')?.hasError('maxlength') || submittedProfile && perfilForm.get('telemovel')?.hasError('minlength'))">
           O telemóvel deve ter 9 dígitos
         </span>
@@ -63,14 +67,8 @@
       <div class="left">
         <div class="gender">
           <label>Género:</label>
-          <label for="male" class="radio-label">
-            <input formControlName="genero" type="radio" name="genero"
-                   value="M" id="male"> Masculino
-          </label>
-          <label for="female" class="radio-label">
-            <input formControlName="genero" type="radio"
-                   name="genero" value="F" id="female"> Feminino
-          </label>
+          <label for="male" class="radio-label"><input formControlName="genero" type="radio" name="genero" value="M" id="male"> Masculino</label>
+          <label for="female" class="radio-label"><input formControlName="genero" type="radio" name="genero" value="F" id="female"> Feminino</label>
         </div>
         <span class="text-danger" *ngIf="submittedProfile && perfilForm.get('genero')?.hasError('required')">
           Selecione um género
@@ -91,13 +89,15 @@
   </div>
 
   <div id="submit-button">
-    <button type="submit"  class="btn-regist">Atualizar</button>
+    <button type="submit" class="btn-regist">Atualizar</button>
   </div>
 
 </form>
 
-
-<form [formGroup]="passwordForm" (ngSubmit)="alterarPassword()" autocomplete="off" >
+<div *ngIf="errorMessages.length > 0">
+  <app-validation-messages [errorMessages]="errorMessages"></app-validation-messages>
+</div>
+<form [formGroup]="passwordForm" (ngSubmit)="alterarPassword()" autocomplete="off" *ngIf="!loading">
   <div class="form-pass">
 
 
@@ -152,4 +152,8 @@
   </div>
 
 </form>
+
+<div *ngIf="loading">
+  <loading-spinner></loading-spinner>
+</div>
 

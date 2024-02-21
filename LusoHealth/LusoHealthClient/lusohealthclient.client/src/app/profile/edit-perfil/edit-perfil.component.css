@@ -23,6 +23,8 @@ h3 {
 }
 
 #img-perfil {
+  height:100px;
+  width:100px;
   border-radius: 130px;
   margin-bottom: 10px;
 }
@@ -90,10 +92,10 @@ input[type="radio"] {
 }
 
 
-
+/*
 #btn-image {
   visibility: hidden;
-}
+}*/
 
 .btn-regist {
   height: 40px;

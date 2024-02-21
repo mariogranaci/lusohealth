@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { User } from '../../shared/models/authentication/user';
 import { environment } from '../../../environments/environment.development';
 import { jwtDecode } from 'jwt-decode';
 import { EditarPerfil } from '../../shared/models/profile/editarPerfil';
 import { ProfileService } from '../profile-service.service';
 import { UserProfile } from '../../shared/models/profile/userProfile';
+import { Observable, Subject, never, takeUntil } from 'rxjs';
 
 
 @Component({
@@ -19,6 +20,9 @@ export class EditPerfilComponent implements OnInit {
   errorMessages: string[] = [];
   submittedProfile = false;
   submittedPassword = false;
+  loading = false;
+  Data = this.getUserProfileInfo();
+  private unsubscribe$ = new Subject<void>();
 
   caminhoDaImagem: string | null = null;
   arquivoSelecionado: File | null = null;
@@ -50,7 +54,8 @@ export class EditPerfilComponent implements OnInit {
 
   getUserProfileInfo() {
     this.profileService.getUserData().subscribe({
-      next: (response: any) => {
+      next: (response: UserProfile) => {
+        console.log(response);
         return response;
       },
       error: (error) => {
@@ -60,43 +65,85 @@ export class EditPerfilComponent implements OnInit {
         } else {
           this.errorMessages.push(error.error);
         }
-        return null;
+        return error;
       }
     },
     );
-    return null;
   }
 
 
   ngOnInit() {
+    this.initializeForm();
+    this.setFields();
+  }
 
-    this.perfilForm = this.fb.group({
-      firstName: ['Francisco', [ Validators.minLength(3), Validators.maxLength(50)]],
-      lastName: ['Vaz', [Validators.minLength(3), Validators.maxLength(50)]],
-      email: ['franciscocaeirovaz@gmail.com', [ Validators.email]],
-      telemovel: ['123456789', [Validators.minLength(9), Validators.maxLength(9)]],
-      nif: ['123456789', [ Validators.minLength(9), Validators.maxLength(9)]],
-      genero: ['M']
-    });
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
+  setFields() {
+    this.profileService.getUserData().pipe(takeUntil(this.unsubscribe$)).subscribe(
+      (userData: UserProfile) => {
+
+          this.perfilForm.setValue({
+            firstName: userData.firstName,
+            lastName: userData['lastName'],
+            email: userData.email,
+            telemovel: userData['telemovel'],
+            nif: userData['nif'],
+            genero: userData['genero']
+          });
+      },
+      error => {
+        if (error.error.errors) {
+          this.errorMessages = error.error.errors;
+        } else {
+          this.errorMessages.push(error.error);
+        }
+      }
+    );
+  }
+  
+  initializeForm() {
+      this.perfilForm = this.fb.group({
+        firstName: ['', [Validators.minLength(3), Validators.maxLength(50)]],
+        lastName: ['', [Validators.minLength(3), Validators.maxLength(50)]],
+        email: ['', [Validators.email]],
+        telemovel: ['', [Validators.minLength(9), Validators.maxLength(9)]],
+        nif: ['', [Validators.minLength(9), Validators.maxLength(9)]],
+        genero: ['', [Validators.required]]
+      });
 
     this.passwordForm = this.fb.group({
-      password: ['Pass1234'],
+      password: [''],
       novaPassword: [''],
       repetirNovaPassword: ['']
     });
-
   }
-  
+
   
   atualizarPerfil() {
     this.submittedProfile = true;
     this.submittedPassword = false;
     this.errorMessages = [];
-    this.profileService.getUserData().subscribe({
+
+    
+    const firstName = this.perfilForm.get('firstName')?.value;
+    const lastName = this.perfilForm.get('lastName')?.value;
+    const email = this.perfilForm.get('email')?.value;
+    const nif = this.perfilForm.get('nif')?.value;
+    const telemovel = this.perfilForm.get('telemovel')?.value;
+    const genero = this.perfilForm.get('genero')?.value;
+
+    const model = new UserProfile(firstName, lastName, email, nif, telemovel, new Date('24-04-2005') , genero ,"wrestdrt");
+
+    this.profileService.updateUserData(model).subscribe({
       next: (response: any) => {
         console.log(response);
       },
       error: (error) => {
+        console.log(error);
         if (error.error.errors) {
           this.errorMessages = error.error.errors;
         } else {
@@ -111,7 +158,35 @@ export class EditPerfilComponent implements OnInit {
     this.submittedProfile = false;
     this.submittedPassword = true;
     this.errorMessages = [];
-    console.log(this.passwordForm.value);
+    
+
+    if (this.passwordForm.value.novaPassword !== this.passwordForm.value.repetirNovaPassword) {
+      this.errorMessages.push("As novas passwords não condizem.");
+      return; 
+    }
+
+    this.profileService.updatePassword({
+      email: this.perfilForm.value.email,
+      currentPassword: this.passwordForm.value.password,
+      newPassword: this.passwordForm.value.novaPassword,
+      confirmNewPassword: this.passwordForm.value.repetirNovaPassword
+    }).subscribe({
+      next: (response: any) => {
+        console.log(response);
+        this.passwordForm.reset(); // Clear the password form
+        // Display success message or perform any additional actions
+        this.errorMessages.push("Password alterada com sucesso.");
+      },
+      error: (error) => {
+        if (error.error.errors) {
+          this.errorMessages = error.error.errors;
+        } else {
+          this.errorMessages.push(error.error);
+        }
+      }
+    });
   }
+
+ 
 }
 

@@ -95,8 +95,19 @@ namespace LusoHealthClient.Server.Controllers
         [HttpPut("update-user-info")]
 		public async Task<ActionResult> UpdateUserInfo(UserProfileDto model)
 		{
-			var user = await _userManager.FindByEmailAsync(model.Email);
-			if (user == null) return Unauthorized("Este endereço de email ainda não foi registado");
+			var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userIdClaim == null)
+            {
+                return BadRequest("Não foi possível encontrar o utilizador");
+            }
+
+            var user = await _userManager.FindByIdAsync(userIdClaim);
+
+            if (user == null)
+            {
+                return NotFound("Não foi possível encontrar o utilizador");
+            }
 			if (!user.EmailConfirmed) return BadRequest("O email ainda não foi confirmado. Confirme o seu email para poder recuperar a sua password");
 
 			try
@@ -107,7 +118,7 @@ namespace LusoHealthClient.Server.Controllers
                 user.NormalizedEmail = model.Email.ToLower().Trim();
 				user.PhoneNumber = model.Telemovel.Trim().IsNullOrEmpty() ? null : model.Telemovel.Trim();
 				user.Nif = model.Nif.Trim();
-				user.Gender = model.Genero;
+				user.Gender = model.Genero != null ? (char) model.Genero : user.Gender;
 
 
                 var result = await _userManager.UpdateAsync(user);
@@ -125,8 +136,19 @@ namespace LusoHealthClient.Server.Controllers
 		[HttpPut("update-password")]
 		public async Task<ActionResult> UpdatePassword(UpdatePasswordDto model)
 		{
-			var user = await _userManager.FindByEmailAsync(model.Email);
-			if (user == null) return Unauthorized("Este endereço de email ainda não foi registado");
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userIdClaim == null)
+            {
+                return BadRequest("Não foi possível encontrar o utilizador");
+            }
+
+            var user = await _userManager.FindByIdAsync(userIdClaim);
+
+            if (user == null)
+            {
+                return NotFound("Não foi possível encontrar o utilizador");
+            }
 
 			try
 			{

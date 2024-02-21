@@ -18,10 +18,10 @@ export class EditPerfilComponent implements OnInit {
   perfilForm: FormGroup = new FormGroup({});
   passwordForm: FormGroup = new FormGroup({});
   errorMessages: string[] = [];
+  responseText: string | undefined;
   submittedProfile = false;
   submittedPassword = false;
   loading = false;
-  Data = this.getUserProfileInfo();
   private unsubscribe$ = new Subject<void>();
 
   caminhoDaImagem: string | null = null;
@@ -127,7 +127,7 @@ export class EditPerfilComponent implements OnInit {
     this.submittedProfile = true;
     this.submittedPassword = false;
     this.errorMessages = [];
-
+    this.responseText = '';
     
     const firstName = this.perfilForm.get('firstName')?.value;
     const lastName = this.perfilForm.get('lastName')?.value;
@@ -136,22 +136,27 @@ export class EditPerfilComponent implements OnInit {
     const telemovel = this.perfilForm.get('telemovel')?.value;
     const genero = this.perfilForm.get('genero')?.value;
 
-    const model = new UserProfile(firstName, lastName, email, nif, telemovel, new Date('24-04-2005') , genero ,"wrestdrt");
+    const model = new UserProfile(firstName, lastName, email, nif, telemovel, null, genero, null);
 
-    this.profileService.updateUserData(model).subscribe({
-      next: (response: any) => {
-        console.log(response);
-      },
-      error: (error) => {
-        console.log(error);
-        if (error.error.errors) {
-          this.errorMessages = error.error.errors;
-        } else {
-          this.errorMessages.push(error.error);
+    if (this.perfilForm.valid) {
+      this.profileService.updateUserData(model).subscribe({
+        next: (response: any) => {
+          console.log(response);
+          this.setFields();
+          this.responseText = response.value.message;
+        },
+        error: (error) => {
+          console.log(error);
+          if (error.error.errors) {
+            this.errorMessages = error.error.errors;
+          } else {
+            this.errorMessages.push(error.error);
+          }
         }
-      }
-    },
-    );
+      },
+      );
+    }
+    
   }
 
   alterarPassword() {

@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace LusoHealthClient.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class lusohealth : Migration
+    public partial class luso : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -58,6 +60,19 @@ namespace LusoHealthClient.Server.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProfessionalTypes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProfessionalTypes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -166,6 +181,21 @@ namespace LusoHealthClient.Server.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.InsertData(
+                table: "ProfessionalTypes",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Medicina" },
+                    { 2, "Enfermagem" },
+                    { 3, "Medicina Dentária" },
+                    { 4, "Fisioterapia" },
+                    { 5, "Nutricionismo" },
+                    { 6, "Psicologia" },
+                    { 7, "Fisiologia" },
+                    { 8, "Outros" }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -223,6 +253,9 @@ namespace LusoHealthClient.Server.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "ProfessionalTypes");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

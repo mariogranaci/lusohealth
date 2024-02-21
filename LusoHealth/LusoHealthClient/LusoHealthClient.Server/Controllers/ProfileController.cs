@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace LusoHealthClient.Server.Controllers
 {
@@ -35,15 +36,14 @@ namespace LusoHealthClient.Server.Controllers
 
             if (userIdClaim == null)
             {
-                return BadRequest("Email claim not found for the current user.");
+                return BadRequest("Não foi possível encontrar o utilizador");
             }
 
             var user = await _userManager.FindByIdAsync(userIdClaim);
 
             if (user == null)
             {
-                _logger.LogInformation($"User with email '{userIdClaim}' not found.");
-                return NotFound();
+                return NotFound("Não foi possível encontrar o utilizador");
             }
 
             UserProfileDto userProfileDto = new UserProfileDto {
@@ -60,7 +60,39 @@ namespace LusoHealthClient.Server.Controllers
             return userProfileDto;
         }
 
-		[HttpPut("update-user-info")]
+        [HttpGet("get-professional-info")]
+        public async Task<ActionResult<UserProfileDto>> GetProfessionalProfile()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userIdClaim == null)
+            {
+                return BadRequest("Não foi possível encontrar o utilizador");
+            }
+
+            var user = await _userManager.FindByIdAsync(userIdClaim);
+
+            if (user == null)
+            {
+                return NotFound("Não foi possível encontrar o utilizador");
+            }
+
+            UserProfileDto userProfileDto = new UserProfileDto
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Nif = user.Nif,
+                Telemovel = user.PhoneNumber,
+                DataNascimento = user.BirthDate,
+                Genero = user.Gender,
+                Picture = user.ProfilePicPath
+            };
+
+            return userProfileDto;
+        }
+
+        [HttpPut("update-user-info")]
 		public async Task<ActionResult> UpdateUserInfo(UserProfileDto model)
 		{
 			var user = await _userManager.FindByEmailAsync(model.Email);
@@ -72,11 +104,13 @@ namespace LusoHealthClient.Server.Controllers
 				user.FirstName = model.FirstName.Trim();
 				user.LastName = model.LastName.Trim();
 				user.Email = model.Email.ToLower().Trim();
-				user.PhoneNumber = model.Telemovel.Trim();
+                user.NormalizedEmail = model.Email.ToLower().Trim();
+				user.PhoneNumber = model.Telemovel.Trim().IsNullOrEmpty() ? null : model.Telemovel.Trim();
 				user.Nif = model.Nif.Trim();
 				user.Gender = model.Genero;
 
-				var result = await _userManager.UpdateAsync(user);
+
+                var result = await _userManager.UpdateAsync(user);
 
 				if (result.Succeeded)
 					return Ok(new JsonResult(new { title = "Perfil Alterado", message = "Os seus dados foram alterados com sucesso." }));

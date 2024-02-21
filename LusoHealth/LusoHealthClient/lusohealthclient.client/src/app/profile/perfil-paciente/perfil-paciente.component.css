@@ -1,0 +1,77 @@
+h1 {
+  text-align: center;
+  font-size: 50px;
+  margin: 25px 0;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  margin: 20px 50px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+  margin-bottom: 25px;
+}
+
+.right, .left {
+  width: 40%;
+}
+
+.info {
+  min-height: 40px;
+  border: none;
+  border-radius: 7px;
+  font-size: 20px;
+  padding: 0 10px;
+  width: 100%;
+  background: white;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+.btn-regist {
+  width: fit-content;
+  height: 50px;
+  border: none;
+  color: #fff;
+  font-size: 1.3rem;
+  border-radius: 30px;
+  padding: 10px 25px;
+  font-weight: 500;
+  background-color: #1875E7;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: absolute;
+  right: 30px;
+  display: inline-block;
+  box-shadow: inset 2px 2px 2px 0px rgba(37, 80, 209, 0.5), 7px 7px 20px 0px rgba(0, 0, 0, .1), 4px 4px 5px 0px rgba(0, 0, 0, .1);
+  outline: none;
+}
+
+.btn-regist:active {
+  transform: translateY(2px);
+}
+
+.btn-regist:hover {
+  background-color: #1b69c8;
+  cursor: pointer;
+}
+
+#btn-text, a {
+  color: black;
+}
+
+loading-spinner {
+  position: absolute;
+  top: 50%; /* Centraliza verticalmente */
+  left: 50%; /* Centraliza horizontalmente */
+  transform: translate(-50%, -50%); /* Corrige o deslocamento pela metade da largura e altura */
+}

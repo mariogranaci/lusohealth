@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrl: './perfil-paciente.component.css'
 })
 export class PerfilPacienteComponent {
-
+  loading = false;
 }

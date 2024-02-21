@@ -12,12 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LusoHealthClient.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-<<<<<<<< HEAD:LusoHealth/LusoHealthClient/LusoHealthClient.Server/Migrations/20240219190902_luso.Designer.cs
-    [Migration("20240219190902_luso")]
-========
-    [Migration("20240221014829_luso")]
->>>>>>>> main:LusoHealth/LusoHealthClient/LusoHealthClient.Server/Migrations/20240221014829_luso.Designer.cs
-    partial class luso
+    [Migration("20240221144210_ONomequeQuiseres")]
+    partial class ONomequeQuiseres
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

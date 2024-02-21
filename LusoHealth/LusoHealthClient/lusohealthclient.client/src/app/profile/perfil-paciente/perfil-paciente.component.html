@@ -1,1 +1,46 @@
-<p>perfil-paciente works!</p>
+ <section class="form-row">
+
+  <div id="button">
+    <button class="btn-regist">Editar Perfil</button>
+  </div>
+
+   <figure>
+     <img alt="Imagem de Perfil" src="../src/assets/images/Perfil/profileImage.jpg"/>
+   </figure>
+
+  <div class="row">
+    <div class="left">
+      <label for="name">Nome:</label>
+      <p type="text" class="info" id="nome" name="nome">
+    </div>
+    <div class="right">
+      <label for="apelido">Apelido:</label>
+      <p type="text" class="info" id="apelido" name="apelido">
+    </div>
+  </div>
+  <div class="row">
+    <div class="left">
+      <label for="email">Email:</label>
+      <p type="email" class="info" id="email" name="email">
+    </div>
+    <div class="right">
+      <label for="telemovel">Telemóvel:</label>
+      <p class="info" type="tel" id="telemovel" name="telemovel">
+    </div>
+  </div>
+  <div class="row">
+    <div class="left">
+      <div class="gender">
+        <label>Género:</label>
+        <p class="info" type="text" id="gender" name="gender">
+      </div>
+    </div>
+    <div class="right">
+      <label for="nif">NIF:</label>
+      <p class="info" type="text" id="nif" name="nif">
+    </div>
+  </div>
+</section>
+<div *ngIf="loading">
+  <loading-spinner></loading-spinner>
+</div>

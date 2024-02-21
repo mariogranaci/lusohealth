@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace LusoHealthClient.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class luso : Migration
+    public partial class ONomequeQuiseres : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

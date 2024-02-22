@@ -10,5 +10,6 @@
   <ItemGroup>
     <Folder Include="src\app\shared\models\profile\" />
     <Folder Include="src\assets\images\login\" />
+    <Folder Include="src\assets\images\profile\" />
   </ItemGroup>
 </Project>

@@ -166,7 +166,6 @@ namespace LusoHealthClient.Server.Controllers
 				return BadRequest("Falha ao atualizar a password. Tente novamente.");
 			}
 		}
-
 	}
 }
 

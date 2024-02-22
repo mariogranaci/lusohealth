@@ -22,37 +22,41 @@ namespace LusoHealthClient.Server.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Service>()
-        .HasKey(s => s.Id);
+            base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<Relative>()
+                .HasOne(r => r.Patient)
+                .WithMany(p => p.FamilyAggregate)
+                .HasForeignKey(r => r.IdPatient);
+
+            // Configure User entity
+            modelBuilder.Entity<User>()
+                .Property(u => u.Gender)
+                .IsRequired();
+
+            modelBuilder.Entity<User>()
+                .Property(u => u.Nif)
+                .IsRequired();
+
+            modelBuilder.Entity<User>()
+                .Property(u => u.UserType)
+                .IsRequired();
+
+            // Configure Review entity
             modelBuilder.Entity<Review>()
                 .HasKey(r => new { r.IdPatient, r.IdService });
 
+            // Configure Service entity
             modelBuilder.Entity<Service>()
                 .HasOne(s => s.Professional)
                 .WithMany(p => p.Services)
-                .HasForeignKey(s => s.IdProfessional)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasForeignKey(s => s.IdProfessional);
 
-            modelBuilder.Entity<Service>()
-                .HasOne(s => s.Specialty)
-                .WithMany()
-                .HasForeignKey(s => s.IdSpecialty)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<Review>()
-                .HasOne(r => r.Service)
-                .WithMany()
-                .HasForeignKey(r => r.IdService)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<Review>()
-                .HasOne(r => r.Patient)
-                .WithMany()
-                .HasForeignKey(r => r.IdPatient)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            base.OnModelCreating(modelBuilder);
+            // Configure Certificate entity
+            modelBuilder.Entity<Certificate>()
+                .HasOne(c => c.Professional)
+                .WithMany(p => p.Certificates)
+                .HasForeignKey(c => c.IdProfessional);
 
             PasswordHasher<User> ph = new PasswordHasher<User>();
 
@@ -394,7 +398,7 @@ namespace LusoHealthClient.Server.Data
             };
             var userGoogle = new User
             {
-
+                Id = "7",
                 FirstName = "User",
                 LastName = "Google",
                 Email = "usergoogle@mail.com",
@@ -431,7 +435,8 @@ namespace LusoHealthClient.Server.Data
                 user3,
                 user4,
                 user5,
-                user6
+                user6,
+                userGoogle
             );
 
             var patient1 = new Patient { UserID = user1.Id };

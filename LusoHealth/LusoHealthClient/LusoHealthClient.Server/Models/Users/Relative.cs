@@ -17,6 +17,5 @@ namespace LusoHealthClient.Server.Models.Users
         #region Navigation Properties
         public virtual Patient Patient { get; set; }
         #endregion
-
     }
 }

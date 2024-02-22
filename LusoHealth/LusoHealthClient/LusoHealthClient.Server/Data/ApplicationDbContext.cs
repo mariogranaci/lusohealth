@@ -16,6 +16,7 @@ namespace LusoHealthClient.Server.Data
         public DbSet<Professional> Professionals { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Service> Services { get; set; }
+        public DbSet<Relative> Relatives { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
@@ -458,6 +459,14 @@ namespace LusoHealthClient.Server.Data
                 professional1,
                 professional2,
                 professional3
+            );
+
+            var relative1 = new Relative { Id = 1, IdPatient = patient1.UserID, Name = "Mário Granaci", Gender = 'M', BirthDate = new DateTime(2003, 4, 29), };
+            var relative2= new Relative { Id = 2, IdPatient = patient1.UserID, Name = "Jaime Vieira", Gender = 'F', BirthDate = new DateTime(2002, 9, 24), };
+
+            modelBuilder.Entity<Relative>().HasData(
+                relative1,
+                relative2
             );
         }
     }

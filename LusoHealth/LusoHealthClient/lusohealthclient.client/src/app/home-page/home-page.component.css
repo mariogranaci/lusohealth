@@ -30,3 +30,50 @@ body {
   .profile-box img {
     width: 100%;
   }
+
+.tab p {
+  width: 15px;
+  height: fit-content;
+  text-align: justify;
+}
+
+.image {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+}
+
+figure {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  padding: 10px;
+  margin-bottom: 10px;
+  margin-right: 30px;
+  border-radius: 10px;
+  position: relative;
+  min-width: 300px;
+  width: 300px;
+}
+
+#icons {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+
+.content {
+  flex-grow: 1;
+  margin-left: 20px;
+}
+
+.imagem {
+  max-width: 32px;
+  margin-left: 12px;
+}

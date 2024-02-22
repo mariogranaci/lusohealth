@@ -3,11 +3,23 @@
   <h1 *ngIf="(authenticationService.user$ | async) as user">Bem-vindo ao LusoHealth, {{ getFirstAndLastName(user.name) }}</h1>
   <input class="search-bar" type="text" placeholder="Pesquisa por algum serviço">
 </div>
-<div class="profile-box">
-  <img src="profile.jpg" alt="Profile Picture">
-  <h2>Nome</h2>
-  <p>Especialidade</p>
-  <p>Localização</p>
-  <p>Preço por Consulta: 18€</p>
+<div class="tab">
+  <div id="icons">
+    <img alt="Editar" class="imagem" src="/assets/images/Perfil/edit.png">
+  </div>
+  <div class="content">
+    <div>
+      <span>Nome:</span><p>-</p>
+    </div>
+    <div>
+      <span>Especialidade:</span><p>-</p>
+    </div>
+    <div>
+      <span>Localização:</span><p>-</p>
+    </div>
+    <div>
+      <span>Preço por Consulta:</span><p>-</p>
+    </div>
+  </div>
 </div>
 

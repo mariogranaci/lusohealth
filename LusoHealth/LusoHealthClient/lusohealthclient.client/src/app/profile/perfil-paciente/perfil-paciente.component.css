@@ -4,6 +4,11 @@ h1 {
   margin: 25px 0;
 }
 
+.tab p {
+  width: 15px;
+  height: fit-content;
+  text-align: justify;
+}
 
 .form-row {
   display: flex;
@@ -88,7 +93,8 @@ figure {
   margin-right: 30px;
   border-radius: 10px;
   position: relative;
-  width: 250px;
+  min-width: 300px;
+  width: 300px;
 }
 
 #plus {
@@ -130,6 +136,7 @@ figure {
   margin: 0 auto;
   display: flex;
   align-items: center;
+  overflow: auto;
 }
 
 .agregado-texto {

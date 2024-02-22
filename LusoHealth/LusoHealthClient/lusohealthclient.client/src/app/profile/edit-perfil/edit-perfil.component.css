@@ -1,9 +1,4 @@
 
-body {
-  padding: 0;
-  margin: 0;
-  background-color: #eceef0;
-}
 
 .form-row, .form-pass {
   display: flex;
@@ -23,11 +18,17 @@ h3 {
 }
 
 #img-perfil {
-  height:100px;
-  width:100px;
-  border-radius: 130px;
+  height:150px;
+  width:150px;
   margin-bottom: 10px;
 }
+
+  #img-perfil > img {
+    width: 100%;
+    height: 100%;
+    object-fit:cover;
+    border-radius: 50%;
+  }
 
 
 .row-pass {
@@ -58,6 +59,13 @@ input[type="tel"] {
   font-size: 20px;
   padding: 0 10px;
   width: 100%;
+}
+
+ 
+ 
+
+input[type="file"] {
+  display: none
 }
 
 /* Chrome, Safari, Edge, Opera */
@@ -92,12 +100,8 @@ input[type="radio"] {
 }
 
 
-/*
-#btn-image {
-  visibility: hidden;
-}*/
 
-.btn-regist {
+.btn-regist, #OpenImgUpload {
   height: 40px;
   color: #fff;
   background-color: #1875e7;
@@ -108,7 +112,7 @@ input[type="radio"] {
   transition: background-color 0.3s ease;
 }
 
-  .btn-regist:hover {
+  .btn-regist:hover, #OpenImgUpload:hover {
     background-color: #1b69c8;
     cursor: pointer;
   }

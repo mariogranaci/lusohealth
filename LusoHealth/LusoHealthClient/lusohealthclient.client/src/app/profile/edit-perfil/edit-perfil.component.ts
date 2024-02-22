@@ -7,6 +7,7 @@ import { EditarPerfil } from '../../shared/models/profile/editarPerfil';
 import { ProfileService } from '../profile-service.service';
 import { UserProfile } from '../../shared/models/profile/userProfile';
 import { Observable, Subject, never, takeUntil } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 
 @Component({
@@ -30,28 +31,19 @@ export class EditPerfilComponent implements OnInit {
   telemovel: string | null = null;
   nif: string | null = null;
   genero: string | null = null;
+  provider = false;
 
-  caminhoDaImagem: string | null = null;
+  caminhoDaImagem: string | null = "https://static.vecteezy.com/ti/vetor-gratis/p3/3715527-imagem-perfil-icone-masculino-icone-humano-ou-pessoa-sinal-e-simbolo-vetor.jpg";
   arquivoSelecionado: File | null = null;
 
   constructor(private fb: FormBuilder,
-    private profileService: ProfileService) { }
+    private profileService: ProfileService,private http:HttpClient) { }
 
   selecionarArquivo(event: any) {
-    const arquivoInput = event.target;
-    if (arquivoInput.files && arquivoInput.files.length > 0) {
-      this.arquivoSelecionado = arquivoInput.files[0];
-      console.log("arquivo :", this.arquivoSelecionado);
-      const leitor = new FileReader();
-      leitor.onload = (e: any) => {
-        this.caminhoDaImagem = e.target.result;
-        console.log("caminho imagem :", this.caminhoDaImagem);
-      };
-      if (this.arquivoSelecionado) {
-        leitor.readAsDataURL(this.arquivoSelecionado);
-      }
-    }
+    this.arquivoSelecionado = <File>event.target.files[0]; 
   }
+
+ 
 
   enviarFormulario() {
     const model = new UserProfile(null, null, null, null, null, null, null, this.caminhoDaImagem , null);
@@ -70,6 +62,17 @@ export class EditPerfilComponent implements OnInit {
     });
   }
 
+  openFiles() {
+    const OpenImgUpload = document.getElementById('OpenImgUpload');
+    const imgupload = document.getElementById('imgupload');
+
+    if (OpenImgUpload != null && imgupload != null) {
+      OpenImgUpload.addEventListener('click', function () {
+        imgupload.click();
+      });
+    }
+
+  }
 
   getUserProfileInfo() {
     this.profileService.getUserData().subscribe({
@@ -94,6 +97,8 @@ export class EditPerfilComponent implements OnInit {
   ngOnInit() {
     this.initializeForm();
     this.setFields();
+    this.openFiles();
+    
   }
 
   ngOnDestroy(): void {
@@ -104,12 +109,18 @@ export class EditPerfilComponent implements OnInit {
   setFields() {
     this.profileService.getUserData().pipe(takeUntil(this.unsubscribe$)).subscribe(
       (userData: UserProfile) => {
+        console.log(userData.provider);
+        if (userData.provider) {
+          this.provider = true;
+        }
         this.firstName = userData.firstName;
         this.lastName = userData.lastName;
         this.email = userData.email;
         this.telemovel = userData.telemovel;
         this.nif = userData.nif;
         this.genero = userData.genero;
+        if (userData.picture)
+          this.caminhoDaImagem = userData.picture;
 
           this.perfilForm.setValue({
             firstName: userData.firstName,

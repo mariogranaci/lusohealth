@@ -54,7 +54,8 @@ namespace LusoHealthClient.Server.Controllers
                 Telemovel = user.PhoneNumber,
                 DataNascimento = user.BirthDate,
                 Genero = user.Gender,
-                Picture = user.ProfilePicPath
+                Picture = user.ProfilePicPath,
+				Provider = user.Provider,
             };
 
             return userProfileDto;
@@ -182,6 +183,7 @@ namespace LusoHealthClient.Server.Controllers
 		public async Task<ActionResult> UpdatePicture(UserProfileDto model)
 		{
 			var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
 
 			if (userIdClaim == null)
 			{

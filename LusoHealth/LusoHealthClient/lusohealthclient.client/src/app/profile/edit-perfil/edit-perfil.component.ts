@@ -41,11 +41,11 @@ export class EditPerfilComponent implements OnInit {
     const arquivoInput = event.target;
     if (arquivoInput.files && arquivoInput.files.length > 0) {
       this.arquivoSelecionado = arquivoInput.files[0];
-
-      // Para exibir a imagem imediatamente após a seleção
+      console.log("arquivo :", this.arquivoSelecionado);
       const leitor = new FileReader();
       leitor.onload = (e: any) => {
         this.caminhoDaImagem = e.target.result;
+        console.log("caminho imagem :", this.caminhoDaImagem);
       };
       if (this.arquivoSelecionado) {
         leitor.readAsDataURL(this.arquivoSelecionado);
@@ -54,9 +54,22 @@ export class EditPerfilComponent implements OnInit {
   }
 
   enviarFormulario() {
-
-    console.log('Arquivo selecionado:', this.arquivoSelecionado);
+    const model = new UserProfile(null, null, null, null, null, null, null, this.caminhoDaImagem , null);
+    console.log("imagem:",this.caminhoDaImagem);
+    this.profileService.updatePicture(model).subscribe({
+      next: (response: any) => {
+        this.responseText = response.value.message;
+      },
+      error: (error) => {
+        if (error.error.errors) {
+          this.errorMessages = error.error.errors;
+        } else {
+          this.errorMessages.push(error.error);
+        }
+      }
+    });
   }
+
 
   getUserProfileInfo() {
     this.profileService.getUserData().subscribe({

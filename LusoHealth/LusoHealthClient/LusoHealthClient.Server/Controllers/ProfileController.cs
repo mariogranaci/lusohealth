@@ -178,6 +178,39 @@ namespace LusoHealthClient.Server.Controllers
 			}
 		}
 
+		[HttpPut("update-picture")]
+		public async Task<ActionResult> UpdatePicture(UserProfileDto model)
+		{
+			var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+			if (userIdClaim == null)
+			{
+				return BadRequest("Não foi possível encontrar o utilizador");
+			}
+
+			var user = await _userManager.FindByIdAsync(userIdClaim);
+
+			if (user == null)
+			{
+				return NotFound("Não foi possível encontrar o utilizador");
+			}
+
+			try
+			{
+				user.ProfilePicPath = model.Picture;
+				var result = await _userManager.UpdateAsync(user);
+
+				if (result.Succeeded)
+					return Ok(new JsonResult(new { title = "Perfil Alterado", message = "A sua foto de perfil foi alterada com sucesso." }));
+				return BadRequest("Não foi possivel alterar a foto de perfil.Tente Novamente.");
+
+			}
+			catch (Exception)
+			{
+				return BadRequest("Não foi possivel alterar a foto de perfil.Tente Novamente.");
+			}
+		}
+
 	}
 }
 

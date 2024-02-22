@@ -54,6 +54,9 @@ export class ProfileService {
     return this.http.put(`${environment.appUrl}/api/profile/update-password`, model, { headers });
   }
 
-
+  updatePicture(model: UserProfile) {
+    const headers = this.getHeaders();
+    return this.http.put(`${environment.appUrl}/api/profile/update-picture`, model, { headers });
+  }
 
 }

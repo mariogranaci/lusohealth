@@ -6,11 +6,11 @@ namespace LusoHealthClient.Server.Models.Users
     public class Relative
     {
         [Key]
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public char Gender { get; set; }
         public string? Nif { get; set; }
-        public string BirthDate { get; set; }
+        public DateTime BirthDate { get; set; }
         public string? Location { get; set; }
         public string IdPatient { get; set; }
 

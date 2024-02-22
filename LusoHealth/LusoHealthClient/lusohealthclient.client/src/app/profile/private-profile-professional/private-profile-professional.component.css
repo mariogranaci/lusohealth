@@ -326,11 +326,23 @@ hr {
 }
 
 .review-image {
-  border-radius: 50%;
   width: 50px;
-  pointer-events: none;
-  user-select: none;
+  height: 50px;
+  overflow: hidden;
+  position: relative;
+  border-radius: 50%;
 }
+
+  .review-image img {
+    pointer-events: none;
+    user-select: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 100%;
+    min-height: 100%;
+  }
 
 .small-right-margin {
   margin-right: 15px;

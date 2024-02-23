@@ -1,10 +1,4 @@
-body {
-  background-color: #ECEEF0;
-}
 
-  body * {
-    box-sizing: border-box;
-  }
 
 main {
   padding: 0 7%;
@@ -13,6 +7,85 @@ main {
   min-width: 1200px;
   max-width: 1500px;
 }
+
+
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 25px;
+}
+
+.right, .left {
+  width: 45%;
+}
+
+.info {
+  min-height: 40px;
+  border: none;
+  border-radius: 7px;
+  font-size: 20px;
+  padding: 10px 10px;
+  width: 100%;
+  background: white;
+}
+
+.btn-edit {
+  width: fit-content;
+  height: 50px;
+  border: none;
+  color: #fff;
+  font-size: 1.3rem;
+  border-radius: 30px;
+  padding: 10px 25px;
+  font-weight: 500;
+  background-color: #1875E7;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0s;
+  position: absolute;
+  right: 30px;
+  display: inline-block;
+  box-shadow: inset 2px 2px 2px 0px rgba(37, 80, 209, 0.5), 7px 7px 20px 0px rgba(0, 0, 0, .1), 4px 4px 5px 0px rgba(0, 0, 0, .1);
+  outline: none;
+}
+
+  .btn-edit:active {
+    transform: translateY(2px);
+  }
+
+  .btn-edit:hover {
+    background-color: #1b69c8;
+    cursor: pointer;
+  }
+
+
+.image {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+}
+
+figure {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+
+
+
+/*------------------------------------------------------------------*/
+
+
+
+
 
 .center-row {
   text-align: center;

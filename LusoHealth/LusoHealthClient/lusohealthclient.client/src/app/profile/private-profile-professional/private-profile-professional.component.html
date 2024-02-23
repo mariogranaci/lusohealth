@@ -1,5 +1,49 @@
 <main>
 
+  <section class="form-row">
+
+    <div id="button">
+      <button class="btn-edit">Editar Perfil</button>
+    </div>
+
+    <figure>
+      <img class="image" alt="Imagem de Perfil" src="/assets/images/Perfil/profileImage.jpg" />
+    </figure>
+
+    <div class="row">
+      <div class="left">
+        <label for="name">Nome:</label>
+        <p type="text" class="info" id="nome" name="nome">
+      </div>
+      <div class="right">
+        <label for="apelido">Apelido:</label>
+        <p type="text" class="info" id="apelido" name="apelido">
+      </div>
+    </div>
+    <div class="row">
+      <div class="left">
+        <label for="email">Email:</label>
+        <p type="email" class="info" id="email" name="email">
+      </div>
+      <div class="right">
+        <label for="telemovel">Telemóvel:</label>
+        <p class="info" type="tel" id="telemovel" name="telemovel">
+      </div>
+    </div>
+    <div class="row">
+      <div class="left">
+        <div class="gender">
+          <label>Género:</label>
+          <p class="info" type="text" id="gender" name="gender">
+        </div>
+      </div>
+      <div class="right">
+        <label for="nif">NIF:</label>
+        <p class="info" type="text" id="nif" name="nif">
+      </div>
+    </div>
+  </section>
+
   <div class="center-row">
     <button type="submit" class="btn btn-blue">Adicionar Especialidade</button>
   </div>
@@ -229,12 +273,11 @@
       <button onclick="closePopup()">Close</button>
     </div>
   </div>-->
-
-  <div class="overlay" id="overlay">
-    <!--(click)="closePopup()"-->
-    <a class="close-button">
-      <!--(click)="closePopup()"-->
-      <img src="assets/images/login/close.png" alt="Close button" class="close-image">
+  <!--<div class="overlay" id="overlay">-->
+  <!--(click)="closePopup()"-->
+  <!--<a class="close-button">-->
+  <!--(click)="closePopup()"-->
+  <!--<img src="assets/images/login/close.png" alt="Close button" class="close-image">
     </a>
     <form id="add-speciality-container" class="overlay-container" autocomplete="off">
 
@@ -290,12 +333,12 @@
 
         <button type="reset" class="btn btn-red">Cancelar</button>
       </div>
-      
+
 
     </form>
+  </div>-->
+  <!--<app-recuperar-pass (click)="stopPropagation($event)" id="recuperar-pass"></app-recuperar-pass>
+  <app-recuperar-conta (click)="stopPropagation($event)" id="recuperar-conta"></app-recuperar-conta>-->
 
-    <!--<app-recuperar-pass (click)="stopPropagation($event)" id="recuperar-pass"></app-recuperar-pass>
-    <app-recuperar-conta (click)="stopPropagation($event)" id="recuperar-conta"></app-recuperar-conta>-->
-  </div>
 
 </main>

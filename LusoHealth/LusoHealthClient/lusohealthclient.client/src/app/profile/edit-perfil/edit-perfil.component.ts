@@ -18,6 +18,7 @@ import { HttpClient } from '@angular/common/http';
 export class EditPerfilComponent implements OnInit {
   perfilForm: FormGroup = new FormGroup({});
   passwordForm: FormGroup = new FormGroup({});
+  pictureForm: FormGroup  = new FormGroup({});
   errorMessages: string[] = [];
   responseText: string | undefined;
   submittedProfile = false;
@@ -35,11 +36,12 @@ export class EditPerfilComponent implements OnInit {
 
   caminhoDaImagem: string | null = "https://static.vecteezy.com/ti/vetor-gratis/p3/3715527-imagem-perfil-icone-masculino-icone-humano-ou-pessoa-sinal-e-simbolo-vetor.jpg";
   arquivoSelecionado: File | null = null;
+    
 
   constructor(private fb: FormBuilder,
     private profileService: ProfileService) { }
 
-  selecionarArquivo(event: any) {
+  /* selecionarArquivo(event: any) {
     const inputElement = event.target;
 
     if (inputElement.files && inputElement.files.length > 0) {
@@ -52,22 +54,92 @@ export class EditPerfilComponent implements OnInit {
       if (this.arquivoSelecionado)
         reader.readAsDataURL(this.arquivoSelecionado);
     }
+  } */
+
+  selecionarArquivo(event: any) {
+   
+
+    const submitButton = document.getElementById('submit-image');
+    if (submitButton) {
+      const inputElement = event.target;
+
+      if (inputElement.files && inputElement.files.length > 0) {
+        this.arquivoSelecionado = inputElement.files[0];
+
+        const reader = new FileReader();
+        reader.onload = (e: any) => {
+          this.caminhoDaImagem = e.target.result;
+        };
+        if (this.arquivoSelecionado)
+          reader.readAsDataURL(this.arquivoSelecionado);
+      }
+      submitButton.click();
+    }
+  }
+
+  /* openFiles() {
+    const OpenImgUpload = document.getElementById('OpenImgUpload');
+    const imgupload = document.getElementById('imgupload');
+
+    if (OpenImgUpload != null && imgupload != null) {
+      OpenImgUpload.addEventListener('click', function () {
+        imgupload.click();
+      });
+    }
+
+  } */
+
+  openFiles() {
+    const OpenImgUpload = document.getElementById('OpenImgUpload');
+    const imgupload = document.getElementById('imgupload');
+
+    if (OpenImgUpload != null && imgupload != null) {
+      OpenImgUpload.addEventListener('click', function () {
+        imgupload.click();
+      });
+    }
+
   }
 
   enviarFormulario() {
     this.responseText = '';
+    console.log("Oi gato2");
+    
+      if (this.arquivoSelecionado) {
+        // Convert the selected file to base64 string
+        this.convertFileToBase64(this.arquivoSelecionado).then((base64String) => {
+          // Create a UserProfile model with the base64String (assuming "Picture" corresponds to the URL property)
+          const model = new UserProfile(null, null, null, null, null, null, null, base64String, null);
 
-    if (this.arquivoSelecionado) {
-      // Convert the selected file to base64 string
-      this.convertFileToBase64(this.arquivoSelecionado).then((base64String) => {
-        // Create a UserProfile model with the base64String (assuming "Picture" corresponds to the URL property)
-        const model = new UserProfile(null, null, null, null, null, null, null, base64String, null);
+          // Call the updatePicture method from the profile service
+          this.profileService.updatePicture(model).subscribe(
+            (response: any) => {
+              console.log("caminho:", this.caminhoDaImagem);
+              this.caminhoDaImagem = response.value.newImagePath;
+              this.responseText = response.value.message;
+            },
+            (error) => {
+              // Handle errors (logging or displaying error messages)
+              console.error('Error updating profile picture', error);
+              if (error.error.errors) {
+                this.errorMessages = error.error.errors;
+              } else {
+                this.errorMessages.push(error.error);
+              }
+            }
+          );
+        });
+      } else {
+        // If no file is selected, update the profile with the current caminhoDaImagem
+        const model = new UserProfile(null, null, null, null, null, null, null, this.caminhoDaImagem, null);
 
         // Call the updatePicture method from the profile service
         this.profileService.updatePicture(model).subscribe(
           (response: any) => {
-            // Update the caminhoDaImagem with the new image path from the response
+            // Update the responseText with the success message
+            
             this.caminhoDaImagem = response.value.newImagePath;
+            console.log("caminho:", this.caminhoDaImagem);
             this.responseText = response.value.message;
           },
           (error) => {
@@ -80,28 +152,8 @@ export class EditPerfilComponent implements OnInit {
             }
           }
         );
-      });
-    } else {
-      // If no file is selected, update the profile with the current caminhoDaImagem
-      const model = new UserProfile(null, null, null, null, null, null, null, this.caminhoDaImagem, null);
-
-      // Call the updatePicture method from the profile service
-      this.profileService.updatePicture(model).subscribe(
-        (response: any) => {
-          // Update the responseText with the success message
-          this.responseText = response.value.message;
-        },
-        (error) => {
-          // Handle errors (logging or displaying error messages)
-          console.error('Error updating profile picture', error);
-          if (error.error.errors) {
-            this.errorMessages = error.error.errors;
-          } else {
-            this.errorMessages.push(error.error);
-          }
-        }
-      );
-    }
+      }
+    
   }
 
 
@@ -119,17 +171,7 @@ export class EditPerfilComponent implements OnInit {
   }
 
 
-  openFiles() {
-    const OpenImgUpload = document.getElementById('OpenImgUpload');
-    const imgupload = document.getElementById('imgupload');
-
-    if (OpenImgUpload != null && imgupload != null) {
-      OpenImgUpload.addEventListener('click', function () {
-        imgupload.click();
-      });
-    }
-
-  }
+  
 
   getUserProfileInfo() {
     this.profileService.getUserData().subscribe({
@@ -154,7 +196,6 @@ export class EditPerfilComponent implements OnInit {
     this.initializeForm();
     this.setFields();
     this.openFiles();
-    
   }
 
   ngOnDestroy(): void {

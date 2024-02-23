@@ -1,9 +1,10 @@
 
-<div class="perfil">
-  <input type="file" id="imgupload" (change)="selecionarArquivo($event)"/>
+<form id="upload-image-form" [formGroup]="pictureForm" class="perfil" (ngSubmit)="enviarFormulario()">
+  <input formControlName="newImage" type="file" id="imgupload" (change)="selecionarArquivo($event)"/>
   <figure  id="img-perfil" ><img [src]="caminhoDaImagem" /></figure>
-  <button id="OpenImgUpload" (click)="enviarFormulario()" >Alterar Foto</button>
-</div>
+  <button type="button" id="OpenImgUpload" >Alterar Foto</button>
+  <button type="submit" id="submit-image" style="display: none;">Enviar</button>
+</form>
 
 <div *ngIf="errorMessages.length > 0">
   <app-validation-messages [errorMessages]="errorMessages"></app-validation-messages>

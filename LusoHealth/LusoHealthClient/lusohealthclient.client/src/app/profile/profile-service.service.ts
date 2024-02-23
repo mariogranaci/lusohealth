@@ -6,6 +6,7 @@ import { environment } from '../../environments/environment.development';
 import { User } from '../shared/models/authentication/user';
 import { UserProfile } from '../shared/models/profile/userProfile';
 import { UpdatePassword } from '../shared/models/profile/updatePassword';
+import { Relatives } from '../shared/models/profile/relatives';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -54,5 +55,8 @@ export class ProfileService {
     return this.http.put(`${environment.appUrl}/api/profile/update-password`, model);
   }
 
-
+  getRelatives(): Observable<Relatives> 
+  {
+    return this.http.get<Relatives>(`${environment.appUrl}/api/profile/get-relatives`);
+  }
 }

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ProfileService } from '../profile-service.service';
 import { UserProfile } from '../../shared/models/profile/userProfile';
+import { Relatives } from '../../shared/models/profile/relatives';
 import { Subject, takeUntil } from 'rxjs';
 
 @Component({
@@ -12,6 +13,7 @@ export class PerfilPacienteComponent {
   loading = false;
   errorMessages: string[] = [];
   private unsubscribe$ = new Subject<void>();
+  relatives: Relatives[] = [];
 
   constructor(private profileService: ProfileService) { }
 
@@ -63,10 +65,31 @@ export class PerfilPacienteComponent {
     }
   }
 
-
+  getRelatives() {
+    this.profileService.getRelatives().pipe(
+      takeUntil(this.unsubscribe$)
+    ).subscribe({
+      next: (relatives: Relatives[]) => {
+        console.log(relatives);
+        this.relatives = relatives;
+        this.loading = false;
+      },
+      error: (error) => {
+        console.log(error);
+        this.loading = false;
+        if (error.error.errors) {
+          this.errorMessages = error.error.errors;
+        } else {
+          this.errorMessages.push(error.error);
+        }
+      }
+    });
+  }
+ 
 
   ngOnInit() {
     this.setFields();
+    this.getRelatives();
   }
 
   ngOnDestroy(): void {

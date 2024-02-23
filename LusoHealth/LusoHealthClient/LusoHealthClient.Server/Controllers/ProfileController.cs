@@ -196,6 +196,51 @@ namespace LusoHealthClient.Server.Controllers
 			}
 		}
 
+        [HttpGet("get-relatives")]
+        public async Task<ActionResult<List<RelativeDto>>> GetRelatives()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userIdClaim == null)
+            {
+                return BadRequest("Não foi possível encontrar o utilizador");
+            }
+
+            var user = await _userManager.FindByIdAsync(userIdClaim);
+
+            if (user == null)
+            {
+                return NotFound("Não foi possível encontrar o utilizador");
+            }
+
+            var relatives = await _context.Relatives
+            .Where(r => r.IdPatient == user.Id)
+            .ToListAsync();
+
+            List<RelativeDto> relativeDtos = new List<RelativeDto>();
+
+            foreach (var relative in relatives)
+            {
+                RelativeDto relativeDto = new RelativeDto
+                {
+                    Name = relative.Name,
+                    Nif = relative.Nif,
+                    DataNascimento = relative.BirthDate,
+                    Gender = relative.Gender,
+                    Location = relative.Location
+                };
+
+                relativeDtos.Add(relativeDto);
+            }
+
+            foreach (var dto in relativeDtos)
+            {
+                Console.WriteLine($"Name: {dto.Name}, Nif: {dto.Nif}, BirthDate: {dto.DataNascimento}, Gender: {dto.Gender}, Location: {dto.Location}");
+            }
+
+            return relativeDtos;
+        }
+
         #region private helper methods
         private List<ServiceDto> GetServiceDtos(List<Service> services)
         {

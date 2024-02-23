@@ -28,7 +28,7 @@ main {
   }
 
 .btn {
-  background-color: #1875e7;
+  
   color: white;
   padding: 15px 40px;
   border: none;
@@ -43,7 +43,6 @@ main {
 }
 
   .btn:hover {
-    background-color: #1b69c8;
     cursor: pointer;
   }
 
@@ -51,11 +50,34 @@ main {
     transform: translateY(2px);
   }
 
+.btn-blue {
+  background-color: #1875e7;
+}
+
+.btn-blue:hover {
+  background-color: #1b69c8;
+}
+
+.btn-red {
+  background-color: #d42a2a;
+}
+
+.btn-red:hover {
+  background-color: #c31414;
+}
+
 .left-align-row {
   width: 100%;
   text-align: left;
   margin-bottom: 10px;
 }
+
+
+
+
+/*------------------------ Tabela -----------------------------*/
+
+
 
 
 table {
@@ -96,6 +118,7 @@ td {
     border-left: none;
     max-height: fit-content;
   }
+
 
   td:nth-child(2),
   th:nth-child(2) {
@@ -153,12 +176,32 @@ tbody {
 
   .action-button img {
     width: 30px;
+    pointer-events: none;
+    user-select: none;
   }
 
 .buttons-container {
   display: flex;
   justify-content: space-evenly;
 }
+
+.specialities-not-found-placeholder {
+  text-align: center !important;
+  padding: 20px 0 !important;
+  width: 1% !important;
+}
+
+
+
+
+/*-----------------------------------------------------------------*/
+
+
+
+/*--------------------------- Certificados ------------------------*/
+
+
+
 
 #certificates-container {
   background-color: #fff;
@@ -173,7 +216,7 @@ tbody {
 
 .single-container {
   background-color: #d9d9d9;
-  height: 250px;
+  height: 230px;
   width: 270px;
   margin: 20px 20px;
   border-radius: 20px;
@@ -189,13 +232,17 @@ tbody {
 
 .pdf-label {
   width: 240px;
-  height: 40px;
+  height: 20px;
   margin-bottom: 10px;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
   text-align: left;
   text-justify: inter-word;
+}
+
+.abbr-pdf-label {
+  text-decoration: none;
 }
 
 .delete-button {
@@ -215,6 +262,8 @@ tbody {
 
   .delete-button img {
     width: 30px;
+    pointer-events: none;
+    user-select: none;
   }
 
 .align-right-container {
@@ -251,6 +300,18 @@ tbody {
     width: 100px;
   }
 
+
+
+
+/*-----------------------------------------------------------------*/
+
+
+
+/*----------------------------- Reviews ---------------------------*/
+
+
+
+
 .reviews-info {
   display: flex;
   flex-direction: row;
@@ -270,7 +331,7 @@ tbody {
 }
 
   .select-dropdown select {
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-weight: normal;
     max-width: 400px;
     padding: 8px 24px 8px 10px;
@@ -279,7 +340,13 @@ tbody {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    user-select: none;
   }
+    .select-dropdown select option {
+      height: fit-content;
+    }
 
     .select-dropdown select:active, .select-dropdown select:focus {
       outline: none;
@@ -336,12 +403,7 @@ hr {
   .review-image img {
     pointer-events: none;
     user-select: none;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    min-width: 100%;
-    min-height: 100%;
+    object-fit: cover;
   }
 
 .small-right-margin {
@@ -359,3 +421,139 @@ hr {
   text-align: justify;
   text-justify: inter-word;
 }
+
+
+
+
+/*-----------------------------------------------------------------*/
+
+
+
+/*------------------------------ Popups ---------------------------*/
+
+
+
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.close-button {
+  position: absolute;
+  top: 70px;
+  right: 60px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.close-image {
+  height: 50px;
+}
+
+.overlay-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  min-width: min-content;
+  max-width: 450px;
+  height: 570px;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  background-color: #ECEEF0;
+  padding: 20px 20px;
+}
+
+  .overlay-container > h2 {
+    text-align: center;
+  }
+
+  .overlay-container label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 600;
+  }
+
+#add-speciality-container {
+  
+}
+
+@media only screen and (max-width: 550px) {
+  #add-speciality-container {
+    min-width: 400px;
+  }
+}
+
+.speciality-form-box {
+    margin-top: 15px;
+}
+
+#speciality-select-div {
+  width: 100%;
+}
+
+#speciality-select-div select{
+  width: inherit;
+}
+
+.input-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+input[type="number"] {
+  min-height: 40px;
+  border: none;
+  border-radius: 7px;
+  font-size: 1.1rem;
+  padding: 0 35px 0 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.euro-symbol {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.1rem;
+  pointer-events: none;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.radio-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+}
+
+input[type="radio"] {
+  width: 17px;
+  margin-right: 10px;
+  height: 17px;
+  margin-top: -1px;
+  vertical-align: middle;
+}
+
+.form-buttons-row {
+    margin-top: 30px;
+    display: flex;
+    justify-content: space-between;
+}
+

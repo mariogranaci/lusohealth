@@ -1,0 +1,75 @@
+<section class="form-row">
+
+  <div id="button">
+    <button class="btn-edit">Editar Perfil</button>
+  </div>
+
+  <figure>
+    <img class="image" alt="Imagem de Perfil" src="/assets/images/Perfil/profileImage.jpg" />
+  </figure>
+
+  <div class="row">
+    <div class="left">
+      <label for="name">Nome:</label>
+      <p type="text" class="info" id="nome" name="nome">
+    </div>
+    <div class="right">
+      <label for="apelido">Apelido:</label>
+      <p type="text" class="info" id="apelido" name="apelido">
+    </div>
+  </div>
+  <div class="row">
+    <div class="left">
+      <label for="email">Email:</label>
+      <p type="email" class="info" id="email" name="email">
+    </div>
+    <div class="right">
+      <label for="telemovel">Telemóvel:</label>
+      <p class="info" type="tel" id="telemovel" name="telemovel">
+    </div>
+  </div>
+  <div class="row">
+    <div class="left">
+      <div class="gender">
+        <label>Género:</label>
+        <p class="info" type="text" id="gender" name="gender">
+      </div>
+    </div>
+    <div class="right">
+      <label for="nif">NIF:</label>
+      <p class="info" type="text" id="nif" name="nif">
+    </div>
+  </div>
+</section>
+
+<p class="agregado-texto">Agregado Familiar</p>
+
+<section id="agregado">
+  <div class="tab">
+    <div id="icons">
+      <button class="edit-button"><img alt="Editar" class="agregado-imagem" src="/assets/images/Perfil/edit.png"></button>
+      <button class="delete-button"><img alt="Apagar" class="agregado-imagem" src="/assets/images/Perfil/bin.png"></button>
+    </div>
+    <div class="content">
+      <div>
+        <span>Nome:</span><p>-</p>
+      </div>
+      <div>
+        <span>NIF:</span><p>-</p>
+      </div>
+      <div>
+        <span>Género:</span><p>-</p>
+      </div>
+      <div>
+        <span>Data de nascimento:</span><p>-</p>
+      </div>
+    </div>
+  </div>
+  <div id="plus">
+    <button class="plus-button"><img alt="Adicionar" id="plus-button" src="/assets/images/Perfil/plus.png"></button>
+  </div>
+</section>
+
+<div *ngIf="loading">
+  <loading-spinner></loading-spinner>
+</div>

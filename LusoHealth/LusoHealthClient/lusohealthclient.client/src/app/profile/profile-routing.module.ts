@@ -7,6 +7,11 @@ import { PrivateProfileProfessionalComponent } from './private-profile-professio
 const routes: Routes = [
   { path: 'edit-profile', component: EditPerfilComponent },
   { path: 'professional-profile', component: PrivateProfileProfessionalComponent }
+import { PerfilPacienteComponent } from './perfil-paciente/perfil-paciente.component';
+
+const routes: Routes = [
+  { path: 'edit-profile', component: EditPerfilComponent },
+  { path: 'patient-profile', component: PerfilPacienteComponent }
 ];
 
 @NgModule({

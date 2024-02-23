@@ -37,30 +37,87 @@ export class EditPerfilComponent implements OnInit {
   arquivoSelecionado: File | null = null;
 
   constructor(private fb: FormBuilder,
-    private profileService: ProfileService,private http:HttpClient) { }
+    private profileService: ProfileService) { }
 
   selecionarArquivo(event: any) {
-    this.arquivoSelecionado = <File>event.target.files[0]; 
-  }
+    const inputElement = event.target;
 
- 
+    if (inputElement.files && inputElement.files.length > 0) {
+      this.arquivoSelecionado = inputElement.files[0];
+
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.caminhoDaImagem = e.target.result;
+      };
+      if (this.arquivoSelecionado)
+        reader.readAsDataURL(this.arquivoSelecionado);
+    }
+  }
 
   enviarFormulario() {
-    const model = new UserProfile(null, null, null, null, null, null, null, this.caminhoDaImagem , null);
-    console.log("imagem:",this.caminhoDaImagem);
-    this.profileService.updatePicture(model).subscribe({
-      next: (response: any) => {
-        this.responseText = response.value.message;
-      },
-      error: (error) => {
-        if (error.error.errors) {
-          this.errorMessages = error.error.errors;
-        } else {
-          this.errorMessages.push(error.error);
+    this.responseText = '';
+
+    if (this.arquivoSelecionado) {
+      // Convert the selected file to base64 string
+      this.convertFileToBase64(this.arquivoSelecionado).then((base64String) => {
+        // Create a UserProfile model with the base64String (assuming "Picture" corresponds to the URL property)
+        const model = new UserProfile(null, null, null, null, null, null, null, base64String, null);
+
+        // Call the updatePicture method from the profile service
+        this.profileService.updatePicture(model).subscribe(
+          (response: any) => {
+            // Update the caminhoDaImagem with the new image path from the response
+            this.caminhoDaImagem = response.value.newImagePath;
+            this.responseText = response.value.message;
+          },
+          (error) => {
+            // Handle errors (logging or displaying error messages)
+            console.error('Error updating profile picture', error);
+            if (error.error.errors) {
+              this.errorMessages = error.error.errors;
+            } else {
+              this.errorMessages.push(error.error);
+            }
+          }
+        );
+      });
+    } else {
+      // If no file is selected, update the profile with the current caminhoDaImagem
+      const model = new UserProfile(null, null, null, null, null, null, null, this.caminhoDaImagem, null);
+
+      // Call the updatePicture method from the profile service
+      this.profileService.updatePicture(model).subscribe(
+        (response: any) => {
+          // Update the responseText with the success message
+          this.responseText = response.value.message;
+        },
+        (error) => {
+          // Handle errors (logging or displaying error messages)
+          console.error('Error updating profile picture', error);
+          if (error.error.errors) {
+            this.errorMessages = error.error.errors;
+          } else {
+            this.errorMessages.push(error.error);
+          }
         }
-      }
+      );
+    }
+  }
+
+
+
+  convertFileToBase64(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64String = reader.result as string;
+        resolve(base64String.split(',')[1]); 
+      };
+      reader.onerror = (error) => reject(error);
+      reader.readAsDataURL(file);
     });
   }
+
 
   openFiles() {
     const OpenImgUpload = document.getElementById('OpenImgUpload');
@@ -77,7 +134,6 @@ export class EditPerfilComponent implements OnInit {
   getUserProfileInfo() {
     this.profileService.getUserData().subscribe({
       next: (response: UserProfile) => {
-        console.log(response);
         return response;
       },
       error: (error) => {

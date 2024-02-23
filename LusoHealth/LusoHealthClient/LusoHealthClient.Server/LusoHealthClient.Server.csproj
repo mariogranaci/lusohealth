@@ -32,4 +32,9 @@
     </ProjectReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Uploads\Certificates\" />
+    <Folder Include="Uploads\ProfilePic\" />
+  </ItemGroup>
+
 </Project>

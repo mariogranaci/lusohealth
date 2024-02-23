@@ -206,8 +206,8 @@ namespace LusoHealthClient.Server.Migrations
                     UserID = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Location = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Agenda = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ProfessionalTypeId = table.Column<int>(type: "int", nullable: true),
-                    TypeId = table.Column<int>(type: "int", nullable: true)
+                    ProfessionalTypeId = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -222,12 +222,8 @@ namespace LusoHealthClient.Server.Migrations
                         name: "FK_Professionals_ProfessionalTypes_ProfessionalTypeId",
                         column: x => x.ProfessionalTypeId,
                         principalTable: "ProfessionalTypes",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Professionals_ProfessionalTypes_TypeId",
-                        column: x => x.TypeId,
-                        principalTable: "ProfessionalTypes",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -276,7 +272,7 @@ namespace LusoHealthClient.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Certificate",
+                name: "Certificates",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -287,9 +283,9 @@ namespace LusoHealthClient.Server.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Certificate", x => x.Id);
+                    table.PrimaryKey("PK_Certificates", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Certificate_Professionals_IdProfessional",
+                        name: "FK_Certificates_Professionals_IdProfessional",
                         column: x => x.IdProfessional,
                         principalTable: "Professionals",
                         principalColumn: "UserID",
@@ -316,14 +312,12 @@ namespace LusoHealthClient.Server.Migrations
                         name: "FK_Services_Professionals_IdProfessional",
                         column: x => x.IdProfessional,
                         principalTable: "Professionals",
-                        principalColumn: "UserID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "UserID");
                     table.ForeignKey(
                         name: "FK_Services_Specialties_IdSpecialty",
                         column: x => x.IdSpecialty,
                         principalTable: "Specialties",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -364,13 +358,13 @@ namespace LusoHealthClient.Server.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "BirthDate", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "Gender", "IsBlocked", "IsSuspended", "LastName", "LockoutEnabled", "LockoutEnd", "Nif", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "ProfilePicPath", "Provider", "SecurityStamp", "TwoFactorEnabled", "UserName", "UserType" },
                 values: new object[,]
                 {
-                    { "1", 0, new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "a6138e55-6ced-4084-b892-eabed8fb9855", "user1@mail.com", true, "User1", "M", false, false, "Family", false, null, "123456789", "user1@mail.com", null, "AQAAAAIAAYagAAAAECpaD+wYju5C4m2cnEy6T5raXlq09927l7qUzzntZkw3nLya6vxLstA+2Dk2UkyyJg==", "987654321", false, null, null, "dc483acc-aac6-42ba-b3b4-515331f7aabb", false, "123456789_700", "U" },
-                    { "2", 0, new DateTime(1995, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "ffb80995-21e1-4e17-839e-d7f172707d37", "user2@mail.com", true, "User2", "F", false, false, "Family", false, null, "987654321", "user2@mail.com", null, "AQAAAAIAAYagAAAAEIJj60JEn1/gqXYU/WDLzLaAtyVf1GwkOQci8gFYMIgBf86XxNJ6O2+BjO+goE1N8w==", "123456789", false, null, null, "d9afca83-eeaf-4107-b905-b32d26b0d28a", false, "987654321_700", "U" },
-                    { "3", 0, new DateTime(1988, 8, 8, 0, 0, 0, 0, DateTimeKind.Unspecified), "638beff3-de79-4840-8b9b-bd4238572ae5", "user3@mail.com", true, "User3", "M", false, false, "Family", false, null, "111223344", "user3@mail.com", null, "AQAAAAIAAYagAAAAEM0/3vv5oQwBtEn9CtbWBTjnOhhtnZzYPX+DLqJDtfLeEj1iM+kOlp269oB3+Pt6PA==", "555555555", false, null, null, "c869af09-50ba-4b93-82a9-2f07378da6a1", false, "111223344_700", "U" },
-                    { "4", 0, new DateTime(1992, 12, 25, 0, 0, 0, 0, DateTimeKind.Unspecified), "30bc6d6e-12d4-471d-8998-6029d37788e1", "user4@mail.com", true, "User4", "F", false, false, "Family", false, null, "999888777", "user4@mail.com", null, "AQAAAAIAAYagAAAAEECHXXiuFEl9r+ybKCmAJ71tb8GmbPR/gHR0Vb8IWG1uTJSLHvP3NnHwvCEagd90Jw==", "444444444", false, null, null, "f7d4d969-e2b7-40dc-bbdc-9808f0a083d4", false, "999888777_700", "U" },
-                    { "5", 0, new DateTime(1997, 7, 7, 0, 0, 0, 0, DateTimeKind.Unspecified), "c17915bb-9231-491a-a0ed-e6123c28a6da", "user5@mail.com", true, "User5", "M", false, false, "Family", false, null, "555444333", "user5@mail.com", null, "AQAAAAIAAYagAAAAEF5YqQd9IyCSNDC4geiy26gfg3r9uk03yBqhEay/Nc0Q8KlPcVLejNc9gRx2+C22ig==", "333333333", false, null, null, "d1d9051c-6c1f-4796-bdfb-136f864ace58", false, "333333333_700", "P" },
-                    { "6", 0, new DateTime(1994, 4, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), "8be43306-9e6c-4f50-8938-6fdd75864088", "user6@mail.com", true, "User6", "F", false, false, "Family", false, null, "777666555", "user6@mail.com", null, "AQAAAAIAAYagAAAAEBLpJV5pkA9RI0H3FLqwLHbP0QVkjXtVgQUmEXxAAxLOIUiePkqmSH/szLS3ePc6vQ==", "222222222", false, null, null, "de4ac288-5594-48ed-901e-04f2c6e45617", false, "777666555_700", "P" },
-                    { "7", 0, new DateTime(1994, 4, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), "2d571675-6d47-4944-899f-ce2934d3dd47", "usergoogle@mail.com", true, "User", "M", false, false, "Google", false, null, "123215648", "usergoogle@mail.com", null, "AQAAAAIAAYagAAAAEMNsF9chjFZRYw9Vu/KioP2CzgJKAmeUIuJqctvqREGJFkx/N91hA5yeda+43elulg==", "231564789", false, "https://img.freepik.com/fotos-premium/empreendedor-deprimido-triste-em-homem-de-trabalhador-de-terno-formal-sentado-perto-de-uma-rua-ao-ar-livre-perto-do-centro-de-negocios-de-escritorio-moderno-homem-de-negocios-chateado-perdeu-o-emprego-devido-a-um-funcionario-de-crise-financeira-tem-problema-lado-de-fora_321831-6752.jpg", "google", "ceaca22d-6a16-45dc-8eab-cc4d4b573bd7", false, "123215648_700", "P" }
+                    { "1", 0, new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "b0ea4a42-0b08-4d3a-9765-cb29e1148677", "user1@mail.com", true, "User1", "M", false, false, "Family", false, null, "123456789", "user1@mail.com", null, "AQAAAAIAAYagAAAAEHE3JJS3zq/CL1STf4iwY/9OKQWpPhnhy1+19MWXKdDms4X0v4MTRIC6FI4kECAHJg==", "987654321", false, null, null, "0b5a156a-9013-4618-b32a-fe5209a6b4d2", false, "123456789_736", "U" },
+                    { "2", 0, new DateTime(1995, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "291b31c8-a868-425a-ad95-270fa6f515c7", "user2@mail.com", true, "User2", "F", false, false, "Family", false, null, "987654321", "user2@mail.com", null, "AQAAAAIAAYagAAAAEFsvFavH4beavbfB8D0nFCjC8q9QUSjkk1FqaNlOTm1iunpFNZ5PaeiakroOSmQbJQ==", "123456789", false, null, null, "cee0f114-7f24-462a-ad0c-a157f9aabf8f", false, "987654321_736", "U" },
+                    { "3", 0, new DateTime(1988, 8, 8, 0, 0, 0, 0, DateTimeKind.Unspecified), "fde813d7-65a8-4ebc-bfee-c0334653fc9e", "user3@mail.com", true, "User3", "M", false, false, "Family", false, null, "111223344", "user3@mail.com", null, "AQAAAAIAAYagAAAAEPviSSDylPmJCIJVmyx5tbt+W06X8O5zVz+R3eVmFH9C2SI8Xtxyxfdu+3FRhhScdw==", "555555555", false, null, null, "8776b5ad-1654-4d9a-bda9-d97ef5e88e4f", false, "111223344_736", "U" },
+                    { "4", 0, new DateTime(1992, 12, 25, 0, 0, 0, 0, DateTimeKind.Unspecified), "e33bc10f-e8c4-4499-8f13-a17655386ec1", "user4@mail.com", true, "User4", "F", false, false, "Family", false, null, "999888777", "user4@mail.com", null, "AQAAAAIAAYagAAAAEKaceTUVVGHaTvKxj38vRP7rWZSlGKURdHarcJNfcH63SdShCKoBTxfE9ogJxRY2YQ==", "444444444", false, null, null, "323fe8e7-f7c1-4bef-8b44-019f948dcf16", false, "999888777_736", "U" },
+                    { "5", 0, new DateTime(1997, 7, 7, 0, 0, 0, 0, DateTimeKind.Unspecified), "8178527c-cafe-4d59-bdea-af4179b85561", "user5@mail.com", true, "User5", "M", false, false, "Family", false, null, "555444333", "user5@mail.com", null, "AQAAAAIAAYagAAAAEGXLJk6nPEE7cS5TGS6vwekozNC22gJxPOdv6X63WIJmMQCJtjZqdA5rIOONwEexJQ==", "333333333", false, null, null, "2d7e7a57-9009-4cdb-ae83-db8225419d66", false, "333333333_736", "P" },
+                    { "6", 0, new DateTime(1994, 4, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), "a1a56ac5-9232-45e7-a327-be1b970a8b6f", "user6@mail.com", true, "User6", "F", false, false, "Family", false, null, "777666555", "user6@mail.com", null, "AQAAAAIAAYagAAAAEPcBm1EAnWXKItFgf+Qw7b7zdXKieBEy43vEpfY9agauMJokjVbZAMkES3aGS6kJyg==", "222222222", false, null, null, "596ac011-319b-4b9b-87f2-1ec934df1f33", false, "777666555_736", "P" },
+                    { "7", 0, new DateTime(1994, 4, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), "9773152b-2a9d-4751-a0ed-c39af6d13768", "usergoogle@mail.com", true, "User", "M", false, false, "Google", false, null, "123215648", "usergoogle@mail.com", null, "AQAAAAIAAYagAAAAEEgrdZsOS43Qun7PFVc3o6ypoCCaUcdpCJ2AvLmRLaPcM2qBnaU8FiilCo+9zhqpLg==", "231564789", false, "https://img.freepik.com/fotos-premium/empreendedor-deprimido-triste-em-homem-de-trabalhador-de-terno-formal-sentado-perto-de-uma-rua-ao-ar-livre-perto-do-centro-de-negocios-de-escritorio-moderno-homem-de-negocios-chateado-perdeu-o-emprego-devido-a-um-funcionario-de-crise-financeira-tem-problema-lado-de-fora_321831-6752.jpg", "google", "5c9c475e-433b-44be-8146-e7b70873dfa1", false, "123215648_736", "P" }
                 });
 
             migrationBuilder.InsertData(
@@ -378,14 +372,14 @@ namespace LusoHealthClient.Server.Migrations
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
-                    { 1, "Medicina" },
-                    { 2, "Enfermagem" },
-                    { 3, "Medicina Dentária" },
-                    { 4, "Fisioterapia" },
-                    { 5, "Nutricionismo" },
-                    { 6, "Psicologia" },
-                    { 7, "Fisiologia" },
-                    { 8, "Outros" }
+                    { 1, "Médico" },
+                    { 2, "Enfermeiro" },
+                    { 3, "Dentista" },
+                    { 4, "Fisioterapeuta" },
+                    { 5, "Nutricionista" },
+                    { 6, "Psicologista" },
+                    { 7, "Fisiologista" },
+                    { 8, "Outro" }
                 });
 
             migrationBuilder.InsertData(
@@ -401,12 +395,12 @@ namespace LusoHealthClient.Server.Migrations
 
             migrationBuilder.InsertData(
                 table: "Professionals",
-                columns: new[] { "UserID", "Agenda", "Location", "ProfessionalTypeId", "TypeId" },
+                columns: new[] { "UserID", "Agenda", "Description", "Location", "ProfessionalTypeId" },
                 values: new object[,]
                 {
-                    { "5", null, null, null, null },
-                    { "6", null, null, null, null },
-                    { "7", null, null, null, null }
+                    { "5", null, null, null, 1 },
+                    { "6", null, null, null, 3 },
+                    { "7", null, null, null, 1 }
                 });
 
             migrationBuilder.InsertData(
@@ -634,19 +628,14 @@ namespace LusoHealthClient.Server.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Certificate_IdProfessional",
-                table: "Certificate",
+                name: "IX_Certificates_IdProfessional",
+                table: "Certificates",
                 column: "IdProfessional");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Professionals_ProfessionalTypeId",
                 table: "Professionals",
                 column: "ProfessionalTypeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Professionals_TypeId",
-                table: "Professionals",
-                column: "TypeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Relatives_IdPatient",
@@ -703,7 +692,7 @@ namespace LusoHealthClient.Server.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Certificate");
+                name: "Certificates");
 
             migrationBuilder.DropTable(
                 name: "Relatives");

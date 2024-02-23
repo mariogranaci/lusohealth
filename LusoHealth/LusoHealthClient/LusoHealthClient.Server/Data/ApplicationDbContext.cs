@@ -17,6 +17,7 @@ namespace LusoHealthClient.Server.Data
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Service> Services { get; set; }
         public DbSet<Relative> Relatives { get; set; }
+        public DbSet<Certificate> Certificates { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
@@ -51,7 +52,14 @@ namespace LusoHealthClient.Server.Data
             modelBuilder.Entity<Service>()
                 .HasOne(s => s.Professional)
                 .WithMany(p => p.Services)
-                .HasForeignKey(s => s.IdProfessional);
+                .HasForeignKey(s => s.IdProfessional)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Service>()
+                .HasOne(s => s.Specialty)
+                .WithMany()
+                .HasForeignKey(s => s.IdSpecialty)
+                .OnDelete(DeleteBehavior.NoAction);
 
             // Configure Certificate entity
             modelBuilder.Entity<Certificate>()
@@ -62,14 +70,14 @@ namespace LusoHealthClient.Server.Data
             PasswordHasher<User> ph = new PasswordHasher<User>();
 
             modelBuilder.Entity<ProfessionalType>().HasData(
-                new ProfessionalType { Id = 1, Name = "Medicina" },
-                new ProfessionalType { Id = 2, Name = "Enfermagem" },
-                new ProfessionalType { Id = 3, Name = "Medicina Dentária" },
-                new ProfessionalType { Id = 4, Name = "Fisioterapia" },
-                new ProfessionalType { Id = 5, Name = "Nutricionismo" },
-                new ProfessionalType { Id = 6, Name = "Psicologia" },
-                new ProfessionalType { Id = 7, Name = "Fisiologia" },
-                new ProfessionalType { Id = 8, Name = "Outros" }
+                new ProfessionalType { Id = 1, Name = "Médico" },
+                new ProfessionalType { Id = 2, Name = "Enfermeiro" },
+                new ProfessionalType { Id = 3, Name = "Dentista" },
+                new ProfessionalType { Id = 4, Name = "Fisioterapeuta" },
+                new ProfessionalType { Id = 5, Name = "Nutricionista" },
+                new ProfessionalType { Id = 6, Name = "Psicologista" },
+                new ProfessionalType { Id = 7, Name = "Fisiologista" },
+                new ProfessionalType { Id = 8, Name = "Outro" }
             );
 
             modelBuilder.Entity<Specialty>().HasData(
@@ -440,13 +448,13 @@ namespace LusoHealthClient.Server.Data
                 userGoogle
             );
 
-            var patient1 = new Patient { UserID = user1.Id };
+            var patient1 = new Patient { UserID = user1.Id};
             var patient2 = new Patient { UserID = user2.Id };
             var patient3 = new Patient { UserID = user3.Id };
             var patient4 = new Patient { UserID = user4.Id };
-            var professional1 = new Professional { UserID = user5.Id };
-            var professional2 = new Professional { UserID = user6.Id };
-            var professional3 = new Professional { UserID = userGoogle.Id };
+            var professional1 = new Professional { UserID = user5.Id, ProfessionalTypeId = 1};
+            var professional2 = new Professional { UserID = user6.Id, ProfessionalTypeId = 3 };
+            var professional3 = new Professional { UserID = userGoogle.Id, ProfessionalTypeId = 1 };
 
             modelBuilder.Entity<Patient>().HasData(
                 patient1,
@@ -461,8 +469,8 @@ namespace LusoHealthClient.Server.Data
                 professional3
             );
 
-            var relative1 = new Relative { Id = 1, IdPatient = patient1.UserID, Name = "Mário Granaci", Gender = 'M', BirthDate = new DateTime(2003, 4, 29), };
-            var relative2= new Relative { Id = 2, IdPatient = patient1.UserID, Name = "Jaime Vieira", Gender = 'F', BirthDate = new DateTime(2002, 9, 24), };
+            var relative1 = new Relative { Id = 1, IdPatient = patient1.UserID, Name = "Mário Granaci", Gender = 'M', BirthDate = new DateTime(2003, 4, 29) };
+            var relative2= new Relative { Id = 2, IdPatient = patient1.UserID, Name = "Jaime Vieira", Gender = 'F', BirthDate = new DateTime(2002, 9, 24) };
 
             modelBuilder.Entity<Relative>().HasData(
                 relative1,

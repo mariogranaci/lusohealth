@@ -13,9 +13,9 @@ namespace LusoHealthClient.Server.Models.Users
         public string? Agenda { get; set; }
         public List<Service>? Services { get; set; }
         [ForeignKey("ProfessionalType")]
-        public int? ProfessionalTypeId { get; set; }
-        public ProfessionalType? Type { get; set; }
+        public int ProfessionalTypeId { get; set; }
         public List<Review>? Reviews { get; set; }
+        public string? Description { get; set; }
         public List<Certificate>? Certificates { get; set; }
 
         #region Navigation Properties

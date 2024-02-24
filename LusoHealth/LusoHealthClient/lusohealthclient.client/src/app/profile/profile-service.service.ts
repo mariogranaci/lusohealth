@@ -6,7 +6,7 @@ import { environment } from '../../environments/environment.development';
 import { User } from '../shared/models/authentication/user';
 import { UserProfile } from '../shared/models/profile/userProfile';
 import { UpdatePassword } from '../shared/models/profile/updatePassword';
-import { Relatives } from '../shared/models/profile/relatives';
+import { Relative } from '../shared/models/profile/relative';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -58,15 +58,20 @@ export class ProfileService {
     return this.http.put(`${environment.appUrl}/api/profile/update-password`, model);
   }
 
-  getRelatives(): Observable<Relatives[]> 
+  getRelatives(): Observable<Relative[]> 
   {
     const headers = this.getHeaders();
-    return this.http.get<Relatives[]>(`${environment.appUrl}/api/profile/get-relatives`, { headers });
+    return this.http.get<Relative[]>(`${environment.appUrl}/api/profile/get-relatives`, { headers });
   }
 
-  deleteRelative(relativeId: number): Observable<Relatives>
+  deleteRelative(relativeId: number): Observable<Relative>
   {
     const headers = this.getHeaders();
-    return this.http.delete<Relatives>(`${environment.appUrl}/api/profile/delete-relative/${relativeId}`, { headers });
+    return this.http.delete<Relative>(`${environment.appUrl}/api/profile/delete-relative/${relativeId}`, { headers });
   }
+
+  addRelative(relative: Relative): Observable<Relative> {
+    const headers = this.getHeaders();
+    return this.http.post<Relative>(`${environment.appUrl}/api/profile/add-relative`, relative, { headers });
+  } 
 }

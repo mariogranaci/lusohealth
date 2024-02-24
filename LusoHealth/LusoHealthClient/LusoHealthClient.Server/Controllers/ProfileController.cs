@@ -279,6 +279,42 @@ namespace LusoHealthClient.Server.Controllers
         }
 
 
+        [HttpPost("add-relative")]
+        public async Task<ActionResult> AddRelative(RelativeDto relativeDto)
+        {
+            try
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(userId))
+                    return BadRequest("User ID not found in claims.");
+
+                var user = await _userManager.FindByIdAsync(userId);
+                if (user == null)
+                    return NotFound("User not found.");
+
+                var relative = new Relative
+                {
+                    Name = relativeDto.Nome,
+                    Nif = relativeDto.Nif,
+                    BirthDate = relativeDto.DataNascimento,
+                    Gender = relativeDto.Genero,
+                    Location = relativeDto.Localizacao,
+                    IdPatient = user.Id 
+                };
+
+                _context.Relatives.Add(relative);
+                await _context.SaveChangesAsync();
+
+                return Ok(new { message = "Relative added successfully." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error adding relative: {ex.Message}");
+            }
+        }
+
+
+
         #region private helper methods
         private List<ServiceDto> GetServiceDtos(List<Service> services)
         {

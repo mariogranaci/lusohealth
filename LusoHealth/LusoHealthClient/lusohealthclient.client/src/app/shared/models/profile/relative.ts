@@ -1,4 +1,4 @@
-export interface Relatives {
+export interface Relative {
   id: number;
   nome: string;
   nif: string;

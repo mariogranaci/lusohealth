@@ -20,6 +20,7 @@ export class PrivateProfileProfessionalComponent implements OnInit {
   submitted = false;
   errorMessages: string[] = [];
   responseText: string | undefined;
+  public userData: Professional | undefined;
 
   constructor(private authenticationService: AuthenticationService,
     private formBuilder: FormBuilder,
@@ -67,11 +68,26 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     this.profileService.getProfessionalInfo().pipe(takeUntil(this.unsubscribe$)).subscribe(
       (userData: Professional) => {
         console.log(userData);
+        this.userData = userData;
       },
       error => {
         console.log(error);
       }
     );
+  }
+
+  setUserFields() {
+
+    const nomeElement = document.getElementById('nome');
+    const apelidoElement = document.getElementById('apelido');
+    const emailElement = document.getElementById('email');
+    const telemovelElement = document.getElementById('telemovel');
+    const nifElement = document.getElementById('nif');
+    const genderElement = document.getElementById('gender');
+
+    if (nomeElement && apelidoElement && emailElement && telemovelElement && nifElement && genderElement) {
+      
+    }
   }
 
   addSpeciality() {

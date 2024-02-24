@@ -13,33 +13,33 @@
     <div class="row">
       <div class="left">
         <label for="name">Nome:</label>
-        <p type="text" class="info" id="nome" name="nome">
+        <p type="text" class="info" id="nome" name="nome"></p>
       </div>
       <div class="right">
         <label for="apelido">Apelido:</label>
-        <p type="text" class="info" id="apelido" name="apelido">
+        <p type="text" class="info" id="apelido" name="apelido"></p>
       </div>
     </div>
     <div class="row">
       <div class="left">
         <label for="email">Email:</label>
-        <p type="email" class="info" id="email" name="email">
+        <p type="email" class="info" id="email" name="email"></p>
       </div>
       <div class="right">
         <label for="telemovel">Telemóvel:</label>
-        <p class="info" type="tel" id="telemovel" name="telemovel">
+        <p class="info" type="tel" id="telemovel" name="telemovel"></p>
       </div>
     </div>
     <div class="row">
       <div class="left">
         <div class="gender">
           <label>Género:</label>
-          <p class="info" type="text" id="gender" name="gender">
+          <p class="info" type="text" id="gender" name="gender"></p>
         </div>
       </div>
       <div class="right">
         <label for="nif">NIF:</label>
-        <p class="info" type="text" id="nif" name="nif">
+        <p class="info" type="text" id="nif" name="nif"></p>
       </div>
     </div>
   </section>
@@ -67,12 +67,12 @@
       <!--<tr>
         <td colspan="6" class="specialities-not-found-placeholder">Não tem especialidades associadas.</td>
       </tr>-->
-      <tr>
-        <td>Cardiologia Cardiologia C Cardiologia Cardiologia C Cardiologia Cardiologia C </td>
-        <td>20€</td>
-        <td>Sim</td>
-        <td>Não</td>
-        <td>Sim</td>
+      <tr *ngFor="let service of userData.services" >
+        <td>{{ service.speciality }}</td>
+        <td>{{ service.pricePerHour }}</td>
+        <td>{{ service.presential }}</td>
+        <td>{{ service.online }}</td>
+        <td>{{ service.home }}</td>
         <td>
           <div class="buttons-container">
             <button class="action-button" (click)="openPopup('edit')">

@@ -1,12 +1,12 @@
 <main>
-  <div class="top-row">
+  <div class="top-row"*ngIf="!loading">
     <div class="page-title">
       <h1>Login</h1>
     </div>
     <button class="recover-account-button" name="recover-account" id="recover-account" (click)="openPopup('conta')">Recuperar Conta</button>
   </div>
-  <div class="login-form">
-    <form [formGroup]="loginForm" (ngSubmit)="login()" *ngIf="!loading">
+  <div class="login-form"*ngIf="!loading">
+    <form [formGroup]="loginForm" (ngSubmit)="login()" >
       <div class="box">
         <input formControlName="email" type="email" class="textbox" placeholder=" " name="email" id="email" [class.is-invalid]="submitted && loginForm.get('email')?.errors" required>
         <label for="email">Email</label>
@@ -35,13 +35,13 @@
 
   </div>
 
-  <div class="login-divider">
+  <div class="login-divider" *ngIf="!loading">
     <hr>
     <h2> OU </h2>
     <hr>
   </div>
 
-  <div class="login-form">
+  <div class="login-form" >
     <div class="box">
       <div id="google-div" #googleButton></div>
       <!--<button #googleButton class="login-button button" name="google-login-button" id="google-login-button">

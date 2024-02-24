@@ -16,6 +16,7 @@ import { Professional } from '../../shared/models/profile/professional';
 export class PrivateProfileProfessionalComponent implements OnInit {
   private unsubscribe$ = new Subject<void>();;
   addSpecialityForm: FormGroup = new FormGroup({});
+  editSpecialityForm: FormGroup = new FormGroup({});
   submitted = false;
   errorMessages: string[] = [];
   responseText: string | undefined;
@@ -26,7 +27,7 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     private router: Router) {
     this.authenticationService.user$.pipe(take(1)).subscribe({
       next: (user: User | null) => {
-        if (user) {
+        if (!user) {
           this.router.navigateByUrl('/');
         }
       }
@@ -34,8 +35,8 @@ export class PrivateProfileProfessionalComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getProfessionalInfo();
     this.initializeForm();
+    this.getProfessionalInfo();
   }
 
   ngOnDestroy(): void {
@@ -48,6 +49,13 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     this.addSpecialityForm = this.formBuilder.group({
 
       selectSpeciality: ['', [Validators.required]],
+      price: ['', [Validators.required, Validators.min(1), Validators.max(1000)]],
+      presencial: ['', [Validators.required]],
+      online: ['', [Validators.required]],
+      domicilio: ['', [Validators.required]]
+    })
+
+    this.editSpecialityForm = this.formBuilder.group({
       price: ['', [Validators.required, Validators.min(1), Validators.max(1000)]],
       presencial: ['', [Validators.required]],
       online: ['', [Validators.required]],

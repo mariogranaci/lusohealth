@@ -107,6 +107,8 @@ namespace LusoHealthClient.Server.Controllers
             //var certificates = GetCertificateDtos(professional.Certificates);
             //var professionalType = await _context.ProfessionalTypes.FirstOrDefaultAsync(pt => pt.Id == professional.ProfessionalTypeId);
 
+            if (professional == null) { return NotFound("Não foi possível encontrar o profissional"); }
+
             var professionalDto = new ProfessionalDto
             {
                 ProfessionalInfo = userProfileDto,

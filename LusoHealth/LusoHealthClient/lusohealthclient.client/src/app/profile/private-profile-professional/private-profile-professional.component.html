@@ -345,7 +345,7 @@
 
     </form>
 
-    <form id="edit-speciality-container" class="overlay-container" autocomplete="off" (click)="stopPropagation($event)">
+    <form [formGroup]="editSpecialityForm" id="edit-speciality-container" class="overlay-container" autocomplete="off" (click)="stopPropagation($event)">
 
       <h2>Editar Especialidade</h2>
 

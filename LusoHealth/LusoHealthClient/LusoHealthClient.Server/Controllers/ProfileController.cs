@@ -67,17 +67,11 @@ namespace LusoHealthClient.Server.Controllers
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            if (userIdClaim == null)
-            {
-                return BadRequest("Não foi possível encontrar o utilizador");
-            }
+            if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
 
             var user = await _userManager.FindByIdAsync(userIdClaim);
 
-            if (user == null)
-            {
-                return NotFound("Não foi possível encontrar o utilizador");
-            }
+            if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
 
             UserProfileDto userProfileDto = new UserProfileDto
             {
@@ -198,6 +192,245 @@ namespace LusoHealthClient.Server.Controllers
 			}
 		}
 
+        [HttpPost("add-service")]
+        public async Task<ActionResult> AddService(ServiceDto model)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
+
+            var user = await _userManager.FindByIdAsync(userIdClaim);
+            if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
+
+            var professional = await _context.Professionals.FirstOrDefaultAsync(p => p.UserID == user.Id);
+            if (professional == null) { return NotFound("Não foi possível encontrar o profissional"); }
+
+            var specialty = await _context.Specialties.FirstOrDefaultAsync(s => s.Id == model.SpecialtyId);
+            if (specialty == null) { return NotFound("Não foi possível encontrar a especialidade"); }
+
+            try
+            {
+                var service = new Service
+                {
+                    IdProfessional = professional.UserID,
+                    IdSpecialty = specialty.Id,
+                    PricePerHour = model.PricePerHour,
+                    Online = model.Online,
+                    Presential = model.Presential,
+                    Home = model.Home
+                };
+
+                _context.Services.Add(service);
+                await _context.SaveChangesAsync();
+
+                return Ok(new JsonResult(new { title = "Serviço Adicionado", message = "O seu serviço foi adicionado com sucesso." }));
+            } catch (Exception)
+            {
+                return BadRequest("Não foi possível adicionar o serviço. Tente novamente.");
+            }
+        }
+
+        [HttpPut("update-service")]
+        public async Task<ActionResult> UpdateService(ServiceDto model)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
+
+            var user = await _userManager.FindByIdAsync(userIdClaim);
+            if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
+
+            var professional = await _context.Professionals.FirstOrDefaultAsync(p => p.UserID == user.Id);
+            if (professional == null) { return NotFound("Não foi possível encontrar o profissional"); }
+
+            var service = await _context.Services.FirstOrDefaultAsync(s => s.Id == model.ServiceId);
+            if (service == null) { return NotFound("Não foi possível encontrar o serviço"); }
+
+            var specialty = await _context.Specialties.FirstOrDefaultAsync(s => s.Id == model.SpecialtyId);
+            if (specialty == null) { return NotFound("Não foi possível encontrar a especialidade"); }
+
+            try
+            {
+                service.IdSpecialty = specialty.Id;
+                service.PricePerHour = model.PricePerHour;
+                service.Online = model.Online;
+                service.Presential = model.Presential;
+                service.Home = model.Home;
+
+                _context.Services.Update(service);
+                await _context.SaveChangesAsync();
+
+                return Ok(new JsonResult(new { title = "Serviço Atualizado", message = "O seu serviço foi atualizado com sucesso." }));
+            }
+            catch (Exception)
+            {
+                return BadRequest("Não foi possível atualizar o serviço. Tente novamente.");
+            }
+        }
+
+        [HttpDelete("delete-service/{id}")]
+        public async Task<ActionResult> DeleteService(int id)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
+
+            var user = await _userManager.FindByIdAsync(userIdClaim);
+            if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
+
+            var professional = await _context.Professionals.FirstOrDefaultAsync(p => p.UserID == user.Id);
+            if (professional == null) { return NotFound("Não foi possível encontrar o profissional"); }
+
+            var service = await _context.Services.FirstOrDefaultAsync(s => s.Id == id);
+            if (service == null) { return NotFound("Não foi possível encontrar o serviço"); }
+
+            try
+            {
+                _context.Services.Remove(service);
+                await _context.SaveChangesAsync();
+
+                return Ok(new JsonResult(new { title = "Serviço Removido", message = "O seu serviço foi removido com sucesso." }));
+            }
+            catch (Exception)
+            {
+                return BadRequest("Não foi possível remover o serviço. Tente novamente.");
+            }
+        }
+
+        [HttpPost("filter-reviews-by-service")]
+        public async Task<ActionResult<List<ReviewDto>>> FilterReviewsByService(int idService)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
+
+            var user = await _userManager.FindByIdAsync(userIdClaim);
+            if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
+
+            var professional = await _context.Professionals.FirstOrDefaultAsync(p => p.UserID == user.Id);
+            if (professional == null) { return NotFound("Não foi possível encontrar o profissional"); }
+
+            var reviewsFromDB = await _context.Reviews
+                .Include(r => r.Service)
+                .Where(r => r.Service.IdProfessional == user.Id && r.IdService == idService)
+                .ToListAsync();
+            var reviews = GetReviewDtos(reviewsFromDB);
+
+            return reviews;
+        }
+        [HttpGet("get-relatives")]
+        public async Task<ActionResult<List<RelativeDto>>> GetRelatives()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userIdClaim == null)
+            {
+                return BadRequest("Não foi possível encontrar o utilizador");
+            }
+
+            var user = await _userManager.FindByIdAsync(userIdClaim);
+
+            if (user == null)
+            {
+                return NotFound("Não foi possível encontrar o utilizador");
+            }
+
+            var relatives = await _context.Relatives
+            .Where(r => r.IdPatient == user.Id)
+            .ToListAsync();
+
+            List<RelativeDto> relativeDtos = new List<RelativeDto>();
+
+            foreach (var relative in relatives)
+            {
+                RelativeDto relativeDto = new RelativeDto
+                {
+                    Id = relative.Id,
+                    Nome = relative.Name,
+                    Nif = relative.Nif,
+                    DataNascimento = relative.BirthDate,
+                    Genero = relative.Gender,
+                    Localizacao = relative.Location
+                };
+
+                relativeDtos.Add(relativeDto);
+            }
+
+            foreach (var dto in relativeDtos)
+            {
+                Console.WriteLine($"Name: {dto.Nome}, Nif: {dto.Nif}, BirthDate: {dto.DataNascimento}, Gender: {dto.Genero}, Location: {dto.Localizacao}");
+            }
+
+            return relativeDtos;
+        }
+
+        [HttpDelete("delete-relative/{relativeId}")]
+        public async Task<ActionResult> DeleteRelative(int relativeId)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userIdClaim == null)
+            {
+                return BadRequest("Não foi possível encontrar o utilizador");
+            }
+
+            var user = await _userManager.FindByIdAsync(userIdClaim);
+
+            if (user == null)
+            {
+                return NotFound("Não foi possível encontrar o utilizador");
+            }
+
+            var relative = await _context.Relatives.FirstOrDefaultAsync(r => r.Id == relativeId && r.IdPatient == user.Id);
+
+            if (relative == null)
+            {
+                return NotFound("Parente não encontrado");
+            }
+
+            try
+            {
+                _context.Relatives.Remove(relative);
+                await _context.SaveChangesAsync();
+                return Ok(new { message = "Parente excluído com sucesso" });
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Ocorreu um erro ao excluir o parente");
+            }
+        }
+
+
+        [HttpPost("add-relative")]
+        public async Task<ActionResult> AddRelative(RelativeDto relativeDto)
+        {
+            try
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(userId))
+                    return BadRequest("User ID not found in claims.");
+
+                var user = await _userManager.FindByIdAsync(userId);
+                if (user == null)
+                    return NotFound("User not found.");
+
+                var relative = new Relative
+                {
+                    Name = relativeDto.Nome,
+                    Nif = relativeDto.Nif,
+                    BirthDate = relativeDto.DataNascimento,
+                    Gender = relativeDto.Genero,
+                    Location = relativeDto.Localizacao,
+                    IdPatient = user.Id 
+                };
+
+                _context.Relatives.Add(relative);
+                await _context.SaveChangesAsync();
+
+                return Ok(new { message = "Relative added successfully." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error adding relative: {ex.Message}");
+            }
+        }
+
         #region private helper methods
         private List<ServiceDto> GetServiceDtos(List<Service> services)
         {
@@ -207,6 +440,7 @@ namespace LusoHealthClient.Server.Controllers
                 var serviceDto = new ServiceDto
                 {
                     ServiceId = service.Id,
+                    SpecialtyId = service.IdSpecialty,
                     Specialty = service.Specialty.Name,
                     PricePerHour = service.PricePerHour,
                     Online = service.Online,

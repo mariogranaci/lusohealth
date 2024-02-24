@@ -107,6 +107,8 @@ namespace LusoHealthClient.Server.Controllers
             //var certificates = GetCertificateDtos(professional.Certificates);
             //var professionalType = await _context.ProfessionalTypes.FirstOrDefaultAsync(pt => pt.Id == professional.ProfessionalTypeId);
 
+            if (professional == null) { return NotFound("Não foi possível encontrar o profissional"); }
+
             var professionalDto = new ProfessionalDto
             {
                 ProfessionalInfo = userProfileDto,
@@ -196,6 +198,53 @@ namespace LusoHealthClient.Server.Controllers
 			}
 		}
 
+        [HttpPost("add-service")]
+        public async Task<ActionResult> AddService(ServiceDto model)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userIdClaim == null)
+            {
+                return BadRequest("Não foi possível encontrar o utilizador");
+            }
+
+            var user = await _userManager.FindByIdAsync(userIdClaim);
+
+            if (user == null)
+            {
+                return NotFound("Não foi possível encontrar o utilizador");
+            }
+
+            var professional = await _context.Professionals.FirstOrDefaultAsync(p => p.UserID == user.Id);
+
+            if (professional == null)
+            {
+                return NotFound("Não foi possível encontrar o profissional");
+            }
+
+            var specialty = await _context.Specialties.FirstOrDefaultAsync(s => s.Name == model.Specialty);
+
+            if (specialty == null)
+            {
+                return NotFound("Não foi possível encontrar a especialidade");
+            }
+
+            var service = new Service
+            {
+                IdProfessional = professional.UserID,
+                IdSpecialty = specialty.Id,
+                PricePerHour = model.PricePerHour,
+                Online = model.Online,
+                Presential = model.Presential,
+                Home = model.Home
+            };
+
+            _context.Services.Add(service);
+            await _context.SaveChangesAsync();
+
+            return Ok(new JsonResult(new { title = "Serviço Adicionado", message = "O seu serviço foi adicionado com sucesso." }));
+        }
+
         #region private helper methods
         private List<ServiceDto> GetServiceDtos(List<Service> services)
         {
@@ -205,6 +254,7 @@ namespace LusoHealthClient.Server.Controllers
                 var serviceDto = new ServiceDto
                 {
                     ServiceId = service.Id,
+                    SpecialtyId = service.IdSpecialty,
                     Specialty = service.Specialty.Name,
                     PricePerHour = service.PricePerHour,
                     Online = service.Online,

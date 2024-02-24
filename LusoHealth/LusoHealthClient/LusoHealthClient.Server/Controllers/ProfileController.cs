@@ -443,6 +443,40 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
+        [HttpPut("update-picture")]
+        public async Task<ActionResult> UpdatePicture(UserProfileDto model)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+
+            if (userIdClaim == null)
+            {
+                return BadRequest("Não foi possível encontrar o utilizador");
+            }
+
+            var user = await _userManager.FindByIdAsync(userIdClaim);
+
+            if (user == null)
+            {
+                return NotFound("Não foi possível encontrar o utilizador");
+            }
+
+            try
+            {
+                user.ProfilePicPath = model.Picture;
+                var result = await _userManager.UpdateAsync(user);
+
+                if (result.Succeeded)
+                    return Ok(new JsonResult(new { title = "Perfil Alterado", message = "A sua foto de perfil foi alterada com sucesso." }));
+                return BadRequest("Não foi possivel alterar a foto de perfil.Tente Novamente.");
+
+            }
+            catch (Exception)
+            {
+                return BadRequest("Não foi possivel alterar a foto de perfil.Tente Novamente.");
+            }
+        }
+
         #region private helper methods
         private List<ServiceDto> GetServiceDtos(List<Service> services)
         {
@@ -463,59 +497,6 @@ namespace LusoHealthClient.Server.Controllers
             }
             return serviceDtos;
         }
-		[HttpPut("update-picture")]
-		public async Task<ActionResult> UpdatePicture(UserProfileDto model)
-		{
-			var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-
-			if (userIdClaim == null)
-			{
-				return BadRequest("Não foi possível encontrar o utilizador");
-			}
-
-			var user = await _userManager.FindByIdAsync(userIdClaim);
-
-			if (user == null)
-			{
-				return NotFound("Não foi possível encontrar o utilizador");
-			}
-
-			try
-			{
-				user.ProfilePicPath = model.Picture;
-				var result = await _userManager.UpdateAsync(user);
-
-				if (result.Succeeded)
-					return Ok(new JsonResult(new { title = "Perfil Alterado", message = "A sua foto de perfil foi alterada com sucesso." }));
-				return BadRequest("Não foi possivel alterar a foto de perfil.Tente Novamente.");
-
-			}
-			catch (Exception)
-			{
-				return BadRequest("Não foi possivel alterar a foto de perfil.Tente Novamente.");
-			}
-		}
-
-		#region private helper methods
-		private List<ServiceDto> GetServiceDtos(List<Service> services)
-		{
-			var serviceDtos = new List<ServiceDto>();
-			foreach (var service in services)
-			{
-				var serviceDto = new ServiceDto
-				{
-					ServiceId = service.Id,
-					Specialty = service.Specialty.Name,
-					PricePerHour = service.PricePerHour,
-					Online = service.Online,
-					Presential = service.Presential,
-					Home = service.Home
-				};
-				serviceDtos.Add(serviceDto);
-			}
-			return serviceDtos;
-		}
 
 		private List<CertificateDto> GetCertificateDtos(List<Certificate> certificates)
 		{
@@ -547,14 +528,10 @@ namespace LusoHealthClient.Server.Controllers
 					Stars = review.Stars,
 					Description = review.Description
 				};
-				reviews.Add(review);
+                reviewDtos.Add(reviewDto);
 			}
 			return reviewDtos;
 		}
-		#endregion
-
-	}
-
+        #endregion
+    }
 }
-
-

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { ProfileService } from '../profile.service';
 import { UserProfile } from '../../shared/models/profile/userProfile';
 import { Observable, Subject, never, takeUntil } from 'rxjs';

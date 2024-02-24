@@ -4,7 +4,7 @@ main {
   padding: 0 7%;
   margin-top: 50px;
   margin: 50px auto 100px auto;
-  min-width: 1200px;
+  min-width: 1150px;
   max-width: 1500px;
 }
 
@@ -70,6 +70,8 @@ main {
   width: 150px;
   height: 150px;
   border-radius: 50%;
+  pointer-events: none;
+  user-select: none;
 }
 
 figure {
@@ -101,7 +103,6 @@ figure {
   }
 
 .btn {
-  
   color: white;
   padding: 15px 40px;
   border: none;
@@ -127,17 +128,17 @@ figure {
   background-color: #1875e7;
 }
 
-.btn-blue:hover {
-  background-color: #1b69c8;
-}
+  .btn-blue:hover {
+    background-color: #1b69c8;
+  }
 
 .btn-red {
   background-color: #d42a2a;
 }
 
-.btn-red:hover {
-  background-color: #c31414;
-}
+  .btn-red:hover {
+    background-color: #c31414;
+  }
 
 .left-align-row {
   width: 100%;
@@ -417,6 +418,7 @@ tbody {
     text-overflow: ellipsis;
     user-select: none;
   }
+
     .select-dropdown select option {
       height: fit-content;
     }
@@ -514,6 +516,7 @@ hr {
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.7);
+  display: block;
 }
 
 .close-button {
@@ -533,13 +536,14 @@ hr {
   top: 50%;
   left: 50%;
   transform: translate(-50%,-50%);
-  min-width: min-content;
-  max-width: 450px;
-  height: 570px;
+  min-width: 450px;
+  max-width: 500px;
+  height: fit-content;
   border: 1px solid transparent;
   border-radius: 5px;
   background-color: #ECEEF0;
   padding: 20px 20px;
+  display: none;
 }
 
   .overlay-container > h2 {
@@ -547,32 +551,34 @@ hr {
   }
 
   .overlay-container label {
-      display: block;
-      margin-bottom: 5px;
-      font-weight: 600;
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
   }
 
 #add-speciality-container {
-  
 }
 
-@media only screen and (max-width: 550px) {
-  #add-speciality-container {
-    min-width: 400px;
-  }
+#edit-speciality-container {
+  display: block;
 }
 
 .speciality-form-box {
-    margin-top: 15px;
+  margin-top: 15px;
+}
+
+.speciality-name {
+  margin: 20px 0 10px 0;
+  font-weight: 500;
 }
 
 #speciality-select-div {
   width: 100%;
 }
 
-#speciality-select-div select{
-  width: inherit;
-}
+  #speciality-select-div select {
+    width: inherit;
+  }
 
 .input-wrapper {
   position: relative;
@@ -588,6 +594,7 @@ input[type="number"] {
   padding: 0 35px 0 10px;
   width: 100%;
   box-sizing: border-box;
+  direction: rtl;
 }
 
 .euro-symbol {
@@ -625,8 +632,7 @@ input[type="radio"] {
 }
 
 .form-buttons-row {
-    margin-top: 30px;
-    display: flex;
-    justify-content: space-between;
+  margin-top: 30px;
+  display: flex;
+  justify-content: space-between;
 }
-

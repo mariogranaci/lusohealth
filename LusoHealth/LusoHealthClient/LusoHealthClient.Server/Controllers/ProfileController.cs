@@ -2,6 +2,8 @@
 using System.Security.Claims;
 using LusoHealthClient.Server.Data;
 using LusoHealthClient.Server.DTOs.Profile;
+using LusoHealthClient.Server.Models.FeedbackAndReports;
+using LusoHealthClient.Server.Models.Professionals;
 using LusoHealthClient.Server.Models.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -62,7 +64,7 @@ namespace LusoHealthClient.Server.Controllers
         }
 
         [HttpGet("get-professional-info")]
-        public async Task<ActionResult<UserProfileDto>> GetProfessionalProfile()
+        public async Task<ActionResult<ProfessionalDto>> GetProfessionalProfile()
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
@@ -91,7 +93,34 @@ namespace LusoHealthClient.Server.Controllers
                 Provider = user.Provider
             };
 
-            return userProfileDto;
+            var servicesFromDB = await _context.Services.Where(s => s.IdProfessional == user.Id).ToListAsync();
+            var services = GetServiceDtos(servicesFromDB);
+
+            //var certificatedFromDB = await _context.Certificates.Where(c => c.IdProfessional == user.Id).ToListAsync();
+            //var certificates = GetCertificateDtos(certificatedFromDB);
+            
+            var reviewsFromDB = await _context.Reviews
+                .Include(r => r.Service)
+                .Where(r => r.Service.IdProfessional == user.Id)
+                .ToListAsync();
+            var reviews = GetReviewDtos(reviewsFromDB);
+            
+            var professional = await _context.Professionals.Include(p => p.Certificates).FirstOrDefaultAsync(p => p.UserID == user.Id);
+            var certificates = GetCertificateDtos(professional.Certificates);
+
+
+            var professionalDto = new ProfessionalDto
+            {
+                ProfessionalInfo = userProfileDto,
+                Services = services,
+                Certificates = certificates,
+                Reviews = reviews,
+                Location = professional.Location,
+                Description = professional.Description,
+                ProfessionalType = professional.ProfessionalType.Name
+            };
+
+            return professionalDto;
         }
 
         [HttpPut("update-user-info")]
@@ -214,5 +243,61 @@ namespace LusoHealthClient.Server.Controllers
 		}
 
 	}
+        #region private helper methods
+        private List<ServiceDto> GetServiceDtos(List<Service> services)
+        {
+            var serviceDtos = new List<ServiceDto>();
+            foreach (var service in services)
+            {
+                var serviceDto = new ServiceDto
+                {
+                    ServiceId = service.Id,
+                    Specialty = service.Specialty.Name,
+                    PricePerHour = service.PricePerHour,
+                    Online = service.Online,
+                    Presential = service.Presential,
+                    Home = service.Home
+                };
+                serviceDtos.Add(serviceDto);
+            }
+            return serviceDtos;
+        }
+
+        private List<CertificateDto> GetCertificateDtos(List<Certificate> certificates)
+        {
+            var certificateDtos = new List<CertificateDto>();
+            foreach (var certificate in certificates)
+            {
+                var certificateDto = new CertificateDto
+                {
+                    CertificateId = certificate.Id,
+                    Name = certificate.Name,
+                    Path = certificate.Path
+                };
+                certificateDtos.Add(certificateDto);
+            }
+            return certificateDtos;
+        }
+
+        private List<ReviewDto> GetReviewDtos(List<Review> reviews)
+        {
+            var reviewDtos = new List<ReviewDto>();
+            foreach (var review in reviews)
+            {
+                ReviewDto reviewDto = new ReviewDto
+                {
+                    IdPatient = review.IdPatient,
+                    PatientName = review.Patient.User.FirstName + " " + review.Patient.User.LastName,
+                    IdService = review.IdService,
+                    ServiceName = review.Service.Specialty.Name,
+                    Stars = review.Stars,
+                    Description = review.Description
+                };
+                reviews.Add(review);
+            }
+            return reviewDtos;
+        }
+        #endregion
+    }
 }
 

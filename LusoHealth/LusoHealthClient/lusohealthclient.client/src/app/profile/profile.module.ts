@@ -6,6 +6,8 @@ import { SharedModule } from '../shared/shared.module';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { ProfileRoutingModule } from './profile-routing.module';
+import { PrivateProfileProfessionalComponent } from './private-profile-professional/private-profile-professional.component';
+import { PerfilPacienteComponent } from './perfil-paciente/perfil-paciente.component';
 
 
 
@@ -13,6 +15,8 @@ import { ProfileRoutingModule } from './profile-routing.module';
 @NgModule({
   declarations: [
     EditPerfilComponent,
+    PrivateProfileProfessionalComponent,
+    PerfilPacienteComponent,
   ],
   imports: [
     CommonModule,

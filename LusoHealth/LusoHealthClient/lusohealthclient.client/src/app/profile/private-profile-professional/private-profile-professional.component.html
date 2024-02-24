@@ -1,0 +1,401 @@
+<main>
+
+  <section class="form-row">
+
+    <div id="button">
+      <button class="btn-edit" [routerLink]="['/edit-profile']">Editar Perfil</button>
+    </div>
+
+    <figure>
+      <img class="image" alt="Imagem de Perfil" src="/assets/images/Perfil/profileImage.jpg" />
+    </figure>
+
+    <div class="row">
+      <div class="left">
+        <label for="name">Nome:</label>
+        <p type="text" class="info" id="nome" name="nome">
+      </div>
+      <div class="right">
+        <label for="apelido">Apelido:</label>
+        <p type="text" class="info" id="apelido" name="apelido">
+      </div>
+    </div>
+    <div class="row">
+      <div class="left">
+        <label for="email">Email:</label>
+        <p type="email" class="info" id="email" name="email">
+      </div>
+      <div class="right">
+        <label for="telemovel">Telemóvel:</label>
+        <p class="info" type="tel" id="telemovel" name="telemovel">
+      </div>
+    </div>
+    <div class="row">
+      <div class="left">
+        <div class="gender">
+          <label>Género:</label>
+          <p class="info" type="text" id="gender" name="gender">
+        </div>
+      </div>
+      <div class="right">
+        <label for="nif">NIF:</label>
+        <p class="info" type="text" id="nif" name="nif">
+      </div>
+    </div>
+  </section>
+
+  <div class="center-row">
+    <button type="button" class="btn btn-blue" (click)="openPopup('add')">Adicionar Especialidade</button>
+  </div>
+
+  <div class="left-align-row">
+    <h2>Especialidades</h2>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Especialidade</th>
+        <th>Preço por Hora</th>
+        <th>Presencial</th>
+        <th>Online</th>
+        <th>Domicílio</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!--<tr>
+        <td colspan="6" class="specialities-not-found-placeholder">Não tem especialidades associadas.</td>
+      </tr>-->
+      <tr>
+        <td>Cardiologia Cardiologia C Cardiologia Cardiologia C Cardiologia Cardiologia C </td>
+        <td>20€</td>
+        <td>Sim</td>
+        <td>Não</td>
+        <td>Sim</td>
+        <td>
+          <div class="buttons-container">
+            <button class="action-button" (click)="openPopup('edit')">
+              <img src="assets/images/profile/pencil.png" alt="Edit">
+            </button>
+            <button class="action-button">
+              <img src="assets/images/profile/bin.png" alt="Edit">
+            </button>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>Cardiologia</td>
+        <td>20€</td>
+        <td>Sim</td>
+        <td>Não</td>
+        <td>Sim</td>
+        <td>
+          <div class="buttons-container">
+            <button class="action-button" (click)="openPopup('edit')">
+              <img src="assets/images/profile/pencil.png" alt="Edit">
+            </button>
+            <button class="action-button">
+              <img src="assets/images/profile/bin.png" alt="Edit">
+            </button>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>Cardiologia</td>
+        <td>20€</td>
+        <td>Sim</td>
+        <td>Não</td>
+        <td>Sim</td>
+        <td>
+          <div class="buttons-container">
+            <button class="action-button" (click)="openPopup('edit')">
+              <img src="assets/images/profile/pencil.png" alt="Edit">
+            </button>
+            <button class="action-button">
+              <img src="assets/images/profile/bin.png" alt="Edit">
+            </button>
+          </div>
+        </td>
+      </tr>
+
+    </tbody>
+  </table>
+
+  <div class="left-align-row">
+    <h2>Certificados</h2>
+  </div>
+
+  <div id="certificates-container">
+    <div id="add-single-container">
+      <button id="add-button">
+        <img src="assets/images/profile/add.png" alt="Adicionar Certificado">
+      </button>
+    </div>
+    <div class="single-container">
+      <img src="assets/images/profile/pdf.png" />
+      <div class="pdf-label">
+        <abbr class="abbr-pdf-label" title="Certificado de habilitaçõesasa cj ddhdsvsdkjv kkjdb  djdfvvjdbvs dchcjc jwwjcw dj sdsdsfff.pdf">Certificado de habilitaçõesasa cj ddhdsvsdkjv kkjdb  djdfvvjdbvs dchcjc jwwjcw dj sdsdsfff.pdf</abbr>
+      </div>
+      <div class="align-right-container">
+        <button class="delete-button">
+          <img src="assets/images/profile/bin.png" alt="Edit">
+        </button>
+      </div>
+    </div>
+    <div class="single-container">
+      <img src="assets/images/profile/pdf.png" />
+      <div class="pdf-label">
+        Certificado de habilitaçõesasa cj ddhdsvsdkjv kkjdb  djdfvvjdbvs
+      </div>
+      <div class="align-right-container">
+        <button class="delete-button">
+          <img src="assets/images/profile/bin.png" alt="Edit">
+        </button>
+      </div>
+    </div>
+    <div class="single-container">
+      <img src="assets/images/profile/pdf.png" />
+      <div class="pdf-label">
+        Certificado de habilita çõesasa cj dd hdsvs dkjv kkjdb  djdfvvjdbvs
+      </div>
+      <div class="align-right-container">
+        <button class="delete-button">
+          <img src="assets/images/profile/bin.png" alt="Edit">
+        </button>
+      </div>
+    </div>
+    <div class="single-container">
+      <img src="assets/images/profile/pdf.png" />
+      <div class="pdf-label">
+        Certificado de habilita çõesasa cj dd hdsvs dkjv kkjdb  djdfvvjdbvs
+      </div>
+      <div class="align-right-container">
+        <button class="delete-button">
+          <img src="assets/images/profile/bin.png" alt="Edit">
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="left-align-row">
+    <h2>Reviews</h2>
+  </div>
+
+  <div class="left-align-row reviews-info">
+    <b class="small-right-margin">Filtrar:</b>
+    <div class="select-dropdown">
+      <select>
+        <option value="Option 1">Tudo</option>
+        <option value="Option 2">2nd Option  w c dwwedw cwe</option>
+        <option value="Option 3">Option Number 3</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="left-align-row reviews-info">
+    <b class="small-right-margin">Classificação média:</b>
+    <span class="small-right-margin">5</span>
+    <img src="assets/images/profile/star.png" alt="Estrela" class="star">
+  </div>
+
+  <div class="review-container">
+    <hr>
+    <div class="review-top-row">
+      <div class="left-review-top-row">
+        <div class="review-image small-right-margin">
+          <img src="https://fpfimagehandler.fpf.pt/FPFImageHandler.ashx?type=Person&id=3025217&op=t&w=325&h=378" alt="Imagem de perfil" class="review-image small-right-margin">
+        </div>
+        <b class="small-right-margin">Marta Casotas</b>
+        <span class="small-right-margin">5</span>
+        <img src="assets/images/profile/star.png" alt="Estrela" class="star">
+      </div>
+      <div class="right-review-top-row">
+        <b>Cardiologia</b>
+      </div>
+    </div>
+    <div class="comment">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+      labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+      laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
+      voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+    </div>
+  </div>
+  <div class="review-container">
+    <hr>
+    <div class="review-top-row">
+      <div class="left-review-top-row">
+        <div class="review-image small-right-margin">
+          <img src="https://www.w3schools.com/howto/img_avatar.png" alt="Imagem de perfil" class="review-image small-right-margin">
+        </div>
+        <b class="small-right-margin">Marta Casotas</b>
+        <span class="small-right-margin">5</span>
+        <img src="assets/images/profile/star.png" alt="Estrela" class="star">
+      </div>
+      <div class="right-review-top-row">
+        <b>Cardiologia</b>
+      </div>
+    </div>
+    <div class="comment">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+      labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+      laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
+      voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+    </div>
+  </div>
+  <div class="review-container">
+    <hr>
+    <div class="review-top-row">
+      <div class="left-review-top-row">
+        <div class="review-image small-right-margin">
+          <img src="https://www.w3schools.com/howto/img_avatar.png" alt="Imagem de perfil" class="review-image small-right-margin">
+        </div>
+        <b class="small-right-margin">Marta Casotas</b>
+        <span class="small-right-margin">5</span>
+        <img src="assets/images/profile/star.png" alt="Estrela" class="star">
+      </div>
+      <div class="right-review-top-row">
+        <b>Cardiologia</b>
+      </div>
+    </div>
+    <div class="comment">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+      labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+      laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
+      voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+    </div>
+  </div>
+
+
+  <div class="overlay" id="overlay" (click)="closePopup()">
+    <a class="close-button" (click)="closePopup()">
+      <img src="assets/images/login/close.png" alt="Close button" class="close-image">
+    </a>
+    <form [formGroup]="addSpecialityForm" id="add-speciality-container" class="overlay-container" autocomplete="off" (ngSubmit)="addSpeciality()" (click)="stopPropagation($event)">
+
+      <h2>Adicionar Especialidade</h2>
+
+      <div class="speciality-form-box">
+        <label for="add-speciality-select">Selecionar Especialidade</label>
+        <div class="select-dropdown" id="speciality-select-div" [class.is-invalid]="submitted && addSpecialityForm.get('price')?.errors">
+          <select formControlName="selectSpeciality" id="add-speciality-select" required >
+            <option value="Option 1" selected>Tudo</option>
+            <option value="Option 2">2nd Option  w c dwwedw cwe sc sjci wiwcw dwc ci</option>
+            <option value="Option 3">Option Number 3</option>
+          </select>
+        </div>
+        <span class="text-danger" *ngIf="submitted && addSpecialityForm.get('selectSpeciality')?.hasError('required')">
+          É obrigatório escolher a especialidade
+        </span>
+      </div>
+
+      <div class="speciality-form-box">
+        <label for="add-price">Preço por Hora:</label>
+        <div class="input-wrapper">
+          <input formControlName="price" type="number" id="add-price" name="price" required oninput="this.value = this.value.replace(/[^0-9]/g, '');" [class.is-invalid]="submitted && addSpecialityForm.get('price')?.errors">
+          <span class="euro-symbol">€ </span>
+        </div>
+        <span class="text-danger" *ngIf="submitted && (addSpecialityForm.get('price')?.hasError('required') || addSpecialityForm.get('price')?.hasError('min') ||  addSpecialityForm.get('price')?.hasError('max'))">
+          É obrigator
+        </span>
+      </div>
+      <div class="speciality-form-box">
+        <div class="gender">
+          <label>Deseja ter consultas Presenciais?</label>
+          <div class="radio-row">
+            <label for="add-presencial-sim" class="radio-label"><input formControlName="presencial" type="radio" name="presencial" value="S" id="add-presencial-sim"> Sim</label>
+            <label for="add-presencial-nao" class="radio-label"><input formControlName="presencial" type="radio" name="presencial" value="N" id="add-presencial-nao"> Não</label>
+          </div>
+        </div>
+        <span class="text-danger" *ngIf="submitted && addSpecialityForm.get('presencial')?.hasError('required')">
+          Selecione um género
+        </span>
+      </div>
+      <div class="speciality-form-box">
+        <div class="gender">
+          <label>Deseja ter consultas Online?</label>
+          <div class="radio-row">
+            <label for="add-online-sim" class="radio-label"><input formControlName="online" type="radio" name="online" value="S" id="add-online-sim"> Sim</label>
+            <label for="add-online-nao" class="radio-label"><input formControlName="online" type="radio" name="online" value="N" id="add-online-nao"> Não</label>
+          </div>
+        </div>
+        <span class="text-danger" *ngIf="submitted && addSpecialityForm.get('online')?.hasError('required')">
+          Selecione um género
+        </span>
+      </div>
+      <div class="speciality-form-box">
+        <div class="gender">
+          <label>Deseja ter consultas Domicílio?</label>
+          <div class="radio-row">
+            <label for="add-domicilio-sim" class="radio-label"><input formControlName="domicilio" type="radio" name="domicilio" value="S" id="add-domicilio-sim"> Sim</label>
+            <label for="add-domicilio-nao" class="radio-label"><input formControlName="domicilio" type="radio" name="domicilio" value="N" id="add-domicilio-nao"> Não</label>
+          </div>
+        </div>
+        <span class="text-danger" *ngIf="submitted && addSpecialityForm.get('domicilio')?.hasError('required')">
+          Selecione um género
+        </span>
+      </div>
+
+      <div class="form-buttons-row">
+        <button type="submit" class="btn btn-blue">Adicionar</button>
+
+        <button type="reset" class="btn btn-red" (click)="closePopup()">Cancelar</button>
+      </div>
+
+    </form>
+
+    <form id="edit-speciality-container" class="overlay-container" autocomplete="off" (click)="stopPropagation($event)">
+
+      <h2>Editar Especialidade</h2>
+
+      <div class="speciality-name">
+        Cardiologia
+      </div>
+
+      <div class="speciality-form-box">
+        <label for="edit-price">Preço por Hora:</label>
+        <div class="input-wrapper">
+          <input type="number" id="edit-price" name="price" required>
+          <span class="euro-symbol">€</span>
+        </div>
+      </div>
+      <div class="speciality-form-box">
+        <div class="gender">
+          <label>Deseja ter consultas Presenciais?</label>
+          <div class="radio-row">
+            <label for="edit-presencial-sim" class="radio-label"><input formControlName="presencial" type="radio" name="presencial" value="S" id="edit-presencial-sim"> Sim</label>
+            <label for="edit-presencial-nao" class="radio-label"><input formControlName="presencial" type="radio" name="presencial" value="N" id="edit-presencial-nao"> Não</label>
+          </div>
+        </div>
+      </div>
+      <div class="speciality-form-box">
+        <div class="gender">
+          <label>Deseja ter consultas Online?</label>
+          <div class="radio-row">
+            <label for="edit-online-sim" class="radio-label"><input formControlName="online" type="radio" name="online" value="S" id="edit-online-sim"> Sim</label>
+            <label for="edit-online-nao" class="radio-label"><input formControlName="online" type="radio" name="online" value="N" id="edit-online-nao"> Não</label>
+          </div>
+        </div>
+      </div>
+      <div class="speciality-form-box">
+        <div class="gender">
+          <label>Deseja ter consultas Domicílio?</label>
+          <div class="radio-row">
+            <label for="edit-domicilio-sim" class="radio-label"><input formControlName="domicilio" type="radio" name="domicilio" value="S" id="edit-domicilio-sim"> Sim</label>
+            <label for="edit-domicilio-nao" class="radio-label"><input formControlName="domicilio" type="radio" name="domicilio" value="N" id="edit-domicilio-nao"> Não</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-buttons-row">
+        <button type="submit" class="btn btn-blue">Adicionar</button>
+
+        <button type="reset" class="btn btn-red">Cancelar</button>
+      </div>
+
+    </form>
+
+  </div>
+
+</main>

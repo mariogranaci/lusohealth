@@ -37,7 +37,8 @@ export class ProfileService {
     return headers;
   }
 
-  getUserData(): Observable<UserProfile> {
+  getUserData(): Observable<UserProfile>
+  {
 
     const headers = this.getHeaders();
 
@@ -45,18 +46,27 @@ export class ProfileService {
     return this.http.get<UserProfile>(`${environment.appUrl}/api/profile/get-user`, { headers });
   }
 
-  updateUserData(model: UserProfile) {
+  updateUserData(model: UserProfile)
+  {
     const headers = this.getHeaders();
     return this.http.put(`${environment.appUrl}/api/profile/update-user-info`, model, { headers });
   }
 
 
-  updatePassword(model:UpdatePassword) {
+  updatePassword(model: UpdatePassword)
+  {
     return this.http.put(`${environment.appUrl}/api/profile/update-password`, model);
   }
 
-  getRelatives(): Observable<Relatives> 
+  getRelatives(): Observable<Relatives[]> 
   {
-    return this.http.get<Relatives>(`${environment.appUrl}/api/profile/get-relatives`);
+    const headers = this.getHeaders();
+    return this.http.get<Relatives[]>(`${environment.appUrl}/api/profile/get-relatives`, { headers });
+  }
+
+  deleteRelative(relativeId: number): Observable<Relatives>
+  {
+    const headers = this.getHeaders();
+    return this.http.delete<Relatives>(`${environment.appUrl}/api/profile/delete-relative/${relativeId}`, { headers });
   }
 }

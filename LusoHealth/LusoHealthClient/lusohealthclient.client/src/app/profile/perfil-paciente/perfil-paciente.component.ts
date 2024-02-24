@@ -85,7 +85,23 @@ export class PerfilPacienteComponent {
       }
     });
   }
- 
+
+  deleteRelative(relativeId: number){
+    this.profileService.deleteRelative(relativeId).subscribe({
+      next: () => {
+        this.relatives = this.relatives.filter(relative => relative.id !== relativeId);
+        this.getRelatives();
+      },
+      error: (error) => {
+        console.log(error);
+        if (error.error.errors) {
+          this.errorMessages = error.error.errors;
+        } else {
+          this.errorMessages.push(error.error);
+        }
+      }
+    });
+  }
 
   ngOnInit() {
     this.setFields();

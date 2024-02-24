@@ -223,11 +223,12 @@ namespace LusoHealthClient.Server.Controllers
             {
                 RelativeDto relativeDto = new RelativeDto
                 {
-                    Name = relative.Name,
+                    Id = relative.Id,
+                    Nome = relative.Name,
                     Nif = relative.Nif,
                     DataNascimento = relative.BirthDate,
-                    Gender = relative.Gender,
-                    Location = relative.Location
+                    Genero = relative.Gender,
+                    Localizacao = relative.Location
                 };
 
                 relativeDtos.Add(relativeDto);
@@ -235,11 +236,48 @@ namespace LusoHealthClient.Server.Controllers
 
             foreach (var dto in relativeDtos)
             {
-                Console.WriteLine($"Name: {dto.Name}, Nif: {dto.Nif}, BirthDate: {dto.DataNascimento}, Gender: {dto.Gender}, Location: {dto.Location}");
+                Console.WriteLine($"Name: {dto.Nome}, Nif: {dto.Nif}, BirthDate: {dto.DataNascimento}, Gender: {dto.Genero}, Location: {dto.Localizacao}");
             }
 
             return relativeDtos;
         }
+
+        [HttpDelete("delete-relative/{relativeId}")]
+        public async Task<ActionResult> DeleteRelative(int relativeId)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userIdClaim == null)
+            {
+                return BadRequest("Não foi possível encontrar o utilizador");
+            }
+
+            var user = await _userManager.FindByIdAsync(userIdClaim);
+
+            if (user == null)
+            {
+                return NotFound("Não foi possível encontrar o utilizador");
+            }
+
+            var relative = await _context.Relatives.FirstOrDefaultAsync(r => r.Id == relativeId && r.IdPatient == user.Id);
+
+            if (relative == null)
+            {
+                return NotFound("Parente não encontrado");
+            }
+
+            try
+            {
+                _context.Relatives.Remove(relative);
+                await _context.SaveChangesAsync();
+                return Ok(new { message = "Parente excluído com sucesso" });
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Ocorreu um erro ao excluir o parente");
+            }
+        }
+
 
         #region private helper methods
         private List<ServiceDto> GetServiceDtos(List<Service> services)

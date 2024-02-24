@@ -43,34 +43,32 @@
 </section>
 
 <p class="agregado-texto">Agregado Familiar</p>
-
-<p class="agregado-texto">Agregado Familiar</p>
 <section id="agregado">
+  <div id="plus">
+    <button class="plus-button"><img alt="Adicionar" id="plus-button" src="/assets/images/Perfil/plus.png"></button>
+  </div>
   <div class="tab" *ngFor="let relative of relatives">
     <div id="icons">
       <button class="edit-button"><img alt="Editar" class="agregado-imagem" src="/assets/images/Perfil/edit.png"></button>
-      <button class="delete-button"><img alt="Apagar" class="agregado-imagem" src="/assets/images/Perfil/bin.png"></button>
+      <button class="delete-button" (click)="deleteRelative(relative.id)"><img alt="Apagar" class="agregado-imagem" src="/assets/images/Perfil/bin.png"></button>
     </div>
     <div class="content">
       <div>
-        <span>Nome:</span><p>{{ relative.name }}</p>
+        <span>Nome:</span><p>{{ relative.nome }}</p>
       </div>
       <div>
         <span>NIF:</span><p>{{ relative.nif }}</p>
       </div>
       <div>
-        <span>Género:</span><p>{{ relative.gender }}</p>
+        <span>Género:</span><p>{{ relative.genero }}</p>
       </div>
       <div>
-        <span>Data de nascimento:</span><p>{{ relative.dataNascimento }}</p>
+        <span>Data de nascimento:</span><p>{{ relative.dataNascimento | date: 'dd/MM/yyyy' }}</p>
       </div>
     </div>
   </div>
-  <div id="plus">
-    <button class="plus-button"><img alt="Adicionar" id="plus-button" src="/assets/images/Perfil/plus.png"></button>
-  </div>
 </section>
-</div>
+
 
 <div *ngIf="loading">
   <loading-spinner></loading-spinner>

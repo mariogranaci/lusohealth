@@ -1,6 +1,8 @@
 export interface Relatives {
-  Name: string;
+  id: number;
+  nome: string;
   nif: string;
   dataNascimento: Date;
   genero: string;
+  localizacao: string;
 }

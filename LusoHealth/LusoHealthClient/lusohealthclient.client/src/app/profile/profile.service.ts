@@ -1,12 +1,12 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { EditarPerfil } from '../shared/models/profile/editarPerfil';
 import { environment } from '../../environments/environment.development';
 import { User } from '../shared/models/authentication/user';
 import { UserProfile } from '../shared/models/profile/userProfile';
 import { UpdatePassword } from '../shared/models/profile/updatePassword';
 import { Observable } from 'rxjs';
+import { Professional } from '../shared/models/profile/professional';
 
 @Injectable({
   providedIn: 'root'
@@ -54,5 +54,9 @@ export class ProfileService {
     return this.http.put(`${environment.appUrl}/api/profile/update-password`, model);
   }
 
+  getProfessionalInfo(): Observable<Professional> {
+    const headers = this.getHeaders();
+    return this.http.get<Professional>(`${environment.appUrl}/api/profile/get-professional-info`, { headers });
+  }
 
 }

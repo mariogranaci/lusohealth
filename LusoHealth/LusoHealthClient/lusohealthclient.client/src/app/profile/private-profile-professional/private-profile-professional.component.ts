@@ -1,16 +1,20 @@
-import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { User } from '../../shared/models/authentication/user';
 import { AuthenticationService } from '../../authentication/authentication.service';
 import { take } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
+import { ProfileService } from '../profile.service';
+import { Subject, takeUntil } from 'rxjs';
+import { Professional } from '../../shared/models/profile/professional';
 
 @Component({
   selector: 'app-private-profile-professional',
   templateUrl: './private-profile-professional.component.html',
   styleUrl: './private-profile-professional.component.css'
 })
-export class PrivateProfileProfessionalComponent {
+export class PrivateProfileProfessionalComponent implements OnInit {
+  private unsubscribe$ = new Subject<void>();;
   addSpecialityForm: FormGroup = new FormGroup({});
   submitted = false;
   errorMessages: string[] = [];
@@ -18,6 +22,7 @@ export class PrivateProfileProfessionalComponent {
 
   constructor(private authenticationService: AuthenticationService,
     private formBuilder: FormBuilder,
+    private profileService: ProfileService,
     private router: Router) {
     this.authenticationService.user$.pipe(take(1)).subscribe({
       next: (user: User | null) => {
@@ -29,7 +34,13 @@ export class PrivateProfileProfessionalComponent {
   }
 
   ngOnInit(): void {
+    this.getProfessionalInfo();
     this.initializeForm();
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   initializeForm() {
@@ -44,13 +55,23 @@ export class PrivateProfileProfessionalComponent {
     })
   }
 
+  getProfessionalInfo() {
+    this.profileService.getProfessionalInfo().pipe(takeUntil(this.unsubscribe$)).subscribe(
+      (userData: Professional) => {
+        console.log(userData);
+      },
+      error => {
+        console.log(error);
+      }
+    );
+  }
+
   addSpeciality() {
     this.submitted = true;
     this.errorMessages = [];
     this.responseText = '';
-
-
   }
+
 
   openPopup(opcao: string) {
     const overlay = document.getElementById('overlay');

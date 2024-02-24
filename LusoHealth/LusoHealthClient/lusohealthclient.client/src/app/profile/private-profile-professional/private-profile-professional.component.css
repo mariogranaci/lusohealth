@@ -516,7 +516,7 @@ hr {
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.7);
-  display: block;
+  display: none;
 }
 
 .close-button {
@@ -560,7 +560,7 @@ hr {
 }
 
 #edit-speciality-container {
-  display: block;
+  display: none;
 }
 
 .speciality-form-box {

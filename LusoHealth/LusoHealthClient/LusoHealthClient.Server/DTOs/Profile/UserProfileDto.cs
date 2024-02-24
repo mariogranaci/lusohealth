@@ -28,5 +28,7 @@ namespace LusoHealthClient.Server.DTOs.Profile
         public char? Genero { get; set; }
         public string? Picture { get; set; }
 
+        public string? Provider { get; set; }
+
     }
 }

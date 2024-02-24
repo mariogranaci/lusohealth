@@ -56,7 +56,8 @@ namespace LusoHealthClient.Server.Controllers
                 Telemovel = user.PhoneNumber,
                 DataNascimento = user.BirthDate,
                 Genero = user.Gender,
-                Picture = user.ProfilePicPath
+                Picture = user.ProfilePicPath,
+				Provider = user.Provider,
             };
 
             return userProfileDto;
@@ -82,7 +83,8 @@ namespace LusoHealthClient.Server.Controllers
                 Telemovel = user.PhoneNumber,
                 DataNascimento = user.BirthDate,
                 Genero = user.Gender,
-                Picture = user.ProfilePicPath
+                Picture = user.ProfilePicPath,
+                Provider = user.Provider
             };
 
             var servicesFromDB = await _context.Services.Where(s => s.IdProfessional == user.Id).ToListAsync();
@@ -133,7 +135,8 @@ namespace LusoHealthClient.Server.Controllers
             {
                 return NotFound("Não foi possível encontrar o utilizador");
             }
-			if (!user.EmailConfirmed) return BadRequest("O email ainda não foi confirmado. Confirme o seu email para poder recuperar a sua password");
+			
+            if (!user.EmailConfirmed) return BadRequest("O email ainda não foi confirmado. Confirme o seu email para poder recuperar a sua password");
 
 			try
 			{
@@ -161,29 +164,38 @@ namespace LusoHealthClient.Server.Controllers
 		[HttpPut("update-password")]
 		public async Task<ActionResult> UpdatePassword(UpdatePasswordDto model)
 		{
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+			var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            if (userIdClaim == null)
-            {
-                return BadRequest("Não foi possível encontrar o utilizador");
-            }
+			if (userIdClaim == null)
+			{
+				return BadRequest("Não foi possível encontrar o utilizador");
+			}
 
-            var user = await _userManager.FindByIdAsync(userIdClaim);
+			var user = await _userManager.FindByIdAsync(userIdClaim);
 
-            if (user == null)
-            {
-                return NotFound("Não foi possível encontrar o utilizador");
-            }
+			if (user == null)
+			{
+				return NotFound("Não foi possível encontrar o utilizador");
+			}
 
 			try
 			{
-				if (model.NewPassword != model.ConfirmNewPassword)
+				var isCurrentPasswordValid = await _userManager.CheckPasswordAsync(user, model.CurrentPassword);
+				if (!isCurrentPasswordValid)
+                {
+					return BadRequest("A password atual está incorreta.");
+				}
+				else if (model.NewPassword != model.ConfirmNewPassword)
+				{
 					return BadRequest("As novas passwords não condizem.");
+				}
 
 				var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
 
 				if (result.Succeeded)
+				{
 					return Ok(new JsonResult(new { title = "Password Alterada", message = "A sua password foi alterada com sucesso." }));
+				}
 				return BadRequest("Falha ao atualizar a password. Tente novamente.");
 			}
 			catch (Exception)
@@ -451,42 +463,98 @@ namespace LusoHealthClient.Server.Controllers
             }
             return serviceDtos;
         }
+		[HttpPut("update-picture")]
+		public async Task<ActionResult> UpdatePicture(UserProfileDto model)
+		{
+			var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-        private List<CertificateDto> GetCertificateDtos(List<Certificate> certificates)
-        {
-            var certificateDtos = new List<CertificateDto>();
-            foreach (var certificate in certificates)
-            {
-                var certificateDto = new CertificateDto
-                {
-                    CertificateId = certificate.Id,
-                    Name = certificate.Name,
-                    Path = certificate.Path
-                };
-                certificateDtos.Add(certificateDto);
-            }
-            return certificateDtos;
-        }
 
-        private List<ReviewDto> GetReviewDtos(List<Review> reviews)
-        {
-            var reviewDtos = new List<ReviewDto>();
-            foreach (var review in reviews)
-            {
-                ReviewDto reviewDto = new ReviewDto
-                {
-                    IdPatient = review.IdPatient,
-                    PatientName = review.Patient.User.FirstName + " " + review.Patient.User.LastName,
-                    IdService = review.IdService,
-                    ServiceName = review.Service.Specialty.Name,
-                    Stars = review.Stars,
-                    Description = review.Description
-                };
-                reviews.Add(review);
-            }
-            return reviewDtos;
-        }
-        #endregion
-    }
+			if (userIdClaim == null)
+			{
+				return BadRequest("Não foi possível encontrar o utilizador");
+			}
+
+			var user = await _userManager.FindByIdAsync(userIdClaim);
+
+			if (user == null)
+			{
+				return NotFound("Não foi possível encontrar o utilizador");
+			}
+
+			try
+			{
+				user.ProfilePicPath = model.Picture;
+				var result = await _userManager.UpdateAsync(user);
+
+				if (result.Succeeded)
+					return Ok(new JsonResult(new { title = "Perfil Alterado", message = "A sua foto de perfil foi alterada com sucesso." }));
+				return BadRequest("Não foi possivel alterar a foto de perfil.Tente Novamente.");
+
+			}
+			catch (Exception)
+			{
+				return BadRequest("Não foi possivel alterar a foto de perfil.Tente Novamente.");
+			}
+		}
+
+		#region private helper methods
+		private List<ServiceDto> GetServiceDtos(List<Service> services)
+		{
+			var serviceDtos = new List<ServiceDto>();
+			foreach (var service in services)
+			{
+				var serviceDto = new ServiceDto
+				{
+					ServiceId = service.Id,
+					Specialty = service.Specialty.Name,
+					PricePerHour = service.PricePerHour,
+					Online = service.Online,
+					Presential = service.Presential,
+					Home = service.Home
+				};
+				serviceDtos.Add(serviceDto);
+			}
+			return serviceDtos;
+		}
+
+		private List<CertificateDto> GetCertificateDtos(List<Certificate> certificates)
+		{
+			var certificateDtos = new List<CertificateDto>();
+			foreach (var certificate in certificates)
+			{
+				var certificateDto = new CertificateDto
+				{
+					CertificateId = certificate.Id,
+					Name = certificate.Name,
+					Path = certificate.Path
+				};
+				certificateDtos.Add(certificateDto);
+			}
+			return certificateDtos;
+		}
+
+		private List<ReviewDto> GetReviewDtos(List<Review> reviews)
+		{
+			var reviewDtos = new List<ReviewDto>();
+			foreach (var review in reviews)
+			{
+				ReviewDto reviewDto = new ReviewDto
+				{
+					IdPatient = review.IdPatient,
+					PatientName = review.Patient.User.FirstName + " " + review.Patient.User.LastName,
+					IdService = review.IdService,
+					ServiceName = review.Service.Specialty.Name,
+					Stars = review.Stars,
+					Description = review.Description
+				};
+				reviews.Add(review);
+			}
+			return reviewDtos;
+		}
+		#endregion
+
+	}
+
 }
+
 

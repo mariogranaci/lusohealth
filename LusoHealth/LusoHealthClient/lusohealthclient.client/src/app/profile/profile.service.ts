@@ -41,8 +41,7 @@ export class ProfileService {
   {
 
     const headers = this.getHeaders();
-
-    // Make the HTTP request with the headers                            
+                               
     return this.http.get<UserProfile>(`${environment.appUrl}/api/profile/get-user`, { headers });
   }
 
@@ -50,12 +49,6 @@ export class ProfileService {
   {
     const headers = this.getHeaders();
     return this.http.put(`${environment.appUrl}/api/profile/update-user-info`, model, { headers });
-  }
-
-
-  updatePassword(model: UpdatePassword)
-  {
-    return this.http.put(`${environment.appUrl}/api/profile/update-password`, model);
   }
 
   getProfessionalInfo(): Observable<Professional> {
@@ -67,6 +60,16 @@ export class ProfileService {
   {
     const headers = this.getHeaders();
     return this.http.get<Relative[]>(`${environment.appUrl}/api/profile/get-relatives`, { headers });
+  }
+
+  updatePassword(model: UpdatePassword) {
+    const headers = this.getHeaders();
+    return this.http.put(`${environment.appUrl}/api/profile/update-password`, model, { headers });
+  }
+
+  updatePicture(model: UserProfile) {
+    const headers = this.getHeaders();
+    return this.http.put(`${environment.appUrl}/api/profile/update-picture`, model, { headers });
   }
 
   deleteRelative(relativeId: number): Observable<Relative>

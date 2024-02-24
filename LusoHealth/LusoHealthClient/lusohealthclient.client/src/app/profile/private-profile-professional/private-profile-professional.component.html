@@ -297,7 +297,7 @@
           <span class="euro-symbol">€ </span>
         </div>
         <span class="text-danger" *ngIf="submitted && (addSpecialityForm.get('price')?.hasError('required') || addSpecialityForm.get('price')?.hasError('min') ||  addSpecialityForm.get('price')?.hasError('max'))">
-          É obrigator
+          O preço tem de estar entre 1€ e 1000€
         </span>
       </div>
       <div class="speciality-form-box">
@@ -309,7 +309,7 @@
           </div>
         </div>
         <span class="text-danger" *ngIf="submitted && addSpecialityForm.get('presencial')?.hasError('required')">
-          Selecione um género
+          Escoha uma opção
         </span>
       </div>
       <div class="speciality-form-box">
@@ -321,7 +321,7 @@
           </div>
         </div>
         <span class="text-danger" *ngIf="submitted && addSpecialityForm.get('online')?.hasError('required')">
-          Selecione um género
+          Escoha uma opção
         </span>
       </div>
       <div class="speciality-form-box">
@@ -333,7 +333,7 @@
           </div>
         </div>
         <span class="text-danger" *ngIf="submitted && addSpecialityForm.get('domicilio')?.hasError('required')">
-          Selecione um género
+          Escoha uma opção
         </span>
       </div>
 

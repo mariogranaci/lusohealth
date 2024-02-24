@@ -242,62 +242,64 @@ namespace LusoHealthClient.Server.Controllers
 			}
 		}
 
+		#region private helper methods
+		private List<ServiceDto> GetServiceDtos(List<Service> services)
+		{
+			var serviceDtos = new List<ServiceDto>();
+			foreach (var service in services)
+			{
+				var serviceDto = new ServiceDto
+				{
+					ServiceId = service.Id,
+					Specialty = service.Specialty.Name,
+					PricePerHour = service.PricePerHour,
+					Online = service.Online,
+					Presential = service.Presential,
+					Home = service.Home
+				};
+				serviceDtos.Add(serviceDto);
+			}
+			return serviceDtos;
+		}
+
+		private List<CertificateDto> GetCertificateDtos(List<Certificate> certificates)
+		{
+			var certificateDtos = new List<CertificateDto>();
+			foreach (var certificate in certificates)
+			{
+				var certificateDto = new CertificateDto
+				{
+					CertificateId = certificate.Id,
+					Name = certificate.Name,
+					Path = certificate.Path
+				};
+				certificateDtos.Add(certificateDto);
+			}
+			return certificateDtos;
+		}
+
+		private List<ReviewDto> GetReviewDtos(List<Review> reviews)
+		{
+			var reviewDtos = new List<ReviewDto>();
+			foreach (var review in reviews)
+			{
+				ReviewDto reviewDto = new ReviewDto
+				{
+					IdPatient = review.IdPatient,
+					PatientName = review.Patient.User.FirstName + " " + review.Patient.User.LastName,
+					IdService = review.IdService,
+					ServiceName = review.Service.Specialty.Name,
+					Stars = review.Stars,
+					Description = review.Description
+				};
+				reviews.Add(review);
+			}
+			return reviewDtos;
+		}
+		#endregion
+
 	}
-        #region private helper methods
-        private List<ServiceDto> GetServiceDtos(List<Service> services)
-        {
-            var serviceDtos = new List<ServiceDto>();
-            foreach (var service in services)
-            {
-                var serviceDto = new ServiceDto
-                {
-                    ServiceId = service.Id,
-                    Specialty = service.Specialty.Name,
-                    PricePerHour = service.PricePerHour,
-                    Online = service.Online,
-                    Presential = service.Presential,
-                    Home = service.Home
-                };
-                serviceDtos.Add(serviceDto);
-            }
-            return serviceDtos;
-        }
 
-        private List<CertificateDto> GetCertificateDtos(List<Certificate> certificates)
-        {
-            var certificateDtos = new List<CertificateDto>();
-            foreach (var certificate in certificates)
-            {
-                var certificateDto = new CertificateDto
-                {
-                    CertificateId = certificate.Id,
-                    Name = certificate.Name,
-                    Path = certificate.Path
-                };
-                certificateDtos.Add(certificateDto);
-            }
-            return certificateDtos;
-        }
-
-        private List<ReviewDto> GetReviewDtos(List<Review> reviews)
-        {
-            var reviewDtos = new List<ReviewDto>();
-            foreach (var review in reviews)
-            {
-                ReviewDto reviewDto = new ReviewDto
-                {
-                    IdPatient = review.IdPatient,
-                    PatientName = review.Patient.User.FirstName + " " + review.Patient.User.LastName,
-                    IdService = review.IdService,
-                    ServiceName = review.Service.Specialty.Name,
-                    Stars = review.Stars,
-                    Description = review.Description
-                };
-                reviews.Add(review);
-            }
-            return reviewDtos;
-        }
-        #endregion
-    }
 }
+
 

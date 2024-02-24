@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LusoHealthClient.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240223022818_LusoHealth")]
-    partial class LusoHealth
+    [Migration("20240224175354_lusohealth")]
+    partial class lusohealth
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1623,7 +1623,7 @@ namespace LusoHealthClient.Server.Migrations
                             Id = "1",
                             AccessFailedCount = 0,
                             BirthDate = new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "b0ea4a42-0b08-4d3a-9765-cb29e1148677",
+                            ConcurrencyStamp = "027ca05b-abd9-4b14-9fb0-45511a2dacea",
                             Email = "user1@mail.com",
                             EmailConfirmed = true,
                             FirstName = "User1",
@@ -1634,12 +1634,12 @@ namespace LusoHealthClient.Server.Migrations
                             LockoutEnabled = false,
                             Nif = "123456789",
                             NormalizedEmail = "user1@mail.com",
-                            PasswordHash = "AQAAAAIAAYagAAAAEHE3JJS3zq/CL1STf4iwY/9OKQWpPhnhy1+19MWXKdDms4X0v4MTRIC6FI4kECAHJg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAELENsgwzX8yDJvNrifBBZYosVa7n1UfaxWRMRrmpYTYrcDDqXxtKbyUwn+ulYAsv6w==",
                             PhoneNumber = "987654321",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "0b5a156a-9013-4618-b32a-fe5209a6b4d2",
+                            SecurityStamp = "99b78d07-79a0-4a70-9d5c-b402400a471a",
                             TwoFactorEnabled = false,
-                            UserName = "123456789_736",
+                            UserName = "123456789_715",
                             UserType = "U"
                         },
                         new
@@ -1647,7 +1647,7 @@ namespace LusoHealthClient.Server.Migrations
                             Id = "2",
                             AccessFailedCount = 0,
                             BirthDate = new DateTime(1995, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "291b31c8-a868-425a-ad95-270fa6f515c7",
+                            ConcurrencyStamp = "29d39a6e-f6fe-4fcf-b12d-c14ca9789478",
                             Email = "user2@mail.com",
                             EmailConfirmed = true,
                             FirstName = "User2",
@@ -1658,12 +1658,12 @@ namespace LusoHealthClient.Server.Migrations
                             LockoutEnabled = false,
                             Nif = "987654321",
                             NormalizedEmail = "user2@mail.com",
-                            PasswordHash = "AQAAAAIAAYagAAAAEFsvFavH4beavbfB8D0nFCjC8q9QUSjkk1FqaNlOTm1iunpFNZ5PaeiakroOSmQbJQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEGZ0g4mQVMUyaRHcol6bQSbSpvTqyaNnlLeUkt9hWqrbepjOxTVik5pu7UXQ5sD7pg==",
                             PhoneNumber = "123456789",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "cee0f114-7f24-462a-ad0c-a157f9aabf8f",
+                            SecurityStamp = "6270a6e4-1b0f-4c8f-b169-86ebfe489549",
                             TwoFactorEnabled = false,
-                            UserName = "987654321_736",
+                            UserName = "987654321_715",
                             UserType = "U"
                         },
                         new
@@ -1671,7 +1671,7 @@ namespace LusoHealthClient.Server.Migrations
                             Id = "3",
                             AccessFailedCount = 0,
                             BirthDate = new DateTime(1988, 8, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "fde813d7-65a8-4ebc-bfee-c0334653fc9e",
+                            ConcurrencyStamp = "9e58dd6a-89a0-4504-9e6f-7b5b29d4844c",
                             Email = "user3@mail.com",
                             EmailConfirmed = true,
                             FirstName = "User3",
@@ -1682,12 +1682,12 @@ namespace LusoHealthClient.Server.Migrations
                             LockoutEnabled = false,
                             Nif = "111223344",
                             NormalizedEmail = "user3@mail.com",
-                            PasswordHash = "AQAAAAIAAYagAAAAEPviSSDylPmJCIJVmyx5tbt+W06X8O5zVz+R3eVmFH9C2SI8Xtxyxfdu+3FRhhScdw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEBumpE6vmz1xUQM7QVMHYQUe7/yV4IXsocI+GouGaTHL5M1Dl3WEj9IMTdbi/N8L9A==",
                             PhoneNumber = "555555555",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "8776b5ad-1654-4d9a-bda9-d97ef5e88e4f",
+                            SecurityStamp = "5a02c103-5eca-4130-b073-67e37dfeec9c",
                             TwoFactorEnabled = false,
-                            UserName = "111223344_736",
+                            UserName = "111223344_715",
                             UserType = "U"
                         },
                         new
@@ -1695,7 +1695,7 @@ namespace LusoHealthClient.Server.Migrations
                             Id = "4",
                             AccessFailedCount = 0,
                             BirthDate = new DateTime(1992, 12, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "e33bc10f-e8c4-4499-8f13-a17655386ec1",
+                            ConcurrencyStamp = "56854992-7900-48e3-afcf-0721985167e7",
                             Email = "user4@mail.com",
                             EmailConfirmed = true,
                             FirstName = "User4",
@@ -1706,12 +1706,12 @@ namespace LusoHealthClient.Server.Migrations
                             LockoutEnabled = false,
                             Nif = "999888777",
                             NormalizedEmail = "user4@mail.com",
-                            PasswordHash = "AQAAAAIAAYagAAAAEKaceTUVVGHaTvKxj38vRP7rWZSlGKURdHarcJNfcH63SdShCKoBTxfE9ogJxRY2YQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAELmEIQq5C1kBq6ydoQKP4OE39Pva0bxuxGMy2vLvZ+eKoIvTjamb+AyfA158hjw2iQ==",
                             PhoneNumber = "444444444",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "323fe8e7-f7c1-4bef-8b44-019f948dcf16",
+                            SecurityStamp = "31cefc53-4de8-4481-a138-cd05c08e5119",
                             TwoFactorEnabled = false,
-                            UserName = "999888777_736",
+                            UserName = "999888777_715",
                             UserType = "U"
                         },
                         new
@@ -1719,7 +1719,7 @@ namespace LusoHealthClient.Server.Migrations
                             Id = "5",
                             AccessFailedCount = 0,
                             BirthDate = new DateTime(1997, 7, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "8178527c-cafe-4d59-bdea-af4179b85561",
+                            ConcurrencyStamp = "22d195cf-e721-4db4-b9de-1c5f50c0d98c",
                             Email = "user5@mail.com",
                             EmailConfirmed = true,
                             FirstName = "User5",
@@ -1730,12 +1730,12 @@ namespace LusoHealthClient.Server.Migrations
                             LockoutEnabled = false,
                             Nif = "555444333",
                             NormalizedEmail = "user5@mail.com",
-                            PasswordHash = "AQAAAAIAAYagAAAAEGXLJk6nPEE7cS5TGS6vwekozNC22gJxPOdv6X63WIJmMQCJtjZqdA5rIOONwEexJQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEGDsL3hvAEKip1gIku4UwR1XUdxU6znc9IVlO0Hw6w6dSkTZkgAv5mcHbwfHuxmsug==",
                             PhoneNumber = "333333333",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "2d7e7a57-9009-4cdb-ae83-db8225419d66",
+                            SecurityStamp = "16d55a3c-6560-46b7-b6ad-f90fdccc3a28",
                             TwoFactorEnabled = false,
-                            UserName = "333333333_736",
+                            UserName = "333333333_715",
                             UserType = "P"
                         },
                         new
@@ -1743,7 +1743,7 @@ namespace LusoHealthClient.Server.Migrations
                             Id = "6",
                             AccessFailedCount = 0,
                             BirthDate = new DateTime(1994, 4, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "a1a56ac5-9232-45e7-a327-be1b970a8b6f",
+                            ConcurrencyStamp = "ec4802bf-eee7-4584-8fb6-d9b7e0e62848",
                             Email = "user6@mail.com",
                             EmailConfirmed = true,
                             FirstName = "User6",
@@ -1754,12 +1754,12 @@ namespace LusoHealthClient.Server.Migrations
                             LockoutEnabled = false,
                             Nif = "777666555",
                             NormalizedEmail = "user6@mail.com",
-                            PasswordHash = "AQAAAAIAAYagAAAAEPcBm1EAnWXKItFgf+Qw7b7zdXKieBEy43vEpfY9agauMJokjVbZAMkES3aGS6kJyg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEOeUpBcRH54iBB7nPxj/VgVdeZAoWbjLQfM+rke4Ic+OLS+kJxCax4WZLSOurTts4Q==",
                             PhoneNumber = "222222222",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "596ac011-319b-4b9b-87f2-1ec934df1f33",
+                            SecurityStamp = "d045167c-76fd-49df-8492-16ceeed5a996",
                             TwoFactorEnabled = false,
-                            UserName = "777666555_736",
+                            UserName = "777666555_715",
                             UserType = "P"
                         },
                         new
@@ -1767,7 +1767,7 @@ namespace LusoHealthClient.Server.Migrations
                             Id = "7",
                             AccessFailedCount = 0,
                             BirthDate = new DateTime(1994, 4, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "9773152b-2a9d-4751-a0ed-c39af6d13768",
+                            ConcurrencyStamp = "1b2fa5ec-7d83-446c-b1ac-f00991e39d5f",
                             Email = "usergoogle@mail.com",
                             EmailConfirmed = true,
                             FirstName = "User",
@@ -1778,14 +1778,14 @@ namespace LusoHealthClient.Server.Migrations
                             LockoutEnabled = false,
                             Nif = "123215648",
                             NormalizedEmail = "usergoogle@mail.com",
-                            PasswordHash = "AQAAAAIAAYagAAAAEEgrdZsOS43Qun7PFVc3o6ypoCCaUcdpCJ2AvLmRLaPcM2qBnaU8FiilCo+9zhqpLg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEGIsz3yfZcJpYP4299G/U/N3rj6JQSFmPyULjJkp2x0A327hF9STS3bIa3oucusPEw==",
                             PhoneNumber = "231564789",
                             PhoneNumberConfirmed = false,
                             ProfilePicPath = "https://img.freepik.com/fotos-premium/empreendedor-deprimido-triste-em-homem-de-trabalhador-de-terno-formal-sentado-perto-de-uma-rua-ao-ar-livre-perto-do-centro-de-negocios-de-escritorio-moderno-homem-de-negocios-chateado-perdeu-o-emprego-devido-a-um-funcionario-de-crise-financeira-tem-problema-lado-de-fora_321831-6752.jpg",
                             Provider = "google",
-                            SecurityStamp = "5c9c475e-433b-44be-8146-e7b70873dfa1",
+                            SecurityStamp = "503f3fb7-87cd-413d-9e54-825d5c8f5b03",
                             TwoFactorEnabled = false,
-                            UserName = "123215648_736",
+                            UserName = "123215648_715",
                             UserType = "P"
                         });
                 });

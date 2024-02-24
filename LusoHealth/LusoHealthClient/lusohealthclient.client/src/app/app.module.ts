@@ -6,8 +6,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { FormsModule } from '@angular/forms';
-import { AuthenticationModule } from './authentication/authentication.module';
 import { HomePageComponent } from './home-page/home-page.component';
+
 
 
 

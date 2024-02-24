@@ -1,13 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
-import { User } from '../../shared/models/authentication/user';
-import { environment } from '../../../environments/environment.development';
-import { jwtDecode } from 'jwt-decode';
-import { EditarPerfil } from '../../shared/models/profile/editarPerfil';
-import { ProfileService } from '../profile-service.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ProfileService } from '../profile.service';
 import { UserProfile } from '../../shared/models/profile/userProfile';
-import { Observable, Subject, never, takeUntil } from 'rxjs';
-
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-edit-perfil',

@@ -1,13 +1,38 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ProfileService } from '../profile.service';
+import { Subject, takeUntil } from 'rxjs';
+import { Professional } from '../../shared/models/profile/professional';
 
 @Component({
   selector: 'app-private-profile-professional',
   templateUrl: './private-profile-professional.component.html',
   styleUrl: './private-profile-professional.component.css'
 })
-export class PrivateProfileProfessionalComponent {
+export class PrivateProfileProfessionalComponent implements OnInit {
+  private unsubscribe$ = new Subject<void>();
+
+  constructor(private profileService: ProfileService) { }
 
 
+  getProfessionalInfo() {
+    this.profileService.getProfessionalInfo().pipe(takeUntil(this.unsubscribe$)).subscribe(
+      (userData: Professional) => {
+        console.log(userData);
+      },
+      error => {
+        console.log(error);
+      }
+    );
+  }
+
+  ngOnInit() {
+    this.getProfessionalInfo();
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
 
   openPopup(opcao: string) {
     const overlay = document.getElementById('overlay');

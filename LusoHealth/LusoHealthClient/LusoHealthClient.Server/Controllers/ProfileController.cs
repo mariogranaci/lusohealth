@@ -94,18 +94,18 @@ namespace LusoHealthClient.Server.Controllers
             var servicesFromDB = await _context.Services.Where(s => s.IdProfessional == user.Id).ToListAsync();
             var services = GetServiceDtos(servicesFromDB);
 
-            //var certificatedFromDB = await _context.Certificates.Where(c => c.IdProfessional == user.Id).ToListAsync();
-            //var certificates = GetCertificateDtos(certificatedFromDB);
-            
+            var certificatedFromDB = await _context.Certificates.Where(c => c.IdProfessional == user.Id).ToListAsync();
+            var certificates = GetCertificateDtos(certificatedFromDB);
+
             var reviewsFromDB = await _context.Reviews
                 .Include(r => r.Service)
                 .Where(r => r.Service.IdProfessional == user.Id)
                 .ToListAsync();
             var reviews = GetReviewDtos(reviewsFromDB);
             
-            var professional = await _context.Professionals.Include(p => p.Certificates).FirstOrDefaultAsync(p => p.UserID == user.Id);
-            var certificates = GetCertificateDtos(professional.Certificates);
-
+            var professional = await _context.Professionals.Include(pt => pt.ProfessionalType).FirstOrDefaultAsync(p => p.UserID == user.Id);
+            //var certificates = GetCertificateDtos(professional.Certificates);
+            //var professionalType = await _context.ProfessionalTypes.FirstOrDefaultAsync(pt => pt.Id == professional.ProfessionalTypeId);
 
             var professionalDto = new ProfessionalDto
             {

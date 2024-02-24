@@ -67,17 +67,11 @@ namespace LusoHealthClient.Server.Controllers
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            if (userIdClaim == null)
-            {
-                return BadRequest("Não foi possível encontrar o utilizador");
-            }
+            if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
 
             var user = await _userManager.FindByIdAsync(userIdClaim);
 
-            if (user == null)
-            {
-                return NotFound("Não foi possível encontrar o utilizador");
-            }
+            if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
 
             UserProfileDto userProfileDto = new UserProfileDto
             {
@@ -202,48 +196,125 @@ namespace LusoHealthClient.Server.Controllers
         public async Task<ActionResult> AddService(ServiceDto model)
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            if (userIdClaim == null)
-            {
-                return BadRequest("Não foi possível encontrar o utilizador");
-            }
+            if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
 
             var user = await _userManager.FindByIdAsync(userIdClaim);
-
-            if (user == null)
-            {
-                return NotFound("Não foi possível encontrar o utilizador");
-            }
+            if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
 
             var professional = await _context.Professionals.FirstOrDefaultAsync(p => p.UserID == user.Id);
+            if (professional == null) { return NotFound("Não foi possível encontrar o profissional"); }
 
-            if (professional == null)
+            var specialty = await _context.Specialties.FirstOrDefaultAsync(s => s.Id == model.SpecialtyId);
+            if (specialty == null) { return NotFound("Não foi possível encontrar a especialidade"); }
+
+            try
             {
-                return NotFound("Não foi possível encontrar o profissional");
+                var service = new Service
+                {
+                    IdProfessional = professional.UserID,
+                    IdSpecialty = specialty.Id,
+                    PricePerHour = model.PricePerHour,
+                    Online = model.Online,
+                    Presential = model.Presential,
+                    Home = model.Home
+                };
+
+                _context.Services.Add(service);
+                await _context.SaveChangesAsync();
+
+                return Ok(new JsonResult(new { title = "Serviço Adicionado", message = "O seu serviço foi adicionado com sucesso." }));
+            } catch (Exception)
+            {
+                return BadRequest("Não foi possível adicionar o serviço. Tente novamente.");
             }
-
-            var specialty = await _context.Specialties.FirstOrDefaultAsync(s => s.Name == model.Specialty);
-
-            if (specialty == null)
-            {
-                return NotFound("Não foi possível encontrar a especialidade");
-            }
-
-            var service = new Service
-            {
-                IdProfessional = professional.UserID,
-                IdSpecialty = specialty.Id,
-                PricePerHour = model.PricePerHour,
-                Online = model.Online,
-                Presential = model.Presential,
-                Home = model.Home
-            };
-
-            _context.Services.Add(service);
-            await _context.SaveChangesAsync();
-
-            return Ok(new JsonResult(new { title = "Serviço Adicionado", message = "O seu serviço foi adicionado com sucesso." }));
         }
+
+        [HttpPut("update-service")]
+        public async Task<ActionResult> UpdateService(ServiceDto model)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
+
+            var user = await _userManager.FindByIdAsync(userIdClaim);
+            if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
+
+            var professional = await _context.Professionals.FirstOrDefaultAsync(p => p.UserID == user.Id);
+            if (professional == null) { return NotFound("Não foi possível encontrar o profissional"); }
+
+            var service = await _context.Services.FirstOrDefaultAsync(s => s.Id == model.ServiceId);
+            if (service == null) { return NotFound("Não foi possível encontrar o serviço"); }
+
+            var specialty = await _context.Specialties.FirstOrDefaultAsync(s => s.Id == model.SpecialtyId);
+            if (specialty == null) { return NotFound("Não foi possível encontrar a especialidade"); }
+
+            try
+            {
+                service.IdSpecialty = specialty.Id;
+                service.PricePerHour = model.PricePerHour;
+                service.Online = model.Online;
+                service.Presential = model.Presential;
+                service.Home = model.Home;
+
+                _context.Services.Update(service);
+                await _context.SaveChangesAsync();
+
+                return Ok(new JsonResult(new { title = "Serviço Atualizado", message = "O seu serviço foi atualizado com sucesso." }));
+            }
+            catch (Exception)
+            {
+                return BadRequest("Não foi possível atualizar o serviço. Tente novamente.");
+            }
+        }
+
+        [HttpDelete("delete-service/{id}")]
+        public async Task<ActionResult> DeleteService(int id)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
+
+            var user = await _userManager.FindByIdAsync(userIdClaim);
+            if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
+
+            var professional = await _context.Professionals.FirstOrDefaultAsync(p => p.UserID == user.Id);
+            if (professional == null) { return NotFound("Não foi possível encontrar o profissional"); }
+
+            var service = await _context.Services.FirstOrDefaultAsync(s => s.Id == id);
+            if (service == null) { return NotFound("Não foi possível encontrar o serviço"); }
+
+            try
+            {
+                _context.Services.Remove(service);
+                await _context.SaveChangesAsync();
+
+                return Ok(new JsonResult(new { title = "Serviço Removido", message = "O seu serviço foi removido com sucesso." }));
+            }
+            catch (Exception)
+            {
+                return BadRequest("Não foi possível remover o serviço. Tente novamente.");
+            }
+        }
+
+        [HttpPost("filter-reviews-by-service")]
+        public async Task<ActionResult<List<ReviewDto>>> FilterReviewsByService(int idService)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
+
+            var user = await _userManager.FindByIdAsync(userIdClaim);
+            if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
+
+            var professional = await _context.Professionals.FirstOrDefaultAsync(p => p.UserID == user.Id);
+            if (professional == null) { return NotFound("Não foi possível encontrar o profissional"); }
+
+            var reviewsFromDB = await _context.Reviews
+                .Include(r => r.Service)
+                .Where(r => r.Service.IdProfessional == user.Id && r.IdService == idService)
+                .ToListAsync();
+            var reviews = GetReviewDtos(reviewsFromDB);
+
+            return reviews;
+        }
+
 
         #region private helper methods
         private List<ServiceDto> GetServiceDtos(List<Service> services)

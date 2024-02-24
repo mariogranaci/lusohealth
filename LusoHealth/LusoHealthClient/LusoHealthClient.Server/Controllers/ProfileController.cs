@@ -314,7 +314,122 @@ namespace LusoHealthClient.Server.Controllers
 
             return reviews;
         }
+        [HttpGet("get-relatives")]
+        public async Task<ActionResult<List<RelativeDto>>> GetRelatives()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
+            if (userIdClaim == null)
+            {
+                return BadRequest("Não foi possível encontrar o utilizador");
+            }
+
+            var user = await _userManager.FindByIdAsync(userIdClaim);
+
+            if (user == null)
+            {
+                return NotFound("Não foi possível encontrar o utilizador");
+            }
+
+            var relatives = await _context.Relatives
+            .Where(r => r.IdPatient == user.Id)
+            .ToListAsync();
+
+            List<RelativeDto> relativeDtos = new List<RelativeDto>();
+
+            foreach (var relative in relatives)
+            {
+                RelativeDto relativeDto = new RelativeDto
+                {
+                    Id = relative.Id,
+                    Nome = relative.Name,
+                    Nif = relative.Nif,
+                    DataNascimento = relative.BirthDate,
+                    Genero = relative.Gender,
+                    Localizacao = relative.Location
+                };
+
+                relativeDtos.Add(relativeDto);
+            }
+
+            foreach (var dto in relativeDtos)
+            {
+                Console.WriteLine($"Name: {dto.Nome}, Nif: {dto.Nif}, BirthDate: {dto.DataNascimento}, Gender: {dto.Genero}, Location: {dto.Localizacao}");
+            }
+
+            return relativeDtos;
+        }
+
+        [HttpDelete("delete-relative/{relativeId}")]
+        public async Task<ActionResult> DeleteRelative(int relativeId)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userIdClaim == null)
+            {
+                return BadRequest("Não foi possível encontrar o utilizador");
+            }
+
+            var user = await _userManager.FindByIdAsync(userIdClaim);
+
+            if (user == null)
+            {
+                return NotFound("Não foi possível encontrar o utilizador");
+            }
+
+            var relative = await _context.Relatives.FirstOrDefaultAsync(r => r.Id == relativeId && r.IdPatient == user.Id);
+
+            if (relative == null)
+            {
+                return NotFound("Parente não encontrado");
+            }
+
+            try
+            {
+                _context.Relatives.Remove(relative);
+                await _context.SaveChangesAsync();
+                return Ok(new { message = "Parente excluído com sucesso" });
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Ocorreu um erro ao excluir o parente");
+            }
+        }
+
+
+        [HttpPost("add-relative")]
+        public async Task<ActionResult> AddRelative(RelativeDto relativeDto)
+        {
+            try
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(userId))
+                    return BadRequest("User ID not found in claims.");
+
+                var user = await _userManager.FindByIdAsync(userId);
+                if (user == null)
+                    return NotFound("User not found.");
+
+                var relative = new Relative
+                {
+                    Name = relativeDto.Nome,
+                    Nif = relativeDto.Nif,
+                    BirthDate = relativeDto.DataNascimento,
+                    Gender = relativeDto.Genero,
+                    Location = relativeDto.Localizacao,
+                    IdPatient = user.Id 
+                };
+
+                _context.Relatives.Add(relative);
+                await _context.SaveChangesAsync();
+
+                return Ok(new { message = "Relative added successfully." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error adding relative: {ex.Message}");
+            }
+        }
 
         #region private helper methods
         private List<ServiceDto> GetServiceDtos(List<Service> services)

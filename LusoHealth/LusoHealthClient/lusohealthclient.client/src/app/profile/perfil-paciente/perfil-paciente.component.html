@@ -43,32 +43,68 @@
 </section>
 
 <p class="agregado-texto">Agregado Familiar</p>
-
 <section id="agregado">
-  <div class="tab">
+  <div id="plus">
+    <button class="plus-button" (click)="openPopup('add')"><img alt="Adicionar" id="plus-button" src="/assets/images/Perfil/plus.png"></button>
+  </div>
+  <div class="tab" *ngFor="let relative of relatives">
     <div id="icons">
       <button class="edit-button"><img alt="Editar" class="agregado-imagem" src="/assets/images/Perfil/edit.png"></button>
-      <button class="delete-button"><img alt="Apagar" class="agregado-imagem" src="/assets/images/Perfil/bin.png"></button>
+      <button class="delete-button" (click)="deleteRelative(relative.id)"><img alt="Apagar" class="agregado-imagem" src="/assets/images/Perfil/bin.png"></button>
     </div>
     <div class="content">
       <div>
-        <span>Nome:</span><p>-</p>
+        <span>Nome:</span><p>{{ relative.nome }}</p>
       </div>
       <div>
-        <span>NIF:</span><p>-</p>
+        <span>NIF:</span><p>{{ relative.nif }}</p>
       </div>
       <div>
-        <span>Género:</span><p>-</p>
+        <span>Género:</span><p>{{ relative.genero }}</p>
       </div>
       <div>
-        <span>Data de nascimento:</span><p>-</p>
+        <span>Data de nascimento:</span><p>{{ relative.dataNascimento | date: 'dd/MM/yyyy' }}</p>
       </div>
     </div>
   </div>
-  <div id="plus">
-    <button class="plus-button"><img alt="Adicionar" id="plus-button" src="/assets/images/Perfil/plus.png"></button>
-  </div>
 </section>
+
+<div class="overlay" id="overlay" (click)="closePopup()">
+  <a class="close-button" (click)="closePopup()">
+    <img src="assets/images/login/close.png" alt="Close button" class="close-image">
+  </a>
+
+  <form [formGroup]="addRelativeForm" (ngSubmit)="addRelative()" id="add-speciality-container" class="overlay-container" autocomplete="off" (click)="stopPropagation($event)">
+
+    <h2>Adicionar Familiar</h2>
+
+    <div class="speciality-form-box">
+      <label for="add-nome">Nome:</label>
+      <input type="text" id="add-nome" name="nome" formControlName="nome" required [class.is-invalid]="submitted && addRelativeForm.get('nome')?.errors">
+    </div>
+    <div class="speciality-form-box">
+      <label for="add-nif">NIF:</label>
+      <input type="number" id="add-nif" name="nif" formControlName="nif" required oninput="javascript: if (this.value.length > 9) this.value = this.value.slice(0, 9);">
+    </div>
+    <div class="speciality-form-box">
+      <label for="add-data-nascimento">Data de Nascimento:</label>
+      <input type="date" id="add-data-nascimento" name="dataNascimento" formControlName="dataNascimento">
+    </div>
+    <div class="speciality-form-box">
+      <label for="add-genero">Género:</label>
+      <div class="radio-row">
+        <label for="masculino" class="radio-label"><input formControlName="genero" type="radio" name="genero" value="M" id="masculino"> Masculino</label>
+        <label for="feminino" class="radio-label"><input formControlName="genero" type="radio" name="genero" value="F" id="feminino"> Feminino</label>
+      </div> 
+    </div>
+
+    <div class="form-buttons-row">
+      <button type="submit" class="btn btn-blue">Adicionar</button>
+      <button type="reset" class="btn btn-red">Cancelar</button>
+    </div>
+  </form>
+</div>
+
 
 <div *ngIf="loading">
   <loading-spinner></loading-spinner>

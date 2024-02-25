@@ -89,6 +89,7 @@ figure {
   border-radius: 10px;
   position: relative;
   min-width: 300px;
+  min-height: 280px;
   width: 300px;
 }
 
@@ -254,15 +255,6 @@ input[type="number"], input[type="text"], input[type="date"] {
   padding: 0 35px 0 10px;
   width: 100%;
   box-sizing: border-box;
-}
-
-.euro-symbol {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 1.1rem;
-  pointer-events: none;
 }
 
 input::-webkit-outer-spin-button,

@@ -5,7 +5,7 @@ namespace LusoHealthClient.Server.DTOs.Profile
 {
     public class RelativeDto
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public string Nome { get; set; }
 
         public string? Nif { get; set; }

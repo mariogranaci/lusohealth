@@ -34,10 +34,11 @@ export class PrivateProfileProfessionalComponent implements OnInit {
       }
     });
   }
-
   ngOnInit(): void {
     this.initializeForm();
-    this.getProfessionalInfo();
+    this.getProfessionalInfo().then(() => {
+      this.setUserFields();
+    });
   }
 
   ngOnDestroy(): void {
@@ -57,6 +58,7 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     })
 
     this.editSpecialityForm = this.formBuilder.group({
+      id: [''],
       price: ['', [Validators.required, Validators.min(1), Validators.max(1000)]],
       presencial: ['', [Validators.required]],
       online: ['', [Validators.required]],
@@ -64,16 +66,20 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     })
   }
 
-  getProfessionalInfo() {
-    this.profileService.getProfessionalInfo().pipe(takeUntil(this.unsubscribe$)).subscribe(
-      (userData: Professional) => {
-        console.log(userData);
-        this.userData = userData;
-      },
-      error => {
-        console.log(error);
-      }
-    );
+  getProfessionalInfo(): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      this.profileService.getProfessionalInfo().pipe(takeUntil(this.unsubscribe$)).subscribe(
+        (userData: Professional) => {
+          console.log(userData);
+          this.userData = userData;
+          resolve();
+        },
+        error => {
+          console.log(error);
+          reject(error); // You might want to handle error cases here
+        }
+      );
+    });
   }
 
   setUserFields() {
@@ -85,8 +91,13 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     const nifElement = document.getElementById('nif');
     const genderElement = document.getElementById('gender');
 
-    if (nomeElement && apelidoElement && emailElement && telemovelElement && nifElement && genderElement) {
-      
+    if (nomeElement && apelidoElement && emailElement && telemovelElement && nifElement && genderElement && this.userData) {
+      nomeElement.textContent = this.userData.professionalInfo.firstName;
+      apelidoElement.textContent = this.userData.professionalInfo.lastName;
+      emailElement.textContent = this.userData.professionalInfo.email;
+      telemovelElement.textContent = this.userData.professionalInfo.telemovel;
+      nifElement.textContent = this.userData.professionalInfo.nif;
+      genderElement.textContent = (this.userData.professionalInfo.genero === "M") ? "Masculino" : "Feminino" ;
     }
   }
 

@@ -11,6 +11,7 @@ import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/fo
   styleUrl: './perfil-paciente.component.css'
 })
 export class PerfilPacienteComponent {
+  submitted = false;
   loading = false;
   errorMessages: string[] = [];
   private unsubscribe$ = new Subject<void>();

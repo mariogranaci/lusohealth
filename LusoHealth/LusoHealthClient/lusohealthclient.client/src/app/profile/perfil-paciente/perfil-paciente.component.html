@@ -103,42 +103,36 @@
       <button type="reset" class="btn btn-red">Cancelar</button>
     </div>
   </form>
-</div>
 
-<div class="overlay" id="overlay" (click)="closePopup()">
-<a class="close-button" (click)="closePopup()">
-  <img src="assets/images/login/close.png" alt="Close button" class="close-image">
-</a>
+  <form [formGroup]="editRelativeForm" (ngSubmit)="updateRelative(selectedRelative)" id="edit-speciality-container" class="overlay-container" autocomplete="off" (click)="stopPropagation($event)">
 
-<form [formGroup]="editRelativeForm" (ngSubmit)="updateRelative(selectedRelative)" id="edit-speciality-container" class="overlay-container" autocomplete="off" (click)="stopPropagation($event)">
+    <h2>Editar Familiar</h2>
 
-  <h2>Editar Familiar</h2>
-
-  <div class="speciality-form-box">
-    <label for="edit-nome">Nome:</label>
-    <input type="text" id="edit-nome" name="nome" formControlName="nome" required [class.is-invalid]="submitted && editRelativeForm.get('nome')?.errors">
-  </div>
-  <div class="speciality-form-box">
-    <label for="edit-nif">NIF:</label>
-    <input type="number" id="edit-nif" name="nif" formControlName="nif" required oninput="javascript: if (this.value.length > 9) this.value = this.value.slice(0, 9);">
-  </div>
-  <div class="speciality-form-box">
-    <label for="edit-data-nascimento">Data de Nascimento:</label>
-    <input type="date" id="edit-data-nascimento" name="dataNascimento" formControlName="dataNascimento">
-  </div>
-  <div class="speciality-form-box">
-    <label for="edit-genero">Género:</label>
-    <div class="radio-row">
-      <label for="masculino" class="radio-label"><input formControlName="genero" type="radio" name="genero" value="M" id="masculino"> Masculino</label>
-      <label for="feminino" class="radio-label"><input formControlName="genero" type="radio" name="genero" value="F" id="feminino"> Feminino</label>
+    <div class="speciality-form-box">
+      <label for="edit-nome">Nome:</label>
+      <input type="text" id="edit-nome" name="nome" formControlName="nome" required [class.is-invalid]="submitted && editRelativeForm.get('nome')?.errors">
     </div>
-  </div>
+    <div class="speciality-form-box">
+      <label for="edit-nif">NIF:</label>
+      <input type="number" id="edit-nif" name="nif" formControlName="nif" required oninput="javascript: if (this.value.length > 9) this.value = this.value.slice(0, 9);">
+    </div>
+    <div class="speciality-form-box">
+      <label for="edit-data-nascimento">Data de Nascimento:</label>
+      <input type="date" id="edit-data-nascimento" name="dataNascimento" formControlName="dataNascimento">
+    </div>
+    <div class="speciality-form-box">
+      <label for="edit-genero">Género:</label>
+      <div class="radio-row">
+        <label for="masculino" class="radio-label"><input formControlName="genero" type="radio" name="genero" value="M" id="masculino"> Masculino</label>
+        <label for="feminino" class="radio-label"><input formControlName="genero" type="radio" name="genero" value="F" id="feminino"> Feminino</label>
+      </div>
+    </div>
 
-  <div class="form-buttons-row">
-    <button type="submit" class="btn btn-blue">Editar</button>
-    <button type="reset" class="btn btn-red">Cancelar</button>
-  </div>
-</form>
+    <div class="form-buttons-row">
+      <button type="submit" class="btn btn-blue">Editar</button>
+      <button type="reset" class="btn btn-red">Cancelar</button>
+    </div>
+  </form>
 </div>
 
 

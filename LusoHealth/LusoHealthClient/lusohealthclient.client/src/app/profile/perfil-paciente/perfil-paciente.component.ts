@@ -105,25 +105,13 @@ export class PerfilPacienteComponent {
 
   setEditForm(relative: Relative)
   {
-    this.profileService.updateRelative(relative).pipe(takeUntil(this.unsubscribe$)).subscribe(
-      (relative: Relative) => {
-       
-          this.editRelativeForm.setValue({
-            nome: relative.nome,
-            nif: relative.nif,
-            dataNascimento: relative.dataNascimento,
-            genero: relative.genero,
-            localizacao: relative.localizacao
-        });
-      },
-      error => {
-        if (error.error.errors) {
-          this.errorMessages = error.error.errors;
-        } else {
-          this.errorMessages.push(error.error);
-        }
-      }
-    );
+    this.editRelativeForm.setValue({
+      nome: relative.nome,
+      nif: relative.nif,
+      dataNascimento: relative.dataNascimento,
+      genero: relative.genero,
+      localizacao: relative.localizacao
+    }) 
   }
 
   getRelatives() {
@@ -131,11 +119,6 @@ export class PerfilPacienteComponent {
       takeUntil(this.unsubscribe$)
     ).subscribe({
       next: (relatives: Relative[]) => {
-        console.log(relatives);
-        for (let i = 0; i < relatives.length; i++)
-        {
-          console.log(typeof relatives[i].id);
-        }
         this.relatives = relatives;
         this.loading = false;
       },
@@ -173,7 +156,6 @@ export class PerfilPacienteComponent {
 
   addRelative() {
     var form = this.addRelativeForm.value;
-
     var relative = new Relative(
       null,
       form.nome,
@@ -197,6 +179,7 @@ export class PerfilPacienteComponent {
   updateRelative(relative: Relative | null) {
     if (relative != null)
     {
+      console.log(relative);
       this.profileService.updateRelative(relative).subscribe({
         next: () => {
           console.log('Relative updated successfully');
@@ -230,7 +213,7 @@ export class PerfilPacienteComponent {
         }
       }
       else if (opcao == "edit") {
-        if (edit) {
+        if (edit) {  
           edit.style.display = "block";
         }
       }

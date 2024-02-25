@@ -348,6 +348,10 @@ namespace LusoHealthClient.Server.Controllers
                 _context.Relatives.Update(relative);
                 await _context.SaveChangesAsync();
 
+                Console.WriteLine(relative);
+
+                Console.WriteLine(relativeDto);
+
                 return Ok(new { message = "Parente atualizado com sucesso" });
             }
             catch (Exception ex)

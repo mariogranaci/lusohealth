@@ -65,8 +65,8 @@
     </thead>
     <tbody *ngIf="(userData && (userData.services.length > 0))">
       <!--<tr>
-      <td colspan="6" class="specialities-not-found-placeholder">Não tem especialidades associadas.</td>
-    </tr>-->
+        <td colspan="6" class="specialities-not-found-placeholder">Não tem especialidades associadas.</td>
+      </tr>-->
       <tr *ngFor="let service of userData.services">
         <td>{{ service.specialty }}</td>
         <td>{{ service.pricePerHour }}</td>
@@ -125,7 +125,7 @@
         </button>
       </div>
     </div>
-    
+
 
   </div>
 
@@ -344,5 +344,7 @@
     </form>
 
   </div>
-
+  <div *ngIf="errorMessages.length > 0">
+    <app-validation-messages [errorMessages]="errorMessages"></app-validation-messages>
+  </div>
 </main>

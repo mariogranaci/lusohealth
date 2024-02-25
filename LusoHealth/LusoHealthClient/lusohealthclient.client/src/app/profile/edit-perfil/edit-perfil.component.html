@@ -1,11 +1,10 @@
 
-
-<form (ngSubmit)="enviarFormulario()" class="perfil">
-
-  <input type="file" (change)="selecionarArquivo($event)" accept="image/*" id="btn-image">
-  <img *ngIf="caminhoDaImagem" [src]="caminhoDaImagem" alt="Imagem selecionada" id="img-perfil">
+<form id="upload-image-form" [formGroup]="pictureForm" class="perfil" (ngSubmit)="enviarFormulario()">
+  <input formControlName="newImage" type="file" id="imgupload" (change)="selecionarArquivo($event)"/>
+  <figure  id="img-perfil" ><img [src]="caminhoDaImagem" /></figure>
+  <button type="button" id="OpenImgUpload" >Alterar Foto</button>
+  <button type="submit" id="submit-image" style="display: none;">Enviar</button>
 </form>
-
 
 <div *ngIf="errorMessages.length > 0">
   <app-validation-messages [errorMessages]="errorMessages"></app-validation-messages>
@@ -96,10 +95,7 @@
 <div *ngIf="responseText">
   <pop-up-success [message]=responseText></pop-up-success>
 </div>
-<div *ngIf="errorMessages.length > 0">
-  <app-validation-messages [errorMessages]="errorMessages"></app-validation-messages>
-</div>
-<form [formGroup]="passwordForm" (ngSubmit)="alterarPassword()" autocomplete="off" *ngIf="!loading">
+<form [formGroup]="passwordForm" *ngIf="!provider" (ngSubmit)="alterarPassword()" autocomplete="off" >
   <div class="form-pass">
 
 

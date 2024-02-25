@@ -1,5 +1,7 @@
 ﻿using Google.Apis.Auth;
+using LusoHealthClient.Server.Data;
 using LusoHealthClient.Server.DTOs.Authentication;
+using LusoHealthClient.Server.Models.Professionals;
 using LusoHealthClient.Server.Models.Users;
 using LusoHealthClient.Server.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -20,6 +22,7 @@ namespace LusoHealthClient.Server.Controllers
         private readonly JWTService _jwtService;
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
+        private readonly ApplicationDbContext _context;
         private readonly EmailService _emailService;
         private readonly IConfiguration _config;
 
@@ -94,6 +97,8 @@ namespace LusoHealthClient.Server.Controllers
 
             var result = await _userManager.CreateAsync(userToAdd, model.Password);
             if (!result.Succeeded) return BadRequest(result.Errors);
+
+
 
             try
             {
@@ -290,6 +295,20 @@ namespace LusoHealthClient.Server.Controllers
             {
                 return BadRequest("Token inválido. Tente novamente");
             }
+        }
+
+        [HttpGet("get-professional-types")]
+        public async Task<ActionResult<List<ProfessionalType>>> GetProfessionalTypes()
+        {
+            try
+            {
+                var professionalTypes = await _context.ProfessionalTypes.ToListAsync();
+                if (professionalTypes == null) return NotFound("Não foram encontrados tipos de profissionais");
+                return professionalTypes;
+            } catch (Exception)
+            {
+                return BadRequest("Houve um problema a obter os tipos de profissionais");
+            }            
         }
 
         #region Private Helper Methods

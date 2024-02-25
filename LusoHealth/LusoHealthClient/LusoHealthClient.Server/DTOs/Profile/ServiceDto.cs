@@ -2,7 +2,8 @@
 {
     public class ServiceDto
     {
-        public int ServiceId { get; set; }
+        public int? ServiceId { get; set; }
+        public int SpecialtyId { get; set; }
         public string Specialty { get; set; }
         public double PricePerHour { get; set; }
         public bool Online { get; set; }

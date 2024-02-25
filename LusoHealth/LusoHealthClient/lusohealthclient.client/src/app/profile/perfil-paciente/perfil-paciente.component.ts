@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ProfileService } from '../profile-service.service';
+import { ProfileService } from '../profile.service';
 import { UserProfile } from '../../shared/models/profile/userProfile';
 import { Relative } from '../../shared/models/profile/relative';
 import { Subject, takeUntil } from 'rxjs';

@@ -6,7 +6,7 @@
     <button class="recover-account-button" name="recover-account" id="recover-account" (click)="openPopup('conta')">Recuperar Conta</button>
   </div>
   <div class="login-form">
-    <form [formGroup]="loginForm" (ngSubmit)="login()" autocomplete="off" *ngIf="!loading">
+    <form [formGroup]="loginForm" (ngSubmit)="login()" *ngIf="!loading">
       <div class="box">
         <input formControlName="email" type="email" class="textbox" placeholder=" " name="email" id="email" [class.is-invalid]="submitted && loginForm.get('email')?.errors" required>
         <label for="email">Email</label>

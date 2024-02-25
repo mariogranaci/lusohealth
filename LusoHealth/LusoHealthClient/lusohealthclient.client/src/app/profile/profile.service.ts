@@ -1,13 +1,13 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { EditarPerfil } from '../shared/models/profile/editarPerfil';
 import { environment } from '../../environments/environment.development';
 import { User } from '../shared/models/authentication/user';
 import { UserProfile } from '../shared/models/profile/userProfile';
 import { UpdatePassword } from '../shared/models/profile/updatePassword';
 import { Relative } from '../shared/models/profile/relative';
 import { Observable } from 'rxjs';
+import { Professional } from '../shared/models/profile/professional';
 
 @Injectable({
   providedIn: 'root'
@@ -41,8 +41,7 @@ export class ProfileService {
   {
 
     const headers = this.getHeaders();
-
-    // Make the HTTP request with the headers                            
+                               
     return this.http.get<UserProfile>(`${environment.appUrl}/api/profile/get-user`, { headers });
   }
 
@@ -52,16 +51,25 @@ export class ProfileService {
     return this.http.put(`${environment.appUrl}/api/profile/update-user-info`, model, { headers });
   }
 
-
-  updatePassword(model: UpdatePassword)
-  {
-    return this.http.put(`${environment.appUrl}/api/profile/update-password`, model);
+  getProfessionalInfo(): Observable<Professional> {
+    const headers = this.getHeaders();
+    return this.http.get<Professional>(`${environment.appUrl}/api/profile/get-professional-info`, { headers });
   }
-
+  
   getRelatives(): Observable<Relative[]> 
   {
     const headers = this.getHeaders();
     return this.http.get<Relative[]>(`${environment.appUrl}/api/profile/get-relatives`, { headers });
+  }
+
+  updatePassword(model: UpdatePassword) {
+    const headers = this.getHeaders();
+    return this.http.put(`${environment.appUrl}/api/profile/update-password`, model, { headers });
+  }
+
+  updatePicture(model: UserProfile) {
+    const headers = this.getHeaders();
+    return this.http.put(`${environment.appUrl}/api/profile/update-picture`, model, { headers });
   }
 
   deleteRelative(relativeId: number): Observable<Relative>

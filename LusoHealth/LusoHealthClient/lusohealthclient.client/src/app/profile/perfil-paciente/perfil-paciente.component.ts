@@ -109,11 +109,11 @@ export class PerfilPacienteComponent {
       (relative: Relative) => {
        
           this.editRelativeForm.setValue({
-            name: relative.nome,
-            localizacao: relative.localizacao,
-            dataNascimento: relative.dataNascimento,
+            nome: relative.nome,
             nif: relative.nif,
-            genero: relative.genero
+            dataNascimento: relative.dataNascimento,
+            genero: relative.genero,
+            localizacao: relative.localizacao
         });
       },
       error => {

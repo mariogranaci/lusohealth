@@ -81,14 +81,32 @@
     <div class="speciality-form-box">
       <label for="add-nome">Nome:</label>
       <input type="text" id="add-nome" name="nome" formControlName="nome" required [class.is-invalid]="submitted && addRelativeForm.get('nome')?.errors">
+      <span class="text-danger" *ngIf="submitted && addRelativeForm.get('nome')?.hasError('required')">
+        Introduza o seu nome
+      </span>
+      <span class="text-danger" *ngIf="submitted && addRelativeForm.get('nome')?.hasError('maxlength')">
+        Não pode introduzir mais de 50 caracteres
+      </span>
+      <span class="text-danger" *ngIf="submitted && addRelativeForm.get('nome')?.hasError('minlength')">
+        O nome tem um mínimo de 3 caracteres
+      </span>
     </div>
     <div class="speciality-form-box">
       <label for="add-nif">NIF:</label>
-      <input type="number" id="add-nif" name="nif" formControlName="nif" required oninput="javascript: if (this.value.length > 9) this.value = this.value.slice(0, 9);">
+      <input type="number" id="add-nif" name="nif" formControlName="nif" oninput="javascript: if (this.value.length > 9) this.value = this.value.slice(0, 9);">
+      <span class="text-danger" *ngIf="submitted && (addRelativeForm.get('nif')?.hasError('maxlength') ||  addRelativeForm.get('nif')?.hasError('minlength'))">
+        O nif deve ter 9 dígitos
+      </span>
     </div>
     <div class="speciality-form-box">
       <label for="add-data-nascimento">Data de Nascimento:</label>
       <input type="date" id="add-data-nascimento" name="dataNascimento" formControlName="dataNascimento">
+      <span class="text-danger" *ngIf="submitted && addRelativeForm.get('dataNascimento')?.hasError('required')">
+        Introduza uma data de nascimento
+      </span>
+      <span class="text-danger" *ngIf="submitted && addRelativeForm.get('dataNascimento')?.hasError('error')">
+        Introduza uma data válida
+      </span>
     </div>
     <div class="speciality-form-box">
       <label for="add-genero">Género:</label>
@@ -96,6 +114,9 @@
         <label for="masculino" class="radio-label"><input formControlName="genero" type="radio" name="genero" value="M" id="masculino"> Masculino</label>
         <label for="feminino" class="radio-label"><input formControlName="genero" type="radio" name="genero" value="F" id="feminino"> Feminino</label>
       </div>
+      <span class="text-danger" *ngIf="submitted && addRelativeForm.get('genero')?.hasError('required')">
+        Selecione um género
+      </span>
     </div>
 
     <div class="form-buttons-row">
@@ -111,14 +132,32 @@
     <div class="speciality-form-box">
       <label for="edit-nome">Nome:</label>
       <input type="text" id="edit-nome" name="nome" formControlName="nome" required [class.is-invalid]="submitted && editRelativeForm.get('nome')?.errors">
+      <span class="text-danger" *ngIf="submitted && editRelativeForm.get('nome')?.hasError('required')">
+        Introduza o seu nome
+      </span>
+      <span class="text-danger" *ngIf="submitted && editRelativeForm.get('nome')?.hasError('maxlength')">
+        Não pode introduzir mais de 50 caracteres
+      </span>
+      <span class="text-danger" *ngIf="submitted && editRelativeForm.get('nome')?.hasError('minlength')">
+        O nome tem um mínimo de 3 caracteres
+      </span>
     </div>
     <div class="speciality-form-box">
       <label for="edit-nif">NIF:</label>
-      <input type="number" id="edit-nif" name="nif" formControlName="nif" required oninput="javascript: if (this.value.length > 9) this.value = this.value.slice(0, 9);">
+      <input type="number" id="edit-nif" name="nif" formControlName="nif" oninput="javascript: if (this.value.length > 9) this.value = this.value.slice(0, 9);">
+      <span class="text-danger" *ngIf="submitted && (editRelativeForm.get('nif')?.hasError('maxlength') ||  editRelativeForm.get('nif')?.hasError('minlength'))">
+        O nif deve ter 9 dígitos
+      </span>
     </div>
     <div class="speciality-form-box">
       <label for="edit-data-nascimento">Data de Nascimento:</label>
       <input type="date" id="edit-data-nascimento" name="dataNascimento" formControlName="dataNascimento">
+      <span class="text-danger" *ngIf="submitted && editRelativeForm.get('dataNascimento')?.hasError('required')">
+        Introduza uma data de nascimento
+      </span>
+      <span class="text-danger" *ngIf="submitted && editRelativeForm.get('dataNascimento')?.hasError('error')">
+        Introduza uma data válida
+      </span>
     </div>
     <div class="speciality-form-box">
       <label for="edit-genero">Género:</label>
@@ -126,6 +165,9 @@
         <label for="masculino" class="radio-label"><input formControlName="genero" type="radio" name="genero" value="M" id="masculino"> Masculino</label>
         <label for="feminino" class="radio-label"><input formControlName="genero" type="radio" name="genero" value="F" id="feminino"> Feminino</label>
       </div>
+      <span class="text-danger" *ngIf="submitted && editRelativeForm.get('genero')?.hasError('required')">
+        Selecione um género
+      </span>
     </div>
 
     <div class="form-buttons-row">

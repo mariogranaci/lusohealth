@@ -119,6 +119,32 @@ namespace LusoHealthClient.Server.Controllers
             return professionalDto;
         }
 
+        [HttpPatch("update-description")]
+        public async Task<ActionResult> UpdateDescription(DescriptionDto model)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
+
+            var user = await _userManager.FindByIdAsync(userIdClaim);
+            if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
+
+            var professional = await _context.Professionals.FirstOrDefaultAsync(p => p.UserID == user.Id);
+            if (professional == null) { return NotFound("Não foi possível encontrar o profissional"); }
+
+            try
+            {
+                professional.Description = model.Description;
+                _context.Professionals.Update(professional);
+                await _context.SaveChangesAsync();
+
+                return Ok(new JsonResult(new { title = "Descrição Alterada", message = "A sua descrição foi alterada com sucesso." }));
+            }
+            catch (Exception)
+            {
+                return BadRequest("Não foi possivel alterar a descrição. Tente Novamente.");
+            }
+        }
+
         [HttpPut("update-user-info")]
 		public async Task<ActionResult> UpdateUserInfo(UserProfileDto model)
 		{

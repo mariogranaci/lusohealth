@@ -45,7 +45,8 @@ namespace LusoHealthClient.Server.DTOs.Authentication
         [Required(ErrorMessage = "Selecione um género")]
         public char Genero { get; set; }
 
-        [Required(ErrorMessage ="Escolha um tipo de conta")]
+        [Required(ErrorMessage= "Escolha um tipo de conta")]
         public char TipoUser { get; set; }
+        public int? ProfessionalTypeId { get; set; }
     }
 }

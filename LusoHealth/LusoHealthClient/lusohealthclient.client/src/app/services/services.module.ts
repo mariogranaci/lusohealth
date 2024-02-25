@@ -5,18 +5,20 @@ import { ServicesRoutingModule } from './services-routing.module';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
+import { CalendarioComponent } from './calendario/calendario.component';
 
 
 
 @NgModule({
   declarations: [
-    MarcarConsultaComponent
+    MarcarConsultaComponent,
   ],
   imports: [
     CommonModule,
     ServicesRoutingModule,
     RouterModule,
-    SharedModule
+    SharedModule,
+    CalendarioComponent
   ],
   exports: [
     HttpClientModule

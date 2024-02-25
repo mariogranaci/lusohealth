@@ -16,6 +16,9 @@ export class PerfilPacienteComponent {
   private unsubscribe$ = new Subject<void>();
   relatives: Relative[] = [];
   addRelativeForm: FormGroup = new FormGroup({});
+  editRelativeForm: FormGroup = new FormGroup({});
+  submitted = false;
+  public selectedRelative: Relative | null = null;
 
   constructor(private profileService: ProfileService, private formBuilder: FormBuilder) { }
 
@@ -59,6 +62,15 @@ export class PerfilPacienteComponent {
       genero: ['', [Validators.required]],
       localizacao: ['', [Validators.required]],
     })
+
+    this.editRelativeForm = this.formBuilder.group({
+
+      nome: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
+      nif: ['', [Validators.minLength(9), Validators.maxLength(9)]],
+      dataNascimento: ['', [Validators.required, this.idadeValidator]],
+      genero: ['', [Validators.required]],
+      localizacao: ['', [Validators.required]],
+    })
   }
 
 
@@ -91,12 +103,39 @@ export class PerfilPacienteComponent {
     }
   }
 
+  setEditForm(relative: Relative)
+  {
+    this.profileService.updateRelative(relative).pipe(takeUntil(this.unsubscribe$)).subscribe(
+      (relative: Relative) => {
+       
+          this.editRelativeForm.setValue({
+            name: relative.nome,
+            localizacao: relative.localizacao,
+            dataNascimento: relative.dataNascimento,
+            nif: relative.nif,
+            genero: relative.genero
+        });
+      },
+      error => {
+        if (error.error.errors) {
+          this.errorMessages = error.error.errors;
+        } else {
+          this.errorMessages.push(error.error);
+        }
+      }
+    );
+  }
+
   getRelatives() {
     this.profileService.getRelatives().pipe(
       takeUntil(this.unsubscribe$)
     ).subscribe({
       next: (relatives: Relative[]) => {
         console.log(relatives);
+        for (let i = 0; i < relatives.length; i++)
+        {
+          console.log(typeof relatives[i].id);
+        }
         this.relatives = relatives;
         this.loading = false;
       },
@@ -112,47 +151,63 @@ export class PerfilPacienteComponent {
     });
   }
 
-  deleteRelative(relativeId: number){
-    this.profileService.deleteRelative(relativeId).subscribe({
-      next: () => {
-        this.relatives = this.relatives.filter(relative => relative.id !== relativeId);
-        this.getRelatives();
-      },
-      error: (error) => {
-        console.log(error);
-        if (error.error.errors) {
-          this.errorMessages = error.error.errors;
-        } else {
-          this.errorMessages.push(error.error);
+  deleteRelative(relativeId: number | null){
+    if (relativeId != null)
+    {
+      this.profileService.deleteRelative(relativeId).subscribe({
+        next: () => {
+          this.relatives = this.relatives.filter(relative => relative.id !== relativeId);
+          this.getRelatives();
+        },
+        error: (error) => {
+          console.log(error);
+          if (error.error.errors) {
+            this.errorMessages = error.error.errors;
+          } else {
+            this.errorMessages.push(error.error);
+          }
         }
-      }
-    });
+      });
+    }
   }
 
   addRelative() {
-
     var form = this.addRelativeForm.value;
 
-    var relative = {
-      id: 0,
-      nome: form.nome,
-      nif: form.nif,
-      dataNascimento: form.dataNascimento,
-      genero: form.genero,
-      localizacao: form.localizacao,
-    }
-
-    console.log(this.addRelativeForm.value);
-
+    var relative = new Relative(
+      null,
+      form.nome,
+      form.nif ? form.nif.toString() : null,
+      form.dataNascimento,
+      form.genero,
+      form.localizacao,
+    )
     this.profileService.addRelative(relative).subscribe({
       next: () => {
         console.log('Relative added successfully');
+        this.getRelatives();
       },
       error: (error) => {
-        console.error('Error adding relative:', error);
+        console.log('Error adding relative:', error);
       }
     });
     this.closePopup();
+  }
+
+  updateRelative(relative: Relative | null) {
+    if (relative != null)
+    {
+      this.profileService.updateRelative(relative).subscribe({
+        next: () => {
+          console.log('Relative updated successfully');
+          this.getRelatives();
+          this.closePopup();
+        },
+        error: (error) => {
+          console.log('Error updating relative:', error);
+        }
+      });
+    }
   }
 
   openPopup(opcao: string) {
@@ -196,6 +251,12 @@ export class PerfilPacienteComponent {
         add.style.display = "none";
       }
     }
+  }
+
+  callMultipleFunctions(formType: string, relative: Relative): void {
+    this.openPopup(formType);
+    this.setEditForm(relative);
+    this.selectedRelative = relative;
   }
 
   stopPropagation(event: Event) {

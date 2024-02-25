@@ -313,6 +313,48 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
+        [HttpPut("update-relative/{relativeId}")]
+        public async Task<ActionResult> UpdateRelative(RelativeDto relativeDto)
+        {
+            try
+            {
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (userIdClaim == null)
+                {
+                    return BadRequest("Não foi possível encontrar o utilizador");
+                }
+
+                var user = await _userManager.FindByIdAsync(userIdClaim);
+
+                if (user == null)
+                {
+                    return NotFound("Não foi possível encontrar o utilizador");
+                }
+
+                var relative = await _context.Relatives.FirstOrDefaultAsync(r => r.Id == relativeDto.Id && r.IdPatient == user.Id);
+
+                if (relative == null)
+                {
+                    return NotFound("Parente não encontrado");
+                }
+
+                relative.Name = relativeDto.Nome;
+                relative.Nif = relativeDto.Nif;
+                relative.BirthDate = relativeDto.DataNascimento;
+                relative.Gender = relativeDto.Genero;
+                relative.Location = relativeDto.Localizacao;
+
+                _context.Relatives.Update(relative);
+                await _context.SaveChangesAsync();
+
+                return Ok(new { message = "Parente atualizado com sucesso" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Erro ao atualizar parente: {ex.Message}");
+            }
+        }
 
 
         #region private helper methods

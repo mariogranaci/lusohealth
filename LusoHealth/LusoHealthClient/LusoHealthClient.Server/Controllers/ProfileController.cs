@@ -219,6 +219,9 @@ namespace LusoHealthClient.Server.Controllers
             var specialty = await _context.Specialties.FirstOrDefaultAsync(s => s.Id == model.SpecialtyId);
             if (specialty == null) { return NotFound("Não foi possível encontrar a especialidade"); }
 
+            bool serviceExists = await _context.Services.AnyAsync(s => s.IdProfessional == professional.UserID && s.IdSpecialty == specialty.Id);
+            if (serviceExists) { return BadRequest("Já existe um serviço com esta especialidade."); }
+
             try
             {
                 var service = new Service
@@ -309,39 +312,39 @@ namespace LusoHealthClient.Server.Controllers
         [HttpPost("filter-reviews-by-service")]
         public async Task<ActionResult<List<ReviewDto>>> FilterReviewsByService(int idService)
         {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
+            try
+            {
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
 
-            var user = await _userManager.FindByIdAsync(userIdClaim);
-            if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
+                var user = await _userManager.FindByIdAsync(userIdClaim);
+                if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
 
-            var professional = await _context.Professionals.FirstOrDefaultAsync(p => p.UserID == user.Id);
-            if (professional == null) { return NotFound("Não foi possível encontrar o profissional"); }
+                var professional = await _context.Professionals.FirstOrDefaultAsync(p => p.UserID == user.Id);
+                if (professional == null) { return NotFound("Não foi possível encontrar o profissional"); }
 
-            var reviewsFromDB = await _context.Reviews
-                .Include(r => r.Service)
-                .Where(r => r.Service.IdProfessional == user.Id && r.IdService == idService)
-                .ToListAsync();
-            var reviews = GetReviewDtos(reviewsFromDB);
+                var reviewsFromDB = await _context.Reviews
+                    .Include(r => r.Service)
+                    .Where(r => r.Service.IdProfessional == user.Id && r.IdService == idService)
+                    .ToListAsync();
+                if (reviewsFromDB == null) { return NotFound("Não foi possível encontrar as reviews"); }
+                var reviews = GetReviewDtos(reviewsFromDB);
 
-            return reviews;
+                return reviews;
+            } catch (Exception)
+            {
+                return BadRequest("Não foi possível encontrar as reviews. Tente novamente.");
+            }
+
         }
         [HttpGet("get-relatives")]
         public async Task<ActionResult<List<RelativeDto>>> GetRelatives()
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            if (userIdClaim == null)
-            {
-                return BadRequest("Não foi possível encontrar o utilizador");
-            }
+            if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
 
             var user = await _userManager.FindByIdAsync(userIdClaim);
-
-            if (user == null)
-            {
-                return NotFound("Não foi possível encontrar o utilizador");
-            }
+            if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
 
             var relatives = await _context.Relatives
             .Where(r => r.IdPatient == user.Id)
@@ -376,25 +379,13 @@ namespace LusoHealthClient.Server.Controllers
         public async Task<ActionResult> DeleteRelative(int relativeId)
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            if (userIdClaim == null)
-            {
-                return BadRequest("Não foi possível encontrar o utilizador");
-            }
+            if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
 
             var user = await _userManager.FindByIdAsync(userIdClaim);
-
-            if (user == null)
-            {
-                return NotFound("Não foi possível encontrar o utilizador");
-            }
+            if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
 
             var relative = await _context.Relatives.FirstOrDefaultAsync(r => r.Id == relativeId && r.IdPatient == user.Id);
-
-            if (relative == null)
-            {
-                return NotFound("Parente não encontrado");
-            }
+            if (relative == null) { return NotFound("Parente não encontrado"); }
 
             try
             {
@@ -415,12 +406,10 @@ namespace LusoHealthClient.Server.Controllers
             try
             {
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                if (string.IsNullOrEmpty(userId))
-                    return BadRequest("User ID not found in claims.");
+                if (string.IsNullOrEmpty(userId)) return BadRequest("User ID not found in claims.");
 
                 var user = await _userManager.FindByIdAsync(userId);
-                if (user == null)
-                    return NotFound("User not found.");
+                if (user == null) return NotFound("User not found.");
 
                 var relative = new Relative
                 {
@@ -447,19 +436,10 @@ namespace LusoHealthClient.Server.Controllers
         public async Task<ActionResult> UpdatePicture(UserProfileDto model)
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-
-            if (userIdClaim == null)
-            {
-                return BadRequest("Não foi possível encontrar o utilizador");
-            }
+            if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
 
             var user = await _userManager.FindByIdAsync(userIdClaim);
-
-            if (user == null)
-            {
-                return NotFound("Não foi possível encontrar o utilizador");
-            }
+            if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
 
             try
             {
@@ -477,8 +457,33 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        #region private helper methods
-        private List<ServiceDto> GetServiceDtos(List<Service> services)
+        [HttpGet("get-specialties")]
+        public async Task<ActionResult<List<Specialty>>> GetSpecialties()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
+
+            var user = await _userManager.FindByIdAsync(userIdClaim);
+            if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
+
+            try
+            {
+                var professional = await _context.Professionals.FirstOrDefaultAsync(p => p.UserID == user.Id);
+                if (professional == null) { return NotFound("Não foi possível encontrar o profissional"); }
+
+                var specialties = _context.Specialties.Where(p => p.ProfessionalTypeId == professional.ProfessionalTypeId).ToList();
+                if (specialties == null) { return NotFound("Não foi possível encontrar as especialidades"); }
+                return specialties;
+            }
+            catch (Exception)
+            {
+                return BadRequest("Não foi possível encontrar as especialidades. Tente novamente.");
+            }
+        }
+
+
+    #region private helper methods
+    private List<ServiceDto> GetServiceDtos(List<Service> services)
         {
             var serviceDtos = new List<ServiceDto>();
             foreach (var service in services)

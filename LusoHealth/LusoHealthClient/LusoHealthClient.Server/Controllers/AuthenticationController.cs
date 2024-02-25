@@ -1,4 +1,5 @@
 ﻿using Google.Apis.Auth;
+using LusoHealthClient.Server.Data;
 using LusoHealthClient.Server.DTOs.Authentication;
 using LusoHealthClient.Server.Models.Users;
 using LusoHealthClient.Server.Services;
@@ -20,6 +21,7 @@ namespace LusoHealthClient.Server.Controllers
         private readonly JWTService _jwtService;
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
+        private readonly ApplicationDbContext _context;
         private readonly EmailService _emailService;
         private readonly IConfiguration _config;
 

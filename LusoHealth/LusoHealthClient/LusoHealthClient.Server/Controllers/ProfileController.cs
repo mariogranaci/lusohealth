@@ -87,7 +87,7 @@ namespace LusoHealthClient.Server.Controllers
                 Provider = user.Provider
             };
 
-            var servicesFromDB = await _context.Services.Where(s => s.IdProfessional == user.Id).ToListAsync();
+            var servicesFromDB = await _context.Services.Include(s => s.Specialty).Where(s => s.IdProfessional == user.Id).ToListAsync();
             var services = GetServiceDtos(servicesFromDB);
 
             var certificatedFromDB = await _context.Certificates.Where(c => c.IdProfessional == user.Id).ToListAsync();

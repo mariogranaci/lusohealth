@@ -93,4 +93,9 @@ export class ProfileService {
     const headers = this.getHeaders();
     return this.http.put<Relative>(`${environment.appUrl}/api/profile/update-relative/${relative.id}`, relative, { headers });
   }
+
+  updateSpecialty(service: Service): Observable<Service> {
+    const headers = this.getHeaders();
+    return this.http.put<Service>(`${environment.appUrl}/api/profile/update-service`, service, { headers });
+  }
 }

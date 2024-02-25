@@ -18,7 +18,8 @@ export class PrivateProfileProfessionalComponent implements OnInit {
   private unsubscribe$ = new Subject<void>();;
   addSpecialityForm: FormGroup = new FormGroup({});
   editSpecialityForm: FormGroup = new FormGroup({});
-  submitted = false;
+  submittedAdd = false;
+  submittedEdit = false;
   selectEditService: Service | undefined;
   errorMessages: string[] = [];
   /*responseText: string | undefined;*/
@@ -55,7 +56,6 @@ export class PrivateProfileProfessionalComponent implements OnInit {
   initializeForm() {
 
     this.addSpecialityForm = this.formBuilder.group({
-
       selectSpeciality: ['', [Validators.required]],
       price: ['', [Validators.required, Validators.min(1), Validators.max(1000)]],
       presencial: ['', [Validators.required]],
@@ -64,7 +64,6 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     })
 
     this.editSpecialityForm = this.formBuilder.group({
-      id: [''],
       price: ['', [Validators.required, Validators.min(1), Validators.max(1000)]],
       presencial: ['', [Validators.required]],
       online: ['', [Validators.required]],
@@ -103,12 +102,12 @@ export class PrivateProfileProfessionalComponent implements OnInit {
       emailElement.textContent = this.userData.professionalInfo.email;
       telemovelElement.textContent = this.userData.professionalInfo.telemovel;
       nifElement.textContent = this.userData.professionalInfo.nif;
-      genderElement.textContent = (this.userData.professionalInfo.genero === "M") ? "Masculino" : "Feminino" ;
+      genderElement.textContent = (this.userData.professionalInfo.genero === "M") ? "Masculino" : "Feminino";
     }
   }
 
   addSpeciality() {
-    this.submitted = true;
+    this.submittedAdd = true;
     this.errorMessages = [];
     /*this.responseText = '';*/
 
@@ -130,7 +129,7 @@ export class PrivateProfileProfessionalComponent implements OnInit {
         next: (response: any) => {
           this.reloadTableData();
           /*this.responseText = response.value.message;*/
-          this.submitted = false;
+          this.submittedAdd = false;
           this.addSpecialityForm.reset();
           this.closePopup();
         },
@@ -146,43 +145,75 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     }
   }
 
+  editSpeciality() {
+    this.submittedEdit = true;
+    this.errorMessages = [];
+    /*this.responseText = '';*/
+
+    if (this.editSpecialityForm.valid) {
+
+      const form = this.editSpecialityForm.value;
+
+      if (this.selectEditService) {
+        var specialtyform = {
+          serviceId: this.selectEditService.serviceId,
+          specialtyId: this.selectEditService.specialtyId,
+          specialty: this.selectEditService.specialty,
+          pricePerHour: form.price,
+          online: (form.online === "S") ? true : false,
+          presential: (form.presencial === "S") ? true : false,
+          home: (form.domicilio === "S") ? true : false,
+        }
+
+        this.profileService.updateSpecialty(specialtyform).subscribe({
+          next: (response: any) => {
+            this.reloadTableData();
+            /*this.responseText = response.value.message;*/
+            this.submittedEdit = false;
+            this.editSpecialityForm.reset();
+            this.closePopup();
+          },
+          error: (error) => {
+            console.log(error.error);
+            if (error.error.errors) {
+              this.errorMessages = error.error.errors;
+            } else {
+              this.errorMessages.push(error.error);
+            }
+          }
+        })
+      }
+    }
+  }
+
   showSpecialtyEdit(service: Service) {
 
     this.selectEditService = service;
 
     this.openPopup('edit');
 
-    /*const nomeElement = document.getElementById('id-speciality-form');
-    const apelidoElement = document.getElementById('speciality-name');
-    const emailElement = document.getElementById('edit-price-form');
-    const telemovelElement = document.getElementById('telemovel');
-    const nifElement = document.getElementById('nif');
-    const genderElement = document.getElementById('gender');
-
-    if (nomeElement && apelidoElement && emailElement && telemovelElement && nifElement && genderElement && this.userData) {
-      nomeElement.textContent = this.userData.professionalInfo.firstName;
-      apelidoElement.textContent = this.userData.professionalInfo.lastName;
-      emailElement.textContent = this.userData.professionalInfo.email;
-      telemovelElement.textContent = this.userData.professionalInfo.telemovel;
-      nifElement.textContent = this.userData.professionalInfo.nif;
-      genderElement.textContent = (this.userData.professionalInfo.genero === "M") ? "Masculino" : "Feminino";
-    }*/
+    this.setEditFormFields();
   }
 
   setEditFormFields() {
-
-    /*Adicionar id ao form*/
-
+    
     const nome = document.getElementById('speciality-name');
+    
+    if (nome && this.selectEditService) {
+      nome.textContent = this.selectEditService.specialty;
+    }
 
-    this.editSpecialityForm.setValue({
-      price: this.selectEditService?.pricePerHour,
-      presencial: (this.selectEditService?.presential == true) ? "S" : "N",
-      online: (this.selectEditService?.online == true) ? "S" : "N",
-      domicilio: (this.selectEditService?.home == true) ? "S" : "N"
-    });
+    if (this.selectEditService) {
+      this.editSpecialityForm.setValue({
+        price: this.selectEditService?.pricePerHour,
+        presencial: (this.selectEditService?.presential == true) ? "S" : "N",
+        online: (this.selectEditService?.online == true) ? "S" : "N",
+        domicilio: (this.selectEditService?.home == true) ? "S" : "N"
+      });
+    }
+
+
   }
-
 
   openPopup(opcao: string) {
     const overlay = document.getElementById('overlay');

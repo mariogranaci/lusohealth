@@ -228,7 +228,7 @@
 
       <div class="speciality-form-box">
         <label for="add-speciality-select">Selecionar Especialidade</label>
-        <div class="select-dropdown" id="speciality-select-div" [class.is-invalid]="submitted && addSpecialityForm.get('price')?.errors">
+        <div class="select-dropdown" id="speciality-select-div" [class.is-invalid]="submittedAdd && addSpecialityForm.get('price')?.errors">
           <select formControlName="selectSpeciality" id="add-speciality-select" required>
             <option value="" disabled hidden>Selecione uma especialidade</option>
             <option value="1">Tudo</option>
@@ -236,7 +236,7 @@
             <option value="3">Option Number 3</option>
           </select>
         </div>
-        <span class="text-danger" *ngIf="submitted && addSpecialityForm.get('selectSpeciality')?.hasError('required')">
+        <span class="text-danger" *ngIf="submittedAdd && addSpecialityForm.get('selectSpeciality')?.hasError('required')">
           É obrigatório escolher a especialidade
         </span>
       </div>
@@ -244,10 +244,10 @@
       <div class="speciality-form-box">
         <label for="add-price">Preço por Hora:</label>
         <div class="input-wrapper">
-          <input formControlName="price" type="number" id="add-price" name="price" required oninput="this.value = this.value.replace(/[^0-9]/g, '');" [class.is-invalid]="submitted && addSpecialityForm.get('price')?.errors">
+          <input formControlName="price" type="number" id="add-price" name="price" required oninput="this.value = this.value.replace(/[^0-9]/g, '');" [class.is-invalid]="submittedAdd && addSpecialityForm.get('price')?.errors">
           <span class="euro-symbol">€ </span>
         </div>
-        <span class="text-danger" *ngIf="submitted && (addSpecialityForm.get('price')?.hasError('required') || addSpecialityForm.get('price')?.hasError('min') ||  addSpecialityForm.get('price')?.hasError('max'))">
+        <span class="text-danger" *ngIf="submittedAdd && (addSpecialityForm.get('price')?.hasError('required') || addSpecialityForm.get('price')?.hasError('min') ||  addSpecialityForm.get('price')?.hasError('max'))">
           O preço tem de estar entre 1€ e 1000€
         </span>
       </div>
@@ -259,7 +259,7 @@
             <label for="add-presencial-nao" class="radio-label"><input formControlName="presencial" type="radio" name="presencial" value="N" id="add-presencial-nao"> Não</label>
           </div>
         </div>
-        <span class="text-danger" *ngIf="submitted && addSpecialityForm.get('presencial')?.hasError('required')">
+        <span class="text-danger" *ngIf="submittedAdd && addSpecialityForm.get('presencial')?.hasError('required')">
           Escoha uma opção
         </span>
       </div>
@@ -271,7 +271,7 @@
             <label for="add-online-nao" class="radio-label"><input formControlName="online" type="radio" name="online" value="N" id="add-online-nao"> Não</label>
           </div>
         </div>
-        <span class="text-danger" *ngIf="submitted && addSpecialityForm.get('online')?.hasError('required')">
+        <span class="text-danger" *ngIf="submittedAdd && addSpecialityForm.get('online')?.hasError('required')">
           Escoha uma opção
         </span>
       </div>
@@ -283,7 +283,7 @@
             <label for="add-domicilio-nao" class="radio-label"><input formControlName="domicilio" type="radio" name="domicilio" value="N" id="add-domicilio-nao"> Não</label>
           </div>
         </div>
-        <span class="text-danger" *ngIf="submitted && addSpecialityForm.get('domicilio')?.hasError('required')">
+        <span class="text-danger" *ngIf="submittedAdd && addSpecialityForm.get('domicilio')?.hasError('required')">
           Escoha uma opção
         </span>
       </div>
@@ -296,13 +296,13 @@
 
     </form>
 
-    <form [formGroup]="editSpecialityForm" id="edit-speciality-container" class="overlay-container" autocomplete="off" (click)="stopPropagation($event)">
+    <form [formGroup]="editSpecialityForm" id="edit-speciality-container" class="overlay-container" autocomplete="off" (ngSubmit)="editSpeciality()" (click)="stopPropagation($event)">
 
       <h2>Editar Especialidade</h2>
 
       <!--<input type="hidden" formControlName="id" id="id-speciality-form" name="id" value="">-->
 
-      <div class="speciality-name">
+      <div class="speciality-name" id="speciality-name">
         
       </div>
 

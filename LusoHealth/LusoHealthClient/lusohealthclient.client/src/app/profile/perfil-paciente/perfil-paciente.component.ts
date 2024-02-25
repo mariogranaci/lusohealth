@@ -193,7 +193,6 @@ export class PerfilPacienteComponent {
       relative.genero = form.genero;
       relative.localizacao = form.localizacao;
 
-      console.log(relative);
       this.profileService.updateRelative(relative).subscribe({
         next: () => {
           console.log('Relative updated successfully');

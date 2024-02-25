@@ -219,6 +219,9 @@ namespace LusoHealthClient.Server.Controllers
             var specialty = await _context.Specialties.FirstOrDefaultAsync(s => s.Id == model.SpecialtyId);
             if (specialty == null) { return NotFound("Não foi possível encontrar a especialidade"); }
 
+            bool serviceExists = await _context.Services.AnyAsync(s => s.IdProfessional == professional.UserID && s.IdSpecialty == specialty.Id);
+            if (serviceExists) { return BadRequest("Já existe um serviço com esta especialidade."); }
+
             try
             {
                 var service = new Service

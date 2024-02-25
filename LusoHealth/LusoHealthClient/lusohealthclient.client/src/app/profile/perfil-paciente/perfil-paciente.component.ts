@@ -18,7 +18,6 @@ export class PerfilPacienteComponent {
   relatives: Relative[] = [];
   addRelativeForm: FormGroup = new FormGroup({});
   editRelativeForm: FormGroup = new FormGroup({});
-  submitted = false;
   public selectedRelative: Relative | null = null;
 
   constructor(private profileService: ProfileService, private formBuilder: FormBuilder) { }

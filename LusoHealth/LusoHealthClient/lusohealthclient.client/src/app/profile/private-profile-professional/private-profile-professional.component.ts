@@ -7,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
 import { ProfileService } from '../profile.service';
 import { Subject, takeUntil } from 'rxjs';
 import { Professional } from '../../shared/models/profile/professional';
+import { Service } from '../../shared/models/profile/service';
 
 @Component({
   selector: 'app-private-profile-professional',
@@ -18,8 +19,9 @@ export class PrivateProfileProfessionalComponent implements OnInit {
   addSpecialityForm: FormGroup = new FormGroup({});
   editSpecialityForm: FormGroup = new FormGroup({});
   submitted = false;
+  selectEditService: Service | undefined;
   errorMessages: string[] = [];
-  responseText: string | undefined;
+  /*responseText: string | undefined;*/
   public userData: Professional | undefined;
 
   constructor(private authenticationService: AuthenticationService,
@@ -44,6 +46,10 @@ export class PrivateProfileProfessionalComponent implements OnInit {
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+  }
+
+  reloadTableData(): void {
+    this.getProfessionalInfo();
   }
 
   initializeForm() {
@@ -104,7 +110,7 @@ export class PrivateProfileProfessionalComponent implements OnInit {
   addSpeciality() {
     this.submitted = true;
     this.errorMessages = [];
-    this.responseText = '';
+    /*this.responseText = '';*/
 
     if (this.addSpecialityForm.valid) {
 
@@ -122,7 +128,11 @@ export class PrivateProfileProfessionalComponent implements OnInit {
 
       this.profileService.addSpecialty(specialtyform).subscribe({
         next: (response: any) => {
-          this.responseText = response.value.message;
+          this.reloadTableData();
+          /*this.responseText = response.value.message;*/
+          this.submitted = false;
+          this.addSpecialityForm.reset();
+          this.closePopup();
         },
         error: (error) => {
           console.log(error.error);
@@ -134,6 +144,43 @@ export class PrivateProfileProfessionalComponent implements OnInit {
         }
       })
     }
+  }
+
+  showSpecialtyEdit(service: Service) {
+
+    this.selectEditService = service;
+
+    this.openPopup('edit');
+
+    /*const nomeElement = document.getElementById('id-speciality-form');
+    const apelidoElement = document.getElementById('speciality-name');
+    const emailElement = document.getElementById('edit-price-form');
+    const telemovelElement = document.getElementById('telemovel');
+    const nifElement = document.getElementById('nif');
+    const genderElement = document.getElementById('gender');
+
+    if (nomeElement && apelidoElement && emailElement && telemovelElement && nifElement && genderElement && this.userData) {
+      nomeElement.textContent = this.userData.professionalInfo.firstName;
+      apelidoElement.textContent = this.userData.professionalInfo.lastName;
+      emailElement.textContent = this.userData.professionalInfo.email;
+      telemovelElement.textContent = this.userData.professionalInfo.telemovel;
+      nifElement.textContent = this.userData.professionalInfo.nif;
+      genderElement.textContent = (this.userData.professionalInfo.genero === "M") ? "Masculino" : "Feminino";
+    }*/
+  }
+
+  setEditFormFields() {
+
+    /*Adicionar id ao form*/
+
+    const nome = document.getElementById('speciality-name');
+
+    this.editSpecialityForm.setValue({
+      price: this.selectEditService?.pricePerHour,
+      presencial: (this.selectEditService?.presential == true) ? "S" : "N",
+      online: (this.selectEditService?.online == true) ? "S" : "N",
+      domicilio: (this.selectEditService?.home == true) ? "S" : "N"
+    });
   }
 
 

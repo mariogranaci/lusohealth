@@ -69,13 +69,13 @@
       </tr>-->
       <tr *ngFor="let service of userData.services">
         <td>{{ service.specialty }}</td>
-        <td>{{ service.pricePerHour }}</td>
-        <td>{{ service.presential }}</td>
-        <td>{{ service.online }}</td>
-        <td>{{ service.home }}</td>
+        <td>{{ service.pricePerHour | currency:'EUR' }}</td>
+        <td>{{ service.presential ? 'Sim' : 'Não' }}</td>
+        <td>{{ service.online ? 'Sim' : 'Não' }}</td>
+        <td>{{ service.home ? 'Sim' : 'Não' }}</td>
         <td>
           <div class="buttons-container">
-            <button class="action-button" (click)="openPopup('edit')">
+            <button class="action-button" (click)="showSpecialtyEdit(service)">
               <img src="assets/images/profile/pencil.png" alt="Edit">
             </button>
             <button class="action-button">
@@ -230,7 +230,7 @@
         <label for="add-speciality-select">Selecionar Especialidade</label>
         <div class="select-dropdown" id="speciality-select-div" [class.is-invalid]="submitted && addSpecialityForm.get('price')?.errors">
           <select formControlName="selectSpeciality" id="add-speciality-select" required>
-            <option value="" disabled>Selecione uma especialidade</option>
+            <option value="" disabled hidden>Selecione uma especialidade</option>
             <option value="1">Tudo</option>
             <option value="2">2nd Option  w c dwwedw cwe sc sjci wiwcw dwc ci</option>
             <option value="3">Option Number 3</option>
@@ -300,16 +300,16 @@
 
       <h2>Editar Especialidade</h2>
 
-      <input type="hidden" formControlName="id" id="edit-price" name="price" value="">
+      <!--<input type="hidden" formControlName="id" id="id-speciality-form" name="id" value="">-->
 
       <div class="speciality-name">
-        Cardiologia
+        
       </div>
 
       <div class="speciality-form-box">
         <label for="edit-price">Preço por Hora:</label>
         <div class="input-wrapper">
-          <input formControlName="price" type="number" id="edit-price" name="price" required>
+          <input formControlName="price" type="number" id="edit-price-form" name="price" required>
           <span class="euro-symbol">€</span>
         </div>
       </div>

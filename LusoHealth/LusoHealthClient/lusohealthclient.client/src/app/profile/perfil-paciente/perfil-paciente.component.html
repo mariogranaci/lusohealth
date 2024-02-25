@@ -80,7 +80,7 @@
 
     <div class="speciality-form-box">
       <label for="add-nome">Nome:</label>
-      <input type="text" id="add-nome" name="nome" formControlName="nome" required [class.is-invalid]="submitted && addRelativeForm.get('nome')?.errors">
+      <input type="text" id="add-nome" name="nome" formControlName="nome" required [class.is-invalid]="addRelativeForm.get('nome')?.errors">
     </div>
     <div class="speciality-form-box">
       <label for="add-nif">NIF:</label>

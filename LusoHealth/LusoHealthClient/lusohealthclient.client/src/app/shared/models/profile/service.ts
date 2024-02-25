@@ -1,7 +1,7 @@
 export interface Service {
-  serviceId: number;
+  serviceId: number | null;
   specialtyId: number;
-  specialty: string;
+  specialty: string | null;
   pricePerHour: number;
   online: boolean;
   presential: boolean;

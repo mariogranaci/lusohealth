@@ -105,6 +105,35 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     this.submitted = true;
     this.errorMessages = [];
     this.responseText = '';
+
+    if (this.addSpecialityForm.valid) {
+
+      const form = this.addSpecialityForm.value;
+
+      var specialtyform = {
+        serviceId: null,
+        specialtyId: form.selectSpeciality,
+        specialty: null,
+        pricePerHour: form.price,
+        online: (form.online === "S") ? true : false,
+        presential: (form.presencial === "S") ? true : false,
+        home: (form.domicilio === "S") ? true : false,
+      }
+
+      this.profileService.addSpecialty(specialtyform).subscribe({
+        next: (response: any) => {
+          this.responseText = response.value.message;
+        },
+        error: (error) => {
+          console.log(error.error);
+          if (error.error.errors) {
+            this.errorMessages = error.error.errors;
+          } else {
+            this.errorMessages.push(error.error);
+          }
+        }
+      })
+    }
   }
 
 

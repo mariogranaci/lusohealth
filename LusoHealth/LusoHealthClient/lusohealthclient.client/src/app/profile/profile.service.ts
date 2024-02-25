@@ -8,6 +8,7 @@ import { UpdatePassword } from '../shared/models/profile/updatePassword';
 import { Relative } from '../shared/models/profile/relative';
 import { Observable } from 'rxjs';
 import { Professional } from '../shared/models/profile/professional';
+import { Service } from '../shared/models/profile/service';
 
 @Injectable({
   providedIn: 'root'
@@ -81,5 +82,11 @@ export class ProfileService {
   addRelative(relative: Relative): Observable<Relative> {
     const headers = this.getHeaders();
     return this.http.post<Relative>(`${environment.appUrl}/api/profile/add-relative`, relative, { headers });
-  } 
+  }
+
+  addSpecialty(service: Service): Observable<Service> {
+    const headers = this.getHeaders();
+    return this.http.post<Service>(`${environment.appUrl}/api/profile/add-service`, service, { headers });
+  }
+
 }

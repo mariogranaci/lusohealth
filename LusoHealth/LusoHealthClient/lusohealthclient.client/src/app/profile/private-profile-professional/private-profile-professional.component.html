@@ -230,9 +230,10 @@
         <label for="add-speciality-select">Selecionar Especialidade</label>
         <div class="select-dropdown" id="speciality-select-div" [class.is-invalid]="submitted && addSpecialityForm.get('price')?.errors">
           <select formControlName="selectSpeciality" id="add-speciality-select" required>
-            <option value="Option 1" selected>Tudo</option>
-            <option value="Option 2">2nd Option  w c dwwedw cwe sc sjci wiwcw dwc ci</option>
-            <option value="Option 3">Option Number 3</option>
+            <option value="" disabled>Selecione uma especialidade</option>
+            <option value="1">Tudo</option>
+            <option value="2">2nd Option  w c dwwedw cwe sc sjci wiwcw dwc ci</option>
+            <option value="3">Option Number 3</option>
           </select>
         </div>
         <span class="text-danger" *ngIf="submitted && addSpecialityForm.get('selectSpeciality')?.hasError('required')">

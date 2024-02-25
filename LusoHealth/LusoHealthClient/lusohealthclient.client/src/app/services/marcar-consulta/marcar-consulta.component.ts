@@ -7,5 +7,9 @@ import { Component } from '@angular/core';
   styleUrl: './marcar-consulta.component.css'
 })
 export class MarcarConsultaComponent {
+  checked = false;
 
+  toggleCalendar() {
+    this.checked = !this.checked;
+  }
 }

@@ -1,9 +1,9 @@
 main {
   padding: 0 7%;
-  margin-top: 50px;
   margin: 50px auto 30px auto;
   min-width: 1150px;
   max-width: 1500px;
+  padding-bottom:30px;
 }
 
 .title{
@@ -98,11 +98,10 @@ select-dropdown,
   justify-content: space-between;
   margin: 20px auto;
   width: 100%;
-  
 }
 
 .calender {
-  width: 30%;
+  
   height: 270px;
   background-color: #fff;
   border-radius: 7px;
@@ -112,20 +111,39 @@ select-dropdown,
 .slots {
   padding: 10px;
   width: 65%;
-  height: 270px;
+  height: 355px;
   background-color: #fff;
   border-radius: 7px;
   box-shadow: 0 12px 6px -4px rgba(0, 0, 0, 0.21);
   overflow: auto;
 }
 
+#title-slots {
+  font-size: 25px;
+}
+
+.checkbox {
+  display:flex;
+  align-content:center;
+  margin: 15px auto;
+  font-size: 20px;
+}
+
+input[type="checkbox"] {
+  margin-right:10px;
+  align-self:center;
+  width:20px;
+  height:20px;
+  border: 2px solid #333;
+  cursor: pointer;
+}
+
 .box-slot {
   width: 100%;
-  height:80px; 
+  height: 80px;
   display: flex;
   flex-direction: row;
-  justify-content:space-between;
-  
+  justify-content: space-between;
 }
 
 .left {

@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
 import { CalendarioComponent } from './calendario/calendario.component';
+import { FormsModule } from '@angular/forms';
 
 
 
@@ -18,7 +19,8 @@ import { CalendarioComponent } from './calendario/calendario.component';
     ServicesRoutingModule,
     RouterModule,
     SharedModule,
-    CalendarioComponent
+    CalendarioComponent,
+    FormsModule,
   ],
   exports: [
     HttpClientModule

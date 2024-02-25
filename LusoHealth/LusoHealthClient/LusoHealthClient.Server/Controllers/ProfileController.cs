@@ -309,22 +309,30 @@ namespace LusoHealthClient.Server.Controllers
         [HttpPost("filter-reviews-by-service")]
         public async Task<ActionResult<List<ReviewDto>>> FilterReviewsByService(int idService)
         {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
+            try
+            {
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
 
-            var user = await _userManager.FindByIdAsync(userIdClaim);
-            if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
+                var user = await _userManager.FindByIdAsync(userIdClaim);
+                if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
 
-            var professional = await _context.Professionals.FirstOrDefaultAsync(p => p.UserID == user.Id);
-            if (professional == null) { return NotFound("Não foi possível encontrar o profissional"); }
+                var professional = await _context.Professionals.FirstOrDefaultAsync(p => p.UserID == user.Id);
+                if (professional == null) { return NotFound("Não foi possível encontrar o profissional"); }
 
-            var reviewsFromDB = await _context.Reviews
-                .Include(r => r.Service)
-                .Where(r => r.Service.IdProfessional == user.Id && r.IdService == idService)
-                .ToListAsync();
-            var reviews = GetReviewDtos(reviewsFromDB);
+                var reviewsFromDB = await _context.Reviews
+                    .Include(r => r.Service)
+                    .Where(r => r.Service.IdProfessional == user.Id && r.IdService == idService)
+                    .ToListAsync();
+                if (reviewsFromDB == null) { return NotFound("Não foi possível encontrar as reviews"); }
+                var reviews = GetReviewDtos(reviewsFromDB);
 
-            return reviews;
+                return reviews;
+            } catch (Exception)
+            {
+                return BadRequest("Não foi possível encontrar as reviews. Tente novamente.");
+            }
+
         }
         [HttpGet("get-relatives")]
         public async Task<ActionResult<List<RelativeDto>>> GetRelatives()

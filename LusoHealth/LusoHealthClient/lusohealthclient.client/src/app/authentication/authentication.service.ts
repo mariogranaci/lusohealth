@@ -129,6 +129,8 @@ export class AuthenticationService {
     localStorage.setItem(environment.userKey, JSON.stringify(user));
     this.userSource.next(user);
   }
-
-
 }
+  export interface ProfessionalType {
+    id: number;
+    name: string;
+  }

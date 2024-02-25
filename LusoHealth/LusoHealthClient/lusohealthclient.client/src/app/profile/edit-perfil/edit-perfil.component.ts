@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { ProfileService } from '../profile.service';
 import { UserProfile } from '../../shared/models/profile/userProfile';
-import { Subject, takeUntil } from 'rxjs';
+import { Observable, Subject, never, takeUntil } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+
 
 @Component({
   selector: 'app-edit-perfil',
@@ -12,6 +14,7 @@ import { Subject, takeUntil } from 'rxjs';
 export class EditPerfilComponent implements OnInit {
   perfilForm: FormGroup = new FormGroup({});
   passwordForm: FormGroup = new FormGroup({});
+  pictureForm: FormGroup  = new FormGroup({});
   errorMessages: string[] = [];
   responseText: string | undefined;
   submittedProfile = false;
@@ -19,38 +22,156 @@ export class EditPerfilComponent implements OnInit {
   loading = false;
   private unsubscribe$ = new Subject<void>();
 
-  caminhoDaImagem: string | null = null;
+  firstName: string | null = null;
+  lastName: string | null = null;
+  email: string | null = null;
+  telemovel: string | null = null;
+  nif: string | null = null;
+  genero: string | null = null;
+  provider = false;
+
+  caminhoDaImagem: string | null = "https://static.vecteezy.com/ti/vetor-gratis/p3/3715527-imagem-perfil-icone-masculino-icone-humano-ou-pessoa-sinal-e-simbolo-vetor.jpg";
   arquivoSelecionado: File | null = null;
+    
 
   constructor(private fb: FormBuilder,
     private profileService: ProfileService) { }
 
-  selecionarArquivo(event: any) {
-    const arquivoInput = event.target;
-    if (arquivoInput.files && arquivoInput.files.length > 0) {
-      this.arquivoSelecionado = arquivoInput.files[0];
+  /* selecionarArquivo(event: any) {
+    const inputElement = event.target;
 
-      // Para exibir a imagem imediatamente após a seleção
-      const leitor = new FileReader();
-      leitor.onload = (e: any) => {
+    if (inputElement.files && inputElement.files.length > 0) {
+      this.arquivoSelecionado = inputElement.files[0];
+
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
         this.caminhoDaImagem = e.target.result;
       };
-      if (this.arquivoSelecionado) {
-        leitor.readAsDataURL(this.arquivoSelecionado);
+      if (this.arquivoSelecionado)
+        reader.readAsDataURL(this.arquivoSelecionado);
+    }
+  } */
+
+  selecionarArquivo(event: any) {
+   
+
+    const submitButton = document.getElementById('submit-image');
+    if (submitButton) {
+      const inputElement = event.target;
+
+      if (inputElement.files && inputElement.files.length > 0) {
+        this.arquivoSelecionado = inputElement.files[0];
+
+        const reader = new FileReader();
+        reader.onload = (e: any) => {
+          this.caminhoDaImagem = e.target.result;
+        };
+        if (this.arquivoSelecionado)
+          reader.readAsDataURL(this.arquivoSelecionado);
       }
+      submitButton.click();
     }
   }
 
-  enviarFormulario() {
-    // Aqui você pode enviar o arquivo para o servidor ou realizar outras ações
-    // Certifique-se de manipular o arquivo conforme necessário.
-    console.log('Arquivo selecionado:', this.arquivoSelecionado);
+  /* openFiles() {
+    const OpenImgUpload = document.getElementById('OpenImgUpload');
+    const imgupload = document.getElementById('imgupload');
+
+    if (OpenImgUpload != null && imgupload != null) {
+      OpenImgUpload.addEventListener('click', function () {
+        imgupload.click();
+      });
+    }
+
+  } */
+
+  openFiles() {
+    const OpenImgUpload = document.getElementById('OpenImgUpload');
+    const imgupload = document.getElementById('imgupload');
+
+    if (OpenImgUpload != null && imgupload != null) {
+      OpenImgUpload.addEventListener('click', function () {
+        imgupload.click();
+      });
+    }
+
   }
+
+  enviarFormulario() {
+    this.responseText = '';
+    console.log("Oi gato2");
+    
+      if (this.arquivoSelecionado) {
+        // Convert the selected file to base64 string
+        this.convertFileToBase64(this.arquivoSelecionado).then((base64String) => {
+          // Create a UserProfile model with the base64String (assuming "Picture" corresponds to the URL property)
+          const model = new UserProfile(null, null, null, null, null, null, null, base64String, null);
+
+          // Call the updatePicture method from the profile service
+          this.profileService.updatePicture(model).subscribe(
+            (response: any) => {
+              console.log("caminho:", this.caminhoDaImagem);
+              this.caminhoDaImagem = response.value.newImagePath;
+              this.responseText = response.value.message;
+            },
+            (error) => {
+              // Handle errors (logging or displaying error messages)
+              console.error('Error updating profile picture', error);
+              if (error.error.errors) {
+                this.errorMessages = error.error.errors;
+              } else {
+                this.errorMessages.push(error.error);
+              }
+            }
+          );
+        });
+      } else {
+        // If no file is selected, update the profile with the current caminhoDaImagem
+        const model = new UserProfile(null, null, null, null, null, null, null, this.caminhoDaImagem, null);
+
+        // Call the updatePicture method from the profile service
+        this.profileService.updatePicture(model).subscribe(
+          (response: any) => {
+            // Update the responseText with the success message
+            
+            this.caminhoDaImagem = response.value.newImagePath;
+            console.log("caminho:", this.caminhoDaImagem);
+            this.responseText = response.value.message;
+          },
+          (error) => {
+            // Handle errors (logging or displaying error messages)
+            console.error('Error updating profile picture', error);
+            if (error.error.errors) {
+              this.errorMessages = error.error.errors;
+            } else {
+              this.errorMessages.push(error.error);
+            }
+          }
+        );
+      }
+    
+  }
+
+
+
+  convertFileToBase64(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64String = reader.result as string;
+        resolve(base64String.split(',')[1]); 
+      };
+      reader.onerror = (error) => reject(error);
+      reader.readAsDataURL(file);
+    });
+  }
+
+
+  
 
   getUserProfileInfo() {
     this.profileService.getUserData().subscribe({
       next: (response: UserProfile) => {
-        console.log(response);
         return response;
       },
       error: (error) => {
@@ -70,6 +191,7 @@ export class EditPerfilComponent implements OnInit {
   ngOnInit() {
     this.initializeForm();
     this.setFields();
+    this.openFiles();
   }
 
   ngOnDestroy(): void {
@@ -80,14 +202,26 @@ export class EditPerfilComponent implements OnInit {
   setFields() {
     this.profileService.getUserData().pipe(takeUntil(this.unsubscribe$)).subscribe(
       (userData: UserProfile) => {
+        console.log(userData.provider);
+        if (userData.provider) {
+          this.provider = true;
+        }
+        this.firstName = userData.firstName;
+        this.lastName = userData.lastName;
+        this.email = userData.email;
+        this.telemovel = userData.telemovel;
+        this.nif = userData.nif;
+        this.genero = userData.genero;
+        if (userData.picture)
+          this.caminhoDaImagem = userData.picture;
 
           this.perfilForm.setValue({
             firstName: userData.firstName,
-            lastName: userData['lastName'],
+            lastName: userData.lastName,
             email: userData.email,
-            telemovel: userData['telemovel'],
-            nif: userData['nif'],
-            genero: userData['genero']
+            telemovel: userData.telemovel,
+            nif: userData.nif,
+            genero: userData.genero
           });
       },
       error => {
@@ -111,16 +245,14 @@ export class EditPerfilComponent implements OnInit {
       });
 
     this.passwordForm = this.fb.group({
-      password: [''],
-      novaPassword: [''],
-      repetirNovaPassword: ['']
+      password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(50)], [this.passwordPatternValidator()]],
+      novaPassword: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(50)], [this.passwordPatternValidator()]],
+      repetirNovaPassword: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(50)], [this.passwordPatternValidator()]]
     });
   }
 
-  
   atualizarPerfil() {
     this.submittedProfile = true;
-    this.submittedPassword = false;
     this.errorMessages = [];
     this.responseText = '';
     
@@ -131,60 +263,77 @@ export class EditPerfilComponent implements OnInit {
     const telemovel = this.perfilForm.get('telemovel')?.value;
     const genero = this.perfilForm.get('genero')?.value;
 
-    const model = new UserProfile(firstName, lastName, email, nif, telemovel, null, genero, null);
+    if (!(this.firstName === firstName && this.lastName === lastName && this.email === email
+      && this.nif === nif && this.telemovel === telemovel && this.genero === genero)) {
 
-    if (this.perfilForm.valid) {
-      this.profileService.updateUserData(model).subscribe({
+
+      const model = new UserProfile(firstName, lastName, email, nif, telemovel, null, genero, null, null);
+
+      if (this.perfilForm.valid) {
+        this.profileService.updateUserData(model).subscribe({
+          next: (response: any) => {
+            console.log(response);
+            this.setFields();
+            this.responseText = response.value.message;
+          },
+          error: (error) => {
+            console.log(error);
+            if (error.error.errors) {
+              this.errorMessages = error.error.errors;
+            } else {
+              this.errorMessages.push(error.error);
+            }
+          }
+        },
+        );
+      }
+    }
+    else {
+      this.errorMessages.push("Para atualizar os dados é necessário modificá-los.");
+      console.log(this.errorMessages.length);
+    }
+  }
+
+  alterarPassword() {
+    this.submittedPassword = true;
+    this.errorMessages = [];
+    this.responseText = '';
+   
+    
+
+    if (this.passwordForm.valid) {
+      this.profileService.updatePassword({
+        currentPassword: this.passwordForm.value.password,
+        newPassword: this.passwordForm.value.novaPassword,
+        confirmNewPassword: this.passwordForm.value.repetirNovaPassword
+      }).subscribe({
         next: (response: any) => {
-          console.log(response);
-          this.setFields();
           this.responseText = response.value.message;
         },
         error: (error) => {
-          console.log(error);
           if (error.error.errors) {
             this.errorMessages = error.error.errors;
           } else {
             this.errorMessages.push(error.error);
           }
         }
-      },
-      );
+      });
     }
     
   }
 
-  alterarPassword() {
-    this.submittedProfile = false;
-    this.submittedPassword = true;
-    this.errorMessages = [];
-    
+  passwordPatternValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const value: string = control.value || '';
 
-    if (this.passwordForm.value.novaPassword !== this.passwordForm.value.repetirNovaPassword) {
-      this.errorMessages.push("As novas passwords não condizem.");
-      return; 
-    }
+      const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/;
 
-    this.profileService.updatePassword({
-      email: this.perfilForm.value.email,
-      currentPassword: this.passwordForm.value.password,
-      newPassword: this.passwordForm.value.novaPassword,
-      confirmNewPassword: this.passwordForm.value.repetirNovaPassword
-    }).subscribe({
-      next: (response: any) => {
-        console.log(response);
-        this.passwordForm.reset(); // Clear the password form
-        // Display success message or perform any additional actions
-        this.errorMessages.push("Password alterada com sucesso.");
-      },
-      error: (error) => {
-        if (error.error.errors) {
-          this.errorMessages = error.error.errors;
-        } else {
-          this.errorMessages.push(error.error);
-        }
-      }
-    });
+      return new Promise(resolve => {
+        setTimeout(() => {
+          resolve(pattern.test(value) ? null : { passwordPattern: true });
+        }, 0);
+      });
+    };
   }
 
  

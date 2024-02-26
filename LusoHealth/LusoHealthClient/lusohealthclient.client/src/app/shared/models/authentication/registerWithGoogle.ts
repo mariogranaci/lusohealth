@@ -11,9 +11,10 @@ export class RegisterWithGoogle {
   provider: string;
   profilePicPath: string | undefined;
   userId: string;
+  professionalTypeId: number | null;
 
-  constructor(firstName: string, lastName: string, nif: string, telemovel: string, dataNascimento: Date,
-    genero: string, tipoUser: string, email: string, accessToken: string, provider: string, profilePicpath: string | undefined, userId: string) {
+  constructor(firstName: string, lastName: string, nif: string, telemovel: string, dataNascimento: Date, genero: string, tipoUser: string,
+    email: string, accessToken: string, provider: string, profilePicpath: string | undefined, userId: string, professionalTypeId: number | null) {
     this.firstName = firstName;
     this.lastName = lastName;
     this.nif = nif;
@@ -26,5 +27,6 @@ export class RegisterWithGoogle {
     this.provider = provider;
     this.profilePicPath = profilePicpath;
     this.userId = userId;
+    this.professionalTypeId = professionalTypeId;
   }
 }

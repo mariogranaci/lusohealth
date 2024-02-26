@@ -1,9 +1,9 @@
 import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
-import { AuthenticationService } from '../authentication.service';
+import { AuthenticationService, ProfessionalType } from '../authentication.service';
 import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { User } from '../../shared/models/authentication/user';
-import { take } from 'rxjs';
+import { Subject, take, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-registo',
@@ -13,10 +13,14 @@ import { take } from 'rxjs';
 
 export class RegistoComponent implements OnInit {
   registerForm: FormGroup = new FormGroup({});
+  private unsubscribe$ = new Subject<void>();
   submitted = false;
   loading = false;
   errorMessages: string[] = [];
   responseText: string | undefined;
+  professionalTypes: ProfessionalType[] = [];
+  isProfessionalSelected: boolean = false;
+
 
   constructor(private authenticationService: AuthenticationService,
     private formBuilder: FormBuilder,
@@ -34,6 +38,12 @@ export class RegistoComponent implements OnInit {
 
   ngOnInit(): void {
     this.initializeForm();
+    this.getProfessionalTypes();
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   ngAfterViewInit(): void {
@@ -47,7 +57,6 @@ export class RegistoComponent implements OnInit {
   initializeForm() {
 
     this.registerForm = this.formBuilder.group({
-
       firstName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
       lastName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
       nif: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(9)]],
@@ -58,17 +67,17 @@ export class RegistoComponent implements OnInit {
       dataNascimento: ['', [Validators.required, this.idadeValidator]],
       genero: ['', [Validators.required]],
       tipoUser: ['', [Validators.required]],
+      professionalTypeId: [null],
     })
   }
-
-
 
   register() {
     this.submitted = true;
     this.errorMessages = [];
     this.responseText = '';
+    
 
-
+    console.log(this.registerForm.value);
     if (this.registerForm.valid) {
       this.loading = true;
       this.authenticationService.register(this.registerForm.value).subscribe({
@@ -87,6 +96,30 @@ export class RegistoComponent implements OnInit {
         }
       })
     }
+  }
+
+  getProfessionalTypes() {
+    this.authenticationService.getProfessionalTypes().pipe(takeUntil(this.unsubscribe$)).subscribe({
+      next: (response: ProfessionalType[]) => {
+        console.log(response);
+        this.professionalTypes = response;
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    });
+  }
+
+  onUserTypeChange(userType: string) {
+    this.isProfessionalSelected = userType === 'P';
+    const professionalTypeControl = this.registerForm.get('professionalTypeId');
+    if (this.isProfessionalSelected) {
+      professionalTypeControl?.setValidators([Validators.required]);
+    } else {
+      professionalTypeControl?.clearValidators();
+    }
+
+    professionalTypeControl?.updateValueAndValidity();
   }
 
   passwordPatternValidator(): ValidatorFn {

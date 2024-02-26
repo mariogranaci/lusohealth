@@ -1,9 +1,9 @@
 import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
-import { AuthenticationService } from '../authentication.service';
+import { AuthenticationService, ProfessionalType } from '../authentication.service';
 import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { User } from '../../shared/models/authentication/user';
-import { take } from 'rxjs';
+import { Subject, take, takeUntil } from 'rxjs';
 import { RegisterWithGoogle } from '../../shared/models/authentication/registerWithGoogle';
 
 @Component({
@@ -13,6 +13,7 @@ import { RegisterWithGoogle } from '../../shared/models/authentication/registerW
 })
 export class RegisterWithGoogleComponent implements OnInit {
   registerForm: FormGroup = new FormGroup({});
+  private unsubscribe$ = new Subject<void>();
   submitted = false;
   loading = false;
   errorMessages: string[] = [];
@@ -24,6 +25,8 @@ export class RegisterWithGoogleComponent implements OnInit {
   familyName: string | null = null;
   givenName: string | null = null;
   picture: string = '';
+  professionalTypes: ProfessionalType[] = [];
+  isProfessionalSelected: boolean = false;
 
   constructor(private authenticationService: AuthenticationService,
     private formBuilder: FormBuilder,
@@ -41,31 +44,13 @@ export class RegisterWithGoogleComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.authenticationService.user$.pipe(take(1)).subscribe({
-      next: (user: User | null) => {
-        if (user) {
-          this.router.navigateByUrl('/');
-        } else {
-          this.activatedRoute.queryParamMap.subscribe({
-            next: (params: any) => {
-              this.provider = this.activatedRoute.snapshot.paramMap.get('provider');
-              this.accessToken = params.get('access_token');
-              this.userId = params.get('user_id');
-              this.email = params.get('email');
-              this.givenName = params.get('given_name');
-              this.familyName = params.get('family_name');
-              this.picture = params.get('picture');
+    this.getParams();
+    this.getProfessionalTypes();
+  }
 
-              if (this.provider && this.accessToken && this.email && this.provider === 'google') {
-                this.initializeForm();
-              } else {
-                this.router.navigateByUrl('/');
-              }
-            }
-          });
-        }
-      }
-    });
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   ngAfterViewInit(): void {
@@ -87,9 +72,37 @@ export class RegisterWithGoogleComponent implements OnInit {
       dataNascimento: ['', [Validators.required, this.idadeValidator]],
       genero: ['', [Validators.required]],
       tipoUser: ['', [Validators.required]],
+      professionalTypeId: [null],
     })
   }
 
+  getParams() {
+    this.authenticationService.user$.pipe(take(1)).subscribe({
+      next: (user: User | null) => {
+        //if (user) {
+        //  this.router.navigateByUrl('/');
+        //} else {
+        this.activatedRoute.queryParamMap.subscribe({
+          next: (params: any) => {
+            this.provider = this.activatedRoute.snapshot.paramMap.get('provider');
+            this.accessToken = params.get('access_token');
+            this.userId = params.get('user_id');
+            this.email = params.get('email');
+            this.givenName = params.get('given_name');
+            this.familyName = params.get('family_name');
+            this.picture = params.get('picture');
+
+            if (this.provider && this.accessToken && this.email && this.provider === 'google') {
+              this.initializeForm();
+            } else {
+              this.router.navigateByUrl('/');
+            }
+          }
+        });
+        //}
+      }
+    });
+  }
 
 
   register() {
@@ -107,8 +120,9 @@ export class RegisterWithGoogleComponent implements OnInit {
       const dataNascimento = this.registerForm.get('dataNascimento')?.value;
       const genero = this.registerForm.get('genero')?.value;
       const tipoUser = this.registerForm.get('tipoUser')?.value;
+      const professionalTypeId = this.registerForm.get('professionalTypeId')?.value;
 
-      const model = new RegisterWithGoogle(firstName, lastName, nif, telemovel, dataNascimento, genero, tipoUser, this.email, this.accessToken, this.provider, this.picture, this.userId);
+      const model = new RegisterWithGoogle(firstName, lastName, nif, telemovel, dataNascimento, genero, tipoUser, this.email, this.accessToken, this.provider, this.picture, this.userId, professionalTypeId);
       this.authenticationService.registerWithGoogle(model).subscribe({
         next: (response: any) => {
           this.loading = false;
@@ -124,6 +138,30 @@ export class RegisterWithGoogleComponent implements OnInit {
         }
       })
     }
+  }
+
+  getProfessionalTypes() {
+    this.authenticationService.getProfessionalTypes().pipe(takeUntil(this.unsubscribe$)).subscribe({
+      next: (response: ProfessionalType[]) => {
+        console.log(response);
+        this.professionalTypes = response;
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    });
+  }
+
+  onUserTypeChange(userType: string) {
+    this.isProfessionalSelected = userType === 'P';
+    const professionalTypeControl = this.registerForm.get('professionalTypeId');
+    if (this.isProfessionalSelected) {
+      professionalTypeControl?.setValidators([Validators.required]);
+    } else {
+      professionalTypeControl?.clearValidators();
+    }
+
+    professionalTypeControl?.updateValueAndValidity();
   }
 
   idadeValidator(control: AbstractControl): { [key: string]: any } | null {

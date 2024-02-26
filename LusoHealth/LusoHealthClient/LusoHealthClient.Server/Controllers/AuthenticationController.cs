@@ -30,13 +30,15 @@ namespace LusoHealthClient.Server.Controllers
             SignInManager<User> signInManager,
             UserManager<User> userManager,
             EmailService emailService,
-            IConfiguration config)
+            IConfiguration config,
+            ApplicationDbContext context)
         {
             _jwtService = jwtService;
             _signInManager = signInManager;
             _userManager = userManager;
             _emailService = emailService;
             _config = config;
+            _context = context;
         }
 
         [Authorize]
@@ -98,7 +100,30 @@ namespace LusoHealthClient.Server.Controllers
             var result = await _userManager.CreateAsync(userToAdd, model.Password);
             if (!result.Succeeded) return BadRequest(result.Errors);
 
-
+            try
+            {
+                if(model.TipoUser == 'P' && model.ProfessionalTypeId != null)
+                {
+                    var professional = new Professional
+                    {
+                        UserID = userToAdd.Id,
+                        ProfessionalTypeId = (int) model.ProfessionalTypeId,
+                    };
+                    _context.Professionals.Add(professional);
+                    await _context.SaveChangesAsync();
+                } else
+                {
+                    var patient = new Patient
+                    {
+                        UserID = userToAdd.Id
+                    };
+                    _context.Patients.Add(patient);
+                    await _context.SaveChangesAsync();
+                }
+            } catch (Exception)
+            {
+                return BadRequest("Houve um problema a criar a sua conta. Tente novamente.");
+            }
 
             try
             {
@@ -196,6 +221,33 @@ namespace LusoHealthClient.Server.Controllers
 
             var result = await _userManager.CreateAsync(userToAdd);
             if (!result.Succeeded) return BadRequest(result.Errors);
+
+            try
+            {
+                if (model.TipoUser == 'P' && model.ProfessionalTypeId != null)
+                {
+                    var professional = new Professional
+                    {
+                        UserID = userToAdd.Id,
+                        ProfessionalTypeId = (int)model.ProfessionalTypeId,
+                    };
+                    _context.Professionals.Add(professional);
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    var patient = new Patient
+                    {
+                        UserID = userToAdd.Id
+                    };
+                    _context.Patients.Add(patient);
+                    await _context.SaveChangesAsync();
+                }
+            }
+            catch (Exception)
+            {
+                return BadRequest("Houve um problema a criar a sua conta. Tente novamente.");
+            }
 
             return CreateApplicationUserDto(userToAdd);
         }

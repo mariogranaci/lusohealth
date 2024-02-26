@@ -121,8 +121,9 @@ main {
   display: flex;
   align-items: center;
   background-color: white;
-  padding: 5px;
+  padding: 10px;
   margin-bottom: 10px;
+  margin-right: 30px;
   border-radius: 10px;
   position: relative;
   min-width: 300px;
@@ -130,7 +131,7 @@ main {
   width: 300px;
 }
 
-#categoria {
+.categoria {
   width: 89%;
   margin: 0 auto;
   display: flex;
@@ -140,7 +141,7 @@ main {
 
 .categoria-texto {
   font-weight: bold;
-  font-size: 20px;
+  font-size: 24px;
   width: 89%;
   margin: 50px auto 30px auto;
 }
@@ -151,6 +152,10 @@ main {
 
 .content div {
   margin-bottom: 55px;
+}
+
+.content-name {
+    width: 80%;
 }
 
 #icons {
@@ -165,13 +170,12 @@ main {
 }
 
 .tab p {
-  width: 69%;
+
   height: fit-content;
   text-align: justify;
   text-overflow: ellipsis;
 }
 
-#last {
-  
-  margin-bottom: 0px;
+#specialties  {
+  margin: 0;
 }

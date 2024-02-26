@@ -65,8 +65,8 @@
     </thead>
     <tbody *ngIf="(userData && (userData.services.length > 0))">
       <!--<tr>
-        <td colspan="6" class="specialities-not-found-placeholder">Não tem especialidades associadas.</td>
-      </tr>-->
+    <td colspan="6" class="specialities-not-found-placeholder">Não tem especialidades associadas.</td>
+  </tr>-->
       <tr *ngFor="let service of userData.services">
         <td>{{ service.specialty }}</td>
         <td>{{ service.pricePerHour | currency:'EUR' }}</td>
@@ -84,7 +84,7 @@
           </div>
         </td>
       </tr>
-
+      
     </tbody>
     <tbody *ngIf="!(userData && (userData.services.length > 0))">
       <tr>
@@ -136,10 +136,12 @@
   <div class="left-align-row reviews-info">
     <b class="small-right-margin">Filtrar:</b>
     <div class="select-dropdown">
-      <select>
-        <option value="Option 1">Tudo</option>
-        <option value="Option 2">2nd Option  w c dwwedw cwe</option>
-        <option value="Option 3">Option Number 3</option>
+      <select id="select-review" *ngIf="(userData && userData.services && (userData.services.length > 0))">
+        <option value="T" selected>Tudo</option>
+        <option *ngFor="let service of userData.services" value="{{ service.specialtyId }}">{{ service.specialty }}</option>
+      </select>
+      <select id="select-review" *ngIf="!(userData && userData.services && (userData.services.length > 0))">
+        <option value="T" selected>Tudo</option>
       </select>
     </div>
   </div>
@@ -228,12 +230,10 @@
 
       <div class="speciality-form-box">
         <label for="add-speciality-select">Selecionar Especialidade</label>
-        <div class="select-dropdown" id="speciality-select-div" [class.is-invalid]="submittedAdd && addSpecialityForm.get('price')?.errors">
+        <div class="select-dropdown" id="speciality-select-div" [class.is-invalid]="submittedAdd && addSpecialityForm.get('selectSpeciality')?.errors">
           <select formControlName="selectSpeciality" id="add-speciality-select" required>
             <option value="" disabled hidden>Selecione uma especialidade</option>
-            <option value="1">Tudo</option>
-            <option value="2">2nd Option  w c dwwedw cwe sc sjci wiwcw dwc ci</option>
-            <option value="3">Option Number 3</option>
+            <option *ngFor="let specialty of specialties" value="{{ specialty.id }}">{{ specialty.name }}</option>
           </select>
         </div>
         <span class="text-danger" *ngIf="submittedAdd && addSpecialityForm.get('selectSpeciality')?.hasError('required')">

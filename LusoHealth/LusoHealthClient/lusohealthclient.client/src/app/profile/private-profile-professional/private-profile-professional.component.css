@@ -407,7 +407,7 @@ tbody {
   .select-dropdown select {
     font-size: 1.1rem;
     font-weight: normal;
-    max-width: 400px;
+    max-width: 100%;
     padding: 8px 24px 8px 10px;
     border: none;
     background-color: transparent;
@@ -643,3 +643,8 @@ input[type="radio"] {
 .is-invalid {
   border: 2px solid #cc0000 !important;
 }
+/*
+app-validation-messages {
+    position: fixed;
+}
+*/

@@ -8,6 +8,7 @@ import { ProfileService } from '../profile.service';
 import { Subject, takeUntil } from 'rxjs';
 import { Professional } from '../../shared/models/profile/professional';
 import { Service } from '../../shared/models/profile/service';
+import { Specialty } from '../../shared/models/profile/specialty';
 
 @Component({
   selector: 'app-private-profile-professional',
@@ -24,6 +25,7 @@ export class PrivateProfileProfessionalComponent implements OnInit {
   errorMessages: string[] = [];
   /*responseText: string | undefined;*/
   public userData: Professional | undefined;
+  public specialties: Specialty[] | undefined;
 
   constructor(private authenticationService: AuthenticationService,
     private formBuilder: FormBuilder,
@@ -42,6 +44,7 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     this.getProfessionalInfo().then(() => {
       this.setUserFields();
     });
+    this.getSpecialties();
   }
 
   ngOnDestroy(): void {
@@ -85,6 +88,18 @@ export class PrivateProfileProfessionalComponent implements OnInit {
         }
       );
     });
+  }
+
+  getSpecialties() {
+    this.profileService.getServices().pipe(takeUntil(this.unsubscribe$)).subscribe(
+      (specialties: Specialty[]) => {
+        console.log(specialties);
+        this.specialties = specialties;
+        },
+        error => {
+          console.log(error);
+        }
+      );
   }
 
   setUserFields() {

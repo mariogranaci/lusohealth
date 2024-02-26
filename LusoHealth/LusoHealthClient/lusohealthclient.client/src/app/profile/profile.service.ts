@@ -9,6 +9,7 @@ import { Relative } from '../shared/models/profile/relative';
 import { Observable } from 'rxjs';
 import { Professional } from '../shared/models/profile/professional';
 import { Service } from '../shared/models/profile/service';
+import { Specialty } from '../shared/models/profile/specialty';
 
 @Injectable({
   providedIn: 'root'
@@ -53,6 +54,11 @@ export class ProfileService {
   getProfessionalInfo(): Observable<Professional> {
     const headers = this.getHeaders();
     return this.http.get<Professional>(`${environment.appUrl}/api/profile/get-professional-info`, { headers });
+  }
+
+  getServices(): Observable<Specialty[]> {
+    const headers = this.getHeaders();
+    return this.http.get<Specialty[]>(`${environment.appUrl}/api/profile/get-specialties`, { headers });
   }
 
   getRelatives(): Observable<Relative[]> {

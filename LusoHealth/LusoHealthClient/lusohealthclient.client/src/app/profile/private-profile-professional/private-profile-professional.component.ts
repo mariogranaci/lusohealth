@@ -186,6 +186,24 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     }
   }
 
+  deleteSpeciality(specialtyId: number | null) {
+    if (specialtyId != null) {
+      this.profileService.deleteSpecialty(specialtyId).subscribe({
+        next: () => {
+          this.reloadTableData();
+        },
+        error: (error) => {
+          console.log(error);
+          if (error.error.errors) {
+            this.errorMessages = error.error.errors;
+          } else {
+            this.errorMessages.push(error.error);
+          }
+        }
+      });
+    }
+  }
+
   showSpecialtyEdit(service: Service) {
 
     this.selectEditService = service;

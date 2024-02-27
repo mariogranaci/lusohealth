@@ -19,8 +19,10 @@ export class PrivateProfileProfessionalComponent implements OnInit {
   private unsubscribe$ = new Subject<void>();;
   addSpecialityForm: FormGroup = new FormGroup({});
   editSpecialityForm: FormGroup = new FormGroup({});
+  updateDescriptionForm: FormGroup = new FormGroup({});
   submittedAdd = false;
   submittedEdit = false;
+  submittedDescription = false;
   selectEditService: Service | undefined;
   errorMessages: string[] = [];
   /*responseText: string | undefined;*/
@@ -43,8 +45,10 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     this.initializeForm();
     this.getProfessionalInfo().then(() => {
       this.setUserFields();
+      this.getDescription();
     });
     this.getSpecialties();
+
   }
 
   ngOnDestroy(): void {
@@ -64,14 +68,18 @@ export class PrivateProfileProfessionalComponent implements OnInit {
       presencial: ['', [Validators.required]],
       online: ['', [Validators.required]],
       domicilio: ['', [Validators.required]]
-    })
+    });
 
     this.editSpecialityForm = this.formBuilder.group({
       price: ['', [Validators.required, Validators.min(1), Validators.max(1000)]],
       presencial: ['', [Validators.required]],
       online: ['', [Validators.required]],
       domicilio: ['', [Validators.required]]
-    })
+    });
+
+    this.updateDescriptionForm = this.formBuilder.group({
+      description: ['', [Validators.maxLength(5000)]],
+    });
   }
 
   getProfessionalInfo(): Promise<void> {
@@ -95,11 +103,11 @@ export class PrivateProfileProfessionalComponent implements OnInit {
       (specialties: Specialty[]) => {
         console.log(specialties);
         this.specialties = specialties;
-        },
-        error => {
-          console.log(error);
-        }
-      );
+      },
+      error => {
+        console.log(error);
+      }
+    );
   }
 
   setUserFields() {
@@ -118,6 +126,58 @@ export class PrivateProfileProfessionalComponent implements OnInit {
       telemovelElement.textContent = this.userData.professionalInfo.telemovel;
       nifElement.textContent = this.userData.professionalInfo.nif;
       genderElement.textContent = (this.userData.professionalInfo.genero === "M") ? "Masculino" : "Feminino";
+    }
+  }
+
+  getDescription() {
+    const descriptionElement = document.getElementById('description');
+
+    if (descriptionElement && this.userData && this.userData.description) {
+      this.updateDescriptionForm.setValue({
+        description: this.userData.description
+      });
+    }
+  }
+
+  updateDescription() {
+    this.submittedDescription = true;
+    this.errorMessages = [];
+    /*this.responseText = '';*/
+
+
+
+    if (this.updateDescriptionForm.valid) {
+
+      const form = this.updateDescriptionForm.value;
+
+      if (this.userData?.description != form.description) {
+
+        var description = { description: form.description }
+
+        this.profileService.updateDescription(description).subscribe({
+          next: (response: any) => {
+            this.reloadTableData();
+            //this.responseText = response.value.message;
+            this.submittedDescription = false;
+            console.log("Alterado");
+          },
+          error: (error) => {
+            console.log(error.error);
+            if (error.error.errors) {
+              this.errorMessages = error.error.errors;
+            } else {
+              this.errorMessages.push(error.error);
+            }
+          }
+        })
+      }
+      else {
+        /*console.log("Burro" + this.userData?.description);
+        console.log("Oi gato" + form.description);*/
+        console.log("Oi gato: " + this.errorMessages.length);
+        this.errorMessages.push("A descrição não foi alterada.");
+        console.log("Burro: " + this.errorMessages.length);
+      }
     }
   }
 
@@ -229,9 +289,9 @@ export class PrivateProfileProfessionalComponent implements OnInit {
   }
 
   setEditFormFields() {
-    
+
     const nome = document.getElementById('speciality-name');
-    
+
     if (nome && this.selectEditService) {
       nome.textContent = this.selectEditService.specialty;
     }

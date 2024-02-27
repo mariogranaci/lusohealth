@@ -10,6 +10,7 @@ import { Observable } from 'rxjs';
 import { Professional } from '../shared/models/profile/professional';
 import { Service } from '../shared/models/profile/service';
 import { Specialty } from '../shared/models/profile/specialty';
+import { Description } from '../shared/models/profile/description';
 
 @Injectable({
   providedIn: 'root'
@@ -104,6 +105,11 @@ export class ProfileService {
   deleteSpecialty(serviceId: number): Observable<Service> {
     const headers = this.getHeaders();
     return this.http.delete<Service>(`${environment.appUrl}/api/profile/delete-service/${serviceId}`, { headers });
+  }
+
+  updateDescription(description: Description): Observable<Description> {
+    const headers = this.getHeaders();
+    return this.http.patch<Description>(`${environment.appUrl}/api/profile/update-description`, description, { headers });
   }
 
 }

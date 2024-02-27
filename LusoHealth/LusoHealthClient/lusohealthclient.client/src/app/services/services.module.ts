@@ -6,12 +6,14 @@ import { RouterModule } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
 import { CalendarioComponent } from './calendario/calendario.component';
+import { MarcacoesComponent } from './marcacoes/marcacoes.component';
 
 
 
 @NgModule({
   declarations: [
     MarcarConsultaComponent,
+    MarcacoesComponent
   ],
   imports: [
     CommonModule,

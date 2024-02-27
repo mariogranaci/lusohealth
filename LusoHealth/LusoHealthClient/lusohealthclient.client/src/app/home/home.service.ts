@@ -15,30 +15,18 @@ export class HomeService {
 
   constructor(private http: HttpClient, private router: Router) { }
 
-  getHeaders() {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-    });
-
-    return headers;
-  }
-
   getProfessionalTypes() {
-    const headers = this.getHeaders();
-    return this.http.get<ProfessionalType[]>(`${environment.appUrl}/api/home/get-professional-types`, { headers });
+    return this.http.get<ProfessionalType[]>(`${environment.appUrl}/api/home/get-professional-types`);
   }
 
   getProfessionals() {
-    const headers = this.getHeaders();
-    return this.http.get<Professional[]>(`${environment.appUrl}/api/home/get-professionals`, { headers });
+    return this.http.get<Professional[]>(`${environment.appUrl}/api/home/get-professionals`);
   }
 
   getSpecialties() {
-    const headers = this.getHeaders();
-    return this.http.get<Specialty[]>(`${environment.appUrl}/api/home/get-specialties`, { headers });
+    return this.http.get<Specialty[]>(`${environment.appUrl}/api/home/get-specialties`);
   }
 }
-
 export interface ProfessionalType {
   id: number;
   name: string;

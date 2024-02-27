@@ -87,4 +87,10 @@ export class ProfileService {
     const headers = this.getHeaders();
     return this.http.put<Relative>(`${environment.appUrl}/api/profile/update-relative/${relative.id}`, relative, { headers });
   }
+
+
+  addReport(relative: Relative): Observable<Relative> {
+    const headers = this.getHeaders();
+    return this.http.post<Relative>(`${environment.appUrl}/api/profile/add-relative`, relative, { headers });
+  }
 }

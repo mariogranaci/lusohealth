@@ -16,7 +16,8 @@ namespace LusoHealthClient.Server.Data
         public DbSet<Professional> Professionals { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Service> Services { get; set; }
-        public DbSet<Relative> Relatives { get; set; }
+		public DbSet<Report> Report { get; set; }
+		public DbSet<Relative> Relatives { get; set; }
         public DbSet<Certificate> Certificates { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {

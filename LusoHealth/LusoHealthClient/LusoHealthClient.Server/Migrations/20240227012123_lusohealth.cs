@@ -76,6 +76,23 @@ namespace LusoHealthClient.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Report",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Timestamp = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IdPatient = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IdProfesional = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    State = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Report", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -358,13 +375,13 @@ namespace LusoHealthClient.Server.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "BirthDate", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "Gender", "IsBlocked", "IsSuspended", "LastName", "LockoutEnabled", "LockoutEnd", "Nif", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "ProfilePicPath", "Provider", "SecurityStamp", "TwoFactorEnabled", "UserName", "UserType" },
                 values: new object[,]
                 {
-                    { "1", 0, new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "c58566ae-4326-49e8-bc5c-bc59cfef090f", "user1@mail.com", true, "User1", "M", false, false, "Family", false, null, "123456789", "user1@mail.com", null, "AQAAAAIAAYagAAAAEJEdKOM44JAmhsMilvIW668trTJokV6fowKlHNKq+7p9GwnisNJiftB6mFcFMHo/YQ==", "987654321", false, null, null, "d6892873-410f-4adc-be83-1b033cd9963f", false, "123456789_260", "U" },
-                    { "2", 0, new DateTime(1995, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "86efdf02-5903-40b2-ae94-afe6e2d92b6c", "user2@mail.com", true, "User2", "F", false, false, "Family", false, null, "987654321", "user2@mail.com", null, "AQAAAAIAAYagAAAAEGmc3uuzDF1kIP1dfwcFxM9vV84g/4Fa2YSAA1X92xxkVque7BfjZI0MmvMDsykIOA==", "123456789", false, null, null, "c16321b9-6d17-4b40-bf5a-44b4934719aa", false, "987654321_260", "U" },
-                    { "3", 0, new DateTime(1988, 8, 8, 0, 0, 0, 0, DateTimeKind.Unspecified), "420b84a5-2020-474b-943a-59fbfc36db36", "user3@mail.com", true, "User3", "M", false, false, "Family", false, null, "111223344", "user3@mail.com", null, "AQAAAAIAAYagAAAAEJBBkiQVUltpCe1ltnFTDevO75iwLxpG9+e1FwTp3cAxWgjoZSiMOyecoKAfF1Lv/A==", "555555555", false, null, null, "5151bb32-ef98-463a-90e1-df9a47ef76f7", false, "111223344_260", "U" },
-                    { "4", 0, new DateTime(1992, 12, 25, 0, 0, 0, 0, DateTimeKind.Unspecified), "01724114-6189-49f7-8a07-e1791213ea17", "user4@mail.com", true, "User4", "F", false, false, "Family", false, null, "999888777", "user4@mail.com", null, "AQAAAAIAAYagAAAAEPBCDhvxaJVMFAI0Z5veJywU23BHmkGh9ee7NgcbWbXzDqHN6fvGwhWUwI4oIjVkgw==", "444444444", false, null, null, "5671fea9-1edb-4bd2-9cb6-02d9a830800c", false, "999888777_260", "U" },
-                    { "5", 0, new DateTime(1997, 7, 7, 0, 0, 0, 0, DateTimeKind.Unspecified), "8defaf1e-f281-4c32-9ac8-569572f610c7", "user5@mail.com", true, "User5", "M", false, false, "Family", false, null, "555444333", "user5@mail.com", null, "AQAAAAIAAYagAAAAELinMwDSlb4F5TfW6QKY/FmX7qJPgzcpEWr4DIvvprizB3jKRtYxG7Zot5v6qR9FnQ==", "333333333", false, null, null, "9fb1a9ea-f33a-4c9e-8b13-46db0b95c6fe", false, "333333333_260", "P" },
-                    { "6", 0, new DateTime(1994, 4, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), "e13a29e4-cab9-4630-b12a-249608c59c8f", "user6@mail.com", true, "User6", "F", false, false, "Family", false, null, "777666555", "user6@mail.com", null, "AQAAAAIAAYagAAAAEP/jjn/SCg0YW6WcEmNDrNQfcfrU4VwKFXPgPiZiPcwBk29xaeCL6yPiXGGPJBBVVw==", "222222222", false, null, null, "4c0d5802-27a0-4715-8eb1-bf77ca28872d", false, "777666555_260", "P" },
-                    { "7", 0, new DateTime(1994, 4, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), "ae0989c6-bbc2-4269-9a38-a4b4309b0147", "usergoogle@mail.com", true, "User", "M", false, false, "Google", false, null, "123215648", "usergoogle@mail.com", null, "AQAAAAIAAYagAAAAEEe/2wbR/p5+vnOe2LemjrpEJoVHjZDR6vsgDgFxtz0sJEbG1vysyoreZ4PRx7Rd4A==", "231564789", false, "https://img.freepik.com/fotos-premium/empreendedor-deprimido-triste-em-homem-de-trabalhador-de-terno-formal-sentado-perto-de-uma-rua-ao-ar-livre-perto-do-centro-de-negocios-de-escritorio-moderno-homem-de-negocios-chateado-perdeu-o-emprego-devido-a-um-funcionario-de-crise-financeira-tem-problema-lado-de-fora_321831-6752.jpg", "google", "42aceb76-4cfa-49d0-ae07-c679a2b60ae6", false, "123215648_260", "P" }
+                    { "1", 0, new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "e957118b-3717-4b3e-8008-f43427669315", "user1@mail.com", true, "User1", "M", false, false, "Family", false, null, "123456789", "user1@mail.com", null, "AQAAAAIAAYagAAAAEL2YLyLoD8bCr2TxD+s0h/IVSeicgw2yO8ebPJPT+PLTXzKcdVdmE5oEfDnDsPgqNQ==", "987654321", false, null, null, "eaf577bb-8291-4697-a948-b2315f6baff9", false, "123456789_91", "U" },
+                    { "2", 0, new DateTime(1995, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "46dbe7b9-1ecd-42a6-95d4-945a4a2c6e6f", "user2@mail.com", true, "User2", "F", false, false, "Family", false, null, "987654321", "user2@mail.com", null, "AQAAAAIAAYagAAAAEG7lnxucLqZ+8yCOj2RZaXPfRkixGf1rS1a/wXytVfKlWDUc3LF9u2HkcjZIckbCLA==", "123456789", false, null, null, "05856959-a64c-43da-a4f1-d2dd3cf76c50", false, "987654321_91", "U" },
+                    { "3", 0, new DateTime(1988, 8, 8, 0, 0, 0, 0, DateTimeKind.Unspecified), "ca3e5142-8da4-4f41-90b4-7a49c95d3fc7", "user3@mail.com", true, "User3", "M", false, false, "Family", false, null, "111223344", "user3@mail.com", null, "AQAAAAIAAYagAAAAEDdvbFjjsaHov+JPxz1h1Ux2MpeoVvm/559IkcQ1spP+ep/SPbalv55fPvFU4oIrzQ==", "555555555", false, null, null, "b2b1dad7-7eb0-4eaf-b86f-0efd7e2030ec", false, "111223344_91", "U" },
+                    { "4", 0, new DateTime(1992, 12, 25, 0, 0, 0, 0, DateTimeKind.Unspecified), "4ba47203-f824-4c20-8fc4-a258e0ec1b95", "user4@mail.com", true, "User4", "F", false, false, "Family", false, null, "999888777", "user4@mail.com", null, "AQAAAAIAAYagAAAAEDSqaTcgZ8R8zCxlOlBuQop50IMole9b/MSwNDNhtaM/bGBjWKLA8iSFShUMXZKGaQ==", "444444444", false, null, null, "538f08c5-1777-4668-af2e-bce8a89f64df", false, "999888777_91", "U" },
+                    { "5", 0, new DateTime(1997, 7, 7, 0, 0, 0, 0, DateTimeKind.Unspecified), "2a6743e1-51b1-46ee-bb12-d366e012045e", "user5@mail.com", true, "User5", "M", false, false, "Family", false, null, "555444333", "user5@mail.com", null, "AQAAAAIAAYagAAAAEFaCzNpy5JOS4+kjYCZL1THomREPp4nP9FS4R9Ku9fjq5d95NaeGUZFkLC9/S5qSrw==", "333333333", false, null, null, "a1ae286d-da93-4e3b-ac47-3cdc9da1c00c", false, "333333333_91", "P" },
+                    { "6", 0, new DateTime(1994, 4, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), "3355fb4e-0a94-4d24-839e-8c1d413654f2", "user6@mail.com", true, "User6", "F", false, false, "Family", false, null, "777666555", "user6@mail.com", null, "AQAAAAIAAYagAAAAEG6rHvLenT5XG4k4abMqSQn2QTEGEfoOqG/af79kYREZe/iZMnU9IpGut3lAoXAqnw==", "222222222", false, null, null, "c758192c-67b8-4244-97f2-b640239a4037", false, "777666555_91", "P" },
+                    { "7", 0, new DateTime(1994, 4, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), "e28dbd93-1644-443a-8754-c999c504f06f", "usergoogle@mail.com", true, "User", "M", false, false, "Google", false, null, "123215648", "usergoogle@mail.com", null, "AQAAAAIAAYagAAAAEHBruZ+v0LTqoHJACGoVDS++bA/a9oY14W5kzN2MT0jG0LPFHmdwXzAT5EmZYc5L9w==", "231564789", false, "https://img.freepik.com/fotos-premium/empreendedor-deprimido-triste-em-homem-de-trabalhador-de-terno-formal-sentado-perto-de-uma-rua-ao-ar-livre-perto-do-centro-de-negocios-de-escritorio-moderno-homem-de-negocios-chateado-perdeu-o-emprego-devido-a-um-funcionario-de-crise-financeira-tem-problema-lado-de-fora_321831-6752.jpg", "google", "6bf82c63-e63b-48a2-b41d-e27888a43b5e", false, "123215648_91", "P" }
                 });
 
             migrationBuilder.InsertData(
@@ -696,6 +713,9 @@ namespace LusoHealthClient.Server.Migrations
 
             migrationBuilder.DropTable(
                 name: "Relatives");
+
+            migrationBuilder.DropTable(
+                name: "Report");
 
             migrationBuilder.DropTable(
                 name: "Reviews");

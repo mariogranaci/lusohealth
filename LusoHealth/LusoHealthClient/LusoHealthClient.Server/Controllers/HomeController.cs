@@ -84,6 +84,20 @@ namespace LusoHealthClient.Server.Controllers
             return professionalsDtoList;
         }
 
+        [HttpGet("get-specialties")]
+        public Task<ActionResult<List<Specialty>>> GetSpecialties()
+        {          
+            try
+            {
+                var specialties = _context.Specialties.ToList();
+                if (specialties == null) { return Task.FromResult<ActionResult<List<Specialty>>>(NotFound("Não foi possível encontrar as especialidades")); }
+                return Task.FromResult<ActionResult<List<Specialty>>>(specialties);
+            }
+            catch (Exception)
+            {
+                return Task.FromResult<ActionResult<List<Specialty>>>(BadRequest("Não foi possível encontrar as especialidades. Tente novamente."));
+            }
+        }
 
         #region private helper methods
         private List<ServiceDto> GetServiceDtos(List<Service> services)
@@ -113,8 +127,6 @@ namespace LusoHealthClient.Server.Controllers
             {
                 ReviewDto reviewDto = new ReviewDto
                 {
-                    IdPatient = review.IdPatient,
-                    PatientName = review.Patient.User.FirstName + " " + review.Patient.User.LastName,
                     IdService = review.IdService,
                     ServiceName = review.Service.Specialty.Name,
                     Stars = review.Stars,

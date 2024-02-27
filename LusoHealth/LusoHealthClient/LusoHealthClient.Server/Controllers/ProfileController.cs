@@ -484,7 +484,7 @@ namespace LusoHealthClient.Server.Controllers
         }
 
         [HttpGet("get-specialties")]
-        public async Task<ActionResult<List<Specialty>>> GetSpecialties()
+        public async Task<ActionResult<List<Models.Professionals.Specialty>>> GetSpecialties()
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }

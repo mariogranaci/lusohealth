@@ -3,6 +3,9 @@ import { AuthenticationService, ProfessionalType } from '../../authentication/au
 import { Subject, takeUntil } from 'rxjs';
 import { HomeService } from '../home.service';
 import { Professional } from '../../shared/models/profile/professional';
+import { Service } from '../../shared/models/profile/service';
+import { Specialty } from '../../shared/models/profile/Specialty';
+
 
 @Component({
   selector: 'app-home-page',
@@ -14,12 +17,16 @@ export class HomePageComponent {
   errorMessages: string[] = [];
   professionalTypes: ProfessionalType[] = [];
   professionals: Professional[] = [];
+  services: Service[] = [];
+  specialties: Specialty[] = [];
+  searchResults: string[] = [];
 
   constructor(public homeService: HomeService) { }
 
   ngOnInit() {
     this.getProfessionalTypes();
     this.getProfessionals();
+    this.getSpecialties();
   }
 
   ngOnDestroy(): void {
@@ -70,5 +77,93 @@ export class HomePageComponent {
         }
       }
     });
+  }
+
+  getSpecialties() {
+    this.homeService.getSpecialties().pipe(
+      takeUntil(this.unsubscribe$)
+    ).subscribe({
+      next: (specialities: Specialty[]) => {
+        this.specialties = specialities;
+        
+      },
+      error: (error) => {
+        console.log(error);
+        if (error.error.errors) {
+          this.errorMessages = error.error.errors;
+        } else {
+          this.errorMessages.push(error.error);
+        }
+      }
+    });
+  }
+
+  getSpecialtiesByTimesScheduled(): Specialty[] {
+    const sortedSpecialties = this.specialties.slice().sort((a, b) => {
+      return b.timesScheduled - a.timesScheduled;
+    });
+
+    const topSpecialties = sortedSpecialties.slice(0, 3);
+
+    console.log(topSpecialties);
+
+    return topSpecialties;
+  }
+
+
+  onSearchInput(event: any) {
+      const searchTerm = event.target.value.toLowerCase();
+      this.searchResults = this.specialties
+        .filter(specialty => specialty.name.toLowerCase().includes(searchTerm))
+        .map(specialty => specialty.name);
+  }
+
+  selectSpecialty(specialty: string) {
+    // Do something with the selected specialty, such as filtering professionals based on it
+    console.log("Selected specialty:", specialty);
+  }
+
+
+  calculateHighestRatedStars(professional: Professional): number {
+    if (!professional.reviews || professional.reviews.length === 0) {
+      return 0;
+    }
+    return Math.max(...professional.reviews.map(review => review.stars));
+  }
+
+  findHighestRatedSpecialty(professional: Professional): string {
+    if (!professional.reviews || professional.reviews.length === 0) {
+      return '';
+    }
+    const highestRatedReview = professional.reviews.reduce((prev, current) => (prev.stars > current.stars) ? prev : current);
+
+    this.services = professional.services;
+
+    const service: Service | undefined = this.services.find(service => service.serviceId === highestRatedReview.idService);
+
+    if (service) {
+      const specialty: string | undefined = this.services.find(type => type.specialtyId === service.specialtyId)?.specialty;
+      return specialty ? specialty: '';
+    } else {
+      return 'NENHUM';
+    }
+  }
+
+  findHighestRatedSpecialtyPrice(professional: Professional): number | null{
+    if (!professional.reviews || professional.reviews.length === 0) {
+      return null;
+    }
+    const highestRatedReview = professional.reviews.reduce((prev, current) => (prev.stars > current.stars) ? prev : current);
+
+    this.services = professional.services;
+
+    const service: Service | undefined = this.services.find(service => service.serviceId === highestRatedReview.idService);
+
+    if (service) {
+      const specialty: number | undefined = this.services.find(type => type.specialtyId === service.specialtyId)?.pricePerHour;
+      return specialty ? specialty : null;
+    } else {
+      return null;
+    }
   }
 }

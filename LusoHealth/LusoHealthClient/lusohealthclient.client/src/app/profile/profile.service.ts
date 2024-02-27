@@ -39,7 +39,6 @@ export class ProfileService {
 
   getUserData(): Observable<UserProfile>
   {
-
     const headers = this.getHeaders();
                                
     return this.http.get<UserProfile>(`${environment.appUrl}/api/profile/get-user`, { headers });

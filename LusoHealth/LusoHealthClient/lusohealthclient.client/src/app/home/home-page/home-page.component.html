@@ -3,18 +3,23 @@
    <h1 *ngIf="(authenticationService.user$ | async) as user">Bem-vindo ao LusoHealth, {{ getFirstAndLastName(user.name) }}</h1>-->
   <h1>LusoHealth</h1>
   <div id="searchDiv">
-    <input id="searchBar" type="text" placeholder="Pesquise por algum serviço">
+    <input id="searchBar" type="text" placeholder="Pesquise por especialidades" (input)="onSearchInput($event)">
     <figure id="searchIcon">
       <img src="assets/images/HomePage/search.png" alt="Ícone de pesquisa de filtros">
     </figure>
+    <ul class="myUL" *ngFor="let specialty of searchResults">
+      <li (click)="selectSpecialty(specialty)"><a href="#">{{ specialty }}</a></li>
+    </ul>
   </div>
+ 
+
 
   <div class="populares">
     <div class="form-buttons-row">
       <p class="populares-texto">Populares:</p>
-      <button class="btn">Cardiologia</button>
-      <button class="btn">Cardiologia</button>
-      <button class="btn">Cardiologia</button>
+      <button class="btn">{{getSpecialtiesByTimesScheduled()[0].name}}</button>
+      <button class="btn">{{getSpecialtiesByTimesScheduled()[1].name}}</button>
+      <button class="btn">{{getSpecialtiesByTimesScheduled()[2].name}}</button>
     </div>
   </div>
 </div>
@@ -27,7 +32,7 @@
       <ng-container *ngIf="professional.professionalType === professionalType.name">
         <div class="tab">
           <div id="icons">
-            <figure class="rating">4.9 <img alt="Estrela" class="star" src="/assets/images/profile/star.png"></figure>
+            <figure class="rating">{{ calculateHighestRatedStars(professional)}} <img alt="Estrela" class="star" src="/assets/images/profile/star.png"></figure>
           </div>
           <div class="content">
             <div class="content-name">
@@ -35,11 +40,10 @@
             </div>
             <div>
               <span>Especialidades:</span>
-              <div id="specialties" *ngFor="let specialty of professional.services">
-                <p>{{ specialty.specialty  }} - {{ specialty.pricePerHour  }}€</p>
-              </div>
+              <p>{{findHighestRatedSpecialty(professional)}}</p>
             </div>
             <div><p>{{professional.location}}</p></div>
+            <p>Preço por hora: {{findHighestRatedSpecialtyPrice(professional)}}€</p>
             <!--  <p>Preço por consulta: 18€</p>-->
           </div>
         </div>

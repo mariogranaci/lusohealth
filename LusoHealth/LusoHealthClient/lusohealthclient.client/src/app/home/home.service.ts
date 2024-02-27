@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment.development';
 import { Professional } from '../shared/models/profile/professional';
+import { Specialty } from '../shared/models/profile/Specialty';
+
 
 
 @Injectable({
@@ -22,11 +24,18 @@ export class HomeService {
   }
 
   getProfessionalTypes() {
-    return this.http.get<ProfessionalType[]>(`${environment.appUrl}/api/home/get-professional-types`);
+    const headers = this.getHeaders();
+    return this.http.get<ProfessionalType[]>(`${environment.appUrl}/api/home/get-professional-types`, { headers });
   }
 
   getProfessionals() {
-    return this.http.get<Professional[]>(`${environment.appUrl}/api/home/get-professionals`);
+    const headers = this.getHeaders();
+    return this.http.get<Professional[]>(`${environment.appUrl}/api/home/get-professionals`, { headers });
+  }
+
+  getSpecialties() {
+    const headers = this.getHeaders();
+    return this.http.get<Specialty[]>(`${environment.appUrl}/api/home/get-specialties`, { headers });
   }
 }
 

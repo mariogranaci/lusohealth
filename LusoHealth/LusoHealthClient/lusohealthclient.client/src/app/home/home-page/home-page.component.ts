@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { AuthenticationService, ProfessionalType } from '../../authentication/authentication.service';
 import { Subject, takeUntil } from 'rxjs';
 import { HomeService } from '../home.service';
@@ -20,6 +20,7 @@ export class HomePageComponent {
   services: Service[] = [];
   specialties: Specialty[] = [];
   searchResults: string[] = [];
+  searchTerm: string = '';
 
   constructor(public homeService: HomeService) { }
 
@@ -110,12 +111,29 @@ export class HomePageComponent {
     return topSpecialties;
   }
 
+  @HostListener('document:click', ['$event'])
+  onClick(event: any) {
+    if (!event.target.closest('#searchDiv')) {
+      this.searchTerm = '';
+      this.searchResults = [];
+    }
+  }
 
   onSearchInput(event: any) {
-      const searchTerm = event.target.value.toLowerCase();
+    this.searchTerm = event.target.value.trim();
+    const searchTermNormalized = this.removeAccents(this.searchTerm.toLowerCase());
+
+    if (searchTermNormalized.length > 1) {
       this.searchResults = this.specialties
-        .filter(specialty => specialty.name.toLowerCase().includes(searchTerm))
+        .filter(specialty => this.removeAccents(specialty.name.toLowerCase()).includes(searchTermNormalized))
         .map(specialty => specialty.name);
+    } else {
+      this.searchResults = [];
+    }
+  }
+
+  removeAccents(str: string): string {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   }
 
   selectSpecialty(specialty: string) {

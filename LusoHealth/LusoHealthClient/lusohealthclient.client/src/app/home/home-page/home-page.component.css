@@ -22,7 +22,7 @@ h1 {
 
 .populares {
   color: #fff;
-  width: 50%;
+  width: 100%;
 }
 
 .form-buttons-row {
@@ -34,7 +34,7 @@ h1 {
 
 .btn {
   color: black;
-  padding: 5px 25px;
+  padding: 5px 20px;
   border: none;
   cursor: pointer;
   border-radius: 25px;
@@ -51,55 +51,6 @@ h1 {
 .btn:active {
   transform: translateY(2px);
 }
-
-
-#searchDiv {
-  margin: 60px 0 40px 0;
-  background-color: #efefef;
-  display: flex;
-  justify-content: flex-end;
-  width: 50%;
-  height: 50px;
-  border-radius: 10px;
-}
-
-  #searchDiv figure {
-    display: flex;
-    align-content: center;
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
-    max-width: 40px;
-    align-items: center;
-    padding-right: 40px;
-  }
-
-    #searchDiv figure:hover {
-      cursor: pointer;
-    }
-
-    #searchDiv figure img {
-      width: 35px;
-      height: 35px;
-      transition: transform 400ms ease-out;
-    }
-
-    #searchDiv figure:hover img {
-      transform: scale(1.1);
-      transition: transform 200ms ease-in;
-    }
-
-#searchBar {
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
-  border: none;
-  width: 100%;
-  text-align: left;
-  padding-left: 15px;
-  font-size: 18px;
-  background: none;
-  outline: none;
-}
-
 
 /*-----------------------------------------------------------------*/
 
@@ -132,8 +83,13 @@ main {
   width: 300px;
 }
 
+.categorias {
+  padding: 0 100px;
+  z-index: -1;
+}
+
 .categoria {
-  width: 89%;
+  width: 100%;
   margin: 0 auto;
   display: flex;
   align-items: center;
@@ -143,7 +99,7 @@ main {
 .categoria-texto {
   font-weight: bold;
   font-size: 24px;
-  width: 89%;
+  width: 100%;
   margin: 50px auto 30px auto;
 }
 
@@ -171,7 +127,6 @@ main {
 }
 
 .tab p {
-
   height: fit-content;
   text-align: justify;
   text-overflow: ellipsis;
@@ -181,34 +136,89 @@ main {
   margin: 0;
 }
 
+#searchDiv {
+  margin-top: 60px;
+  background-color: #efefef;
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  height: 50px;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
 
-#searchBar {
-  background-position: 10px 12px; /* Position the search icon */
-  background-repeat: no-repeat; /* Do not repeat the icon image */
-  width: 100%; /* Full-width */
-  font-size: 16px; /* Increase font-size */
-  padding: 12px 20px 12px 40px; /* Add some padding */
-  border: 1px solid #ddd; /* Add a grey border */
-  margin-bottom: 12px; /* Add some space below the input */
+  #searchDiv figure {
+    display: flex;
+    align-content: center;
+    max-width: 40px;
+    align-items: center;
+    padding-right: 40px;
+  }
+
+    #searchDiv figure:hover {
+      cursor: pointer;
+    }
+
+    #searchDiv figure img {
+      width: 35px;
+      height: 35px;
+      transition: transform 400ms ease-out;
+    }
+
+    #searchDiv figure:hover img {
+      transform: scale(1.1);
+      transition: transform 200ms ease-in;
+    }
+
+.searchBar {
+  border: none;
+  width: 100%;
+  text-align: left;
+  padding-left: 15px;
+  font-size: 18px;
+  background: none;
+  outline: none;
+}
+
+.rounded-bottom {
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
 }
 
 #myUL {
   list-style-type: none;
   padding: 0;
   margin: 0;
+  width: 100%;
+  max-height: 300px;
+  overflow-y: scroll;
+  position: absolute;
+  z-index: 1;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+#searchSection {
+  width: 50%;
+  position:relative;
+}
+
+.option {
+  height: 47px;
 }
 
   #myUL li a {
-    border: 1px solid #ddd; /* Add a border to all links */
-    margin-top: -1px; /* Prevent double borders */
-    background-color: #f6f6f6; /* Grey background color */
-    padding: 12px; /* Add some padding */
-    text-decoration: none; /* Remove default text underline */
-    font-size: 18px; /* Increase the font-size */
-    color: black; /* Add a black text color */
-    display: block; /* Make it into a block element to fill the whole list */
+    border: 1px solid #ddd; 
+    background-color: #f6f6f6;
+    padding: 12px;
+    text-decoration: none;
+    font-size: 18px; 
+    color: black; 
+    display: block; 
   }
 
     #myUL li a:hover:not(.header) {
-      background-color: #eee; /* Add a hover effect to all links, except for headers */
+      background-color: #eee; 
     }

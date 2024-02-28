@@ -44,9 +44,9 @@ namespace LusoHealthClient.Server.Data
                 .Property(u => u.UserType)
                 .IsRequired();
 
-            // Configure Review entity
-            modelBuilder.Entity<Review>()
-                .HasKey(r => new { r.IdPatient, r.IdService });
+            //// Configure Review entity
+            //modelBuilder.Entity<Review>()
+            //    .HasKey(r => new { r.IdPatient, r.IdService });
 
             // Configure Service entity
             modelBuilder.Entity<Service>()
@@ -66,8 +66,6 @@ namespace LusoHealthClient.Server.Data
                 .HasOne(c => c.Professional)
                 .WithMany(p => p.Certificates)
                 .HasForeignKey(c => c.IdProfessional);
-
-            PasswordHasher<User> ph = new PasswordHasher<User>();
 
             modelBuilder.Entity<ProfessionalType>().HasData(
                 new ProfessionalType { Id = 1, Name = "Médico" },
@@ -266,216 +264,6 @@ namespace LusoHealthClient.Server.Data
                 new Specialty { Id = 197, Name = "Shiatsu", ProfessionalTypeId = 8, TimesScheduled = 0 },
                 new Specialty { Id = 198, Name = "Massoterapia", ProfessionalTypeId = 8, TimesScheduled = 0 }
         );
-
-            var user1 = new User
-            {
-                Id = "1",
-                FirstName = "User1",
-                LastName = "Family",
-                Email = "user1@mail.com",
-                NormalizedEmail = "user1@mail.com",
-                Gender = 'M',
-                Nif = "123456789",
-                UserType = 'U',
-                PhoneNumber = "987654321",
-                PasswordHash = "User1Pass",
-                PhoneNumberConfirmed = false,
-                EmailConfirmed = true,
-                IsSuspended = false,
-                IsBlocked = false,
-                ProfilePicPath = null,
-                TwoFactorEnabled = false,
-                LockoutEnabled = false,
-                AccessFailedCount = 0,
-                UserName = "123456789" + '_' + DateTime.Now.Millisecond,
-                BirthDate = new DateTime(1990, 1, 1)
-            };
-            var user2 = new User
-            {
-                Id = "2",
-                FirstName = "User2",
-                LastName = "Family",
-                Email = "user2@mail.com",
-                NormalizedEmail = "user2@mail.com",
-                Gender = 'F',
-                Nif = "987654321",
-                UserType = 'U',
-                PhoneNumber = "123456789",
-                PasswordHash = "User2Pass",
-                PhoneNumberConfirmed = false,
-                EmailConfirmed = true,
-                IsSuspended = false,
-                IsBlocked = false,
-                ProfilePicPath = null,
-                TwoFactorEnabled = false,
-                LockoutEnabled = false,
-                AccessFailedCount = 0,
-                UserName = "987654321" + '_' + DateTime.Now.Millisecond,
-                BirthDate = new DateTime(1995, 5, 15)
-            };
-            var user3 = new User
-            {
-                Id = "3",
-                FirstName = "User3",
-                LastName = "Family",
-                Email = "user3@mail.com",
-                NormalizedEmail = "user3@mail.com",
-                Gender = 'M',
-                Nif = "111223344",
-                UserType = 'U',
-                PhoneNumber = "555555555",
-                PasswordHash = "User3Pass",
-                PhoneNumberConfirmed = false,
-                EmailConfirmed = true,
-                IsSuspended = false,
-                IsBlocked = false,
-                ProfilePicPath = null,
-                TwoFactorEnabled = false,
-                LockoutEnabled = false,
-                AccessFailedCount = 0,
-                UserName = "111223344" + '_' + DateTime.Now.Millisecond,
-                BirthDate = new DateTime(1988, 8, 8)
-            };
-            var user4 = new User
-            {
-                Id = "4",
-                FirstName = "User4",
-                LastName = "Family",
-                Email = "user4@mail.com",
-                NormalizedEmail = "user4@mail.com",
-                Gender = 'F',
-                Nif = "999888777",
-                UserType = 'U',
-                PhoneNumber = "444444444",
-                PasswordHash = "User4Pass",
-                PhoneNumberConfirmed = false,
-                EmailConfirmed = true,
-                IsSuspended = false,
-                IsBlocked = false,
-                ProfilePicPath = null,
-                TwoFactorEnabled = false,
-                LockoutEnabled = false,
-                AccessFailedCount = 0,
-                UserName = "999888777" + '_' + DateTime.Now.Millisecond,
-                BirthDate = new DateTime(1992, 12, 25)
-            };
-            var user5 = new User
-            {
-                Id = "5",
-                FirstName = "User5",
-                LastName = "Family",
-                Email = "user5@mail.com",
-                NormalizedEmail = "user5@mail.com",
-                Gender = 'M',
-                Nif = "555444333",
-                UserType = 'P',
-                PhoneNumber = "333333333",
-                PasswordHash = "User5Pass",
-                PhoneNumberConfirmed = false,
-                EmailConfirmed = true,
-                IsSuspended = false,
-                IsBlocked = false,
-                ProfilePicPath = null,
-                TwoFactorEnabled = false,
-                LockoutEnabled = false,
-                AccessFailedCount = 0,
-                UserName = "333333333" + '_' + DateTime.Now.Millisecond,
-                BirthDate = new DateTime(1997, 7, 7)
-            };
-            var user6 = new User
-            {
-                Id = "6",
-                FirstName = "User6",
-                LastName = "Family",
-                Email = "user6@mail.com",
-                NormalizedEmail = "user6@mail.com",
-                Gender = 'F',
-                Nif = "777666555",
-                UserType = 'P',
-                PhoneNumber = "222222222",
-                PasswordHash = "User6Pass",
-                PhoneNumberConfirmed = false,
-                EmailConfirmed = true,
-                IsSuspended = false,
-                IsBlocked = false,
-                ProfilePicPath = null,
-                TwoFactorEnabled = false,
-                LockoutEnabled = false,
-                AccessFailedCount = 0,
-                UserName = "777666555" + '_' + DateTime.Now.Millisecond,
-                BirthDate = new DateTime(1994, 4, 14)
-            };
-            var userGoogle = new User
-            {
-                Id = "7",
-                FirstName = "User",
-                LastName = "Google",
-                Email = "usergoogle@mail.com",
-                NormalizedEmail = "usergoogle@mail.com",
-                Gender = 'M',
-                Nif = "123215648",
-                UserType = 'P',
-                PhoneNumber = "231564789",
-                PasswordHash = "User7Pass",
-                PhoneNumberConfirmed = false,
-                EmailConfirmed = true,
-                IsSuspended = false,
-                IsBlocked = false,
-                ProfilePicPath = "https://img.freepik.com/fotos-premium/empreendedor-deprimido-triste-em-homem-de-trabalhador-de-terno-formal-sentado-perto-de-uma-rua-ao-ar-livre-perto-do-centro-de-negocios-de-escritorio-moderno-homem-de-negocios-chateado-perdeu-o-emprego-devido-a-um-funcionario-de-crise-financeira-tem-problema-lado-de-fora_321831-6752.jpg",
-                TwoFactorEnabled = false,
-                LockoutEnabled = false,
-                AccessFailedCount = 0,
-                UserName = "123215648_" + DateTime.Now.Millisecond,
-                BirthDate = new DateTime(1994, 4, 14),
-                Provider = "google",
-
-            };
-
-            var users = new List<User> { user1, user2, user3, user4, user5, user6, userGoogle };
-
-            foreach (var user in users)
-            {
-                user.PasswordHash = ph.HashPassword(user, user.PasswordHash);
-            }
-
-            modelBuilder.Entity<User>().HasData(
-                user1,
-                user2,
-                user3,
-                user4,
-                user5,
-                user6,
-                userGoogle
-            );
-
-            var patient1 = new Patient { UserID = user1.Id};
-            var patient2 = new Patient { UserID = user2.Id };
-            var patient3 = new Patient { UserID = user3.Id };
-            var patient4 = new Patient { UserID = user4.Id };
-            var professional1 = new Professional { UserID = user5.Id, ProfessionalTypeId = 1};
-            var professional2 = new Professional { UserID = user6.Id, ProfessionalTypeId = 3 };
-            var professional3 = new Professional { UserID = userGoogle.Id, ProfessionalTypeId = 1 };
-
-            modelBuilder.Entity<Patient>().HasData(
-                patient1,
-                patient2,
-                patient3,
-                patient4
-            );
-
-            modelBuilder.Entity<Professional>().HasData(
-                professional1,
-                professional2,
-                professional3
-            );
-
-            var relative1 = new Relative { Id = 1, IdPatient = patient1.UserID, Name = "Mário Granaci", Gender = 'M', BirthDate = new DateTime(2003, 4, 29) };
-            var relative2= new Relative { Id = 2, IdPatient = patient1.UserID, Name = "Jaime Vieira", Gender = 'F', BirthDate = new DateTime(2002, 9, 24) };
-
-            modelBuilder.Entity<Relative>().HasData(
-                relative1,
-                relative2
-            );
         }
     }
 }

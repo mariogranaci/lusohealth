@@ -340,6 +340,7 @@ namespace LusoHealthClient.Server.Controllers
         {
             try
             {
+
                 var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
 
@@ -349,14 +350,28 @@ namespace LusoHealthClient.Server.Controllers
                 var professional = await _context.Professionals.FirstOrDefaultAsync(p => p.UserID == user.Id);
                 if (professional == null) { return NotFound("Não foi possível encontrar o profissional"); }
 
-                var reviewsFromDB = await _context.Reviews
-                    .Include(r => r.Service)
-                    .Where(r => r.Service.IdProfessional == user.Id && r.IdService == idService)
-                    .ToListAsync();
-                if (reviewsFromDB == null) { return NotFound("Não foi possível encontrar as reviews"); }
-                var reviews = GetReviewDtos(reviewsFromDB);
+                if (idService <= 0)
+                {
+                    var reviewsFromDB = await _context.Reviews
+                        .Include(r => r.Service)
+                        .Include(r => r.Patient)
+                        .Where(r => r.Service.IdProfessional == user.Id)
+                        .ToListAsync();
+                    if (reviewsFromDB == null) { return NotFound("Não foi possível encontrar as reviews"); }
+                    var reviews = GetReviewDtos(reviewsFromDB);
+                    return reviews;
+                } else
+                {
+                    var reviewsFromDB = await _context.Reviews
+                        .Include(r => r.Service)
+                        .Include(r => r.Patient)
+                        .Where(r => r.Service.IdProfessional == user.Id && r.IdService == idService)
+                        .ToListAsync();
+                    if (reviewsFromDB == null) { return NotFound("Não foi possível encontrar as reviews"); }
+                    var reviews = GetReviewDtos(reviewsFromDB);
+                    return reviews;
+                }
 
-                return reviews;
             } catch (Exception)
             {
                 return BadRequest("Não foi possível encontrar as reviews. Tente novamente.");

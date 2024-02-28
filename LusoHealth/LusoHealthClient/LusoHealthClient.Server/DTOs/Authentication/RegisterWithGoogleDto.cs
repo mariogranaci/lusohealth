@@ -42,5 +42,6 @@ namespace LusoHealthClient.Server.DTOs.Authentication
         [Required]
         public string Provider { get; set; }
         public string? ProfilePicPath { get; set; }
+        public int? ProfessionalTypeId { get; set; }
     }
 }

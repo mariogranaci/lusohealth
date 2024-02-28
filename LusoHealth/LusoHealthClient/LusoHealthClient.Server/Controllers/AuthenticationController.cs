@@ -111,7 +111,7 @@ namespace LusoHealthClient.Server.Controllers
                     };
                     _context.Professionals.Add(professional);
                     await _context.SaveChangesAsync();
-                } else
+                } else if(model.TipoUser == 'U')
                 {
                     var patient = new Patient
                     {

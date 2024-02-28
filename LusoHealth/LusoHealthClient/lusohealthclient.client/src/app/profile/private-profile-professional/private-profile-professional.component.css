@@ -73,6 +73,7 @@ main {
   border-radius: 50%;
   pointer-events: none;
   user-select: none;
+  object-fit: cover;
 }
 
 figure {

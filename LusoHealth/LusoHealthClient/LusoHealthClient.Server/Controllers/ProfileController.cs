@@ -593,11 +593,13 @@ namespace LusoHealthClient.Server.Controllers
 			var reviewDtos = new List<ReviewDto>();
 			foreach (var review in reviews)
 			{
-				ReviewDto reviewDto = new ReviewDto
-				{
-					IdPatient = review.IdPatient,
-					PatientName = review.Patient.User.FirstName + " " + review.Patient.User.LastName,
-					IdService = review.IdService,
+                Console.WriteLine(review);
+                ReviewDto reviewDto = new ReviewDto
+                {
+                    IdPatient = review.IdPatient,
+                    PatientName = review.Patient.User.FirstName + " " + review.Patient.User.LastName,
+                    PatientPicture = review.Patient.User.ProfilePicPath,
+                    IdService = review.IdService,
 					ServiceName = review.Service.Specialty.Name,
 					Stars = review.Stars,
 					Description = review.Description

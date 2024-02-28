@@ -11,6 +11,7 @@ import { Professional } from '../shared/models/profile/professional';
 import { Service } from '../shared/models/profile/service';
 import { Specialty } from '../shared/models/profile/specialty';
 import { Description } from '../shared/models/profile/description';
+import { Review } from '../shared/models/profile/review';
 
 @Injectable({
   providedIn: 'root'
@@ -110,6 +111,11 @@ export class ProfileService {
   updateDescription(description: Description): Observable<Description> {
     const headers = this.getHeaders();
     return this.http.patch<Description>(`${environment.appUrl}/api/profile/update-description`, description, { headers });
+  }
+
+  filterReviewsByService(idService: number): Observable<Review[]> {
+    const headers = this.getHeaders();
+    return this.http.post<Review[]>(`${environment.appUrl}/api/profile/filter-reviews-by-service`, idService, { headers });
   }
 
 }

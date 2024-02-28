@@ -11,36 +11,108 @@ h1 {
   color: #fff;
 }
 
-.populares-texto {
-  font-size: 25px;
-}
-
-.populares {
-  color: #fff;
-  width: 100%;
-}
-
-.form-buttons-row {
-  margin-top: 30px;
+.firstRow {
+  padding-top: 10px;
+  padding-left: 20px;
+  justify-content: flex-start;
+  margin-top: 20px;
   display: flex;
-  width: 100%;
-  justify-content: space-between;
+  align-items: center;
+  width:50%;
+}
+
+  .firstRow h4 {
+    padding-right: 15px;
+    width: 10%;
+  }
+
+
+.secondRow {
+  padding-top: 10px;
+  padding-left: 20px;
+  justify-content: flex-start;
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  width: 50%;
+}
+
+  .secondRow h4 {
+    padding-right: 15px;
+    width: 10%;
+  }
+
+.dropdown,
+.dropdown * {
+  position: relative;
+}
+
+.dropdown {
+  position: relative;
+  background-color: #fff;
+  border-radius: 10px;
+  margin-left: 15px;
+}
+
+.dropdown select {
+  font-size: 1.1rem;
+  font-weight: normal;
+  max-width: 400px;
+  padding: 8px 24px 8px 10px;
+  border: none;
+  background-color: transparent;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  user-select: none;
+}
+
+.dropdown select option {
+  height: fit-content;
+}
+
+.dropdown select:active, .dropdown select:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.dropdown:after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  width: 0;
+  height: 0;
+  margin-top: -2px;
+  border-top: 5px solid #aaa;
+  border-right: 5px solid transparent;
+  border-left: 5px solid transparent;
 }
 
 .btn {
-  color: black;
-  padding: 5px 20px;
+  width: fit-content;
+  height: 50px;
   border: none;
+  color: #fff;
+  font-size: 1.3rem;
+  border-radius: 30px;
+  padding: 10px 25px;
+  font-weight: 500;
+  background-color: #1875E7;
   cursor: pointer;
-  border-radius: 25px;
-  font-size: 15px;
   transition: background-color 0.3s ease, transform 0s;
-  margin-left: 20px;
+  position: absolute;
+  right: 30px;
+  display: inline-block;
+  box-shadow: inset 2px 2px 2px 0px rgba(37, 80, 209, 0.5), 7px 7px 20px 0px rgba(0, 0, 0, .1), 4px 4px 5px 0px rgba(0, 0, 0, .1);
+  outline: none;
 }
 
   .btn:hover {
     cursor: pointer;
-    background-color: rgb(195, 194, 194);
+    background-color: #1b69ca;
   }
 
   .btn:active {
@@ -133,12 +205,11 @@ main {
 }
 
 #searchDiv {
-  border: 2px solid black;
   margin: 60px auto 0;
   background-color: #fff;
   display: flex;
   justify-content: flex-end;
-  width: 97%;
+  width: 99%;
   height: 50px;
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
@@ -151,7 +222,7 @@ main {
     align-content: center;
     max-width: 40px;
     align-items: center;
-    padding-right: 40px;
+    padding-left: 10px;
   }
 
     #searchDiv figure:hover {

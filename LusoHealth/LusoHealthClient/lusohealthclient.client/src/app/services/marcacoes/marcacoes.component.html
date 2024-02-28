@@ -1,36 +1,65 @@
+<div class="firstRow">
+  <h4>Filtrar:</h4>
+  <div class="dropdown">
+    <select id="category" (change)="filterSpecialties(); filterProfessionals()">
+      <option disabled hidden selected>Categoria</option>
+      <option *ngFor="let professionalType of professionalTypes" value="{{ professionalType.name }}">{{ professionalType.name }}</option>
+    </select>
+  </div>
+  <div class="dropdown">
+    <select id="specialty" (change)="filterProfessionals()">
+      <option disabled hidden selected>Especialidade</option>
+      <option *ngFor="let specialty of specialtiesFiltered" value="{{specialty.name}}">{{ specialty.name }}</option>
+    </select>
+  </div>
+  <div class="dropdown">
+    <select id="type" (change)="filterProfessionals()">
+      <option disabled hidden selected>Tipo de Consulta</option>
+      <option value="Online">Online</option>
+      <option value="Presential">Presencial</option>
+      <option value="Home">Domicilio</option>
+    </select>
+  </div>
+  <button class="btn">Ver Mapa</button>
+</div>
+
+<div class="secondRow">
+  <h4>Ordenar:</h4>
+  <div class="dropdown">
+    <select>
+      <option value="" selected>Ranking</option>
+      <option value="" selected>preco ></option>
+      <option value="" selected>preco <</option>
+    </select>
+  </div>
+</div>
+
   <div class="header">
     <div id="searchDiv" [class.rounded-bottom]=" searchResults.length > 0">
       <figure class="searchIcon">
         <img src="assets/images/HomePage/search.png" alt="Ícone de pesquisa de filtros">
       </figure>
-      <input class="searchBar" type="text" placeholder="Pesquise por nome"
-             (input)="onSearchInput($event)">
+      <input class="searchBar" type="text" placeholder="Pesquise por nome" (keyup)="onSearchInput($event)" >
     </div>
-    <ul id="myUL">
-      <li class="option" *ngFor="let specialty of searchResults" (click)="selectSpecialty(specialty)"><a href="#">{{ specialty }}</a></li>
-    </ul>
   </div>
 
-
-
-<section class="categorias">
-  <div class="categoria" *ngFor="let professional of professionals">
-        <div class="tab">
-          <div id="icons">
-            <figure class="rating">{{ calculateHighestRatedStars(professional)}} <img alt="Estrela" class="star" src="/assets/images/profile/star.png"></figure>
-          </div>
-          <div class="content">
-            <div class="content-name">
-              <span>{{ professional.professionalInfo.firstName  }} {{ professional.professionalInfo.lastName  }}</span>
-            </div>
-            <div>
-              <span>Especialidades:</span>
-              <p>{{findHighestRatedSpecialty(professional)}}</p>
-            </div>
-            <div><p>{{professional.location}}</p></div>
-            <p>Preço por hora: {{findHighestRatedSpecialtyPrice(professional)}}€</p>
-          </div>
+  <section class="categorias">
+    <div class="categoria" *ngFor="let professional of professionalsFiltered">
+      <div class="tab">
+        <div id="icons">
+          <figure class="rating">{{ calculateHighestRatedStars(professional)}} <img alt="Estrela" class="star" src="/assets/images/profile/star.png"></figure>
         </div>
-  </div>
-</section>
-
+        <div class="content">
+          <div class="content-name">
+            <span>{{ professional.professionalInfo.firstName  }} {{ professional.professionalInfo.lastName }}</span>
+          </div>
+          <div>
+            <span>Especialidades:</span>
+            <p>{{findHighestRatedSpecialty(professional)}}</p>
+          </div>
+          <div><p>{{professional.location}}</p></div>
+          <p>Preço por hora: {{findHighestRatedSpecialtyPrice(professional)}}€</p>
+        </div>
+      </div>
+    </div>
+  </section>

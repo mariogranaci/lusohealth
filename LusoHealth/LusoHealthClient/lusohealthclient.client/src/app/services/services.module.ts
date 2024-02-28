@@ -7,7 +7,7 @@ import { SharedModule } from '../shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
 import { CalendarioComponent } from './calendario/calendario.component';
 import { MarcacoesComponent } from './marcacoes/marcacoes.component';
-
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -20,10 +20,12 @@ import { MarcacoesComponent } from './marcacoes/marcacoes.component';
     ServicesRoutingModule,
     RouterModule,
     SharedModule,
-    CalendarioComponent
+    CalendarioComponent,
+    FormsModule
   ],
   exports: [
     HttpClientModule
-  ]
+  ],
+  bootstrap: [MarcacoesComponent]
 })
 export class ServicesModule { }

@@ -89,7 +89,7 @@ namespace LusoHealthClient.Server.Controllers
         {          
             try
             {
-                var specialties = _context.Specialties.ToList();
+                var specialties = _context.Specialties.OrderByDescending(a => a.Name).ToList();
                 if (specialties == null) { return Task.FromResult<ActionResult<List<Specialty>>>(NotFound("Não foi possível encontrar as especialidades")); }
                 return Task.FromResult<ActionResult<List<Specialty>>>(specialties);
             }

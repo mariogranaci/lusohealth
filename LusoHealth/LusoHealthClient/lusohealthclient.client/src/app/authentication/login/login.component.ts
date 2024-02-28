@@ -59,14 +59,25 @@ export class LoginComponent implements OnInit {
     this.submitted = true;
     this.errorMessages = [];
 
+    const googleBox = this._document.getElementById('google-button-box');
+
     if (this.loginForm.valid) {
+      if (googleBox) {
+        googleBox.style.display = "none";
+      }
       this.loading = true;
       this.service.login(this.loginForm.value).subscribe({
         next: (response: any) => {
+          if (googleBox) {
+            googleBox.style.display = "block";
+          }
           this.loading = false;
           this.router.navigateByUrl('/');
         },
         error: (error) => {
+          if (googleBox) {
+            googleBox.style.display = "block";
+          }
           this.loading = false;
           if (error.error.errors) {
             this.errorMessages = error.error.errors;

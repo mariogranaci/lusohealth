@@ -7,6 +7,9 @@ import { Component, OnInit } from '@angular/core';
 import { ProfileService } from '../profile.service';
 import { Subject, takeUntil } from 'rxjs';
 import { Professional } from '../../shared/models/profile/professional';
+import { Service } from '../../shared/models/profile/service';
+import { Specialty } from '../../shared/models/profile/specialty';
+import { Review } from '../../shared/models/profile/review';
 
 @Component({
   selector: 'app-private-profile-professional',
@@ -17,9 +20,18 @@ export class PrivateProfileProfessionalComponent implements OnInit {
   private unsubscribe$ = new Subject<void>();;
   addSpecialityForm: FormGroup = new FormGroup({});
   editSpecialityForm: FormGroup = new FormGroup({});
-  submitted = false;
+  updateDescriptionForm: FormGroup = new FormGroup({});
+  submittedAdd = false;
+  submittedEdit = false;
+  submittedDescription = false;
+  selectEditService: Service | undefined;
   errorMessages: string[] = [];
-  responseText: string | undefined;
+  /*responseText: string | undefined;*/
+  public userData: Professional | undefined;
+  public specialties: Specialty[] | undefined;
+  public profileImagePath = "/assets/images/Perfil/profileImage.jpg";
+  public selectedSpecialtyReview = 0;
+  public reviews = null;
 
   constructor(private authenticationService: AuthenticationService,
     private formBuilder: FormBuilder,
@@ -33,10 +45,15 @@ export class PrivateProfileProfessionalComponent implements OnInit {
       }
     });
   }
-
   ngOnInit(): void {
     this.initializeForm();
-    this.getProfessionalInfo();
+    this.getProfessionalInfo().then(() => {
+      this.setUserFields();
+      this.getDescription();
+      //this.filterReviews();
+    });
+    this.getSpecialties();
+
   }
 
   ngOnDestroy(): void {
@@ -44,29 +61,72 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     this.unsubscribe$.complete();
   }
 
+  reloadTableData(): void {
+    this.getProfessionalInfo();
+  }
+
   initializeForm() {
 
     this.addSpecialityForm = this.formBuilder.group({
-
       selectSpeciality: ['', [Validators.required]],
       price: ['', [Validators.required, Validators.min(1), Validators.max(1000)]],
       presencial: ['', [Validators.required]],
       online: ['', [Validators.required]],
       domicilio: ['', [Validators.required]]
-    })
+    });
 
     this.editSpecialityForm = this.formBuilder.group({
       price: ['', [Validators.required, Validators.min(1), Validators.max(1000)]],
       presencial: ['', [Validators.required]],
       online: ['', [Validators.required]],
       domicilio: ['', [Validators.required]]
-    })
+    });
+
+    this.updateDescriptionForm = this.formBuilder.group({
+      description: ['', [Validators.maxLength(5000)]],
+    });
   }
 
-  getProfessionalInfo() {
-    this.profileService.getProfessionalInfo().pipe(takeUntil(this.unsubscribe$)).subscribe(
-      (userData: Professional) => {
-        console.log(userData);
+  getProfessionalInfo(): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      this.profileService.getProfessionalInfo().pipe(takeUntil(this.unsubscribe$)).subscribe(
+        (userData: Professional) => {
+          console.log(userData);
+          this.userData = userData;
+          /*var review1 = {
+            idPatient: "3",
+            patientName: "Macho Man",
+            patientPicture: "https://lh3.googleusercontent.com/a/ACg8ocIPXKhLd6de-EUAJqJMHueiODlt9uqkjPQMs9OdKH5F=s96-c",
+            idService: 21,
+            serviceName: "Cirurgia Plástica, Reconstrutiva e Estética",
+            stars: 5,
+            description: "Este chavalo é muito bom.",
+          }
+          var review2 = {
+            idPatient: "2",
+            patientName: "Macho Woman",
+            patientPicture: "https://lh3.googleusercontent.com/a/ACg8ocIPXKhLd6de-EUAJqJMHueiODlt9uqkjPQMs9OdKH5F=s96-c",
+            idService: 22,
+            serviceName: "Anestesiologia",
+            stars: 4,
+            description: "És top.",
+          }
+          this.userData.reviews.push(review1, review2);*/
+          resolve();
+        },
+        error => {
+          console.log(error);
+          reject(error); // You might want to handle error cases here
+        }
+      );
+    });
+  }
+
+  getSpecialties() {
+    this.profileService.getServices().pipe(takeUntil(this.unsubscribe$)).subscribe(
+      (specialties: Specialty[]) => {
+        console.log(specialties);
+        this.specialties = specialties;
       },
       error => {
         console.log(error);
@@ -74,12 +134,248 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     );
   }
 
-  addSpeciality() {
-    this.submitted = true;
-    this.errorMessages = [];
-    this.responseText = '';
+  setUserFields() {
+
+    const nomeElement = document.getElementById('nome');
+    const apelidoElement = document.getElementById('apelido');
+    const emailElement = document.getElementById('email');
+    const telemovelElement = document.getElementById('telemovel');
+    const nifElement = document.getElementById('nif');
+    const genderElement = document.getElementById('gender');
+
+    if (nomeElement && apelidoElement && emailElement && telemovelElement && nifElement && genderElement && this.userData) {
+      nomeElement.textContent = this.userData.professionalInfo.firstName;
+      apelidoElement.textContent = this.userData.professionalInfo.lastName;
+      emailElement.textContent = this.userData.professionalInfo.email;
+      telemovelElement.textContent = this.userData.professionalInfo.telemovel;
+      nifElement.textContent = this.userData.professionalInfo.nif;
+      genderElement.textContent = (this.userData.professionalInfo.genero === "M") ? "Masculino" : "Feminino";
+
+      if (this.userData.professionalInfo.picture) {
+        this.profileImagePath = this.userData.professionalInfo.picture;
+      }
+    }
   }
 
+  getDescription() {
+    const descriptionElement = document.getElementById('description');
+
+    if (descriptionElement && this.userData && this.userData.description) {
+      this.updateDescriptionForm.setValue({
+        description: this.userData.description
+      });
+    }
+  }
+
+  updateDescription() {
+    this.submittedDescription = true;
+    this.errorMessages = [];
+    /*this.responseText = '';*/
+
+
+
+    if (this.updateDescriptionForm.valid) {
+
+      const form = this.updateDescriptionForm.value;
+
+      if (this.userData?.description != form.description) {
+
+        var description = { description: form.description }
+
+        this.profileService.updateDescription(description).subscribe({
+          next: (response: any) => {
+            this.reloadTableData();
+            //this.responseText = response.value.message;
+            this.submittedDescription = false;
+            console.log("Alterado");
+          },
+          error: (error) => {
+            console.log(error.error);
+            if (error.error.errors) {
+              this.errorMessages = error.error.errors;
+            } else {
+              this.errorMessages.push(error.error);
+            }
+          }
+        })
+      }
+      else {
+        console.log("Antes: " + this.errorMessages.length);
+        this.errorMessages.push("A nova descrição é igual à anterior.");
+        console.log("Depois: " + this.errorMessages.length);
+      }
+    }
+  }
+
+  addSpeciality() {
+    this.submittedAdd = true;
+    this.errorMessages = [];
+    /*this.responseText = '';*/
+
+    if (this.addSpecialityForm.valid) {
+
+      const form = this.addSpecialityForm.value;
+
+      var specialtyform = {
+        serviceId: null,
+        specialtyId: form.selectSpeciality,
+        specialty: null,
+        pricePerHour: form.price,
+        online: (form.online === "S") ? true : false,
+        presential: (form.presencial === "S") ? true : false,
+        home: (form.domicilio === "S") ? true : false,
+      }
+
+      this.profileService.addSpecialty(specialtyform).subscribe({
+        next: (response: any) => {
+          this.reloadTableData();
+          /*this.responseText = response.value.message;*/
+          this.submittedAdd = false;
+          this.addSpecialityForm.reset();
+          this.closePopup();
+        },
+        error: (error) => {
+          console.log(error.error);
+          if (error.error.errors) {
+            this.errorMessages = error.error.errors;
+          } else {
+            this.errorMessages.push(error.error);
+          }
+        }
+      })
+    }
+  }
+
+  editSpeciality() {
+    this.submittedEdit = true;
+    this.errorMessages = [];
+    /*this.responseText = '';*/
+
+    if (this.editSpecialityForm.valid) {
+
+      const form = this.editSpecialityForm.value;
+
+      if (this.selectEditService) {
+        var specialtyform = {
+          serviceId: this.selectEditService.serviceId,
+          specialtyId: this.selectEditService.specialtyId,
+          specialty: this.selectEditService.specialty,
+          pricePerHour: form.price,
+          online: (form.online === "S") ? true : false,
+          presential: (form.presencial === "S") ? true : false,
+          home: (form.domicilio === "S") ? true : false,
+        }
+
+        this.profileService.updateSpecialty(specialtyform).subscribe({
+          next: (response: any) => {
+            this.reloadTableData();
+            /*this.responseText = response.value.message;*/
+            this.submittedEdit = false;
+            this.editSpecialityForm.reset();
+            this.closePopup();
+          },
+          error: (error) => {
+            console.log(error.error);
+            if (error.error.errors) {
+              this.errorMessages = error.error.errors;
+            } else {
+              this.errorMessages.push(error.error);
+            }
+          }
+        })
+      }
+    }
+  }
+
+  deleteSpeciality(specialtyId: number | null) {
+    if (specialtyId != null) {
+      this.profileService.deleteSpecialty(specialtyId).subscribe({
+        next: () => {
+          this.reloadTableData();
+        },
+        error: (error) => {
+          console.log(error);
+          if (error.error.errors) {
+            this.errorMessages = error.error.errors;
+          } else {
+            this.errorMessages.push(error.error);
+          }
+        }
+      });
+    }
+  }
+
+  showSpecialtyEdit(service: Service) {
+
+    this.selectEditService = service;
+
+    this.openPopup('edit');
+
+    this.setEditFormFields();
+  }
+
+  setEditFormFields() {
+
+    const nome = document.getElementById('speciality-name');
+
+    if (nome && this.selectEditService) {
+      nome.textContent = this.selectEditService.specialty;
+    }
+
+    if (this.selectEditService) {
+      this.editSpecialityForm.setValue({
+        price: this.selectEditService?.pricePerHour,
+        presencial: (this.selectEditService?.presential == true) ? "S" : "N",
+        online: (this.selectEditService?.online == true) ? "S" : "N",
+        domicilio: (this.selectEditService?.home == true) ? "S" : "N"
+      });
+    }
+  }
+
+  changeSpecialtyReview(value: string) {
+
+    const selectedValue = parseInt(value);
+
+    if (!isNaN(selectedValue)) {
+      if (selectedValue == 0) {
+        this.selectedSpecialtyReview = 0;
+
+      }
+      else {
+        var reviews = this.filterReviews(this.selectedSpecialtyReview);
+
+        if (Array.isArray(reviews)) {
+          if (reviews.length > 0) {
+
+          }
+          else {
+
+          }
+        }
+      }
+    } else {
+
+    }
+    //document.getElementById('personlist').value = Person_ID;
+  }
+
+  filterReviews(serviceId: number) {
+    this.profileService.filterReviewsByService(21).subscribe({
+      next: (reviews: Review[]) => {
+        /*this.responseText = response.value.message;*/
+        console.log(reviews);
+        return reviews;
+      },
+      error: (error) => {
+        console.log(error.error);
+        if (error.error.errors) {
+          this.errorMessages = error.error.errors;
+        } else {
+          this.errorMessages.push(error.error);
+        }
+      }
+    });
+  }
 
   openPopup(opcao: string) {
     const overlay = document.getElementById('overlay');
@@ -106,6 +402,10 @@ export class PrivateProfileProfessionalComponent implements OnInit {
         }
       }
     }
+  }
+
+  private getAverage(reviews: Review[]) {
+
   }
 
   closePopup() {

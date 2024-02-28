@@ -95,6 +95,8 @@ namespace LusoHealthClient.Server.Controllers
 
             var reviewsFromDB = await _context.Reviews
                 .Include(r => r.Service)
+                .Include(r => r.Patient)
+                .ThenInclude(p => p.User)
                 .Where(r => r.Service.IdProfessional == user.Id)
                 .ToListAsync();
             var reviews = GetReviewDtos(reviewsFromDB);
@@ -355,6 +357,7 @@ namespace LusoHealthClient.Server.Controllers
                     var reviewsFromDB = await _context.Reviews
                         .Include(r => r.Service)
                         .Include(r => r.Patient)
+                        .ThenInclude(p => p.User)
                         .Where(r => r.Service.IdProfessional == user.Id)
                         .ToListAsync();
                     if (reviewsFromDB == null) { return NotFound("Não foi possível encontrar as reviews"); }
@@ -365,6 +368,7 @@ namespace LusoHealthClient.Server.Controllers
                     var reviewsFromDB = await _context.Reviews
                         .Include(r => r.Service)
                         .Include(r => r.Patient)
+                        .ThenInclude(p => p.User)
                         .Where(r => r.Service.IdProfessional == user.Id && r.IdService == idService)
                         .ToListAsync();
                     if (reviewsFromDB == null) { return NotFound("Não foi possível encontrar as reviews"); }

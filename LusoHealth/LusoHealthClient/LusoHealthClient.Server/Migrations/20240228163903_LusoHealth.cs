@@ -324,30 +324,31 @@ namespace LusoHealthClient.Server.Migrations
                 name: "Reviews",
                 columns: table => new
                 {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     IdPatient = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     IdService = table.Column<int>(type: "int", nullable: false),
                     Stars = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PatientUserID = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    ServiceId = table.Column<int>(type: "int", nullable: false),
                     ProfessionalUserID = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Reviews", x => new { x.IdPatient, x.IdService });
+                    table.PrimaryKey("PK_Reviews", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Reviews_Patients_PatientUserID",
-                        column: x => x.PatientUserID,
+                        name: "FK_Reviews_Patients_IdPatient",
+                        column: x => x.IdPatient,
                         principalTable: "Patients",
-                        principalColumn: "UserID");
+                        principalColumn: "UserID",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Reviews_Professionals_ProfessionalUserID",
                         column: x => x.ProfessionalUserID,
                         principalTable: "Professionals",
                         principalColumn: "UserID");
                     table.ForeignKey(
-                        name: "FK_Reviews_Services_ServiceId",
-                        column: x => x.ServiceId,
+                        name: "FK_Reviews_Services_IdService",
+                        column: x => x.IdService,
                         principalTable: "Services",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -599,19 +600,19 @@ namespace LusoHealthClient.Server.Migrations
                 column: "IdPatient");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Reviews_PatientUserID",
+                name: "IX_Reviews_IdPatient",
                 table: "Reviews",
-                column: "PatientUserID");
+                column: "IdPatient");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reviews_IdService",
+                table: "Reviews",
+                column: "IdService");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reviews_ProfessionalUserID",
                 table: "Reviews",
                 column: "ProfessionalUserID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Reviews_ServiceId",
-                table: "Reviews",
-                column: "ServiceId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Services_IdProfessional",

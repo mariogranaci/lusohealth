@@ -24,35 +24,36 @@ namespace LusoHealthClient.Server.Migrations
 
             modelBuilder.Entity("LusoHealthClient.Server.Models.FeedbackAndReports.Review", b =>
                 {
-                    b.Property<string>("IdPatient")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("IdService")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PatientUserID")
+                    b.Property<string>("IdPatient")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("IdService")
+                        .HasColumnType("int");
 
                     b.Property<string>("ProfessionalUserID")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("ServiceId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Stars")
                         .HasColumnType("int");
 
-                    b.HasKey("IdPatient", "IdService");
+                    b.HasKey("Id");
 
-                    b.HasIndex("PatientUserID");
+                    b.HasIndex("IdPatient");
+
+                    b.HasIndex("IdService");
 
                     b.HasIndex("ProfessionalUserID");
-
-                    b.HasIndex("ServiceId");
 
                     b.ToTable("Reviews");
                 });
@@ -1699,17 +1700,19 @@ namespace LusoHealthClient.Server.Migrations
                 {
                     b.HasOne("LusoHealthClient.Server.Models.Users.Patient", "Patient")
                         .WithMany()
-                        .HasForeignKey("PatientUserID");
+                        .HasForeignKey("IdPatient")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LusoHealthClient.Server.Models.Professionals.Service", "Service")
+                        .WithMany()
+                        .HasForeignKey("IdService")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("LusoHealthClient.Server.Models.Users.Professional", null)
                         .WithMany("Reviews")
                         .HasForeignKey("ProfessionalUserID");
-
-                    b.HasOne("LusoHealthClient.Server.Models.Professionals.Service", "Service")
-                        .WithMany()
-                        .HasForeignKey("ServiceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
 
                     b.Navigation("Patient");
 

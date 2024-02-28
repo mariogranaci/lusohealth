@@ -44,9 +44,9 @@ namespace LusoHealthClient.Server.Data
                 .Property(u => u.UserType)
                 .IsRequired();
 
-            // Configure Review entity
-            modelBuilder.Entity<Review>()
-                .HasKey(r => new { r.IdPatient, r.IdService });
+            //// Configure Review entity
+            //modelBuilder.Entity<Review>()
+            //    .HasKey(r => new { r.IdPatient, r.IdService });
 
             // Configure Service entity
             modelBuilder.Entity<Service>()

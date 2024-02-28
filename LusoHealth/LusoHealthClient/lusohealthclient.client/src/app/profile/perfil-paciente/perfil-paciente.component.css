@@ -167,6 +167,13 @@ loading-spinner {
   transform: translate(-50%, -50%); 
 }
 
+.is-invalid {
+  border: 2px solid #cc0000 !important;
+}
+
+.text-danger {
+  color: #cc0000;
+}
 
 /*----------------------Popup------------------------*/
 

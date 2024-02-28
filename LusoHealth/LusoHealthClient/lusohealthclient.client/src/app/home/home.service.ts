@@ -5,10 +5,14 @@ import { environment } from '../../environments/environment.development';
 import { Professional } from '../shared/models/profile/professional';
 import { Specialty } from '../shared/models/profile/Specialty';
 
+
+
 @Injectable({
   providedIn: 'root'
 })
-export class ServicesService {
+
+export class HomeService {
+
   constructor(private http: HttpClient, private router: Router) { }
 
   getProfessionalTypes() {

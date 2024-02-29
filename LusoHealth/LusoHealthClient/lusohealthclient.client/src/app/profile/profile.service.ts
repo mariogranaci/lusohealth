@@ -9,7 +9,7 @@ import { Relative } from '../shared/models/profile/relative';
 import { Observable } from 'rxjs';
 import { Professional } from '../shared/models/profile/professional';
 import { Service } from '../shared/models/profile/service';
-import { Specialty } from '../shared/models/profile/specialty';
+import { Specialty } from '../shared/models/profile/Specialty';
 import { Description } from '../shared/models/profile/description';
 import { Review } from '../shared/models/profile/review';
 

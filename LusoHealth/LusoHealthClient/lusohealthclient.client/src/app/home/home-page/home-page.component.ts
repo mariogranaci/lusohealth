@@ -160,7 +160,7 @@ export class HomePageComponent {
     const service: Service | undefined = this.services.find(service => service.serviceId === highestRatedReview.idService);
 
     if (service) {
-      const specialty: string | undefined = this.services.find(type => type.specialtyId === service.specialtyId)?.specialty;
+      const specialty: string | undefined | null = this.services.find(type => type.specialtyId === service.specialtyId)?.specialty;
       return specialty ? specialty: '';
     } else {
       return 'NENHUM';

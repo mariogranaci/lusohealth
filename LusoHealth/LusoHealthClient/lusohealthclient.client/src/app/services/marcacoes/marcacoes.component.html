@@ -48,21 +48,21 @@
 </div>
 
 <section class="categorias">
-  <div class="categoria" *ngFor="let professional of paginatedProfessionals">
+  <div class="categoria" *ngFor="let service of paginatedServices">
     <div class="tab">
       <div id="icons">
-        <figure class="rating">{{ calculateHighestRatedStars(professional)}} <img alt="Estrela" class="star" src="/assets/images/profile/star.png"></figure>
+        <figure class="rating">{{ returnStars(service) === 0 ? '-' : returnStars(service)}} <img alt="Estrela" class="star" src="/assets/images/profile/star.png"></figure>
       </div>
       <div class="content">
         <div class="content-name">
-          <span>{{ professional.professionalInfo.firstName  }} {{ professional.professionalInfo.lastName }}</span>
+          <span>{{ service.professional.professionalInfo.firstName  }} {{ service.professional.professionalInfo.lastName }}</span>
         </div>
         <div>
           <span>Especialidades:</span>
-          <p>{{findHighestRatedSpecialty(professional)}}</p>
+          <p>{{service.specialty}}</p>
         </div>
-        <div><p>{{professional.location}}</p></div>
-        <p>Preço por hora: {{findHighestRatedSpecialtyPrice(professional)}}€</p>
+        <div><p>{{service.professional.location}}</p></div>
+        <p>Preço por hora: {{service.pricePerHour}}€</p>
       </div>
     </div>
   </div>

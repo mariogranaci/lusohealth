@@ -124,12 +124,11 @@ export class MarcacoesComponent {
     return topSpecialties;
   }
 
-  @HostListener('document:click', ['$event'])
-  onClick(event: any) {
-    if (!event.target.closest('#searchDiv')) {
-      this.searchTerm = '';
-      this.searchResults = [];
-    }
+  resetInputValue(event: any) {
+    event.target.value = ''; 
+    this.searchTerm = '';
+    this.searchResults = []; 
+    this.professionalsFilteredAgain = this.professionalsTemp;
   }
 
   onSearchInput(event: any) {

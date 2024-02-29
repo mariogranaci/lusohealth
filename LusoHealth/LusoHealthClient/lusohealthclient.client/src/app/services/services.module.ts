@@ -8,6 +8,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { CalendarioComponent } from './calendario/calendario.component';
 import { MarcacoesComponent } from './marcacoes/marcacoes.component';
 import { FormsModule } from '@angular/forms';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { FormsModule } from '@angular/forms';
     RouterModule,
     SharedModule,
     CalendarioComponent,
-    FormsModule
+    FormsModule,
+    MatPaginatorModule
   ],
   exports: [
     HttpClientModule

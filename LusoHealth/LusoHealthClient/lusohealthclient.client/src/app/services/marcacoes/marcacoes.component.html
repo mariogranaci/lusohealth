@@ -43,7 +43,7 @@
       <figure class="searchIcon">
         <img src="assets/images/HomePage/search.png" alt="Ícone de pesquisa de filtros">
       </figure>
-      <input class="searchBar" type="text" placeholder="Pesquise por nome" (keyup)="onSearchInput($event)" >
+      <input class="searchBar" type="text" placeholder="Pesquise por nome" (keyup)="onSearchInput($event)"  (blur)="resetInputValue($event)">
     </div>
   </div>
 
@@ -67,3 +67,5 @@
       </div>
     </div>
   </section>
+
+  <mat-paginator [length]="professionalsFilteredAgain.length" [pageSize]="6"></mat-paginator>

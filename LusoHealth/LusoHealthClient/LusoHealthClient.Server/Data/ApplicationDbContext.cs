@@ -1,5 +1,6 @@
 ﻿using LusoHealthClient.Server.Models.FeedbackAndReports;
 using LusoHealthClient.Server.Models.Professionals;
+using LusoHealthClient.Server.Models.Services;
 using LusoHealthClient.Server.Models.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;

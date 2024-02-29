@@ -6,6 +6,7 @@ import { ConfirmEmail } from '../../shared/models/authentication/confirmEmail';
 import { Subject, take, takeUntil } from 'rxjs';
 import { ServicesService } from '../services.service';
 import { MakeAppointment } from '../../shared/models/Services/makeAppointment';
+import { Appointment } from '../../shared/models/Services/appointment';
 
 
 @Component({
@@ -75,6 +76,19 @@ export class MarcarConsultaComponent {
         console.log(error);
       }
     );
+  }
+
+  marcarClick() {
+    const newAppointment = new Appointment(null, "praceta", "Presential", "descrição", "Pending", 1, "5", "2" , parseInt(this.serviceId));
+
+    this.service.addAppointment(newAppointment).subscribe(
+      response => {
+        console.log('Appointment adicionado com sucesso:', response);
+      },
+      error => {
+        console.error('Erro ao adicionar o appointment:', error);
+      }
+    )
   }
 
   toggleCalendar() {

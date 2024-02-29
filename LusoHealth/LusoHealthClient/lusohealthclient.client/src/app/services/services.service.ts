@@ -4,6 +4,7 @@ import { environment } from '../../environments/environment.development';
 import { User } from '../shared/models/authentication/user';
 import { MakeAppointment } from '../shared/models/Services/makeAppointment';
 import { Observable } from 'rxjs';
+import { Appointment } from '../shared/models/Services/appointment';
 
 @Injectable({
   providedIn: 'root'
@@ -42,5 +43,11 @@ export class ServicesService {
     const headers = this.getHeaders();
 
     return this.http.get<MakeAppointment>(`${environment.appUrl}/api/home/get-service-info/${id}`, { headers });
+  }
+
+
+  addAppointment(appointment: Appointment): Observable<Appointment> {
+    const headers = this.getHeaders();
+    return this.http.post<Appointment>(`${environment.appUrl}/api/home/add-appointment`, appointment, { headers });
   }
 }

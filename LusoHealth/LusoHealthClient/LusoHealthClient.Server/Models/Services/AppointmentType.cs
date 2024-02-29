@@ -1,4 +1,4 @@
-﻿namespace LusoHealthClient.Server.Models.Professionals
+﻿namespace LusoHealthClient.Server.Models.Services
 {
 	public enum AppointmentType
 	{
@@ -6,4 +6,5 @@
 		Online,
 		Home
 	}
+
 }

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LusoHealthClient.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240229014227_lusohealth")]
+    [Migration("20240229171344_lusohealth")]
     partial class lusohealth
     {
         /// <inheritdoc />
@@ -90,47 +90,6 @@ namespace LusoHealthClient.Server.Migrations
                     b.HasIndex("ProfessionalUserID");
 
                     b.ToTable("Reviews");
-                });
-
-            modelBuilder.Entity("LusoHealthClient.Server.Models.Professionals.Appointment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Duration")
-                        .HasColumnType("int");
-
-                    b.Property<string>("IdPatient")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("IdProfesional")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Location")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("State")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Timestamp")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Appointment");
                 });
 
             modelBuilder.Entity("LusoHealthClient.Server.Models.Professionals.Certificate", b =>
@@ -1465,6 +1424,52 @@ namespace LusoHealthClient.Server.Migrations
                         });
                 });
 
+            modelBuilder.Entity("LusoHealthClient.Server.Models.Services.Appointment", b =>
+                {
+                    b.Property<int?>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Duration")
+                        .HasColumnType("int");
+
+                    b.Property<string>("IdPatient")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("IdProfesional")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("IdService")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Location")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("State")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdPatient");
+
+                    b.HasIndex("IdProfesional");
+
+                    b.HasIndex("IdService");
+
+                    b.ToTable("Appointment");
+                });
+
             modelBuilder.Entity("LusoHealthClient.Server.Models.Users.Patient", b =>
                 {
                     b.Property<string>("UserID")
@@ -1833,6 +1838,27 @@ namespace LusoHealthClient.Server.Migrations
                         .IsRequired();
 
                     b.Navigation("ProfessionalType");
+                });
+
+            modelBuilder.Entity("LusoHealthClient.Server.Models.Services.Appointment", b =>
+                {
+                    b.HasOne("LusoHealthClient.Server.Models.Users.Patient", "Patient")
+                        .WithMany()
+                        .HasForeignKey("IdPatient");
+
+                    b.HasOne("LusoHealthClient.Server.Models.Users.Professional", "Professional")
+                        .WithMany()
+                        .HasForeignKey("IdProfesional");
+
+                    b.HasOne("LusoHealthClient.Server.Models.Professionals.Service", "Service")
+                        .WithMany()
+                        .HasForeignKey("IdService");
+
+                    b.Navigation("Patient");
+
+                    b.Navigation("Professional");
+
+                    b.Navigation("Service");
                 });
 
             modelBuilder.Entity("LusoHealthClient.Server.Models.Users.Patient", b =>

@@ -14,26 +14,6 @@ namespace LusoHealthClient.Server.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Appointment",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Timestamp = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Type = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    State = table.Column<int>(type: "int", nullable: false),
-                    Duration = table.Column<int>(type: "int", nullable: false),
-                    IdProfesional = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IdPatient = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Appointment", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
                 {
@@ -358,6 +338,42 @@ namespace LusoHealthClient.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Appointment",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Timestamp = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Location = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Type = table.Column<int>(type: "int", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    State = table.Column<int>(type: "int", nullable: true),
+                    Duration = table.Column<int>(type: "int", nullable: true),
+                    IdProfesional = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    IdPatient = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    IdService = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Appointment", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Appointment_Patients_IdPatient",
+                        column: x => x.IdPatient,
+                        principalTable: "Patients",
+                        principalColumn: "UserID");
+                    table.ForeignKey(
+                        name: "FK_Appointment_Professionals_IdProfesional",
+                        column: x => x.IdProfesional,
+                        principalTable: "Professionals",
+                        principalColumn: "UserID");
+                    table.ForeignKey(
+                        name: "FK_Appointment_Services_IdService",
+                        column: x => x.IdService,
+                        principalTable: "Services",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Reviews",
                 columns: table => new
                 {
@@ -581,6 +597,21 @@ namespace LusoHealthClient.Server.Migrations
                     { 197, "Shiatsu", 8, 0 },
                     { 198, "Massoterapia", 8, 0 }
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Appointment_IdPatient",
+                table: "Appointment",
+                column: "IdPatient");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Appointment_IdProfesional",
+                table: "Appointment",
+                column: "IdProfesional");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Appointment_IdService",
+                table: "Appointment",
+                column: "IdService");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

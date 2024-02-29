@@ -3,12 +3,16 @@ using LusoHealthClient.Server.DTOs.Administration;
 using LusoHealthClient.Server.DTOs.Profile;
 using LusoHealthClient.Server.DTOs.Services;
 using LusoHealthClient.Server.Models.FeedbackAndReports;
+using LusoHealthClient.Server.Models.Professionals;
+using LusoHealthClient.Server.Models.Services;
 using LusoHealthClient.Server.Models.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client.Platforms.Features.DesktopOs.Kerberos;
+using Microsoft.OpenApi.Extensions;
 using System.Security.Claims;
 
 namespace LusoHealthClient.Server.Controllers
@@ -62,29 +66,38 @@ namespace LusoHealthClient.Server.Controllers
 
 
 		[HttpPost("add-appointment")]
-		public async Task<ActionResult> AddReport(MakeAppointmentDto makeAppointmentDto)
+		public async Task<ActionResult> AddAppointment(AppointmentDto appointmentDto)
 		{
 			try
 			{
 				var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 				if (string.IsNullOrEmpty(userId)) return BadRequest("Não foi possível encontrar o utilizador.");
-
+				
 				var user = await _userManager.FindByIdAsync(userId);
 				if (user == null) return NotFound("Não foi possível encontrar o utilizador.");
 
-				var MakeAppointmentDto = new makeAppointmentDto
+				var info = await _context.Services
+				.FirstOrDefaultAsync(x => x.Id == appointmentDto.IdService);
+
+
+
+				var appointmentInfo = new Appointment
 				{
 					Timestamp = DateTime.Now,
+					Location = appointmentDto.Location,
+					Type = AppointmentType.Presential,
+					Description = appointmentDto.Description,
+					State = AppointmentState.Pending,
+					Duration = appointmentDto.Duration,	
 					IdPatient = user.Id,
-					IdProfesional = reportDto.IdProfesional,
-					Description = reportDto.De
-
+					IdProfesional = info.IdProfessional,
+					IdService = info.Id,
 				};
 
-				_context.Appointment.Add(makeAppointmentDto);
+				_context.Appointment.Add(appointmentInfo);
 				await _context.SaveChangesAsync();
 
-				return Ok(new { message = "O report foi enviado com sucesso." });
+				return Ok(new { message = "A consulta foi marcada com sucesso." });
 			}
 			catch (Exception ex)
 			{

@@ -98,8 +98,17 @@
   </div>
 
   <form [formGroup]="updateDescriptionForm" id="update-description-form" autocomplete="off" (ngSubmit)="updateDescription()">
-    <textarea formControlName="description" id="description" name="description" placeholder="Insira a sua descrição..." 
-              [class.is-invalid]="submittedDescription && updateDescriptionForm.get('description')?.errors"></textarea>
+    <div class="description-container">
+      <textarea formControlName="description" id="description" name="description" placeholder="Insira a sua descrição..."
+          [class.is-invalid]="submittedDescription && updateDescriptionForm.get('description')?.errors"></textarea>
+      <div class="container-animation">
+        <input class="input-check-animation" type="checkbox" id="check">
+        <label class="label-check-animation" for="check">
+          <div class="check-icon"></div>
+        </label>
+      </div>
+    </div>
+    
     <span class="text-danger" *ngIf="submittedDescription && updateDescriptionForm.get('description')?.hasError('maxLength')">
       A descrição deve ter menos de 500 caracteres.
     </span>
@@ -156,7 +165,7 @@
     <div class="left-align-row reviews-info">
       <b class="small-right-margin">Filtrar:</b>
       <div class="select-dropdown">
-        <select id="select-review" *ngIf="(userData && userData.services && (userData.services.length > 0))">
+        <select id="select-review" (change)="selectReviewEventReceiver($event)" *ngIf="(userData && userData.services && (userData.services.length > 0))">
           <option value="0">Tudo</option>
           <option *ngFor="let service of userData.services" value="{{ service.specialtyId }}">{{ service.specialty }}</option>
         </select>
@@ -165,11 +174,11 @@
 
     <div class="left-align-row reviews-info">
       <b class="small-right-margin">Classificação média:</b>
-      <span class="small-right-margin">5</span>
+      <span class="small-right-margin">{{ averageStars.toFixed(1).replace('.', ',') }}</span>
       <img src="assets/images/profile/star.png" alt="Estrela" class="star">
     </div>
 
-    <div class="review-container" *ngFor="let review of userData.reviews">
+    <div class="review-container" *ngFor="let review of this.reviews">
       <hr>
       <div class="review-top-row" >
         <div class="left-review-top-row">
@@ -204,9 +213,6 @@
             <option *ngFor="let specialty of specialties" value="{{ specialty.id }}">{{ specialty.name }}</option>
           </select>
         </div>
-        <span class="text-danger" *ngIf="submittedAdd && addSpecialityForm.get('selectSpeciality')?.hasError('required')">
-          É obrigatório escolher a especialidade
-        </span>
       </div>
 
       <div class="speciality-form-box">

@@ -115,7 +115,7 @@ export class ProfileService {
 
   filterReviewsByService(idService: number): Observable<Review[]> {
     const headers = this.getHeaders();
-    return this.http.post<Review[]>(`${environment.appUrl}/api/profile/filter-reviews-by-service`, idService, { headers });
+    return this.http.get<Review[]>(`${environment.appUrl}/api/profile/filter-reviews-by-service/${idService}`, { headers });
   }
 
 }

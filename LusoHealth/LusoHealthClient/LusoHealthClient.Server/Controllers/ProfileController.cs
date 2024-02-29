@@ -95,6 +95,7 @@ namespace LusoHealthClient.Server.Controllers
 
             var reviewsFromDB = await _context.Reviews
                 .Include(r => r.Service)
+                .ThenInclude(s => s.Specialty)
                 .Include(r => r.Patient)
                 .ThenInclude(p => p.User)
                 .Where(r => r.Service.IdProfessional == user.Id)
@@ -337,8 +338,8 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpPost("filter-reviews-by-service")]
-        public async Task<ActionResult<List<ReviewDto>>> FilterReviewsByService(int idService)
+        [HttpGet("filter-reviews-by-service/{id}")]
+        public async Task<ActionResult<List<ReviewDto>>> FilterReviewsByService(int id)
         {
             try
             {
@@ -352,10 +353,11 @@ namespace LusoHealthClient.Server.Controllers
                 var professional = await _context.Professionals.FirstOrDefaultAsync(p => p.UserID == user.Id);
                 if (professional == null) { return NotFound("Não foi possível encontrar o profissional"); }
 
-                if (idService <= 0)
+                if (id <= 0)
                 {
                     var reviewsFromDB = await _context.Reviews
                         .Include(r => r.Service)
+                        .ThenInclude(s => s.Specialty)
                         .Include(r => r.Patient)
                         .ThenInclude(p => p.User)
                         .Where(r => r.Service.IdProfessional == user.Id)
@@ -367,9 +369,10 @@ namespace LusoHealthClient.Server.Controllers
                 {
                     var reviewsFromDB = await _context.Reviews
                         .Include(r => r.Service)
+                        .ThenInclude(s => s.Specialty)
                         .Include(r => r.Patient)
                         .ThenInclude(p => p.User)
-                        .Where(r => r.Service.IdProfessional == user.Id && r.IdService == idService)
+                        .Where(r => r.Service.IdProfessional == user.Id && r.Service.IdSpecialty == id)
                         .ToListAsync();
                     if (reviewsFromDB == null) { return NotFound("Não foi possível encontrar as reviews"); }
                     var reviews = GetReviewDtos(reviewsFromDB);
@@ -630,7 +633,7 @@ namespace LusoHealthClient.Server.Controllers
                 {
                     IdPatient = review.IdPatient,
                     PatientName = review.Patient.User.FirstName + " " + review.Patient.User.LastName,
-                    PatientPicture = review.Patient.User.ProfilePicPath,
+                    PatientPicture = review.Patient.User.ProfilePicPath ?? "/assets/images/Perfil/profileImage.jpg",
                     IdService = review.IdService,
 					ServiceName = review.Service.Specialty.Name,
 					Stars = review.Stars,

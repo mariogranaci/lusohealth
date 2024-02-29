@@ -324,47 +324,34 @@ namespace LusoHealthClient.Server.Migrations
                 name: "Reviews",
                 columns: table => new
                 {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     IdPatient = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     IdService = table.Column<int>(type: "int", nullable: false),
                     Stars = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PatientUserID = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    ServiceId = table.Column<int>(type: "int", nullable: false),
                     ProfessionalUserID = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Reviews", x => new { x.IdPatient, x.IdService });
+                    table.PrimaryKey("PK_Reviews", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Reviews_Patients_PatientUserID",
-                        column: x => x.PatientUserID,
+                        name: "FK_Reviews_Patients_IdPatient",
+                        column: x => x.IdPatient,
                         principalTable: "Patients",
-                        principalColumn: "UserID");
+                        principalColumn: "UserID",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Reviews_Professionals_ProfessionalUserID",
                         column: x => x.ProfessionalUserID,
                         principalTable: "Professionals",
                         principalColumn: "UserID");
                     table.ForeignKey(
-                        name: "FK_Reviews_Services_ServiceId",
-                        column: x => x.ServiceId,
+                        name: "FK_Reviews_Services_IdService",
+                        column: x => x.IdService,
                         principalTable: "Services",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.InsertData(
-                table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "BirthDate", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "Gender", "IsBlocked", "IsSuspended", "LastName", "LockoutEnabled", "LockoutEnd", "Nif", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "ProfilePicPath", "Provider", "SecurityStamp", "TwoFactorEnabled", "UserName", "UserType" },
-                values: new object[,]
-                {
-                    { "1", 0, new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "c58566ae-4326-49e8-bc5c-bc59cfef090f", "user1@mail.com", true, "User1", "M", false, false, "Family", false, null, "123456789", "user1@mail.com", null, "AQAAAAIAAYagAAAAEJEdKOM44JAmhsMilvIW668trTJokV6fowKlHNKq+7p9GwnisNJiftB6mFcFMHo/YQ==", "987654321", false, null, null, "d6892873-410f-4adc-be83-1b033cd9963f", false, "123456789_260", "U" },
-                    { "2", 0, new DateTime(1995, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "86efdf02-5903-40b2-ae94-afe6e2d92b6c", "user2@mail.com", true, "User2", "F", false, false, "Family", false, null, "987654321", "user2@mail.com", null, "AQAAAAIAAYagAAAAEGmc3uuzDF1kIP1dfwcFxM9vV84g/4Fa2YSAA1X92xxkVque7BfjZI0MmvMDsykIOA==", "123456789", false, null, null, "c16321b9-6d17-4b40-bf5a-44b4934719aa", false, "987654321_260", "U" },
-                    { "3", 0, new DateTime(1988, 8, 8, 0, 0, 0, 0, DateTimeKind.Unspecified), "420b84a5-2020-474b-943a-59fbfc36db36", "user3@mail.com", true, "User3", "M", false, false, "Family", false, null, "111223344", "user3@mail.com", null, "AQAAAAIAAYagAAAAEJBBkiQVUltpCe1ltnFTDevO75iwLxpG9+e1FwTp3cAxWgjoZSiMOyecoKAfF1Lv/A==", "555555555", false, null, null, "5151bb32-ef98-463a-90e1-df9a47ef76f7", false, "111223344_260", "U" },
-                    { "4", 0, new DateTime(1992, 12, 25, 0, 0, 0, 0, DateTimeKind.Unspecified), "01724114-6189-49f7-8a07-e1791213ea17", "user4@mail.com", true, "User4", "F", false, false, "Family", false, null, "999888777", "user4@mail.com", null, "AQAAAAIAAYagAAAAEPBCDhvxaJVMFAI0Z5veJywU23BHmkGh9ee7NgcbWbXzDqHN6fvGwhWUwI4oIjVkgw==", "444444444", false, null, null, "5671fea9-1edb-4bd2-9cb6-02d9a830800c", false, "999888777_260", "U" },
-                    { "5", 0, new DateTime(1997, 7, 7, 0, 0, 0, 0, DateTimeKind.Unspecified), "8defaf1e-f281-4c32-9ac8-569572f610c7", "user5@mail.com", true, "User5", "M", false, false, "Family", false, null, "555444333", "user5@mail.com", null, "AQAAAAIAAYagAAAAELinMwDSlb4F5TfW6QKY/FmX7qJPgzcpEWr4DIvvprizB3jKRtYxG7Zot5v6qR9FnQ==", "333333333", false, null, null, "9fb1a9ea-f33a-4c9e-8b13-46db0b95c6fe", false, "333333333_260", "P" },
-                    { "6", 0, new DateTime(1994, 4, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), "e13a29e4-cab9-4630-b12a-249608c59c8f", "user6@mail.com", true, "User6", "F", false, false, "Family", false, null, "777666555", "user6@mail.com", null, "AQAAAAIAAYagAAAAEP/jjn/SCg0YW6WcEmNDrNQfcfrU4VwKFXPgPiZiPcwBk29xaeCL6yPiXGGPJBBVVw==", "222222222", false, null, null, "4c0d5802-27a0-4715-8eb1-bf77ca28872d", false, "777666555_260", "P" },
-                    { "7", 0, new DateTime(1994, 4, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), "ae0989c6-bbc2-4269-9a38-a4b4309b0147", "usergoogle@mail.com", true, "User", "M", false, false, "Google", false, null, "123215648", "usergoogle@mail.com", null, "AQAAAAIAAYagAAAAEEe/2wbR/p5+vnOe2LemjrpEJoVHjZDR6vsgDgFxtz0sJEbG1vysyoreZ4PRx7Rd4A==", "231564789", false, "https://img.freepik.com/fotos-premium/empreendedor-deprimido-triste-em-homem-de-trabalhador-de-terno-formal-sentado-perto-de-uma-rua-ao-ar-livre-perto-do-centro-de-negocios-de-escritorio-moderno-homem-de-negocios-chateado-perdeu-o-emprego-devido-a-um-funcionario-de-crise-financeira-tem-problema-lado-de-fora_321831-6752.jpg", "google", "42aceb76-4cfa-49d0-ae07-c679a2b60ae6", false, "123215648_260", "P" }
                 });
 
             migrationBuilder.InsertData(
@@ -380,27 +367,6 @@ namespace LusoHealthClient.Server.Migrations
                     { 6, "Psicologista" },
                     { 7, "Fisiologista" },
                     { 8, "Outro" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Patients",
-                columns: new[] { "UserID", "Agenda" },
-                values: new object[,]
-                {
-                    { "1", null },
-                    { "2", null },
-                    { "3", null },
-                    { "4", null }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Professionals",
-                columns: new[] { "UserID", "Agenda", "Description", "Location", "ProfessionalTypeId" },
-                values: new object[,]
-                {
-                    { "5", null, null, null, 1 },
-                    { "6", null, null, null, 3 },
-                    { "7", null, null, null, 1 }
                 });
 
             migrationBuilder.InsertData(
@@ -579,15 +545,6 @@ namespace LusoHealthClient.Server.Migrations
                     { 198, "Massoterapia", 8, 0 }
                 });
 
-            migrationBuilder.InsertData(
-                table: "Relatives",
-                columns: new[] { "Id", "BirthDate", "Gender", "IdPatient", "Location", "Name", "Nif" },
-                values: new object[,]
-                {
-                    { 1, new DateTime(2003, 4, 29, 0, 0, 0, 0, DateTimeKind.Unspecified), "M", "1", null, "Mário Granaci", null },
-                    { 2, new DateTime(2002, 9, 24, 0, 0, 0, 0, DateTimeKind.Unspecified), "F", "1", null, "Jaime Vieira", null }
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -643,19 +600,19 @@ namespace LusoHealthClient.Server.Migrations
                 column: "IdPatient");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Reviews_PatientUserID",
+                name: "IX_Reviews_IdPatient",
                 table: "Reviews",
-                column: "PatientUserID");
+                column: "IdPatient");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reviews_IdService",
+                table: "Reviews",
+                column: "IdService");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reviews_ProfessionalUserID",
                 table: "Reviews",
                 column: "ProfessionalUserID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Reviews_ServiceId",
-                table: "Reviews",
-                column: "ServiceId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Services_IdProfessional",

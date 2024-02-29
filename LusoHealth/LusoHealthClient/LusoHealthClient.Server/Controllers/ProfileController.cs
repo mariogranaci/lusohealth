@@ -95,6 +95,8 @@ namespace LusoHealthClient.Server.Controllers
 
             var reviewsFromDB = await _context.Reviews
                 .Include(r => r.Service)
+                .Include(r => r.Patient)
+                .ThenInclude(p => p.User)
                 .Where(r => r.Service.IdProfessional == user.Id)
                 .ToListAsync();
             var reviews = GetReviewDtos(reviewsFromDB);
@@ -340,6 +342,7 @@ namespace LusoHealthClient.Server.Controllers
         {
             try
             {
+
                 var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
 
@@ -349,20 +352,37 @@ namespace LusoHealthClient.Server.Controllers
                 var professional = await _context.Professionals.FirstOrDefaultAsync(p => p.UserID == user.Id);
                 if (professional == null) { return NotFound("Não foi possível encontrar o profissional"); }
 
-                var reviewsFromDB = await _context.Reviews
-                    .Include(r => r.Service)
-                    .Where(r => r.Service.IdProfessional == user.Id && r.IdService == idService)
-                    .ToListAsync();
-                if (reviewsFromDB == null) { return NotFound("Não foi possível encontrar as reviews"); }
-                var reviews = GetReviewDtos(reviewsFromDB);
+                if (idService <= 0)
+                {
+                    var reviewsFromDB = await _context.Reviews
+                        .Include(r => r.Service)
+                        .Include(r => r.Patient)
+                        .ThenInclude(p => p.User)
+                        .Where(r => r.Service.IdProfessional == user.Id)
+                        .ToListAsync();
+                    if (reviewsFromDB == null) { return NotFound("Não foi possível encontrar as reviews"); }
+                    var reviews = GetReviewDtos(reviewsFromDB);
+                    return reviews;
+                } else
+                {
+                    var reviewsFromDB = await _context.Reviews
+                        .Include(r => r.Service)
+                        .Include(r => r.Patient)
+                        .ThenInclude(p => p.User)
+                        .Where(r => r.Service.IdProfessional == user.Id && r.IdService == idService)
+                        .ToListAsync();
+                    if (reviewsFromDB == null) { return NotFound("Não foi possível encontrar as reviews"); }
+                    var reviews = GetReviewDtos(reviewsFromDB);
+                    return reviews;
+                }
 
-                return reviews;
             } catch (Exception)
             {
                 return BadRequest("Não foi possível encontrar as reviews. Tente novamente.");
             }
 
         }
+
         [HttpGet("get-relatives")]
         public async Task<ActionResult<List<RelativeDto>>> GetRelatives()
         {
@@ -393,11 +413,6 @@ namespace LusoHealthClient.Server.Controllers
                 relativeDtos.Add(relativeDto);
             }
 
-            foreach (var dto in relativeDtos)
-            {
-                Console.WriteLine($"Name: {dto.Nome}, Nif: {dto.Nif}, BirthDate: {dto.DataNascimento}, Gender: {dto.Genero}, Location: {dto.Localizacao}");
-            }
-
             return relativeDtos;
         }
 
@@ -411,17 +426,17 @@ namespace LusoHealthClient.Server.Controllers
             if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
 
             var relative = await _context.Relatives.FirstOrDefaultAsync(r => r.Id == relativeId && r.IdPatient == user.Id);
-            if (relative == null) { return NotFound("Parente não encontrado"); }
+            if (relative == null) { return NotFound("Familiar não encontrado"); }
 
             try
             {
                 _context.Relatives.Remove(relative);
                 await _context.SaveChangesAsync();
-                return Ok(new { message = "Parente excluído com sucesso" });
+                return Ok(new JsonResult(new { message = "Familiar excluído com sucesso" }));
             }
             catch (Exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Ocorreu um erro ao excluir o parente");
+                return BadRequest("Ocorreu um erro ao excluir o familiar");
             }
         }
 
@@ -431,11 +446,11 @@ namespace LusoHealthClient.Server.Controllers
         {
             try
             {
-                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                if (string.IsNullOrEmpty(userId)) return BadRequest("User ID not found in claims.");
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (userIdClaim == null) return BadRequest("Não foi possível encontrar o utilizador");
 
-                var user = await _userManager.FindByIdAsync(userId);
-                if (user == null) return NotFound("User not found.");
+                var user = await _userManager.FindByIdAsync(userIdClaim);
+                if (user == null) return NotFound("Não foi possível encontrar o utilizador");
 
                 var relative = new Relative
                 {
@@ -450,11 +465,42 @@ namespace LusoHealthClient.Server.Controllers
                 _context.Relatives.Add(relative);
                 await _context.SaveChangesAsync();
 
-                return Ok(new { message = "Relative added successfully." });
+                return Ok(new JsonResult(new { message = "Familiar adicionado com sucesso" }));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Error adding relative: {ex.Message}");
+                return BadRequest("Ocorreu um erro ao adicionar o familiar");
+            }
+        }
+
+        [HttpPut("update-relative/{relativeId}")]
+        public async Task<ActionResult> UpdateRelative(RelativeDto relativeDto)
+        {
+            try
+            {
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (userIdClaim == null) return BadRequest("Não foi possível encontrar o utilizador");
+
+                var user = await _userManager.FindByIdAsync(userIdClaim);
+                if (user == null) return NotFound("Não foi possível encontrar o utilizador");
+
+                var relative = await _context.Relatives.FirstOrDefaultAsync(r => r.Id == relativeDto.Id && r.IdPatient == user.Id);
+                if (relative == null) return NotFound("Familiar não encontrado");
+
+                relative.Name = relativeDto.Nome;
+                relative.Nif = relativeDto.Nif;
+                relative.BirthDate = relativeDto.DataNascimento;
+                relative.Gender = relativeDto.Genero;
+                relative.Location = relativeDto.Localizacao;
+
+                _context.Relatives.Update(relative);
+                await _context.SaveChangesAsync();
+
+                return Ok(new JsonResult(new { message = "Familiar atualizado com sucesso" }));
+            }
+            catch (Exception)
+            {
+                return BadRequest("Erro ao atualizar familiar");
             }
         }
 
@@ -506,50 +552,36 @@ namespace LusoHealthClient.Server.Controllers
                 return BadRequest("Não foi possível encontrar as especialidades. Tente novamente.");
             }
         }
-        
-        [HttpPut("update-relative/{relativeId}")]
-        public async Task<ActionResult> UpdateRelative(RelativeDto relativeDto)
+
+        [HttpPost("add-review")]
+        public async Task<ActionResult> AddReview(ReviewDto reviewDto)
         {
             try
             {
-                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(userId)) return BadRequest("Não foi possível encontrar o utilizador");
 
-                if (userIdClaim == null)
+                var user = await _userManager.FindByIdAsync(userId);
+                if (user == null) return NotFound("Não foi possível encontrar o utilizador");
+
+                var review = new Review
                 {
-                    return BadRequest("Não foi possível encontrar o utilizador");
-                }
+                    IdPatient = user.Id,
+                    IdService = reviewDto.IdService,
+                    Stars = reviewDto.Stars,
+                    Description = reviewDto.Description
+                };
 
-                var user = await _userManager.FindByIdAsync(userIdClaim);
-
-                if (user == null)
-                {
-                    return NotFound("Não foi possível encontrar o utilizador");
-                }
-
-                var relative = await _context.Relatives.FirstOrDefaultAsync(r => r.Id == relativeDto.Id && r.IdPatient == user.Id);
-
-                if (relative == null)
-                {
-                    return NotFound("Parente não encontrado");
-                }
-
-                relative.Name = relativeDto.Nome;
-                relative.Nif = relativeDto.Nif;
-                relative.BirthDate = relativeDto.DataNascimento;
-                relative.Gender = relativeDto.Genero;
-                relative.Location = relativeDto.Localizacao;
-
-                _context.Relatives.Update(relative);
+                _context.Reviews.Add(review);
                 await _context.SaveChangesAsync();
 
-                return Ok(new { message = "Parente atualizado com sucesso" });
+                return Ok(new JsonResult(new { message = "A sua review foi adicionada com sucesso" }));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Erro ao atualizar parente: {ex.Message}");
+                return BadRequest("Houve um erro ao adicionar a review. Tente novamente");
             }
         }
-
 
     #region private helper methods
     private List<ServiceDto> GetServiceDtos(List<Service> services)
@@ -593,11 +625,13 @@ namespace LusoHealthClient.Server.Controllers
 			var reviewDtos = new List<ReviewDto>();
 			foreach (var review in reviews)
 			{
-				ReviewDto reviewDto = new ReviewDto
-				{
-					IdPatient = review.IdPatient,
-					PatientName = review.Patient.User.FirstName + " " + review.Patient.User.LastName,
-					IdService = review.IdService,
+                Console.WriteLine(review);
+                ReviewDto reviewDto = new ReviewDto
+                {
+                    IdPatient = review.IdPatient,
+                    PatientName = review.Patient.User.FirstName + " " + review.Patient.User.LastName,
+                    PatientPicture = review.Patient.User.ProfilePicPath,
+                    IdService = review.IdService,
 					ServiceName = review.Service.Specialty.Name,
 					Stars = review.Stars,
 					Description = review.Description

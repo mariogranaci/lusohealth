@@ -11,13 +11,13 @@ import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/fo
   styleUrl: './perfil-paciente.component.css'
 })
 export class PerfilPacienteComponent {
+  submitted = false;
   loading = false;
   errorMessages: string[] = [];
   private unsubscribe$ = new Subject<void>();
   relatives: Relative[] = [];
   addRelativeForm: FormGroup = new FormGroup({});
   editRelativeForm: FormGroup = new FormGroup({});
-  submitted = false;
   public selectedRelative: Relative | null = null;
 
   constructor(private profileService: ProfileService, private formBuilder: FormBuilder) { }

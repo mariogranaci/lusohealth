@@ -8,36 +8,16 @@ namespace LusoHealthClient.Server.Models.FeedbackAndReports
     public class Review
     {
         [Key]
+        public int Id { get; set; }
+        [ForeignKey("Patient")]
         public string IdPatient { get; set; }
-        [Key]
+        [ForeignKey("Service")] 
         public int IdService { get; set; }
-
         public int Stars { get; set; }
         public string Description { get; set; }
-
         #region Navigation Properties
         public Patient Patient { get; set; }
         public Service Service { get; set; }
         #endregion
     }
 }
-
-    ////////public class Review
-    ////////{
-    ////////    [Key, ForeignKey("Professional")]
-    ////////    public string IdProfessional { get; set; }
-
-    ////////    [Key, ForeignKey("Patient")]
-    ////////    public string IdPatient { get; set; }
-
-    ////////    [ForeignKey("Service")]
-    ////////    public Service Service { get; set; }
-
-    ////////    public int Stars { get; set; }
-    ////////    public string Description { get; set; }
-
-    ////////    #region Navigation Properties
-    ////////    public Professional Professional { get; set; }
-    ////////    public Patient Patient { get; set; }
-    ////////    #endregion
-    ////////}

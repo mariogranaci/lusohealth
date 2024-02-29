@@ -35,7 +35,7 @@
         <ng-container *ngIf="professional.professionalType === professionalType.name">
           <div class="tab">
             <div id="icons">
-              <figure class="rating">{{ calculateHighestRatedStars(professional)}} <img alt="Estrela" class="star" src="/assets/images/profile/star.png"></figure>
+              <figure class="rating">{{ calculateAverageStars(professional) === 0 ? '-' : calculateAverageStars(professional)}} <img alt="Estrela" class="star" src="/assets/images/profile/star.png"></figure>
             </div>
             <div class="content">
               <div class="content-name">

@@ -1,5 +1,6 @@
 ﻿using LusoHealthClient.Server.Data;
 using LusoHealthClient.Server.DTOs.Profile;
+using LusoHealthClient.Server.DTOs.Services;
 using LusoHealthClient.Server.Models.FeedbackAndReports;
 using LusoHealthClient.Server.Models.Professionals;
 using LusoHealthClient.Server.Models.Users;
@@ -8,6 +9,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using System.Threading.Tasks;
+using ServicesDto = LusoHealthClient.Server.DTOs.Services.ServicesDto;
+using ServiceProfileDto = LusoHealthClient.Server.DTOs.Profile.ServiceDto;
 
 namespace LusoHealthClient.Server.Controllers
 {
@@ -59,7 +63,7 @@ namespace LusoHealthClient.Server.Controllers
                     .Include(s => s.Specialty)
                     .Where(s => s.IdProfessional == professional.UserID)
                     .ToListAsync();
-                var services = GetServiceDtos(servicesFromDB);
+                var services = GetServiceProfileDtos(servicesFromDB);
 
                 var reviewsFromDB = await _context.Reviews
                     .Include(r => r.Service)
@@ -99,13 +103,42 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        #region private helper methods
-        private List<ServiceDto> GetServiceDtos(List<Service> services)
+        [HttpGet("get-services")]
+        public async Task<List<ServicesDto>> GetServices()
         {
-            var serviceDtos = new List<ServiceDto>();
+            var servicesFromDB = await _context.Services.Include(s => s.Specialty).Include(d => d.Professional).ThenInclude(a => a.ProfessionalType).ToListAsync();
+            var services = await GetServiceDtos(servicesFromDB);
+
+            return services;
+        }
+
+        #region private helper methods
+        private async Task<List<ServicesDto>> GetServiceDtos(List<Service> services)
+        {
+            var serviceDtos = new List<ServicesDto>();
             foreach (var service in services)
             {
-                var serviceDto = new ServiceDto
+                var serviceDto = new ServicesDto
+                {
+                    ServiceId = service.Id,
+                    SpecialtyId = service.IdSpecialty,
+                    Specialty = service.Specialty.Name,
+                    PricePerHour = service.PricePerHour,
+                    Online = service.Online,
+                    Presential = service.Presential,
+                    Home = service.Home,
+                    Professional = await GetProfessionalInfo(service.Professional),
+                };
+                serviceDtos.Add(serviceDto);
+            }
+            return serviceDtos;
+        }
+        private List<ServiceProfileDto> GetServiceProfileDtos(List<Service> services)
+        {
+            var serviceDtos = new List<ServiceProfileDto>();
+            foreach (var service in services)
+            {
+                var serviceDto = new ServiceProfileDto
                 {
                     ServiceId = service.Id,
                     SpecialtyId = service.IdSpecialty,
@@ -135,6 +168,36 @@ namespace LusoHealthClient.Server.Controllers
                 reviewDtos.Add(reviewDto);
             }
             return reviewDtos;
+        }
+
+        private async Task<ProfessionalDto> GetProfessionalInfo(Professional professional)
+        {
+            var user = await _context.Users.FindAsync(professional.UserID);
+
+            var servicesFromDB = await _context.Services
+                .Include(s => s.Specialty)
+                .Where(s => s.IdProfessional == professional.UserID)
+                .ToListAsync();
+            var services = GetServiceProfileDtos(servicesFromDB);
+
+            var reviewsFromDB = await _context.Reviews
+                .Include(r => r.Service)
+                .Where(r => r.Service.IdProfessional == professional.UserID)
+                .ToListAsync();
+            var reviews = GetReviewDtos(reviewsFromDB);
+
+            var professionalDto = new ProfessionalDto
+            {
+                ProfessionalInfo = new UserProfileDto { FirstName = user.FirstName, LastName = user.LastName },
+                Services = services,
+                Certificates = null, 
+                Reviews = reviews,
+                Location = professional.Location,
+                Description = professional.Description,
+                ProfessionalType = professional.ProfessionalType.Name
+            };
+
+            return professionalDto;
         }
         #endregion
     }

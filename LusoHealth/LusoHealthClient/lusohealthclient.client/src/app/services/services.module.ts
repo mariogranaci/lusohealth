@@ -9,6 +9,7 @@ import { CalendarioComponent } from './calendario/calendario.component';
 import { MarcacoesComponent } from './marcacoes/marcacoes.component';
 import { FormsModule } from '@angular/forms';
 import { MapaComponent } from './mapa/mapa.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import { MapaComponent } from './mapa/mapa.component';
     RouterModule,
     SharedModule,
     CalendarioComponent,
-    FormsModule
+    FormsModule,
+    MatPaginatorModule
   ],
   exports: [
     HttpClientModule

@@ -12,9 +12,11 @@ main {
 }
 
 #img-perfil{
+    margin: 10px auto;
     width:150px;
     height:150px;
     border-radius:50%;
+    object-fit:cover;
 }
 
 select-dropdown,
@@ -157,12 +159,16 @@ input[type="checkbox"] {
   flex-direction: row;
 }
 
-.name {
+.type-appointment {
   margin-right: 40px;
   align-self: center;
   font-size: 25px;
-  min-width:min-content;
-  max-width:400px;
+  min-width: min-content;
+  max-width: 400px;
+}
+
+.name {
+  font-size: 25px;
 }
 
 .hours-slots {

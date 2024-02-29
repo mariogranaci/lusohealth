@@ -89,6 +89,47 @@ namespace LusoHealthClient.Server.Migrations
                     b.ToTable("Reviews");
                 });
 
+            modelBuilder.Entity("LusoHealthClient.Server.Models.Professionals.Appointment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Duration")
+                        .HasColumnType("int");
+
+                    b.Property<string>("IdPatient")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IdProfesional")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("State")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Appointment");
+                });
+
             modelBuilder.Entity("LusoHealthClient.Server.Models.Professionals.Certificate", b =>
                 {
                     b.Property<int>("Id")
@@ -1592,178 +1633,6 @@ namespace LusoHealthClient.Server.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "1",
-                            AccessFailedCount = 0,
-                            BirthDate = new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "e957118b-3717-4b3e-8008-f43427669315",
-                            Email = "user1@mail.com",
-                            EmailConfirmed = true,
-                            FirstName = "User1",
-                            Gender = "M",
-                            IsBlocked = false,
-                            IsSuspended = false,
-                            LastName = "Family",
-                            LockoutEnabled = false,
-                            Nif = "123456789",
-                            NormalizedEmail = "user1@mail.com",
-                            PasswordHash = "AQAAAAIAAYagAAAAEL2YLyLoD8bCr2TxD+s0h/IVSeicgw2yO8ebPJPT+PLTXzKcdVdmE5oEfDnDsPgqNQ==",
-                            PhoneNumber = "987654321",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "eaf577bb-8291-4697-a948-b2315f6baff9",
-                            TwoFactorEnabled = false,
-                            UserName = "123456789_91",
-                            UserType = "U"
-                        },
-                        new
-                        {
-                            Id = "2",
-                            AccessFailedCount = 0,
-                            BirthDate = new DateTime(1995, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "46dbe7b9-1ecd-42a6-95d4-945a4a2c6e6f",
-                            Email = "user2@mail.com",
-                            EmailConfirmed = true,
-                            FirstName = "User2",
-                            Gender = "F",
-                            IsBlocked = false,
-                            IsSuspended = false,
-                            LastName = "Family",
-                            LockoutEnabled = false,
-                            Nif = "987654321",
-                            NormalizedEmail = "user2@mail.com",
-                            PasswordHash = "AQAAAAIAAYagAAAAEG7lnxucLqZ+8yCOj2RZaXPfRkixGf1rS1a/wXytVfKlWDUc3LF9u2HkcjZIckbCLA==",
-                            PhoneNumber = "123456789",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "05856959-a64c-43da-a4f1-d2dd3cf76c50",
-                            TwoFactorEnabled = false,
-                            UserName = "987654321_91",
-                            UserType = "U"
-                        },
-                        new
-                        {
-                            Id = "3",
-                            AccessFailedCount = 0,
-                            BirthDate = new DateTime(1988, 8, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "ca3e5142-8da4-4f41-90b4-7a49c95d3fc7",
-                            Email = "user3@mail.com",
-                            EmailConfirmed = true,
-                            FirstName = "User3",
-                            Gender = "M",
-                            IsBlocked = false,
-                            IsSuspended = false,
-                            LastName = "Family",
-                            LockoutEnabled = false,
-                            Nif = "111223344",
-                            NormalizedEmail = "user3@mail.com",
-                            PasswordHash = "AQAAAAIAAYagAAAAEDdvbFjjsaHov+JPxz1h1Ux2MpeoVvm/559IkcQ1spP+ep/SPbalv55fPvFU4oIrzQ==",
-                            PhoneNumber = "555555555",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "b2b1dad7-7eb0-4eaf-b86f-0efd7e2030ec",
-                            TwoFactorEnabled = false,
-                            UserName = "111223344_91",
-                            UserType = "U"
-                        },
-                        new
-                        {
-                            Id = "4",
-                            AccessFailedCount = 0,
-                            BirthDate = new DateTime(1992, 12, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "4ba47203-f824-4c20-8fc4-a258e0ec1b95",
-                            Email = "user4@mail.com",
-                            EmailConfirmed = true,
-                            FirstName = "User4",
-                            Gender = "F",
-                            IsBlocked = false,
-                            IsSuspended = false,
-                            LastName = "Family",
-                            LockoutEnabled = false,
-                            Nif = "999888777",
-                            NormalizedEmail = "user4@mail.com",
-                            PasswordHash = "AQAAAAIAAYagAAAAEDSqaTcgZ8R8zCxlOlBuQop50IMole9b/MSwNDNhtaM/bGBjWKLA8iSFShUMXZKGaQ==",
-                            PhoneNumber = "444444444",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "538f08c5-1777-4668-af2e-bce8a89f64df",
-                            TwoFactorEnabled = false,
-                            UserName = "999888777_91",
-                            UserType = "U"
-                        },
-                        new
-                        {
-                            Id = "5",
-                            AccessFailedCount = 0,
-                            BirthDate = new DateTime(1997, 7, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "2a6743e1-51b1-46ee-bb12-d366e012045e",
-                            Email = "user5@mail.com",
-                            EmailConfirmed = true,
-                            FirstName = "User5",
-                            Gender = "M",
-                            IsBlocked = false,
-                            IsSuspended = false,
-                            LastName = "Family",
-                            LockoutEnabled = false,
-                            Nif = "555444333",
-                            NormalizedEmail = "user5@mail.com",
-                            PasswordHash = "AQAAAAIAAYagAAAAEFaCzNpy5JOS4+kjYCZL1THomREPp4nP9FS4R9Ku9fjq5d95NaeGUZFkLC9/S5qSrw==",
-                            PhoneNumber = "333333333",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "a1ae286d-da93-4e3b-ac47-3cdc9da1c00c",
-                            TwoFactorEnabled = false,
-                            UserName = "333333333_91",
-                            UserType = "P"
-                        },
-                        new
-                        {
-                            Id = "6",
-                            AccessFailedCount = 0,
-                            BirthDate = new DateTime(1994, 4, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "3355fb4e-0a94-4d24-839e-8c1d413654f2",
-                            Email = "user6@mail.com",
-                            EmailConfirmed = true,
-                            FirstName = "User6",
-                            Gender = "F",
-                            IsBlocked = false,
-                            IsSuspended = false,
-                            LastName = "Family",
-                            LockoutEnabled = false,
-                            Nif = "777666555",
-                            NormalizedEmail = "user6@mail.com",
-                            PasswordHash = "AQAAAAIAAYagAAAAEG6rHvLenT5XG4k4abMqSQn2QTEGEfoOqG/af79kYREZe/iZMnU9IpGut3lAoXAqnw==",
-                            PhoneNumber = "222222222",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "c758192c-67b8-4244-97f2-b640239a4037",
-                            TwoFactorEnabled = false,
-                            UserName = "777666555_91",
-                            UserType = "P"
-                        },
-                        new
-                        {
-                            Id = "7",
-                            AccessFailedCount = 0,
-                            BirthDate = new DateTime(1994, 4, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "e28dbd93-1644-443a-8754-c999c504f06f",
-                            Email = "usergoogle@mail.com",
-                            EmailConfirmed = true,
-                            FirstName = "User",
-                            Gender = "M",
-                            IsBlocked = false,
-                            IsSuspended = false,
-                            LastName = "Google",
-                            LockoutEnabled = false,
-                            Nif = "123215648",
-                            NormalizedEmail = "usergoogle@mail.com",
-                            PasswordHash = "AQAAAAIAAYagAAAAEHBruZ+v0LTqoHJACGoVDS++bA/a9oY14W5kzN2MT0jG0LPFHmdwXzAT5EmZYc5L9w==",
-                            PhoneNumber = "231564789",
-                            PhoneNumberConfirmed = false,
-                            ProfilePicPath = "https://img.freepik.com/fotos-premium/empreendedor-deprimido-triste-em-homem-de-trabalhador-de-terno-formal-sentado-perto-de-uma-rua-ao-ar-livre-perto-do-centro-de-negocios-de-escritorio-moderno-homem-de-negocios-chateado-perdeu-o-emprego-devido-a-um-funcionario-de-crise-financeira-tem-problema-lado-de-fora_321831-6752.jpg",
-                            Provider = "google",
-                            SecurityStamp = "6bf82c63-e63b-48a2-b41d-e27888a43b5e",
-                            TwoFactorEnabled = false,
-                            UserName = "123215648_91",
-                            UserType = "P"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

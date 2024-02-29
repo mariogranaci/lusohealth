@@ -1,22 +1,22 @@
 <div class="firstRow">
   <h4>Filtrar:</h4>
   <div class="dropdown">
-    <select id="category" (change)="filterSpecialties(); filterProfessionalsCategory()">
-      <option disabled hidden selected>Categoria</option>
+    <select id="category" (change)="filterSpecialties(); filterProfessionalsCategory(); filterProfessionalsType(); orderBy()">
+      <option value="-----" disabled hidden selected>Categoria</option>
       <option>-----</option>
       <option *ngFor="let professionalType of professionalTypes" value="{{ professionalType.name }}">{{ professionalType.name }}</option>
     </select>
   </div>
   <div class="dropdown">
-    <select id="specialty" (change)="filterProfessionalsCategory(); filterProfessionalsType()">
-      <option disabled hidden selected>Especialidade</option>
+    <select id="specialty" (change)="filterProfessionalsCategory(); filterProfessionalsType(); orderBy()">
+      <option value="-----" disabled hidden selected>Especialidade</option>
       <option>-----</option>
       <option *ngFor="let specialty of specialtiesFiltered" value="{{specialty.name}}">{{ specialty.name }}</option>
     </select>
   </div>
   <div class="dropdown">
-    <select id="type" (change)="filterProfessionalsType(); filterProfessionalsCategory()">
-      <option disabled hidden selected>Tipo de Consulta</option>
+    <select id="type" (change)="filterProfessionalsType(); orderBy()">
+      <option value="-----" disabled hidden selected>Tipo de Consulta</option>
       <option>-----</option>
       <option value="Online">Online</option>
       <option value="Presential">Presencial</option>
@@ -29,10 +29,11 @@
 <div class="secondRow">
   <h4>Ordenar:</h4>
   <div class="dropdown">
-    <select>
-      <option value="" selected>Ranking</option>
-      <option value="" selected>preco ></option>
-      <option value="" selected>preco <</option>
+    <select id="order" (change)="orderBy()">
+      <option value="-----" disabled hidden selected>Ordenar</option>
+      <option value="Rank" >Ranking</option>
+      <option value="p<" >Preco Ascendente</option>
+      <option value="p>" >Preco Descendente</option>
     </select>
   </div>
 </div>
@@ -47,7 +48,7 @@
   </div>
 
   <section class="categorias">
-    <div class="categoria" *ngFor="let professional of professionalsFiltered">
+    <div class="categoria" *ngFor="let professional of professionalsFilteredAgain">
       <div class="tab">
         <div id="icons">
           <figure class="rating">{{ calculateHighestRatedStars(professional)}} <img alt="Estrela" class="star" src="/assets/images/profile/star.png"></figure>

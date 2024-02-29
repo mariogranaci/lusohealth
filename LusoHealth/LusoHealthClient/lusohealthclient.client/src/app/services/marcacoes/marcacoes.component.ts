@@ -18,6 +18,8 @@ export class MarcacoesComponent {
   professionalTypes: ProfessionalType[] = [];
   professionals: Professional[] = [];
   professionalsFiltered: Professional[] = [];
+  professionalsFilteredAgain: Professional[] = [];
+  professionalsTemp: Professional[] = [];
   services: Service[] = [];
   specialties: Specialty[] = [];
   specialtiesFiltered: Specialty[] = [];
@@ -31,6 +33,8 @@ export class MarcacoesComponent {
     this.getSpecialties();
     this.getProfessionals().then(() => {
       this.professionalsFiltered = this.professionals;
+      this.professionalsFilteredAgain = this.professionalsFiltered;
+      this.professionalsTemp = this.professionalsFilteredAgain;
     });
     this.getSpecialties();
   }
@@ -132,19 +136,24 @@ export class MarcacoesComponent {
     this.searchTerm = event.target.value.trim();
     const searchTermNormalized = this.removeAccents(this.searchTerm.toLowerCase());
 
-    if (searchTermNormalized.length > 1) {
-        this.professionalsFiltered = this.professionals.filter(professional => {
+    if (searchTermNormalized.length > 0) {
+      this.professionalsFilteredAgain = this.professionalsFilteredAgain.filter(professional => {
         const firstName = professional.professionalInfo?.firstName ?? '';
         const lastName = professional.professionalInfo?.lastName ?? '';
         const fullNameNormalized = this.removeAccents(`${firstName} ${lastName}`.toLowerCase());
         return fullNameNormalized.includes(searchTermNormalized);
       });
 
-      this.searchResults = this.professionalsFiltered.map(professional => `${professional.professionalInfo?.firstName} ${professional.professionalInfo?.lastName}`)
+      this.searchResults = this.professionalsFilteredAgain.map(professional => `${professional.professionalInfo?.firstName} ${professional.professionalInfo?.lastName}`)
         .filter(name => name.trim() !== '');
     } else {
       this.searchResults = [];
-      this.professionalsFiltered = this.professionals;
+      this.professionalsFilteredAgain = this.professionalsTemp;
+    }
+    if (event.key === "Backspace")
+    {
+      event.target.value = "";
+      this.professionalsFilteredAgain = this.professionalsTemp;
     }
   }
 
@@ -219,8 +228,139 @@ export class MarcacoesComponent {
 
   filterProfessionalsCategory(): void {
 
+    this.professionalsFiltered = this.professionals;
+
     const selectedCategory = document.getElementById("category") as HTMLSelectElement | null;
     const selectedSpecialty = document.getElementById("specialty") as HTMLSelectElement | null;
+
+    if (selectedCategory && selectedCategory.value != "-----") {
+
+      const professionalType = this.professionalTypes.find(type => type.name.trim() === selectedCategory.value.trim());
+
+      if (professionalType) {
+
+        this.professionalsFilteredAgain = this.professionalsFiltered.filter(professional => {
+          return professional.professionalType.trim() === professionalType.name.trim();
+        });
+
+        this.professionalsFiltered = this.professionalsFiltered.filter(professional => {
+          return professional.professionalType.trim() === professionalType.name.trim();
+        });
+
+        this.professionalsTemp = this.professionalsFilteredAgain; 
+
+        if (selectedSpecialty) {
+
+          const specialty = this.specialties.find(type => type.name.trim() === selectedSpecialty.value.trim());
+
+
+          if (specialty) {
+
+            this.professionalsFiltered = this.professionals.filter(professional => {
+              return this.findHighestRatedSpecialty(professional).trim() === specialty.name.trim();
+            });
+
+            this.professionalsFilteredAgain = this.professionalsFiltered.filter(professional => {
+              return this.findHighestRatedSpecialty(professional).trim() === specialty.name.trim();
+            });
+
+            this.professionalsTemp = this.professionalsFilteredAgain; 
+
+          } else if (selectedSpecialty.value == "-----") {
+
+            this.professionalsFiltered = this.professionals.filter(professional => {
+              return professional.professionalType.trim() === professionalType.name.trim();
+            });
+
+            this.professionalsFilteredAgain = this.professionalsFiltered.filter(professional => {
+              return professional.professionalType.trim() === professionalType.name.trim();
+            });
+            this.professionalsTemp = this.professionalsFilteredAgain; 
+          }
+        }
+      }
+      console.log(this.professionalsFiltered);
+    }
+    else {
+      this.professionalsFiltered = this.professionals;
+      this.professionalsFilteredAgain = this.professionalsFiltered;
+      this.professionalsTemp = this.professionalsFilteredAgain; 
+    }
+  }
+
+  filterProfessionalsType(): void {
+
+    const selectedType = document.getElementById("type") as HTMLSelectElement | null;
+    
+    if (selectedType && selectedType.value != "-----") {
+      this.professionalsFilteredAgain = this.professionalsFiltered.filter(professional => {
+        return this.services.find(service => service.serviceId === this.findHighestRatedService(professional)?.serviceId);
+      });
+
+      this.professionalsFilteredAgain = this.professionalsFiltered.filter(professional => {
+        const service = this.findHighestRatedService(professional);
+
+        if (service) {
+          if (selectedType.value == "Home") {
+            return service.home === true;
+          }
+          else if (selectedType.value == "Online") {
+            return service.online === true;
+          }
+          else if (selectedType.value == "Presential") {
+            return service.presential === true;
+          }
+        }
+        return false;
+      });
+      this.professionalsTemp = this.professionalsFilteredAgain; 
+    }
+    else {
+      this.professionalsFilteredAgain = this.professionalsFiltered;
+      this.professionalsTemp = this.professionalsFilteredAgain; 
+    }
+  }
+
+  orderBy() {
+
+    const option = document.getElementById("order") as HTMLSelectElement | null;
+
+    switch (option?.value) {
+      case 'Rank':
+        // Order by rank (assuming rank is calculated in some method)
+        this.professionalsFilteredAgain.sort((a, b) => {
+          // You need to replace calculateHighestRatedStars with your actual method
+          return this.calculateHighestRatedStars(b) - this.calculateHighestRatedStars(a);
+        });
+        break;
+      case 'p<':
+        // Order by price ascending
+        this.professionalsFilteredAgain.sort((a, b) => {
+          const priceA = this.findHighestRatedSpecialtyPrice(a) || 0;
+          const priceB = this.findHighestRatedSpecialtyPrice(b) || 0;
+          return priceA - priceB;
+        });
+        break;
+      case 'p>':
+        // Order by price descending
+        this.professionalsFilteredAgain.sort((a, b) => {
+          const priceA = this.findHighestRatedSpecialtyPrice(a) || 0;
+          const priceB = this.findHighestRatedSpecialtyPrice(b) || 0;
+          return priceB - priceA;
+        });
+        break;
+      default:
+        // Default behavior: do nothing
+        break;
+    }
+  }
+
+  /*filterProfessionals(): void {
+    this.professionalsFiltered = this.professionals;
+
+    const selectedCategory = document.getElementById("category") as HTMLSelectElement | null;
+    const selectedSpecialty = document.getElementById("specialty") as HTMLSelectElement | null;
+    const selectedType = document.getElementById("type") as HTMLSelectElement | null;
 
     if (selectedCategory && selectedCategory.value != "-----") {
 
@@ -241,24 +381,17 @@ export class MarcacoesComponent {
               return this.findHighestRatedSpecialty(professional).trim() === specialty.name.trim();
             });
           } else if (selectedSpecialty.value == "-----") {
-              this.professionalsFiltered = this.professionals.filter(professional => {
+            this.professionalsFiltered = this.professionals.filter(professional => {
               return professional.professionalType.trim() === professionalType.name.trim();
             });
           }
         }
+        else {
+          this.professionalsFiltered = this.professionals;
+        }
+
       }
-    }
-    else
-    {
-      this.professionalsFiltered = this.professionals;
-    }
-  }
-
-  filterProfessionalsType(): void {
-
-    const selectedType = document.getElementById("type") as HTMLSelectElement | null;
-
-    if (selectedType && selectedType.value != "-----") {
+    }else if (selectedType) {
       this.professionalsFiltered = this.professionals.filter(professional => {
         return this.services.find(service => service.serviceId === this.findHighestRatedService(professional)?.serviceId);
       });
@@ -280,61 +413,6 @@ export class MarcacoesComponent {
         return false;
       });
     }
-    else {
-      this.professionalsFiltered = this.professionals;
-    }
-  }
-
-  /*filterProfessionals(): void {
-    this.professionalsFiltered = this.professionals;
-
-    const selectedCategory = document.getElementById("category") as HTMLSelectElement | null;
-    const selectedSpecialty = document.getElementById("specialty") as HTMLSelectElement | null;
-    const selectedType = document.getElementById("type") as HTMLSelectElement | null;
-
-    if (selectedCategory && selectedSpecialty && selectedType) {
-
-      const professionalType = this.professionalTypes.find(type => type.name.trim() === selectedCategory.value.trim());
-      const specialty = this.specialties.find(type => type.name.trim() === selectedSpecialty.value.trim());
-
-      if (professionalType) {
-
-        this.professionalsFiltered = this.professionals.filter(professional => {
-          return professional.professionalType.trim() === professionalType.name.trim();
-        });
-        if (specialty) {
-          this.professionalsFiltered = this.professionals.filter(professional => {
-            return this.findHighestRatedSpecialty(professional).trim() === specialty.name.trim();
-          });
-        }
-      }
-      
-      if (selectedType) {
-        this.professionalsFiltered = this.professionals.filter(professional => {
-          return this.services.find(service => service.serviceId === this.findHighestRatedService(professional)?.serviceId);
-        });
-
-        this.professionalsFiltered = this.professionals.filter(professional => {
-          const service = this.findHighestRatedService(professional);
-
-          if (service) {
-            if (selectedType.value == "Home") {
-              return service.home === true;
-            }
-            else if (selectedType.value == "Online") {
-              return service.online === true;
-            }
-            else if (selectedType.value == "Presential") {
-              return service.presential === true;
-            }
-          }
-          return false;
-        });
-      }
-    }
-    console.log(this.professionalsFiltered);
-  }
-*/
-
-
+    
+  }*/
 }

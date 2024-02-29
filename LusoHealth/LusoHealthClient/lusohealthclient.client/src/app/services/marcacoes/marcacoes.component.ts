@@ -181,7 +181,7 @@ export class MarcacoesComponent {
     const service: Service | undefined = this.findHighestRatedService(professional);
 
     if (service) {
-      const specialty: string | undefined = this.services.find(type => type.specialtyId === service.specialtyId)?.specialty;
+      const specialty: string | undefined | null = this.services.find(type => type.specialtyId === service.specialtyId)?.specialty;
       return specialty ? specialty : '';
     } else {
       return 'NENHUMA';

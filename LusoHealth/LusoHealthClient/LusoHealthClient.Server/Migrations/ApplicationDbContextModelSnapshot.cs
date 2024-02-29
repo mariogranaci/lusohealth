@@ -55,35 +55,36 @@ namespace LusoHealthClient.Server.Migrations
 
             modelBuilder.Entity("LusoHealthClient.Server.Models.FeedbackAndReports.Review", b =>
                 {
-                    b.Property<string>("IdPatient")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("IdService")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PatientUserID")
+                    b.Property<string>("IdPatient")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("IdService")
+                        .HasColumnType("int");
 
                     b.Property<string>("ProfessionalUserID")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("ServiceId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Stars")
                         .HasColumnType("int");
 
-                    b.HasKey("IdPatient", "IdService");
+                    b.HasKey("Id");
 
-                    b.HasIndex("PatientUserID");
+                    b.HasIndex("IdPatient");
+
+                    b.HasIndex("IdService");
 
                     b.HasIndex("ProfessionalUserID");
-
-                    b.HasIndex("ServiceId");
 
                     b.ToTable("Reviews");
                 });
@@ -1431,24 +1432,6 @@ namespace LusoHealthClient.Server.Migrations
                     b.HasKey("UserID");
 
                     b.ToTable("Patients");
-
-                    b.HasData(
-                        new
-                        {
-                            UserID = "1"
-                        },
-                        new
-                        {
-                            UserID = "2"
-                        },
-                        new
-                        {
-                            UserID = "3"
-                        },
-                        new
-                        {
-                            UserID = "4"
-                        });
                 });
 
             modelBuilder.Entity("LusoHealthClient.Server.Models.Users.Professional", b =>
@@ -1473,23 +1456,6 @@ namespace LusoHealthClient.Server.Migrations
                     b.HasIndex("ProfessionalTypeId");
 
                     b.ToTable("Professionals");
-
-                    b.HasData(
-                        new
-                        {
-                            UserID = "5",
-                            ProfessionalTypeId = 1
-                        },
-                        new
-                        {
-                            UserID = "6",
-                            ProfessionalTypeId = 3
-                        },
-                        new
-                        {
-                            UserID = "7",
-                            ProfessionalTypeId = 1
-                        });
                 });
 
             modelBuilder.Entity("LusoHealthClient.Server.Models.Users.Relative", b =>
@@ -1526,24 +1492,6 @@ namespace LusoHealthClient.Server.Migrations
                     b.HasIndex("IdPatient");
 
                     b.ToTable("Relatives");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            BirthDate = new DateTime(2003, 4, 29, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Gender = "M",
-                            IdPatient = "1",
-                            Name = "Mário Granaci"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            BirthDate = new DateTime(2002, 9, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Gender = "F",
-                            IdPatient = "1",
-                            Name = "Jaime Vieira"
-                        });
                 });
 
             modelBuilder.Entity("LusoHealthClient.Server.Models.Users.User", b =>
@@ -1955,17 +1903,19 @@ namespace LusoHealthClient.Server.Migrations
                 {
                     b.HasOne("LusoHealthClient.Server.Models.Users.Patient", "Patient")
                         .WithMany()
-                        .HasForeignKey("PatientUserID");
+                        .HasForeignKey("IdPatient")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LusoHealthClient.Server.Models.Professionals.Service", "Service")
+                        .WithMany()
+                        .HasForeignKey("IdService")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("LusoHealthClient.Server.Models.Users.Professional", null)
                         .WithMany("Reviews")
                         .HasForeignKey("ProfessionalUserID");
-
-                    b.HasOne("LusoHealthClient.Server.Models.Professionals.Service", "Service")
-                        .WithMany()
-                        .HasForeignKey("ServiceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
 
                     b.Navigation("Patient");
 

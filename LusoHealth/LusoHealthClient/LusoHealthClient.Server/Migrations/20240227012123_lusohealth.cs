@@ -341,36 +341,38 @@ namespace LusoHealthClient.Server.Migrations
                 name: "Reviews",
                 columns: table => new
                 {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     IdPatient = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     IdService = table.Column<int>(type: "int", nullable: false),
                     Stars = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PatientUserID = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    ServiceId = table.Column<int>(type: "int", nullable: false),
                     ProfessionalUserID = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Reviews", x => new { x.IdPatient, x.IdService });
+                    table.PrimaryKey("PK_Reviews", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Reviews_Patients_PatientUserID",
-                        column: x => x.PatientUserID,
+                        name: "FK_Reviews_Patients_IdPatient",
+                        column: x => x.IdPatient,
                         principalTable: "Patients",
-                        principalColumn: "UserID");
+                        principalColumn: "UserID",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Reviews_Professionals_ProfessionalUserID",
                         column: x => x.ProfessionalUserID,
                         principalTable: "Professionals",
                         principalColumn: "UserID");
                     table.ForeignKey(
-                        name: "FK_Reviews_Services_ServiceId",
-                        column: x => x.ServiceId,
+                        name: "FK_Reviews_Services_IdService",
+                        column: x => x.IdService,
                         principalTable: "Services",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
+<<<<<<<< HEAD:LusoHealth/LusoHealthClient/LusoHealthClient.Server/Migrations/20240227012123_lusohealth.cs
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "BirthDate", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "Gender", "IsBlocked", "IsSuspended", "LastName", "LockoutEnabled", "LockoutEnd", "Nif", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "ProfilePicPath", "Provider", "SecurityStamp", "TwoFactorEnabled", "UserName", "UserType" },
                 values: new object[,]
@@ -385,6 +387,8 @@ namespace LusoHealthClient.Server.Migrations
                 });
 
             migrationBuilder.InsertData(
+========
+>>>>>>>> main:LusoHealth/LusoHealthClient/LusoHealthClient.Server/Migrations/20240228175203_lusohealth.cs
                 table: "ProfessionalTypes",
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
@@ -397,27 +401,6 @@ namespace LusoHealthClient.Server.Migrations
                     { 6, "Psicologista" },
                     { 7, "Fisiologista" },
                     { 8, "Outro" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Patients",
-                columns: new[] { "UserID", "Agenda" },
-                values: new object[,]
-                {
-                    { "1", null },
-                    { "2", null },
-                    { "3", null },
-                    { "4", null }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Professionals",
-                columns: new[] { "UserID", "Agenda", "Description", "Location", "ProfessionalTypeId" },
-                values: new object[,]
-                {
-                    { "5", null, null, null, 1 },
-                    { "6", null, null, null, 3 },
-                    { "7", null, null, null, 1 }
                 });
 
             migrationBuilder.InsertData(
@@ -596,15 +579,6 @@ namespace LusoHealthClient.Server.Migrations
                     { 198, "Massoterapia", 8, 0 }
                 });
 
-            migrationBuilder.InsertData(
-                table: "Relatives",
-                columns: new[] { "Id", "BirthDate", "Gender", "IdPatient", "Location", "Name", "Nif" },
-                values: new object[,]
-                {
-                    { 1, new DateTime(2003, 4, 29, 0, 0, 0, 0, DateTimeKind.Unspecified), "M", "1", null, "Mário Granaci", null },
-                    { 2, new DateTime(2002, 9, 24, 0, 0, 0, 0, DateTimeKind.Unspecified), "F", "1", null, "Jaime Vieira", null }
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -660,19 +634,19 @@ namespace LusoHealthClient.Server.Migrations
                 column: "IdPatient");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Reviews_PatientUserID",
+                name: "IX_Reviews_IdPatient",
                 table: "Reviews",
-                column: "PatientUserID");
+                column: "IdPatient");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reviews_IdService",
+                table: "Reviews",
+                column: "IdService");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reviews_ProfessionalUserID",
                 table: "Reviews",
                 column: "ProfessionalUserID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Reviews_ServiceId",
-                table: "Reviews",
-                column: "ServiceId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Services_IdProfessional",

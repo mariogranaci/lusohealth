@@ -8,6 +8,10 @@ import { UpdatePassword } from '../shared/models/profile/updatePassword';
 import { Relative } from '../shared/models/profile/relative';
 import { Observable } from 'rxjs';
 import { Professional } from '../shared/models/profile/professional';
+import { Service } from '../shared/models/profile/service';
+import { Specialty } from '../shared/models/profile/specialty';
+import { Description } from '../shared/models/profile/description';
+import { Review } from '../shared/models/profile/review';
 
 @Injectable({
   providedIn: 'root'
@@ -37,16 +41,14 @@ export class ProfileService {
     return headers;
   }
 
-  getUserData(): Observable<UserProfile>
-  {
+  getUserData(): Observable<UserProfile> {
 
     const headers = this.getHeaders();
-                               
+
     return this.http.get<UserProfile>(`${environment.appUrl}/api/profile/get-user`, { headers });
   }
 
-  updateUserData(model: UserProfile)
-  {
+  updateUserData(model: UserProfile) {
     const headers = this.getHeaders();
     return this.http.put(`${environment.appUrl}/api/profile/update-user-info`, model, { headers });
   }
@@ -55,9 +57,13 @@ export class ProfileService {
     const headers = this.getHeaders();
     return this.http.get<Professional>(`${environment.appUrl}/api/profile/get-professional-info`, { headers });
   }
-  
-  getRelatives(): Observable<Relative[]> 
-  {
+
+  getServices(): Observable<Specialty[]> {
+    const headers = this.getHeaders();
+    return this.http.get<Specialty[]>(`${environment.appUrl}/api/profile/get-specialties`, { headers });
+  }
+
+  getRelatives(): Observable<Relative[]> {
     const headers = this.getHeaders();
     return this.http.get<Relative[]>(`${environment.appUrl}/api/profile/get-relatives`, { headers });
   }
@@ -72,8 +78,7 @@ export class ProfileService {
     return this.http.put(`${environment.appUrl}/api/profile/update-picture`, model, { headers });
   }
 
-  deleteRelative(relativeId: number): Observable<Relative>
-  {
+  deleteRelative(relativeId: number): Observable<Relative> {
     const headers = this.getHeaders();
     return this.http.delete<Relative>(`${environment.appUrl}/api/profile/delete-relative/${relativeId}`, { headers });
   }
@@ -81,6 +86,11 @@ export class ProfileService {
   addRelative(relative: Relative): Observable<Relative> {
     const headers = this.getHeaders();
     return this.http.post<Relative>(`${environment.appUrl}/api/profile/add-relative`, relative, { headers });
+  }
+
+  addSpecialty(service: Service): Observable<Service> {
+    const headers = this.getHeaders();
+    return this.http.post<Service>(`${environment.appUrl}/api/profile/add-service`, service, { headers });
   }
 
   updateRelative(relative: Relative): Observable<Relative> {
@@ -93,4 +103,24 @@ export class ProfileService {
     const headers = this.getHeaders();
     return this.http.post<Relative>(`${environment.appUrl}/api/profile/add-relative`, relative, { headers });
   }
+  updateSpecialty(service: Service): Observable<Service> {
+    const headers = this.getHeaders();
+    return this.http.put<Service>(`${environment.appUrl}/api/profile/update-service`, service, { headers });
+  }
+
+  deleteSpecialty(serviceId: number): Observable<Service> {
+    const headers = this.getHeaders();
+    return this.http.delete<Service>(`${environment.appUrl}/api/profile/delete-service/${serviceId}`, { headers });
+  }
+
+  updateDescription(description: Description): Observable<Description> {
+    const headers = this.getHeaders();
+    return this.http.patch<Description>(`${environment.appUrl}/api/profile/update-description`, description, { headers });
+  }
+
+  filterReviewsByService(idService: number): Observable<Review[]> {
+    const headers = this.getHeaders();
+    return this.http.post<Review[]>(`${environment.appUrl}/api/profile/filter-reviews-by-service`, idService, { headers });
+  }
+
 }

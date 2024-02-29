@@ -1,6 +1,7 @@
 ﻿using Google.Apis.Auth;
 using LusoHealthClient.Server.Data;
 using LusoHealthClient.Server.DTOs.Authentication;
+using LusoHealthClient.Server.Models.Professionals;
 using LusoHealthClient.Server.Models.Users;
 using LusoHealthClient.Server.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -29,13 +30,15 @@ namespace LusoHealthClient.Server.Controllers
             SignInManager<User> signInManager,
             UserManager<User> userManager,
             EmailService emailService,
-            IConfiguration config)
+            IConfiguration config,
+            ApplicationDbContext context)
         {
             _jwtService = jwtService;
             _signInManager = signInManager;
             _userManager = userManager;
             _emailService = emailService;
             _config = config;
+            _context = context;
         }
 
         [Authorize]
@@ -43,7 +46,7 @@ namespace LusoHealthClient.Server.Controllers
         public async Task<ActionResult<UserDto>> RefreshUserToken()
         {
             var user = await _userManager.FindByEmailAsync(User.FindFirst(ClaimTypes.Email)?.Value);
-            return CreateApplicationUserDto(user);
+            return await CreateApplicationUserDto(user);
         }
 
         [HttpPost("login")]
@@ -56,7 +59,7 @@ namespace LusoHealthClient.Server.Controllers
             var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
             if (!result.Succeeded) return Unauthorized("Email ou password inválidos");
 
-            return CreateApplicationUserDto(user);
+            return await CreateApplicationUserDto(user);
         }
 
         [HttpPost("register")]
@@ -99,6 +102,33 @@ namespace LusoHealthClient.Server.Controllers
 
             try
             {
+                if(model.TipoUser == 'P' && model.ProfessionalTypeId != null)
+                {
+                    var professional = new Professional
+                    {
+                        UserID = userToAdd.Id,
+                        ProfessionalTypeId = (int) model.ProfessionalTypeId,
+                    };
+                    _context.Professionals.Add(professional);
+                    await _userManager.AddToRoleAsync(userToAdd, SD.ProfessionalRole);
+                    await _context.SaveChangesAsync();
+                } else if(model.TipoUser == 'U')
+                {
+                    var patient = new Patient
+                    {
+                        UserID = userToAdd.Id
+                    };
+                    _context.Patients.Add(patient);
+                    await _userManager.AddToRoleAsync(userToAdd, SD.PatientRole);
+                    await _context.SaveChangesAsync();
+                }
+            } catch (Exception)
+            {
+                return BadRequest("Houve um problema a criar a sua conta. Tente novamente.");
+            }
+
+            try
+            {
                 if (await SendConfirmEmailAsync(userToAdd))
                 {
                     return Ok(new JsonResult(new { title = "Conta Criada", message = "A sua conta foi criada com sucesso. Por favor, confirme o seu endereço de email" }));
@@ -137,7 +167,7 @@ namespace LusoHealthClient.Server.Controllers
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user == null) return BadRequest("O email não está registado");
 
-            return CreateApplicationUserDto(user);
+            return await CreateApplicationUserDto(user);
         }
 
         [HttpPost("register-with-google")]
@@ -194,7 +224,36 @@ namespace LusoHealthClient.Server.Controllers
             var result = await _userManager.CreateAsync(userToAdd);
             if (!result.Succeeded) return BadRequest(result.Errors);
 
-            return CreateApplicationUserDto(userToAdd);
+            try
+            {
+                if (model.TipoUser == 'P' && model.ProfessionalTypeId != null)
+                {
+                    var professional = new Professional
+                    {
+                        UserID = userToAdd.Id,
+                        ProfessionalTypeId = (int)model.ProfessionalTypeId,
+                    };
+                    _context.Professionals.Add(professional);
+                    await _userManager.AddToRoleAsync(userToAdd, SD.ProfessionalRole);
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    var patient = new Patient
+                    {
+                        UserID = userToAdd.Id
+                    };
+                    _context.Patients.Add(patient);
+                    await _userManager.AddToRoleAsync(userToAdd, SD.PatientRole);
+                    await _context.SaveChangesAsync();
+                }
+            }
+            catch (Exception)
+            {
+                return BadRequest("Houve um problema a criar a sua conta. Tente novamente.");
+            }
+
+            return await CreateApplicationUserDto(userToAdd);
         }
 
         [HttpPut("confirm-email")]
@@ -294,14 +353,28 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
+        [HttpGet("get-professional-types")]
+        public async Task<ActionResult<List<ProfessionalType>>> GetProfessionalTypes()
+        {
+            try
+            {
+                var professionalTypes = await _context.ProfessionalTypes.ToListAsync();
+                if (professionalTypes == null) return NotFound("Não foram encontrados tipos de profissionais");
+                return professionalTypes;
+            } catch (Exception)
+            {
+                return BadRequest("Houve um problema a obter os tipos de profissionais");
+            }            
+        }
+
         #region Private Helper Methods
-        private UserDto CreateApplicationUserDto(User user)
+        private async Task<UserDto> CreateApplicationUserDto(User user)
         {
             if (user == null) return null;
             return new UserDto
             {
                 Name = user.FirstName + " " + user.LastName,
-                JWT = _jwtService.CreateJWT(user)
+                JWT = await _jwtService.CreateJWT(user)
             };
         }
 

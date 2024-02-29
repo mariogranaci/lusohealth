@@ -1,4 +1,5 @@
 ﻿using LusoHealthClient.Server.Models.Users;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -10,15 +11,17 @@ namespace LusoHealthClient.Server.Services
     {
         private readonly IConfiguration _config;
         private readonly SymmetricSecurityKey _jwtKey;
+        private readonly UserManager<User> _userManager;
 
-        public JWTService(IConfiguration config)
+        public JWTService(IConfiguration config, UserManager<User> userManager)
         {
             _config = config;
             // jwtKey is used for both encrypting and decrypting the JWT token
             _jwtKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
+            _userManager = userManager;
         }
 
-        public string CreateJWT(User user)
+        public async Task<string> CreateJWT(User user)
         {
             var userClaims = new List<Claim>()
             {
@@ -26,6 +29,9 @@ namespace LusoHealthClient.Server.Services
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Name, user.FirstName + " " + user.LastName),
             };
+            var roles = await _userManager.GetRolesAsync(user);
+            userClaims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
+            Console.WriteLine("Roles: " + roles.Count());
 
             var credentials = new SigningCredentials(_jwtKey, SecurityAlgorithms.HmacSha256Signature);
             var tokenDescriptor = new SecurityTokenDescriptor()
@@ -39,6 +45,6 @@ namespace LusoHealthClient.Server.Services
             var tokenHandler = new JwtSecurityTokenHandler();
             var jwt = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(jwt);
-    }
+        }
     }
 }

@@ -115,6 +115,10 @@ export class AuthenticationService {
     return this.http.put(`${environment.appUrl}/api/authentication/reset-password`, model);
   }
 
+  getProfessionalTypes() {
+    return this.http.get<ProfessionalType[]>(`${environment.appUrl}/api/authentication/get-professional-types`);
+  }
+
   getJWT() {
     const key = localStorage.getItem(environment.userKey);
     if (key) {
@@ -129,6 +133,8 @@ export class AuthenticationService {
     localStorage.setItem(environment.userKey, JSON.stringify(user));
     this.userSource.next(user);
   }
-
-
 }
+  export interface ProfessionalType {
+    id: number;
+    name: string;
+  }

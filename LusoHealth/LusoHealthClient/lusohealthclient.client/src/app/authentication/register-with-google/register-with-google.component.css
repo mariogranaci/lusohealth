@@ -59,6 +59,8 @@ input::-webkit-inner-spin-button {
 
 input[type="radio"] {
   width: 20px;
+  min-width: 20px;
+  min-height: 20px;
   margin: 0 10px 0 0;
   height: 20px;
 }
@@ -110,3 +112,59 @@ loading-spinner {
   left: 50%; /* Centraliza horizontalmente */
   transform: translate(-50%, -50%); /* Corrige o deslocamento pela metade da largura e altura */
 }
+
+/* -------------------------------------- select option ------------------------------------- */
+
+.professional-type-form-box {
+  width: 40%;
+  margin: 0 auto;
+}
+
+.select-dropdown,
+.select-dropdown * {
+  position: relative;
+}
+
+.select-dropdown {
+  position: relative;
+  background-color: #fff;
+  border-radius: 7px;
+  width: 100%;
+}
+
+  .select-dropdown select {
+    font-size: 1.1rem;
+    font-weight: normal;
+    width: 100%;
+    padding: 8px 24px 8px 10px;
+    border: none;
+    background-color: transparent;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    user-select: none;
+  }
+
+    .select-dropdown select option {
+      height: fit-content;
+    }
+
+    .select-dropdown select:active, .select-dropdown select:focus {
+      outline: none;
+      box-shadow: none;
+    }
+
+  .select-dropdown:after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 8px;
+    width: 0;
+    height: 0;
+    margin-top: -2px;
+    border-top: 5px solid #aaa;
+    border-right: 5px solid transparent;
+    border-left: 5px solid transparent;
+  }

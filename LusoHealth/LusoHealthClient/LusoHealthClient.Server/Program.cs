@@ -26,6 +26,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddScoped<JWTService>();
 builder.Services.AddScoped<EmailService>();
+builder.Services.AddScoped<ContextSeedService>();
 
 builder.Services.AddIdentityCore<User>(options =>
 {
@@ -96,6 +97,14 @@ builder.Services.AddCors(options =>
                .AllowAnyHeader());
 });
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
+    options.AddPolicy("ManagerPolicy", policy => policy.RequireRole("Manager"));
+    options.AddPolicy("PatientPolicy", policy => policy.RequireRole("Patient"));
+    options.AddPolicy("ProfessionalPolicy", policy => policy.RequireRole("Professional"));
+});
+
 var app = builder.Build();
 
 app.UseDefaultFiles();
@@ -118,5 +127,18 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.MapFallbackToFile("/index.html");
+
+#region ContextSeed
+using var scope = app.Services.CreateScope();
+try
+{
+    var contextSeedService = scope.ServiceProvider.GetService<ContextSeedService>();
+    await contextSeedService.InitializeContextAsync();
+} catch (Exception ex)
+{
+    var logger = scope.ServiceProvider.GetService<ILogger<Program>>();
+    logger.LogError(ex, "An error occurred while seeding the database.");
+}
+#endregion
 
 app.Run();

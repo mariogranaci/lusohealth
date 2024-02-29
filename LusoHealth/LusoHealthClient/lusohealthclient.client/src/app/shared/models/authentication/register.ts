@@ -1,5 +1,4 @@
 export interface Register {
-
   firstName: string;
   lastName: string;
   nif: string;
@@ -10,5 +9,5 @@ export interface Register {
   dataNascimento: Date;
   genero: string;
   tipoUser: string;
-
+  professionalTypeId: number | null;
 }

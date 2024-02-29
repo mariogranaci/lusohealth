@@ -1,4 +1,4 @@
-<h1>Registo</h1>
+<h1 >Registo</h1>
 <div *ngIf="errorMessages.length > 0">
   <app-validation-messages [errorMessages]="errorMessages"></app-validation-messages>
 </div>
@@ -119,13 +119,28 @@
       <div class="right">
         <div class="type-acount">
           <label>Tipo de Conta:</label>
-          <label for="type-radio-pacient" class="radio-label"><input formControlName="tipoUser" id="type-radio-pacient" type="radio" name="tipoUser" value="U">Paciente</label>
-          <label for="type-radio-professional" class="radio-label"><input formControlName="tipoUser" id="type-radio-professional" type="radio" name="tipoUser" value="P"> Profissional de Saúde</label>
+          <label for="type-radio-pacient" class="radio-label"><input formControlName="tipoUser" id="type-radio-pacient" type="radio" name="tipoUser" value="U" (change)="onUserTypeChange('U')">Paciente</label>
+          <label for="type-radio-professional" class="radio-label"><input formControlName="tipoUser" id="type-radio-professional" type="radio" name="tipoUser" value="P" (change)="onUserTypeChange('P')">Profissional de Saúde</label>
         </div>
         <span class="text-danger" *ngIf="submitted && registerForm.get('tipoUser')?.hasError('required')">
           Escolha um tipo de conta
         </span>
       </div>
+    </div>
+    <div class="professional-type-form-box" *ngIf="isProfessionalSelected">
+      <label for="add-professional-type-select">Tipo de Profissional</label>
+      <div class="select-dropdown" id="professional-type-select-div" [class.is-invalid]="submitted && registerForm.get('professionalTypeId')?.errors">
+        <select formControlName="professionalTypeId" id="add-professional-type-select" *ngIf="(professionalTypes && (professionalTypes.length > 0))" required>
+          <option value="" disabled hidden>Selecione um tipo de profissional</option>
+          <option *ngFor="let type of professionalTypes" value="{{ type.id }}">{{ type.name }}</option>
+        </select>
+        <select formControlName="professionalTypeId" id="add-professional-type-select" *ngIf="!(professionalTypes && (professionalTypes.length > 0))" required>
+          <option value="" disabled hidden>Selecione um tipo de profissional</option>
+        </select>
+      </div>
+      <span class="text-danger" *ngIf="submitted && registerForm.get('professionalTypeId')?.hasError('required')">
+        É obrigatório escolher um tipo de profissional
+      </span>
     </div>
   </div>
   <div *ngIf="responseText">

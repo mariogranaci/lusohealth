@@ -290,3 +290,60 @@ main {
   #myUL li a:hover:not(.header) {
     background-color: #eee;
   }
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+.page-btn {
+  font-size: 15px;
+  color: black;
+  padding: 5px 10px;
+  margin: 0 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 10px;
+  border: none;
+}
+
+  .page-btn:hover,
+  .page-btn.current {
+    color: white;
+    background-color: black;
+  }
+
+  .page-btn:disabled {
+    display: none;
+  }
+
+.page-info {
+  margin: 0 10px;
+  font-weight: bold;
+}
+
+.page-arrow {
+  font-size: 15px;
+  color: black;
+  padding: 5px 10px;
+  margin: 0 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 10px;
+  border: none;
+}
+
+  .page-arrow:hover {
+    color: white;
+    background-color: black;
+  }
+
+  .page-arrow:disabled {
+    display: none;
+  }
+

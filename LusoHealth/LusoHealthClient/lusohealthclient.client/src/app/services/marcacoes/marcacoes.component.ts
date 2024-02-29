@@ -25,6 +25,9 @@ export class MarcacoesComponent {
   specialtiesFiltered: Specialty[] = [];
   searchResults: string[] = [];
   searchTerm: string = '';
+  currentPage: number = 1;
+  itemsPerPage: number = 2;
+  pageButtons: number[] = [];
 
   constructor(public servicesService: ServicesService) { }
 
@@ -124,12 +127,50 @@ export class MarcacoesComponent {
     return topSpecialties;
   }
 
-  resetInputValue(event: any) {
-    event.target.value = ''; 
-    this.searchTerm = '';
-    this.searchResults = []; 
-    this.professionalsFilteredAgain = this.professionalsTemp;
+  get paginatedProfessionals(): Professional[] {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    return this.professionalsFilteredAgain.slice(startIndex, startIndex + this.itemsPerPage);
   }
+
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.updatePageButtons();
+    }
+  }
+
+  prevPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.updatePageButtons();
+    }
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.professionalsFilteredAgain.length / this.itemsPerPage);
+  }
+
+  updatePagination() {
+    this.currentPage = 1;
+    this.updatePageButtons();
+  }
+
+  updatePageButtons() {
+    this.pageButtons = [this.currentPage];
+    for (let i = 1; i <= 3; i++) {
+      if (this.currentPage + i <= this.totalPages) {
+        this.pageButtons.push(this.currentPage + i);
+      }
+    }
+  }
+
+  goToPage(page: number) {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.updatePageButtons();
+    }
+  }
+
 
   onSearchInput(event: any) {
     this.searchTerm = event.target.value.trim();
@@ -277,14 +318,14 @@ export class MarcacoesComponent {
             this.professionalsTemp = this.professionalsFilteredAgain; 
           }
         }
-      }
-      console.log(this.professionalsFiltered);
+      } 
     }
     else {
       this.professionalsFiltered = this.professionals;
       this.professionalsFilteredAgain = this.professionalsFiltered;
       this.professionalsTemp = this.professionalsFilteredAgain; 
     }
+    this.updatePagination();
   }
 
   filterProfessionalsType(): void {
@@ -318,6 +359,7 @@ export class MarcacoesComponent {
       this.professionalsFilteredAgain = this.professionalsFiltered;
       this.professionalsTemp = this.professionalsFilteredAgain; 
     }
+    this.updatePagination();
   }
 
   orderBy() {
@@ -352,6 +394,7 @@ export class MarcacoesComponent {
         // Default behavior: do nothing
         break;
     }
+    this.updatePagination();
   }
 
   /*filterProfessionals(): void {

@@ -31,41 +31,51 @@
   <div class="dropdown">
     <select id="order" (change)="orderBy()">
       <option value="-----" disabled hidden selected>Ordenar</option>
-      <option value="Rank" >Ranking</option>
-      <option value="p<" >Preco Ascendente</option>
-      <option value="p>" >Preco Descendente</option>
+      <option value="Rank">Ranking</option>
+      <option value="p<">Preco Ascendente</option>
+      <option value="p>">Preco Descendente</option>
     </select>
   </div>
 </div>
 
-  <div class="header">
-    <div id="searchDiv" [class.rounded-bottom]=" searchResults.length > 0">
-      <figure class="searchIcon">
-        <img src="assets/images/HomePage/search.png" alt="Ícone de pesquisa de filtros">
-      </figure>
-      <input class="searchBar" type="text" placeholder="Pesquise por nome" (keyup)="onSearchInput($event)"  (blur)="resetInputValue($event)">
-    </div>
+<div class="header">
+  <div id="searchDiv" [class.rounded-bottom]=" searchResults.length > 0">
+    <figure class="searchIcon">
+      <img src="assets/images/HomePage/search.png" alt="Ícone de pesquisa de filtros">
+    </figure>
+    <input class="searchBar" type="text" placeholder="Pesquise por nome" (keyup)="onSearchInput($event)">
   </div>
+</div>
 
-  <section class="categorias">
-    <div class="categoria" *ngFor="let professional of professionalsFilteredAgain">
-      <div class="tab">
-        <div id="icons">
-          <figure class="rating">{{ calculateHighestRatedStars(professional)}} <img alt="Estrela" class="star" src="/assets/images/profile/star.png"></figure>
+<section class="categorias">
+  <div class="categoria" *ngFor="let professional of paginatedProfessionals">
+    <div class="tab">
+      <div id="icons">
+        <figure class="rating">{{ calculateHighestRatedStars(professional)}} <img alt="Estrela" class="star" src="/assets/images/profile/star.png"></figure>
+      </div>
+      <div class="content">
+        <div class="content-name">
+          <span>{{ professional.professionalInfo.firstName  }} {{ professional.professionalInfo.lastName }}</span>
         </div>
-        <div class="content">
-          <div class="content-name">
-            <span>{{ professional.professionalInfo.firstName  }} {{ professional.professionalInfo.lastName }}</span>
-          </div>
-          <div>
-            <span>Especialidades:</span>
-            <p>{{findHighestRatedSpecialty(professional)}}</p>
-          </div>
-          <div><p>{{professional.location}}</p></div>
-          <p>Preço por hora: {{findHighestRatedSpecialtyPrice(professional)}}€</p>
+        <div>
+          <span>Especialidades:</span>
+          <p>{{findHighestRatedSpecialty(professional)}}</p>
         </div>
+        <div><p>{{professional.location}}</p></div>
+        <p>Preço por hora: {{findHighestRatedSpecialtyPrice(professional)}}€</p>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <mat-paginator [length]="professionalsFilteredAgain.length" [pageSize]="6"></mat-paginator>
+<div class="pagination">
+  <button class="page-arrow" id="prev" (click)="prevPage()" [disabled]="currentPage === 1"><</button>
+  <button class="page-btn" (click)="goToPage(currentPage-2)" [disabled]="currentPage-2 <= 0">{{currentPage-2}}</button>
+  <button class="page-btn" (click)="goToPage(currentPage-1)" [disabled]="currentPage-1 <= 0">{{currentPage-1}}</button>
+  <button class="page-btn current" (click)="goToPage(currentPage)">{{currentPage}}</button>
+  <button class="page-btn" (click)="goToPage(currentPage+1)" [disabled]="currentPage+1 > totalPages">{{currentPage+1}}</button>
+  <button class="page-btn" (click)="goToPage(currentPage+2)" [disabled]="currentPage+2 > totalPages">{{currentPage+2}}</button>
+  <button class="page-btn" (click)="goToPage(currentPage+3)" [disabled]="currentPage+3 > totalPages">{{currentPage+3}}</button>
+  <button class="page-arrow" id="next" (click)="nextPage()" [disabled]="currentPage === totalPages">></button>
+</div>
+

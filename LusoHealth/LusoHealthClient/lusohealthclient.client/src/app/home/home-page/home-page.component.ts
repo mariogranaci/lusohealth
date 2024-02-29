@@ -137,16 +137,17 @@ export class HomePageComponent {
   }
 
   selectSpecialty(specialty: string) {
-    // Do something with the selected specialty, such as filtering professionals based on it
     console.log("Selected specialty:", specialty);
   }
 
 
-  calculateHighestRatedStars(professional: Professional): number {
+  calculateAverageStars(professional: Professional): number {
     if (!professional.reviews || professional.reviews.length === 0) {
-      return 0;
+      return 0; // Default value when there are no reviews
     }
-    return Math.max(...professional.reviews.map(review => review.stars));
+
+    const sumStars = professional.reviews.reduce((sum, review) => sum + review.stars, 0);
+    return sumStars / professional.reviews.length;
   }
 
   findHighestRatedSpecialty(professional: Professional): string {

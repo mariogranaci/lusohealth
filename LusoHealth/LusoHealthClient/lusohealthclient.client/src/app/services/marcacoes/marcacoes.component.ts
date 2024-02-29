@@ -216,7 +216,76 @@ export class MarcacoesComponent {
     }
   }
 
-  filterProfessionals(): void {
+
+  filterProfessionalsCategory(): void {
+
+    const selectedCategory = document.getElementById("category") as HTMLSelectElement | null;
+    const selectedSpecialty = document.getElementById("specialty") as HTMLSelectElement | null;
+
+    if (selectedCategory && selectedCategory.value != "-----") {
+
+      const professionalType = this.professionalTypes.find(type => type.name.trim() === selectedCategory.value.trim());
+
+      if (professionalType) {
+
+        this.professionalsFiltered = this.professionals.filter(professional => {
+          return professional.professionalType.trim() === professionalType.name.trim();
+        });
+
+        if (selectedSpecialty) {
+
+          const specialty = this.specialties.find(type => type.name.trim() === selectedSpecialty.value.trim());
+
+          if (specialty) {
+            this.professionalsFiltered = this.professionalsFiltered.filter(professional => {
+              return this.findHighestRatedSpecialty(professional).trim() === specialty.name.trim();
+            });
+          } else if (selectedSpecialty.value == "-----") {
+              this.professionalsFiltered = this.professionals.filter(professional => {
+              return professional.professionalType.trim() === professionalType.name.trim();
+            });
+          }
+        }
+      }
+    }
+    else
+    {
+      this.professionalsFiltered = this.professionals;
+    }
+  }
+
+  filterProfessionalsType(): void {
+
+    const selectedType = document.getElementById("type") as HTMLSelectElement | null;
+
+    if (selectedType && selectedType.value != "-----") {
+      this.professionalsFiltered = this.professionals.filter(professional => {
+        return this.services.find(service => service.serviceId === this.findHighestRatedService(professional)?.serviceId);
+      });
+
+      this.professionalsFiltered = this.professionals.filter(professional => {
+        const service = this.findHighestRatedService(professional);
+
+        if (service) {
+          if (selectedType.value == "Home") {
+            return service.home === true;
+          }
+          else if (selectedType.value == "Online") {
+            return service.online === true;
+          }
+          else if (selectedType.value == "Presential") {
+            return service.presential === true;
+          }
+        }
+        return false;
+      });
+    }
+    else {
+      this.professionalsFiltered = this.professionals;
+    }
+  }
+
+  /*filterProfessionals(): void {
     this.professionalsFiltered = this.professionals;
 
     const selectedCategory = document.getElementById("category") as HTMLSelectElement | null;
@@ -225,28 +294,21 @@ export class MarcacoesComponent {
 
     if (selectedCategory && selectedSpecialty && selectedType) {
 
-      console.log(this.professionalTypes);
-      console.log(this.specialties);
-      console.log(selectedSpecialty.value);
-      console.log(selectedCategory.value);
+      const professionalType = this.professionalTypes.find(type => type.name.trim() === selectedCategory.value.trim());
+      const specialty = this.specialties.find(type => type.name.trim() === selectedSpecialty.value.trim());
 
-      const professionalType = this.professionalTypes.find(type => type.name === selectedSpecialty.value);
-      const specialty = this.specialties.find(type => type.name === selectedCategory.value);
-
-      console.log(professionalType);
-      console.log(specialty);
-
-
-      if (specialty) {
-        this.professionalsFiltered = this.professionals.filter(professional => {
-          return this.findHighestRatedSpecialty(professional) === specialty.name;
-        });
-      }
       if (professionalType) {
+
         this.professionalsFiltered = this.professionals.filter(professional => {
-          return professional.professionalType === professionalType.name;
+          return professional.professionalType.trim() === professionalType.name.trim();
         });
+        if (specialty) {
+          this.professionalsFiltered = this.professionals.filter(professional => {
+            return this.findHighestRatedSpecialty(professional).trim() === specialty.name.trim();
+          });
+        }
       }
+      
       if (selectedType) {
         this.professionalsFiltered = this.professionals.filter(professional => {
           return this.services.find(service => service.serviceId === this.findHighestRatedService(professional)?.serviceId);
@@ -272,7 +334,7 @@ export class MarcacoesComponent {
     }
     console.log(this.professionalsFiltered);
   }
-
+*/
 
 
 }

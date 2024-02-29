@@ -1,20 +1,23 @@
 <div class="firstRow">
   <h4>Filtrar:</h4>
   <div class="dropdown">
-    <select id="category" (change)="filterSpecialties(); filterProfessionals()">
+    <select id="category" (change)="filterSpecialties(); filterProfessionalsCategory()">
       <option disabled hidden selected>Categoria</option>
+      <option>-----</option>
       <option *ngFor="let professionalType of professionalTypes" value="{{ professionalType.name }}">{{ professionalType.name }}</option>
     </select>
   </div>
   <div class="dropdown">
-    <select id="specialty" (change)="filterProfessionals()">
+    <select id="specialty" (change)="filterProfessionalsCategory(); filterProfessionalsType()">
       <option disabled hidden selected>Especialidade</option>
+      <option>-----</option>
       <option *ngFor="let specialty of specialtiesFiltered" value="{{specialty.name}}">{{ specialty.name }}</option>
     </select>
   </div>
   <div class="dropdown">
-    <select id="type" (change)="filterProfessionals()">
+    <select id="type" (change)="filterProfessionalsType(); filterProfessionalsCategory()">
       <option disabled hidden selected>Tipo de Consulta</option>
+      <option>-----</option>
       <option value="Online">Online</option>
       <option value="Presential">Presencial</option>
       <option value="Home">Domicilio</option>

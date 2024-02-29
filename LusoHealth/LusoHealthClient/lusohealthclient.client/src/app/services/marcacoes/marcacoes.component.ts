@@ -26,7 +26,7 @@ export class MarcacoesComponent {
   searchResults: string[] = [];
   searchTerm: string = '';
   currentPage: number = 1;
-  itemsPerPage: number = 2;
+  itemsPerPage: number = 8;
   pageButtons: number[] = [];
 
   constructor(public servicesService: ServicesService) { }

@@ -60,7 +60,7 @@ export class PerfilPacienteComponent {
       nif: ['', [Validators.minLength(9), Validators.maxLength(9)]],
       dataNascimento: ['', [Validators.required, this.idadeValidator]],
       genero: ['', [Validators.required]],
-      localizacao: ['', [Validators.required]],
+      localizacao: [''],
     })
 
     this.editRelativeForm = this.formBuilder.group({
@@ -69,7 +69,7 @@ export class PerfilPacienteComponent {
       nif: ['', [Validators.minLength(9), Validators.maxLength(9)]],
       dataNascimento: ['', [Validators.required, this.idadeValidator]],
       genero: ['', [Validators.required]],
-      localizacao: ['', [Validators.required]],
+      localizacao: [''],
     })
   }
 
@@ -105,25 +105,13 @@ export class PerfilPacienteComponent {
 
   setEditForm(relative: Relative)
   {
-    this.profileService.updateRelative(relative).pipe(takeUntil(this.unsubscribe$)).subscribe(
-      (relative: Relative) => {
-       
-          this.editRelativeForm.setValue({
-            nome: relative.nome,
-            nif: relative.nif,
-            dataNascimento: relative.dataNascimento,
-            genero: relative.genero,
-            localizacao: relative.localizacao
-        });
-      },
-      error => {
-        if (error.error.errors) {
-          this.errorMessages = error.error.errors;
-        } else {
-          this.errorMessages.push(error.error);
-        }
-      }
-    );
+    this.editRelativeForm.setValue({
+      nome: relative.nome,
+      nif: relative.nif,
+      dataNascimento: relative.dataNascimento,
+      genero: relative.genero,
+      localizacao: relative.localizacao
+    }) 
   }
 
   getRelatives() {
@@ -131,11 +119,6 @@ export class PerfilPacienteComponent {
       takeUntil(this.unsubscribe$)
     ).subscribe({
       next: (relatives: Relative[]) => {
-        console.log(relatives);
-        for (let i = 0; i < relatives.length; i++)
-        {
-          console.log(typeof relatives[i].id);
-        }
         this.relatives = relatives;
         this.loading = false;
       },
@@ -172,31 +155,44 @@ export class PerfilPacienteComponent {
   }
 
   addRelative() {
-    var form = this.addRelativeForm.value;
-
-    var relative = new Relative(
-      null,
-      form.nome,
-      form.nif ? form.nif.toString() : null,
-      form.dataNascimento,
-      form.genero,
-      form.localizacao,
-    )
-    this.profileService.addRelative(relative).subscribe({
-      next: () => {
-        console.log('Relative added successfully');
-        this.getRelatives();
-      },
-      error: (error) => {
-        console.log('Error adding relative:', error);
-      }
-    });
-    this.closePopup();
+    this.submitted = true;
+    console.log(this.addRelativeForm.valid);
+    if (this.addRelativeForm.valid)
+    {
+      console.log(this.addRelativeForm.valid);
+      var form = this.addRelativeForm.value;
+      var relative = new Relative(
+        null,
+        form.nome,
+        form.nif ? form.nif.toString() : null,
+        form.dataNascimento,
+        form.genero,
+        null,
+      )
+      this.profileService.addRelative(relative).subscribe({
+        next: () => {
+          console.log('Relative added successfully');
+          this.getRelatives();
+          this.closePopup();
+        },
+        error: (error) => {
+          console.log('Error adding relative:', error);
+        }
+      });
+    }
   }
 
   updateRelative(relative: Relative | null) {
-    if (relative != null)
+    this.submitted = true;
+    if (relative != null && this.editRelativeForm.valid)
     {
+      var form = this.editRelativeForm.value;
+      relative.nome = form.nome;
+      relative.nif = form.nif ? form.nif.toString() : null;
+      relative.dataNascimento = form.dataNascimento;
+      relative.genero = form.genero;
+      relative.localizacao = form.localizacao;
+
       this.profileService.updateRelative(relative).subscribe({
         next: () => {
           console.log('Relative updated successfully');
@@ -230,7 +226,7 @@ export class PerfilPacienteComponent {
         }
       }
       else if (opcao == "edit") {
-        if (edit) {
+        if (edit) {  
           edit.style.display = "block";
         }
       }
@@ -282,10 +278,6 @@ export class PerfilPacienteComponent {
 
       if (diferencaAnos > 110 || diferencaAnos < 0) {
         return { 'error': 'Introduza uma data válida.' };
-      }
-
-      if (diferencaAnos < 18) {
-        return { 'idade': 'A idade deve ser maior que 18 anos.' };
       }
     }
     return null;

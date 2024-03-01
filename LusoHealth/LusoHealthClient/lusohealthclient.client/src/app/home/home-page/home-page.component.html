@@ -1,0 +1,56 @@
+<div class="header">
+  <!-- <h1 *ngIf="(authenticationService.user$ | async) === null">Bem vindo ao LusoHealth!</h1>
+   <h1 *ngIf="(authenticationService.user$ | async) as user">Bem-vindo ao LusoHealth, {{ getFirstAndLastName(user.name) }}</h1>-->
+  <h1>LusoHealth</h1>
+
+  <div id="searchSection">
+    <div id="searchDiv" [class.rounded-bottom]=" searchResults.length > 0">
+      <input class="searchBar" type="text" placeholder="Pesquise por especialidades"
+             (input)="onSearchInput($event)">
+      <figure class="searchIcon">
+        <img src="assets/images/HomePage/search.png" alt="Ícone de pesquisa de filtros">
+      </figure>
+    </div>
+    <ul id="myUL">
+      <li class="option" *ngFor="let specialty of searchResults" (click)="selectSpecialty(specialty)"><a href="#">{{ specialty }}</a></li>
+    </ul>
+
+    <div class="populares">
+      <div class="form-buttons-row">
+        <p class="populares-texto">Populares:</p>
+        <button class="btn">{{getSpecialtiesByTimesScheduled()[0].name}}</button>
+        <button class="btn">{{getSpecialtiesByTimesScheduled()[1].name}}</button>
+        <button class="btn">{{getSpecialtiesByTimesScheduled()[2].name}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+  <section class="categorias" *ngFor="let professionalType of professionalTypes">
+    <p class="categoria-texto">{{ professionalType.name }}</p>
+    <div class="categoria">
+      <div *ngFor="let professional of professionals">
+        <ng-container *ngIf="professional.professionalType === professionalType.name">
+          <div class="tab">
+            <div id="icons">
+              <figure class="rating">{{ calculateAverageStars(professional) === 0 ? '-' : calculateAverageStars(professional)}} <img alt="Estrela" class="star" src="/assets/images/profile/star.png"></figure>
+            </div>
+            <div class="content">
+              <div class="content-name">
+                <span>{{ professional.professionalInfo.firstName  }} {{ professional.professionalInfo.lastName  }}</span>
+              </div>
+              <div>
+                <span>Especialidades:</span>
+                <p>{{findHighestRatedSpecialty(professional)}}</p>
+              </div>
+              <div><p>{{professional.location}}</p></div>
+              <p>Preço por hora: {{findHighestRatedSpecialtyPrice(professional)}}€</p>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </section>
+

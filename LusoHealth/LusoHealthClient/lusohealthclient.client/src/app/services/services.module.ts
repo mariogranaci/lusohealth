@@ -6,22 +6,28 @@ import { RouterModule } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
 import { CalendarioComponent } from './calendario/calendario.component';
-
+import { MarcacoesComponent } from './marcacoes/marcacoes.component';
+import { FormsModule } from '@angular/forms';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 
 @NgModule({
   declarations: [
     MarcarConsultaComponent,
+    MarcacoesComponent
   ],
   imports: [
     CommonModule,
     ServicesRoutingModule,
     RouterModule,
     SharedModule,
-    CalendarioComponent
+    CalendarioComponent,
+    FormsModule,
+    MatPaginatorModule
   ],
   exports: [
     HttpClientModule
-  ]
+  ],
+  bootstrap: [MarcacoesComponent]
 })
 export class ServicesModule { }

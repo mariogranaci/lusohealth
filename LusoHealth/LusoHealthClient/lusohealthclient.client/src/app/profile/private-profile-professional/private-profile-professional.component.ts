@@ -8,7 +8,7 @@ import { ProfileService } from '../profile.service';
 import { Subject, takeUntil } from 'rxjs';
 import { Professional } from '../../shared/models/profile/professional';
 import { Service } from '../../shared/models/profile/service';
-import { Specialty } from '../../shared/models/profile/specialty';
+import { Specialty } from '../../shared/models/profile/Specialty';
 import { Review } from '../../shared/models/profile/review';
 
 @Component({

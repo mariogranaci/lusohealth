@@ -1,4 +1,7 @@
 ﻿using System;
+using System.IO;
+using System.Net.Http.Headers;
+using System.Net.Mime;
 using System.Security.Claims;
 using LusoHealthClient.Server.Data;
 using LusoHealthClient.Server.DTOs.Profile;
@@ -583,8 +586,144 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-    #region private helper methods
-    private List<ServiceDto> GetServiceDtos(List<Service> services)
+        [HttpPost("upload-pdf")]
+        [DisableRequestSizeLimit]
+        public async Task<ActionResult> UploadPdf()
+        {
+            try
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(userId)) return BadRequest("Não foi possível encontrar o utilizador");
+
+                var user = await _userManager.FindByIdAsync(userId);
+                if (user == null) return NotFound("Não foi possível encontrar o utilizador");
+
+                var file = Request.Form.Files[0];
+                var folderName = Path.Combine("Uploads", "Certificates");
+                var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+                if (file.Length > 0) 
+                {
+                    var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                    var fullPath = Path.Combine(pathToSave, fileName);
+                    var dbPath = Path.Combine(folderName, fileName);
+                    using (var stream = new FileStream(fullPath, FileMode.Create)) 
+                    {
+                        file.CopyTo(stream);
+                    }
+                    var certificate = new Certificate
+                    {
+                        Name = fileName,
+                        Path = fullPath,
+                        IdProfessional = user.Id
+                    };
+
+                    _context.Certificates.Add(certificate);
+                    await _context.SaveChangesAsync();
+
+                    return Ok(new JsonResult(new { title = "PDF Uploaded", message = "PDF file uploaded successfully." }));
+                }
+                else 
+                {
+                    return BadRequest("Failed to upload PDF. Please try again.");
+                }    
+            }
+            catch (Exception)
+            {
+                return BadRequest("Failed to upload PDF. Please try again.");
+            }  
+        }
+
+        [HttpGet("get-pdfs")]
+        public async Task<ActionResult<List<CertificateDto>>> GetPdfs()
+        {
+            try
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(userId)) return BadRequest("Não foi possível encontrar o utilizador");
+
+                var user = await _userManager.FindByIdAsync(userId);
+                if (user == null) return NotFound("Não foi possível encontrar o utilizador");
+
+                var certificates = await _context.Certificates
+                    .Where(c => c.IdProfessional == user.Id)
+                    .ToListAsync();
+
+                List<CertificateDto> certificateDtos = new List<CertificateDto>();
+                foreach (var certificate in certificates)
+                {
+                    CertificateDto certificateDto = new CertificateDto
+                    {
+                        CertificateId = certificate.Id,
+                        Name = certificate.Name,
+                        Path = certificate.Path 
+                    };
+                    certificateDtos.Add(certificateDto);
+                }
+
+                return certificateDtos;
+            }
+            catch (Exception)
+            {
+                return BadRequest("Failed to retrieve PDFs. Please try again.");
+            }
+        }
+
+        [HttpDelete("delete-pdf/{id}")]
+        public async Task<ActionResult> DeletePdf(int id)
+        {
+            try
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(userId)) return BadRequest("Não foi possível encontrar o utilizador");
+
+                var user = await _userManager.FindByIdAsync(userId);
+                if (user == null) return NotFound("Não foi possível encontrar o utilizador");
+
+                var certificate = await _context.Certificates.FirstOrDefaultAsync(r => r.Id == id && r.IdProfessional == userId); ;
+                if (certificate == null) return NotFound("Certificate not found");
+
+                _context.Certificates.Remove(certificate);
+                await _context.SaveChangesAsync();
+
+                return Ok(new JsonResult(new { title = "PDF Deleted", message = "PDF file deleted successfully." }));
+            }
+            catch (Exception)
+            {
+                return BadRequest("Failed to delete PDF. Please try again.");
+            }
+        }
+
+        [HttpGet("download-pdf")]
+        public async Task<IActionResult> DownloadPdf(string filePath)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(filePath))
+                    return BadRequest("File path cannot be empty");
+
+                var fullPath = Path.Combine(Directory.GetCurrentDirectory(), filePath);
+                if (!System.IO.File.Exists(fullPath))
+                    return NotFound("File not found");
+
+                var memory = new MemoryStream();
+                using (var stream = new FileStream(fullPath, FileMode.Open))
+                {
+                    await stream.CopyToAsync(memory);
+                }
+                memory.Position = 0;
+
+                var contentType = "application/pdf";
+                var fileName = Path.GetFileName(fullPath);
+                return File(memory, contentType, fileName);
+            }
+            catch (Exception)
+            {
+                return BadRequest("Failed to download PDF. Please try again.");
+            }
+        }
+
+        #region private helper methods
+        private List<ServiceDto> GetServiceDtos(List<Service> services)
         {
             var serviceDtos = new List<ServiceDto>();
             foreach (var service in services)

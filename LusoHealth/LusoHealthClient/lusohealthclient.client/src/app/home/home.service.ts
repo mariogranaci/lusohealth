@@ -3,7 +3,8 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment.development';
 import { Professional } from '../shared/models/profile/professional';
-import { Specialty } from '../shared/models/profile/Specialty';
+import { Specialty } from '../shared/models/profile/specialty';
+import { Service } from '../shared/models/services/service';
 
 
 
@@ -25,6 +26,10 @@ export class HomeService {
 
   getSpecialties() {
     return this.http.get<Specialty[]>(`${environment.appUrl}/api/home/get-specialties`);
+  }
+
+  getServices() {
+    return this.http.get<Service[]>(`${environment.appUrl}/api/home/get-services`);
   }
 }
 export interface ProfessionalType {

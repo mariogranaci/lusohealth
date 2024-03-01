@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment.development';
 import { Professional } from '../shared/models/profile/professional';
-import { Specialty } from '../shared/models/profile/Specialty';
+import { Specialty } from '../shared/models/profile/specialty';
 import { Service } from '../shared/models/profile/service';
 
 @Injectable({

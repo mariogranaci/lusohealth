@@ -2,7 +2,7 @@ import { Component, HostListener } from '@angular/core';
 import { AuthenticationService, ProfessionalType } from '../../authentication/authentication.service';
 import { Subject, takeUntil } from 'rxjs';
 import { Professional } from '../../shared/models/profile/professional';
-import { Specialty } from '../../shared/models/profile/Specialty';
+import { Specialty } from '../../shared/models/profile/specialty';
 import { ServicesService } from '../services.service';
 import { Service } from '../../shared/models/services/service';
 

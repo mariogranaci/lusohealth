@@ -1,9 +1,10 @@
 import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
-import { AuthenticationService, ProfessionalType } from '../authentication.service';
+import { AuthenticationService } from '../authentication.service';
 import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { User } from '../../shared/models/authentication/user';
 import { Subject, take, takeUntil } from 'rxjs';
+import { ProfessionalType } from '../../shared/models/authentication/professionalType';
 
 @Component({
   selector: 'app-registo',

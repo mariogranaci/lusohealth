@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { ProfessionalType } from '../../shared/models/authentication/professionalType';
+import { Specialty } from '../../shared/models/profile/Specialty';
 
 @Component({
   selector: 'app-mapa',
@@ -6,5 +8,6 @@ import { Component } from '@angular/core';
   styleUrl: './mapa.component.css'
 })
 export class MapaComponent {
-
+  professionalTypes: ProfessionalType[] = [];
+  specialties : Specialty[] = [];
 }

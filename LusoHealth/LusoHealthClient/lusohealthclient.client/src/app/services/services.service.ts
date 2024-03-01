@@ -5,6 +5,7 @@ import { environment } from '../../environments/environment.development';
 import { Professional } from '../shared/models/profile/professional';
 import { Specialty } from '../shared/models/profile/Specialty';
 import { Service } from '../shared/models/profile/service';
+import { ProfessionalType } from '../shared/models/authentication/professionalType';
 
 @Injectable({
   providedIn: 'root'
@@ -28,7 +29,4 @@ export class ServicesService {
     return this.http.get<Service[]>(`${environment.appUrl}/api/home/get-services`);
   }
 }
-export interface ProfessionalType {
-  id: number;
-  name: string;
-}
+

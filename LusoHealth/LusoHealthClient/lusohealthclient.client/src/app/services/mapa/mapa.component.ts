@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ProfessionalType } from '../../shared/models/authentication/professionalType';
-import { Specialty } from '../../shared/models/profile/Specialty';
+import { Specialty } from '../../shared/models/profile/specialty';
 
 @Component({
   selector: 'app-mapa',

@@ -6,14 +6,14 @@
   </div>
   <ul id="menu">
     <li class="sub-menu-parent">
-      <a routerLink="" class="nav-link" routerLinkActive="active">
+      <a [routerLink]="['/services']" class="nav-link" routerLinkActive="active">
         <img class="menu-icons" src="assets/images/NavBar/doctor-icon.png" alt="Ícone Marcações" />
         <div class="nav-text"> Marcações </div>
       </a>
       <ul class="sub-menu">
         <li class="dropdown-element">
           <img src="assets/images/NavBar/maps.png" />
-          <a routerLink="" class="nav-link" routerLinkActive="active">Mapa</a>
+          <a [routerLink]="['/map']" class="nav-link" routerLinkActive="active">Mapa</a>
         </li>
       </ul>
     </li>

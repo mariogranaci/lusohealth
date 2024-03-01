@@ -1,0 +1,225 @@
+<main>
+  <section id="left-panel">
+    <section id="filter-section">
+      <div id="filters-div">
+        <p class="bold margin-select">Filtrar:</p>
+        <div id="filters">
+          <div class="select-form-box">
+            <div class="select-dropdown">
+              <select>
+                <option value="0" selected disabled hidden>Categoria</option>
+                <option value="0">Qualquer</option>
+                <option *ngFor="let type of professionalTypes" value="{{ type.id }}">{{ type.name }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="select-form-box">
+            <div class="select-dropdown">
+              <select>
+                <option value="0" selected disabled hidden>Especialidade</option>
+                <option value="0">Qualquer</option>
+                <option *ngFor="let specialty of specialties" value="{{ specialty.id }}">{{ specialty.name }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="select-form-box">
+            <div class="select-dropdown">
+              <select>
+                <option value="0" selected disabled hidden>Tipo de Consulta</option>
+                <option value="0">Qualquer</option>
+                <option>Presencial</option>
+                <option>Online</option>
+                <option>Domiciliar</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div><div id="order-div">
+        <p class="bold margin-select">Ordenar:</p>
+        <div id="order">
+          <div class="select-form-box">
+            <div class="select-dropdown">
+              <select>
+                <option value="0" selected disabled hidden>Ordenar por</option>
+                <option value="rank">Ranking</option>
+                <option value="asc">Preço Ascendente</option>
+                <option value="desc">Preço Descendente</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="service-section">
+      <div class="service-tab">
+        <figure>
+          <img src="/assets/images/Perfil/profileImage.jpg" alt="Foto de Perfil" />
+        </figure>
+        <div class="service-info">
+          <div class="row">
+            <h3>Nome do Profissional</h3>
+            <div class="row center-height">
+              <img class="placeholder" src="/assets/images/Mapa/placeholder.png" alt="Localização" />
+              <p>Localização</p>
+            </div>
+          </div>
+          <div class="row center-height">
+            <div class="row center-height">
+              <span class="small-right-margin">5,0</span>
+              <img src="assets/images/profile/star.png" alt="Estrela" class="star display-block" />
+            </div>
+            <p>Categoria</p>
+          </div>
+        </div>
+      </div>
+      <div class="service-tab">
+        <figure>
+          <img src="/assets/images/Perfil/profileImage.jpg" alt="Foto de Perfil" />
+        </figure>
+        <div class="service-info">
+          <div class="row">
+            <h3>Nome do Profissional</h3>
+            <div class="row center-height">
+              <img class="placeholder" src="/assets/images/Mapa/placeholder.png" alt="Localização" />
+              <p>Localização</p>
+            </div>
+          </div>
+          <div class="row center-height">
+            <div class="row center-height">
+              <span class="small-right-margin">5,0</span>
+              <img src="assets/images/profile/star.png" alt="Estrela" class="star display-block" />
+            </div>
+            <p>Categoria</p>
+          </div>
+        </div>
+      </div>
+      <div class="service-tab">
+        <figure>
+          <img src="/assets/images/Perfil/profileImage.jpg" alt="Foto de Perfil" />
+        </figure>
+        <div class="service-info">
+          <div class="row">
+            <h3>Nome do Profissional</h3>
+            <div class="row center-height">
+              <img class="placeholder" src="/assets/images/Mapa/placeholder.png" alt="Localização" />
+              <p>Localização</p>
+            </div>
+          </div>
+          <div class="row center-height">
+            <div class="row center-height">
+              <span class="small-right-margin">5,0</span>
+              <img src="assets/images/profile/star.png" alt="Estrela" class="star display-block" />
+            </div>
+            <p>Categoria</p>
+          </div>
+        </div>
+      </div>
+      <div class="service-tab">
+        <figure>
+          <img src="/assets/images/Perfil/profileImage.jpg" alt="Foto de Perfil" />
+        </figure>
+        <div class="service-info">
+          <div class="row">
+            <h3>Nome do Profissional</h3>
+            <div class="row center-height">
+              <img class="placeholder" src="/assets/images/Mapa/placeholder.png" alt="Localização" />
+              <p>Localização</p>
+            </div>
+          </div>
+          <div class="row center-height">
+            <div class="row center-height">
+              <span class="small-right-margin">5,0</span>
+              <img src="assets/images/profile/star.png" alt="Estrela" class="star display-block" />
+            </div>
+            <p>Categoria</p>
+          </div>
+        </div>
+      </div>
+      <div class="service-tab">
+        <figure>
+          <img src="/assets/images/Perfil/profileImage.jpg" alt="Foto de Perfil" />
+        </figure>
+        <div class="service-info">
+          <div class="row">
+            <h3>Nome do Profissional</h3>
+            <div class="row center-height">
+              <img class="placeholder" src="/assets/images/Mapa/placeholder.png" alt="Localização" />
+              <p>Localização</p>
+            </div>
+          </div>
+          <div class="row center-height">
+            <div class="row center-height">
+              <span class="small-right-margin">5,0</span>
+              <img src="assets/images/profile/star.png" alt="Estrela" class="star display-block" />
+            </div>
+            <p>Categoria</p>
+          </div>
+        </div>
+      </div>
+      <div class="service-tab">
+        <figure>
+          <img src="/assets/images/Perfil/profileImage.jpg" alt="Foto de Perfil" />
+        </figure>
+        <div class="service-info">
+          <div class="row">
+            <h3>Nome do Profissional</h3>
+            <div class="row center-height">
+              <img class="placeholder" src="/assets/images/Mapa/placeholder.png" alt="Localização" />
+              <p>Localização</p>
+            </div>
+          </div>
+          <div class="row center-height">
+            <div class="row center-height">
+              <span class="small-right-margin">5,0</span>
+              <img src="assets/images/profile/star.png" alt="Estrela" class="star display-block" />
+            </div>
+            <p>Categoria</p>
+          </div>
+        </div>
+      </div>
+      <div class="service-tab">
+        <figure>
+          <img src="/assets/images/Perfil/profileImage.jpg" alt="Foto de Perfil" />
+        </figure>
+        <div class="service-info">
+          <div class="row">
+            <h3>Nome do Profissional</h3>
+            <div class="row center-height">
+              <img class="placeholder" src="/assets/images/Mapa/placeholder.png" alt="Localização" />
+              <p>Localização</p>
+            </div>
+          </div>
+          <div class="row center-height">
+            <div class="row center-height">
+              <span class="small-right-margin">5,0</span>
+              <img src="assets/images/profile/star.png" alt="Estrela" class="star display-block" />
+            </div>
+            <p>Categoria</p>
+          </div>
+        </div>
+      </div>
+      <div class="service-tab">
+        <figure>
+          <img src="/assets/images/Perfil/profileImage.jpg" alt="Foto de Perfil" />
+        </figure>
+        <div class="service-info">
+          <div class="row">
+            <h3>Nome do Profissional</h3>
+            <div class="row center-height">
+              <img class="placeholder" src="/assets/images/Mapa/placeholder.png" alt="Localização" />
+              <p>Localização</p>
+            </div>
+          </div>
+          <div class="row center-height">
+            <div class="row center-height">
+              <span class="small-right-margin">5,0</span>
+              <img src="assets/images/profile/star.png" alt="Estrela" class="star display-block" />
+            </div>
+            <p>Categoria</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </section>
+  <section id="right-panel"></section>
+</main>

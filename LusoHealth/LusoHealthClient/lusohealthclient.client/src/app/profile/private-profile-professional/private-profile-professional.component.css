@@ -413,6 +413,7 @@ tbody {
 #certificates-container {
   background-color: #fff;
   width: 100%;
+  min-height: 270px;
   display: flex;
   overflow: auto;
   height: fit-content;
@@ -433,7 +434,6 @@ tbody {
 
   .single-container > img {
     width: 100px;
-    pointer-events: none;
     user-select: none;
   }
 

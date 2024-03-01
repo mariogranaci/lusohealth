@@ -8,13 +8,15 @@ import { HttpClientModule } from '@angular/common/http';
 import { CalendarioComponent } from './calendario/calendario.component';
 import { MarcacoesComponent } from './marcacoes/marcacoes.component';
 import { FormsModule } from '@angular/forms';
+import { MapaComponent } from './mapa/mapa.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
 
 
 @NgModule({
   declarations: [
     MarcarConsultaComponent,
-    MarcacoesComponent
+    MarcacoesComponent,
+    MapaComponent
   ],
   imports: [
     CommonModule,
@@ -27,7 +29,6 @@ import { MatPaginatorModule } from '@angular/material/paginator';
   ],
   exports: [
     HttpClientModule
-  ],
-  bootstrap: [MarcacoesComponent]
+  ]
 })
 export class ServicesModule { }

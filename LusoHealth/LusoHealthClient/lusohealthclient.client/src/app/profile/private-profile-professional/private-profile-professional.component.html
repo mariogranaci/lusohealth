@@ -7,7 +7,7 @@
     </div>
 
     <figure>
-      <img class="image" alt="Imagem de Perfil" [src]="profileImagePath"/>
+      <img class="image" alt="Imagem de Perfil" [src]="profileImagePath" />
     </figure>
 
     <div class="row">
@@ -123,35 +123,24 @@
 
   <div id="certificates-container">
     <div id="add-single-container">
-      <button id="add-button">
+      <button id="add-button" (click)="fileInput.click()">
         <img src="assets/images/profile/add.png" alt="Adicionar Certificado">
       </button>
+      <input #fileInput type="file" style="display: none;" (change)="onFileSelected($event)" accept=".pdf">
     </div>
-    <div class="single-container">
-      <img src="assets/images/profile/pdf.png" />
+    <div class="single-container" *ngFor="let pdf of pdfList" >
+      <img src="assets/images/profile/pdf.png" (click)="openPdf(pdf.path)"/>
       <div class="pdf-label">
-        <abbr class="abbr-pdf-label" title="Certificado de habilitações.pdf">Certificado de habilitações.pdf</abbr>
+        <abbr class="abbr-pdf-label" title="{{pdf.name}}">{{pdf.name}}</abbr>
       </div>
       <div class="align-right-container">
-        <button class="delete-button">
-          <img src="assets/images/profile/bin.png" alt="Edit">
+        <button class="delete-button" (click)="deletePdf(pdf.certificateId)">
+          <img src="assets/images/profile/bin.png" alt="Delete">
         </button>
       </div>
     </div>
-    <div class="single-container">
-      <img src="assets/images/profile/pdf.png" />
-      <div class="pdf-label">
-        <abbr class="abbr-pdf-label" title="Certificado de habilitaçõesasa cj ddhdsvsdkjv kkjdb  djdfvvjdbvs dchcjc jwwjcw dj sdsdsfff.pdf">Certificado de habilitaçõesasa cj ddhdsvsdkjv kkjdb  djdfvvjdbvs dchcjc jwwjcw dj sdsdsfff.pdf</abbr>
-      </div>
-      <div class="align-right-container">
-        <button class="delete-button">
-          <img src="assets/images/profile/bin.png" alt="Edit">
-        </button>
-      </div>
-    </div>
-
-
   </div>
+
 
   <div class="left-align-row">
     <h2>Reviews</h2>
@@ -180,11 +169,11 @@
 
     <div class="review-container" *ngFor="let review of this.reviews">
       <hr>
-      <div class="review-top-row" >
+      <div class="review-top-row">
         <div class="left-review-top-row">
           <div class="review-image small-right-margin">
             <img src="{{ review.patientPicture }}" alt="Imagem de perfil" class="review-image small-right-margin">
-          </div> 
+          </div>
           <b class="small-right-margin">{{ review.patientName }}</b>
           <span class="small-right-margin">{{ review.stars }}</span>
           <img src="assets/images/profile/star.png" alt="Estrela" class="star">
@@ -192,7 +181,7 @@
         <div class="right-review-top-row">
           <b>{{ review.serviceName }}</b>
         </div>
-      </div> 
+      </div>
       <div class="comment">{{ review.description }}</div>
     </div>
   </div>

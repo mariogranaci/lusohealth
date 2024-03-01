@@ -156,10 +156,8 @@ export class PerfilPacienteComponent {
 
   addRelative() {
     this.submitted = true;
-    console.log(this.addRelativeForm.valid);
     if (this.addRelativeForm.valid)
     {
-      console.log(this.addRelativeForm.valid);
       var form = this.addRelativeForm.value;
       var relative = new Relative(
         null,

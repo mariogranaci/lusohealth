@@ -1,10 +1,10 @@
 import { Component, HostListener } from '@angular/core';
-import { AuthenticationService, ProfessionalType } from '../../authentication/authentication.service';
 import { Subject, takeUntil } from 'rxjs';
 import { HomeService } from '../home.service';
 import { Professional } from '../../shared/models/profile/professional';
-import { Service } from '../../shared/models/profile/service';
-import { Specialty } from '../../shared/models/profile/Specialty';
+import { Service } from '../../shared/models/services/service';
+import { Specialty } from '../../shared/models/profile/specialty';
+import { ProfessionalType } from '../../shared/models/authentication/professionalType';
 
 
 @Component({
@@ -16,7 +16,6 @@ export class HomePageComponent {
   private unsubscribe$ = new Subject<void>();
   errorMessages: string[] = [];
   professionalTypes: ProfessionalType[] = [];
-  professionals: Professional[] = [];
   services: Service[] = [];
   specialties: Specialty[] = [];
   searchResults: string[] = [];
@@ -26,7 +25,7 @@ export class HomePageComponent {
 
   ngOnInit() {
     this.getProfessionalTypes();
-    this.getProfessionals();
+    this.getServices();
     this.getSpecialties();
   }
 
@@ -62,22 +61,41 @@ export class HomePageComponent {
     });
   }
 
-  getProfessionals() {
-    this.homeService.getProfessionals().pipe(
-      takeUntil(this.unsubscribe$)
-    ).subscribe({
-      next: (professionals: Professional[]) => {
-        this.professionals = professionals;
-      },
-      error: (error) => {
-        console.log(error);
-        if (error.error.errors) {
-          this.errorMessages = error.error.errors;
-        } else {
-          this.errorMessages.push(error.error);
+  getServices(): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      this.homeService.getServices().pipe(
+        takeUntil(this.unsubscribe$)
+      ).subscribe({
+        next: (services: any) => {
+          this.services = services;
+          resolve();
+        },
+        error: (error) => {
+          console.log(error);
+          if (error.error.errors) {
+            this.errorMessages = error.error.errors;
+          } else {
+            this.errorMessages.push(error.error);
+          }
+          reject(error);
         }
-      }
+      });
     });
+  }
+
+  get fourServices(): Service[] {
+    return this.services.slice(0, 4);
+  }
+
+  returnStars(service: Service): number {
+    const reviewsForService = service.professional.reviews.filter(review => review.idService === service.serviceId);
+
+    if (reviewsForService.length === 0) {
+      return 0; // Default value when there are no reviews
+    }
+
+    const sumStars = reviewsForService.reduce((sum, review) => sum + review.stars, 0);
+    return sumStars / reviewsForService.length;
   }
 
   getSpecialties() {
@@ -105,8 +123,6 @@ export class HomePageComponent {
     });
 
     const topSpecialties = sortedSpecialties.slice(0, 3);
-
-    console.log(topSpecialties);
 
     return topSpecialties;
   }
@@ -138,51 +154,5 @@ export class HomePageComponent {
 
   selectSpecialty(specialty: string) {
     console.log("Selected specialty:", specialty);
-  }
-
-
-  calculateAverageStars(professional: Professional): number {
-    if (!professional.reviews || professional.reviews.length === 0) {
-      return 0; // Default value when there are no reviews
-    }
-
-    const sumStars = professional.reviews.reduce((sum, review) => sum + review.stars, 0);
-    return sumStars / professional.reviews.length;
-  }
-
-  findHighestRatedSpecialty(professional: Professional): string {
-    if (!professional.reviews || professional.reviews.length === 0) {
-      return '';
-    }
-    const highestRatedReview = professional.reviews.reduce((prev, current) => (prev.stars > current.stars) ? prev : current);
-
-    this.services = professional.services;
-
-    const service: Service | undefined = this.services.find(service => service.serviceId === highestRatedReview.idService);
-
-    if (service) {
-      const specialty: string | undefined | null = this.services.find(type => type.specialtyId === service.specialtyId)?.specialty;
-      return specialty ? specialty: '';
-    } else {
-      return 'NENHUM';
-    }
-  }
-
-  findHighestRatedSpecialtyPrice(professional: Professional): number | null{
-    if (!professional.reviews || professional.reviews.length === 0) {
-      return null;
-    }
-    const highestRatedReview = professional.reviews.reduce((prev, current) => (prev.stars > current.stars) ? prev : current);
-
-    this.services = professional.services;
-
-    const service: Service | undefined = this.services.find(service => service.serviceId === highestRatedReview.idService);
-
-    if (service) {
-      const specialty: number | undefined = this.services.find(type => type.specialtyId === service.specialtyId)?.pricePerHour;
-      return specialty ? specialty : null;
-    } else {
-      return null;
-    }
   }
 }

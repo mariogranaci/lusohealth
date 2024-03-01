@@ -8,8 +8,9 @@ import { ProfileService } from '../profile.service';
 import { Subject, takeUntil } from 'rxjs';
 import { Professional } from '../../shared/models/profile/professional';
 import { Service } from '../../shared/models/profile/service';
-import { Specialty } from '../../shared/models/profile/Specialty';
+import { Specialty } from '../../shared/models/profile/specialty';
 import { Review } from '../../shared/models/profile/review';
+import { Certificate } from '../../shared/models/profile/certificate';
 
 @Component({
   selector: 'app-private-profile-professional',
@@ -33,6 +34,7 @@ export class PrivateProfileProfessionalComponent implements OnInit {
   public selectedSpecialtyReview = 0;
   public reviews: Review[] = [];
   public averageStars = 0;
+  pdfList: Certificate[] = [];
 
   constructor(private authenticationService: AuthenticationService,
     private formBuilder: FormBuilder,
@@ -64,6 +66,7 @@ export class PrivateProfileProfessionalComponent implements OnInit {
       this.changeSpecialtyReview("0");
     });
     this.getSpecialties();
+    this.getPdfs();
 
   }
 
@@ -143,6 +146,70 @@ export class PrivateProfileProfessionalComponent implements OnInit {
         this.profileImagePath = this.userData.professionalInfo.picture;
       }
     }
+  }
+
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+
+    // Check if the file is a PDF
+    if (file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')) {
+      this.profileService.uploadPdf(file).subscribe(
+        response => {
+          console.log('PDF uploaded successfully.');
+          this.getPdfs(); 
+
+          if (response && response.pdfUrl) {
+            this.openPdf(response.pdfUrl);
+          }
+        },
+        error => {
+          this.errorMessages.push('Erro ao dar upload do ficheiro.');
+        }
+      );
+    } else {
+      this.errorMessages.push('Ficheiro não é um pdf.');
+    }
+  }
+  getPdfs() {
+    this.profileService.getPdfs().subscribe(
+      pdfs => {
+        this.pdfList = pdfs;
+      },
+      error => {
+        console.error('Error getting PDFs:', error);
+        // Handle error appropriately (e.g., show error message)
+      }
+    );
+  }
+
+  deletePdf(certificateId: number) {
+    this.profileService.deletePdf(certificateId).subscribe(
+      response => {
+        console.log('PDF deleted successfully.');
+        this.getPdfs(); // Refresh the PDF list after deletion
+      },
+      error => {
+        this.errorMessages.push('Erro ao apagar o ficheiro.');
+        // Handle error appropriately (e.g., show error message)
+      }
+    );
+  }
+
+  openPdf(pdfFilename: string): void {
+    this.profileService.downloadPdf(pdfFilename).subscribe(
+      (blob: Blob) => {
+        const url = window.URL.createObjectURL(blob);
+
+        window.open(url);
+
+        setTimeout(() => {
+          window.URL.revokeObjectURL(url);
+        }, 1000);
+      },
+      error => {
+        console.error('Error downloading PDF:', error);
+      }
+    );
   }
 
   getDescription() {

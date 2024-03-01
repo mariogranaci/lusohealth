@@ -40,8 +40,18 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     private router: Router) {
     this.authenticationService.user$.pipe(take(1)).subscribe({
       next: (user: User | null) => {
+        console.log(user);
         if (!user) {
           this.router.navigateByUrl('/');
+        }
+        else {
+          const decodedToken = this.profileService.getDecodedToken();
+
+          if (decodedToken) {
+            if (decodedToken.role !== "Professional") {
+              this.router.navigateByUrl('/');
+            }
+          }
         }
       }
     });
@@ -223,11 +233,11 @@ export class PrivateProfileProfessionalComponent implements OnInit {
   }
 
   errorHideCheckAnimation() {
-    /*const checkmark = document.querySelector('.container-animation');
+    const checkmark = document.querySelector('.container-animation');
 
     if (checkmark instanceof HTMLElement) {
       checkmark.style.display = 'none';
-    }*/
+    }
   }
 
   addSpeciality() {

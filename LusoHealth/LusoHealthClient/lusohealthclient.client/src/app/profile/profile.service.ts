@@ -12,6 +12,7 @@ import { Service } from '../shared/models/profile/service';
 import { Specialty } from '../shared/models/profile/specialty';
 import { Description } from '../shared/models/profile/description';
 import { Review } from '../shared/models/profile/review';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +27,14 @@ export class ProfileService {
       return user.jwt;
     } else {
       return 'No JWT';
+    }
+  }
+
+  getDecodedToken() {
+    const jwt = this.getJWT();
+    if (jwt != null) {
+      const decodedToken: any = jwtDecode(jwt);
+      return decodedToken;
     }
   }
 

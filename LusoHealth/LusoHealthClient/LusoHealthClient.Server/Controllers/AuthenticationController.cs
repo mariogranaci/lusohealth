@@ -231,7 +231,7 @@ namespace LusoHealthClient.Server.Controllers
                     var professional = new Professional
                     {
                         UserID = userToAdd.Id,
-                        ProfessionalTypeId = (int)model.ProfessionalTypeId,
+                        ProfessionalTypeId = (int) model.ProfessionalTypeId
                     };
                     _context.Professionals.Add(professional);
                     await _userManager.AddToRoleAsync(userToAdd, SD.ProfessionalRole);

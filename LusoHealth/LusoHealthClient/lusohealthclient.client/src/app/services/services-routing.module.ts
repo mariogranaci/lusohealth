@@ -3,10 +3,12 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { MarcarConsultaComponent } from './marcar-consulta/marcar-consulta.component';
 import { MarcacoesComponent } from './marcacoes/marcacoes.component';
+import { MapaComponent } from './mapa/mapa.component';
 
 const routes: Routes = [
   { path: 'make-appointment', component: MarcarConsultaComponent },
-  { path: 'appointements', component: MarcacoesComponent },
+  { path: 'services', component: MarcacoesComponent },
+  { path: 'map', component: MapaComponent }
 ]
 
 @NgModule({

@@ -1,10 +1,10 @@
 import { Component, HostListener } from '@angular/core';
-import { AuthenticationService, ProfessionalType } from '../../authentication/authentication.service';
 import { Subject, takeUntil } from 'rxjs';
 import { HomeService } from '../home.service';
 import { Professional } from '../../shared/models/profile/professional';
 import { Service } from '../../shared/models/services/service';
 import { Specialty } from '../../shared/models/profile/specialty';
+import { ProfessionalType } from '../../shared/models/authentication/professionalType';
 
 
 @Component({

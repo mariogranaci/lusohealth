@@ -1,1 +1,4 @@
-console.log("Hello World!")
+export interface ProfessionalType {
+  id: number;
+  name: string;
+}

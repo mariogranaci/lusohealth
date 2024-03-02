@@ -321,10 +321,22 @@ namespace LusoHealthClient.Server.Services
                     }
                     else
                     {
+                        double lisbonLatitude = 38.7074;
+                        double lisbonLongitude = -9.1368;
+                        double radius = 0.1;
+
+                        var random = new Random();
+                        double latOffset = (random.NextDouble() * 2 - 1) * radius;
+                        double lonOffset = (random.NextDouble() * 2 - 1) * radius;
+
+                        double newLatitude = lisbonLatitude + latOffset;
+                        double newLongitude = lisbonLongitude + lonOffset;
+
                         var professionalToAdd = new Professional
                         {
                             UserID = user.Id,
                             ProfessionalTypeId = 1,
+                            Location = $"{newLatitude};{newLongitude}"
                         };
                         await _context.Professionals.AddAsync(professionalToAdd);
                         await _userManager.AddToRoleAsync(user, SD.ProfessionalRole);

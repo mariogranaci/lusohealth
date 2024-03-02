@@ -29,10 +29,10 @@ export class MapaComponent implements OnInit, AfterViewInit{
 
   onMapReady(map: any): void {
     this.map = map;
+    console.log('Mapa carregado');
   }
 
   initAutocomplete(): void {
-    debugger;
     if (this.searchBox) {
       const autocomplete = new google.maps.places.Autocomplete(this.searchBox.nativeElement);
       autocomplete.addListener('place_changed', () => {
@@ -40,14 +40,15 @@ export class MapaComponent implements OnInit, AfterViewInit{
         if (!place.geometry) {
           window.alert("No details available for input: '" + place.name + "'");
           return;
-        }
-
+        } 
+          console.log(place.address_components);
         if (this.map) {
+          console.log('Mapa existe');
           if (place.geometry.viewport) {
             this.map.fitBounds(place.geometry.viewport);
           } else {
             this.map.setCenter(place.geometry.location);
-            this.map.setZoom(17);  // Por que 17? Porque parece bom.
+            this.map.setZoom(13);
           }
         }
       });

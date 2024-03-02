@@ -1,7 +1,6 @@
 import { Component, HostListener } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { HomeService } from '../home.service';
-import { Professional } from '../../shared/models/profile/professional';
 import { Service } from '../../shared/models/services/service';
 import { Specialty } from '../../shared/models/profile/specialty';
 import { ProfessionalType } from '../../shared/models/authentication/professionalType';
@@ -18,7 +17,7 @@ export class HomePageComponent {
   professionalTypes: ProfessionalType[] = [];
   services: Service[] = [];
   specialties: Specialty[] = [];
-  searchResults: string[] = [];
+  searchResults: Specialty[] = [];
   searchTerm: string = '';
   public topSpecialties: Specialty[] = [];
 
@@ -101,6 +100,11 @@ export class HomePageComponent {
     return sumStars / reviewsForService.length;
   }
 
+  getProfessionalTypeName(professionalTypeID: number): string | undefined {
+    const professionalType = this.professionalTypes.find(pt => pt.id === professionalTypeID);
+    return professionalType ? professionalType.name : undefined;
+  }
+
   getSpecialties(): Promise<void> {
     
     return new Promise<void>((resolve, reject) => {
@@ -148,7 +152,7 @@ export class HomePageComponent {
     if (searchTermNormalized.length > 1) {
       this.searchResults = this.specialties
         .filter(specialty => this.removeAccents(specialty.name.toLowerCase()).includes(searchTermNormalized))
-        .map(specialty => specialty.name);
+        .map(specialty => specialty);
     } else {
       this.searchResults = [];
     }
@@ -158,7 +162,7 @@ export class HomePageComponent {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   }
 
-  selectSpecialty(specialty: string) {
-    console.log("Selected specialty:", specialty);
+  selectSpecialty(specialty: Specialty) {
+    console.log("Selected specialty:", specialty.name);
   }
 }

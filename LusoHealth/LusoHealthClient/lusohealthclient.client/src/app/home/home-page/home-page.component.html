@@ -16,11 +16,11 @@
     </ul>
 
     <div class="populares">
-      <div class="form-buttons-row">
+      <div class="form-buttons-row" *ngIf="(topSpecialties.length > 0)">
         <p class="populares-texto">Populares:</p>
-        <button class="btn">{{getSpecialtiesByTimesScheduled()[0].name}}</button>
-        <button class="btn">{{getSpecialtiesByTimesScheduled()[1].name}}</button>
-        <button class="btn">{{getSpecialtiesByTimesScheduled()[2].name}}</button>
+        <button class="btn">{{topSpecialties[0].name}}</button>
+        <button class="btn">{{topSpecialties[1].name}}</button>
+        <button class="btn">{{topSpecialties[2].name}}</button>
       </div>
     </div>
   </div>

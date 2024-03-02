@@ -2,10 +2,9 @@
   background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/assets/images/HomePage/Banner.jpg');
   background-size: cover;
   background-position: center;
-  padding: 10px;
+  padding: 10px 100px;
   width: 100%;
   display: block;
-  padding-left: 100px;
 }
 
 h1 {
@@ -200,8 +199,9 @@ main {
 }
 
 #searchSection {
-  width: 50%;
-  position:relative;
+  min-width: 700px;
+  max-width: 1000px;
+  position: relative;
 }
 
 .option {

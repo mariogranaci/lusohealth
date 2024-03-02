@@ -20,13 +20,16 @@ export class HomePageComponent {
   specialties: Specialty[] = [];
   searchResults: string[] = [];
   searchTerm: string = '';
+  public topSpecialties: Specialty[] = [];
 
   constructor(public homeService: HomeService) { }
 
   ngOnInit() {
     this.getProfessionalTypes();
     this.getServices();
-    this.getSpecialties();
+    this.getSpecialties().then(() => {
+      this.getSpecialtiesByTimesScheduled();
+    });
   }
 
   ngOnDestroy(): void {
@@ -98,33 +101,36 @@ export class HomePageComponent {
     return sumStars / reviewsForService.length;
   }
 
-  getSpecialties() {
-    this.homeService.getSpecialties().pipe(
-      takeUntil(this.unsubscribe$)
-    ).subscribe({
-      next: (specialities: Specialty[]) => {
-        this.specialties = specialities;
-        
-      },
-      error: (error) => {
-        console.log(error);
-        if (error.error.errors) {
-          this.errorMessages = error.error.errors;
-        } else {
-          this.errorMessages.push(error.error);
+  getSpecialties(): Promise<void> {
+    
+    return new Promise<void>((resolve, reject) => {
+      this.homeService.getSpecialties().pipe(
+        takeUntil(this.unsubscribe$)
+      ).subscribe({
+        next: (specialities: Specialty[]) => {
+          this.specialties = specialities;
+          resolve();
+        },
+        error: (error) => {
+          console.log(error);
+          if (error.error.errors) {
+            this.errorMessages = error.error.errors;
+          } else {
+            this.errorMessages.push(error.error);
+          }
+          reject(error);
         }
-      }
+      });
     });
   }
 
-  getSpecialtiesByTimesScheduled(): Specialty[] {
+  getSpecialtiesByTimesScheduled() {
+    
     const sortedSpecialties = this.specialties.slice().sort((a, b) => {
       return b.timesScheduled - a.timesScheduled;
     });
 
-    const topSpecialties = sortedSpecialties.slice(0, 3);
-
-    return topSpecialties;
+    this.topSpecialties = sortedSpecialties.slice(0, 3);
   }
 
   @HostListener('document:click', ['$event'])

@@ -13,7 +13,11 @@
     </div>
     <ul id="myUL">
       <li class="option" *ngFor="let specialty of searchResults" (click)="selectSpecialty(specialty)">
-        <a href="#">{{ specialty.name }} - {{ getProfessionalTypeName(specialty.professionalTypeId) }}</a></li>
+        <a href="#">
+          <p>{{ specialty.name }}</p>
+          <p class="gray" >{{ getProfessionalTypeName(specialty.professionalTypeId) }}</p>
+        </a>
+      </li>
     </ul>
 
     <div class="populares">

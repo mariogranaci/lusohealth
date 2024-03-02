@@ -10,6 +10,7 @@ import { MarcacoesComponent } from './marcacoes/marcacoes.component';
 import { FormsModule } from '@angular/forms';
 import { MapaComponent } from './mapa/mapa.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { GoogleMapsModule } from '@angular/google-maps';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     SharedModule,
     CalendarioComponent,
     FormsModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    GoogleMapsModule
   ],
   exports: [
     HttpClientModule

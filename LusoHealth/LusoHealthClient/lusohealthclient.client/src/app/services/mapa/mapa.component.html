@@ -221,5 +221,14 @@
       </div>
     </section>
   </section>
-  <section id="right-panel"></section>
+  <section id="right-panel">
+    <input id="pac-input" #searchBox class="controls" type="text" placeholder="Search Box" />
+    <google-map [height]="'100%'"
+                [width]="'100%'"
+                [center]="center"
+                [zoom]="zoom"
+                (mapIdle)="onMapIdle()"
+                (mapReady)="onMapReady($event)">
+    </google-map>
+  </section>
 </main>

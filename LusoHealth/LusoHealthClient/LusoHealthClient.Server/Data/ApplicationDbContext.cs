@@ -134,7 +134,7 @@ namespace LusoHealthClient.Server.Data
                 // Enfermagem
                 new Specialty { Id = 51, Name = "Sem Especialidade", ProfessionalTypeId = 2, TimesScheduled = 0 },
                 new Specialty { Id = 52, Name = "Médico-Cirúrgica", ProfessionalTypeId = 2, TimesScheduled = 0 },
-                new Specialty { Id = 53, Name = "Pediátrica", ProfessionalTypeId = 2, TimesScheduled = 0 },
+                new Specialty { Id = 53, Name = "Pediatria", ProfessionalTypeId = 2, TimesScheduled = 0 },
                 new Specialty { Id = 54, Name = "Obstétrica e Ginecológica", ProfessionalTypeId = 2, TimesScheduled = 0 },
                 new Specialty { Id = 55, Name = "Saúde Mental", ProfessionalTypeId = 2, TimesScheduled = 0 },
                 new Specialty { Id = 56, Name = "Geriátrica", ProfessionalTypeId = 2, TimesScheduled = 0 },
@@ -175,7 +175,7 @@ namespace LusoHealthClient.Server.Data
                 new Specialty { Id = 116, Name = "Neurológica", ProfessionalTypeId = 4, TimesScheduled = 0 },
                 new Specialty { Id = 117, Name = "Ortopédica", ProfessionalTypeId = 4, TimesScheduled = 0 },
                 new Specialty { Id = 118, Name = "Respiratória", ProfessionalTypeId = 4, TimesScheduled = 0 },
-                new Specialty { Id = 119, Name = "Pediátrica", ProfessionalTypeId = 4, TimesScheduled = 0 },
+                new Specialty { Id = 119, Name = "Pediatria", ProfessionalTypeId = 4, TimesScheduled = 0 },
                 new Specialty { Id = 120, Name = "Geriátrica", ProfessionalTypeId = 4, TimesScheduled = 0 },
                 new Specialty { Id = 121, Name = "Cardiovascular", ProfessionalTypeId = 4, TimesScheduled = 0 },
                 new Specialty { Id = 122, Name = "Aquática", ProfessionalTypeId = 4, TimesScheduled = 0 },

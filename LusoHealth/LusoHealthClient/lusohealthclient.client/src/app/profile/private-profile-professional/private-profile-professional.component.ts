@@ -10,6 +10,7 @@ import { Professional } from '../../shared/models/profile/professional';
 import { Service } from '../../shared/models/profile/service';
 import { Specialty } from '../../shared/models/profile/specialty';
 import { Review } from '../../shared/models/profile/review';
+import { Certificate } from '../../shared/models/profile/certificate';
 
 @Component({
   selector: 'app-private-profile-professional',
@@ -31,7 +32,9 @@ export class PrivateProfileProfessionalComponent implements OnInit {
   public specialties: Specialty[] | undefined;
   public profileImagePath = "/assets/images/Perfil/profileImage.jpg";
   public selectedSpecialtyReview = 0;
-  public reviews = null;
+  public reviews: Review[] = [];
+  public averageStars = 0;
+  pdfList: Certificate[] = [];
 
   constructor(private authenticationService: AuthenticationService,
     private formBuilder: FormBuilder,
@@ -39,8 +42,18 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     private router: Router) {
     this.authenticationService.user$.pipe(take(1)).subscribe({
       next: (user: User | null) => {
+        console.log(user);
         if (!user) {
           this.router.navigateByUrl('/');
+        }
+        else {
+          const decodedToken = this.profileService.getDecodedToken();
+
+          if (decodedToken) {
+            if (decodedToken.role !== "Professional") {
+              this.router.navigateByUrl('/');
+            }
+          }
         }
       }
     });
@@ -50,9 +63,10 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     this.getProfessionalInfo().then(() => {
       this.setUserFields();
       this.getDescription();
-      //this.filterReviews();
+      this.changeSpecialtyReview("0");
     });
     this.getSpecialties();
+    this.getPdfs();
 
   }
 
@@ -91,32 +105,11 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     return new Promise<void>((resolve, reject) => {
       this.profileService.getProfessionalInfo().pipe(takeUntil(this.unsubscribe$)).subscribe(
         (userData: Professional) => {
-          console.log(userData);
           this.userData = userData;
-          /*var review1 = {
-            idPatient: "3",
-            patientName: "Macho Man",
-            patientPicture: "https://lh3.googleusercontent.com/a/ACg8ocIPXKhLd6de-EUAJqJMHueiODlt9uqkjPQMs9OdKH5F=s96-c",
-            idService: 21,
-            serviceName: "Cirurgia Plástica, Reconstrutiva e Estética",
-            stars: 5,
-            description: "Este chavalo é muito bom.",
-          }
-          var review2 = {
-            idPatient: "2",
-            patientName: "Macho Woman",
-            patientPicture: "https://lh3.googleusercontent.com/a/ACg8ocIPXKhLd6de-EUAJqJMHueiODlt9uqkjPQMs9OdKH5F=s96-c",
-            idService: 22,
-            serviceName: "Anestesiologia",
-            stars: 4,
-            description: "És top.",
-          }
-          this.userData.reviews.push(review1, review2);*/
           resolve();
         },
         error => {
-          console.log(error);
-          reject(error); // You might want to handle error cases here
+          reject(error);
         }
       );
     });
@@ -125,11 +118,9 @@ export class PrivateProfileProfessionalComponent implements OnInit {
   getSpecialties() {
     this.profileService.getServices().pipe(takeUntil(this.unsubscribe$)).subscribe(
       (specialties: Specialty[]) => {
-        console.log(specialties);
         this.specialties = specialties;
       },
       error => {
-        console.log(error);
       }
     );
   }
@@ -157,6 +148,70 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     }
   }
 
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+
+    // Check if the file is a PDF
+    if (file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')) {
+      this.profileService.uploadPdf(file).subscribe(
+        response => {
+          console.log('PDF uploaded successfully.');
+          this.getPdfs(); 
+
+          if (response && response.pdfUrl) {
+            this.openPdf(response.pdfUrl);
+          }
+        },
+        error => {
+          this.errorMessages.push('Erro ao dar upload do ficheiro.');
+        }
+      );
+    } else {
+      this.errorMessages.push('Ficheiro não é um pdf.');
+    }
+  }
+  getPdfs() {
+    this.profileService.getPdfs().subscribe(
+      pdfs => {
+        this.pdfList = pdfs;
+      },
+      error => {
+        console.error('Error getting PDFs:', error);
+        // Handle error appropriately (e.g., show error message)
+      }
+    );
+  }
+
+  deletePdf(certificateId: number) {
+    this.profileService.deletePdf(certificateId).subscribe(
+      response => {
+        console.log('PDF deleted successfully.');
+        this.getPdfs(); // Refresh the PDF list after deletion
+      },
+      error => {
+        this.errorMessages.push('Erro ao apagar o ficheiro.');
+        // Handle error appropriately (e.g., show error message)
+      }
+    );
+  }
+
+  openPdf(pdfFilename: string): void {
+    this.profileService.downloadPdf(pdfFilename).subscribe(
+      (blob: Blob) => {
+        const url = window.URL.createObjectURL(blob);
+
+        window.open(url);
+
+        setTimeout(() => {
+          window.URL.revokeObjectURL(url);
+        }, 1000);
+      },
+      error => {
+        console.error('Error downloading PDF:', error);
+      }
+    );
+  }
+
   getDescription() {
     const descriptionElement = document.getElementById('description');
 
@@ -172,7 +227,7 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     this.errorMessages = [];
     /*this.responseText = '';*/
 
-
+    this.showCheckAnimation();
 
     if (this.updateDescriptionForm.valid) {
 
@@ -188,22 +243,67 @@ export class PrivateProfileProfessionalComponent implements OnInit {
             //this.responseText = response.value.message;
             this.submittedDescription = false;
             console.log("Alterado");
+            const check = document.getElementById('check');
+
+            if (check) {
+              check.click();
+            }
+
+            setTimeout(() => {
+              this.hideCheckAnimation();
+            }, 1800);
+
           },
           error: (error) => {
-            console.log(error.error);
             if (error.error.errors) {
               this.errorMessages = error.error.errors;
+              this.errorHideCheckAnimation();
             } else {
               this.errorMessages.push(error.error);
+              this.errorHideCheckAnimation();
             }
           }
         })
       }
       else {
-        console.log("Antes: " + this.errorMessages.length);
+        this.errorHideCheckAnimation();
         this.errorMessages.push("A nova descrição é igual à anterior.");
-        console.log("Depois: " + this.errorMessages.length);
       }
+    }
+    else {
+      this.errorHideCheckAnimation();
+    }
+  }
+
+  showCheckAnimation() {
+    const checkmark = document.querySelector('.container-animation');
+
+    if (checkmark instanceof HTMLElement) {
+      checkmark.style.display = 'flex';
+    }
+  }
+
+  hideCheckAnimation() {
+
+    const checkmark = document.querySelector('.container-animation');
+
+    if (checkmark instanceof HTMLElement) {
+      checkmark.style.display = 'none';
+    }
+
+    const check = document.getElementById('check');
+
+    if (check) {
+      check.click();
+    }
+
+  }
+
+  errorHideCheckAnimation() {
+    const checkmark = document.querySelector('.container-animation');
+
+    if (checkmark instanceof HTMLElement) {
+      checkmark.style.display = 'none';
     }
   }
 
@@ -235,7 +335,6 @@ export class PrivateProfileProfessionalComponent implements OnInit {
           this.closePopup();
         },
         error: (error) => {
-          console.log(error.error);
           if (error.error.errors) {
             this.errorMessages = error.error.errors;
           } else {
@@ -275,7 +374,6 @@ export class PrivateProfileProfessionalComponent implements OnInit {
             this.closePopup();
           },
           error: (error) => {
-            console.log(error.error);
             if (error.error.errors) {
               this.errorMessages = error.error.errors;
             } else {
@@ -294,7 +392,6 @@ export class PrivateProfileProfessionalComponent implements OnInit {
           this.reloadTableData();
         },
         error: (error) => {
-          console.log(error);
           if (error.error.errors) {
             this.errorMessages = error.error.errors;
           } else {
@@ -332,42 +429,43 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     }
   }
 
+  selectReviewEventReceiver(event: Event) {
+    const target = event.target as HTMLSelectElement;
+    if (target) {
+      const value = target.value;
+
+      this.changeSpecialtyReview(value);
+    }
+  }
+
   changeSpecialtyReview(value: string) {
 
     const selectedValue = parseInt(value);
 
     if (!isNaN(selectedValue)) {
-      if (selectedValue == 0) {
-        this.selectedSpecialtyReview = 0;
 
-      }
-      else {
-        var reviews = this.filterReviews(this.selectedSpecialtyReview);
+      this.selectedSpecialtyReview = selectedValue;
 
-        if (Array.isArray(reviews)) {
-          if (reviews.length > 0) {
+      this.filterReviews(this.selectedSpecialtyReview);
 
-          }
-          else {
+      /*const reviewSelect = document.getElementById('select-review') as HTMLSelectElement | null;
 
-          }
-        }
-      }
+      if (reviewSelect) {
+        reviewSelect.value = String(this.selectedSpecialtyReview);
+      }*/
+
     } else {
-
+      this.errorMessages.push("Erro ao carregar reviews.");
     }
-    //document.getElementById('personlist').value = Person_ID;
   }
 
   filterReviews(serviceId: number) {
-    this.profileService.filterReviewsByService(21).subscribe({
+    this.profileService.filterReviewsByService(serviceId).subscribe({
       next: (reviews: Review[]) => {
-        /*this.responseText = response.value.message;*/
-        console.log(reviews);
-        return reviews;
+        this.reviews = reviews;
+        this.getAverageStars();
       },
       error: (error) => {
-        console.log(error.error);
         if (error.error.errors) {
           this.errorMessages = error.error.errors;
         } else {
@@ -375,6 +473,16 @@ export class PrivateProfileProfessionalComponent implements OnInit {
         }
       }
     });
+  }
+
+  private getAverageStars()
+  {
+    var sum = 0;
+    for (let i = 0; i < this.reviews.length; i++)
+    {
+      sum += this.reviews[i].stars;
+    }
+    this.averageStars = sum / this.reviews.length;
   }
 
   openPopup(opcao: string) {
@@ -402,10 +510,6 @@ export class PrivateProfileProfessionalComponent implements OnInit {
         }
       }
     }
-  }
-
-  private getAverage(reviews: Review[]) {
-
   }
 
   closePopup() {

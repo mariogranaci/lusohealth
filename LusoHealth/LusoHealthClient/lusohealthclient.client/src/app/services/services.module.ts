@@ -6,13 +6,17 @@ import { RouterModule } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
 import { CalendarioComponent } from './calendario/calendario.component';
+import { MarcacoesComponent } from './marcacoes/marcacoes.component';
 import { FormsModule } from '@angular/forms';
-
+import { MapaComponent } from './mapa/mapa.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 
 @NgModule({
   declarations: [
     MarcarConsultaComponent,
+    MarcacoesComponent,
+    MapaComponent
   ],
   imports: [
     CommonModule,
@@ -21,6 +25,7 @@ import { FormsModule } from '@angular/forms';
     SharedModule,
     CalendarioComponent,
     FormsModule,
+    MatPaginatorModule
   ],
   exports: [
     HttpClientModule

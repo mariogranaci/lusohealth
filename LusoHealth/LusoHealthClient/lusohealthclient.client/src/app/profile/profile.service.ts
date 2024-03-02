@@ -6,12 +6,14 @@ import { User } from '../shared/models/authentication/user';
 import { UserProfile } from '../shared/models/profile/userProfile';
 import { UpdatePassword } from '../shared/models/profile/updatePassword';
 import { Relative } from '../shared/models/profile/relative';
-import { Observable } from 'rxjs';
+import { Observable, catchError } from 'rxjs';
 import { Professional } from '../shared/models/profile/professional';
 import { Service } from '../shared/models/profile/service';
 import { Specialty } from '../shared/models/profile/specialty';
 import { Description } from '../shared/models/profile/description';
 import { Review } from '../shared/models/profile/review';
+import { jwtDecode } from 'jwt-decode';
+import { Certificate } from '../shared/models/profile/certificate';
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +31,14 @@ export class ProfileService {
     }
   }
 
+  getDecodedToken() {
+    const jwt = this.getJWT();
+    if (jwt != null) {
+      const decodedToken: any = jwtDecode(jwt);
+      return decodedToken;
+    }
+  }
+
   getHeaders() {
     const jwt = this.getJWT();
 
@@ -42,9 +52,7 @@ export class ProfileService {
   }
 
   getUserData(): Observable<UserProfile> {
-
     const headers = this.getHeaders();
-
     return this.http.get<UserProfile>(`${environment.appUrl}/api/profile/get-user`, { headers });
   }
 
@@ -120,7 +128,59 @@ export class ProfileService {
 
   filterReviewsByService(idService: number): Observable<Review[]> {
     const headers = this.getHeaders();
-    return this.http.post<Review[]>(`${environment.appUrl}/api/profile/filter-reviews-by-service`, idService, { headers });
+    return this.http.get<Review[]>(`${environment.appUrl}/api/profile/filter-reviews-by-service/${idService}`, { headers });
   }
 
+  uploadPdf(pdfFile: File): Observable<any> {
+
+    const formData = new FormData();
+    formData.append('pdfFile', pdfFile);
+
+    const headers = new HttpHeaders({
+      'Authorization': 'Bearer ' + this.getJWT() // replace this.getToken() with your token retrieval logic
+    });
+
+    return this.http.post(`${environment.appUrl}/api/profile/upload-pdf`, formData, { headers }).pipe(
+      catchError(error => {
+        throw 'Error uploading PDF: ' + error;
+      })
+    );
+  }
+
+  getPdfs(): Observable<Certificate[]> {
+    const headers = this.getHeaders();
+
+    return this.http.get<Certificate[]>(`${environment.appUrl}/api/profile/get-pdfs`, { headers }).pipe(
+      catchError(error => {
+        throw 'Error getting PDFs: ' + error;
+      })
+    );
+  }
+
+  deletePdf(certificateId: number): Observable<any> {
+    const headers = this.getHeaders();
+
+    return this.http.delete(`${environment.appUrl}/api/profile/delete-pdf/${certificateId}`, { headers }).pipe(
+      catchError(error => {
+        throw 'Error deleting PDF: ' + error;
+      })
+    );
+  }
+
+
+  downloadPdf(filePath: string): Observable<Blob> {
+    const headers = new HttpHeaders({
+      'Authorization': 'Bearer ' + this.getJWT(),
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.get(`${environment.appUrl}/api/profile/download-pdf?filePath=${filePath}`, {
+      headers: headers,
+      responseType: 'blob'
+    }).pipe(
+      catchError(error => {
+        throw ('Error downloading PDF: ' + error);
+      })
+    );
+  }
 }

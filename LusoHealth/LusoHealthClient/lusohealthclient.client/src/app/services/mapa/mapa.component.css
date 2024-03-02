@@ -1,0 +1,160 @@
+main {
+  display: flex;
+  width: 100%;
+  height: calc(100vh - 65px);
+}
+
+#left-panel {
+  width: 45%;
+  height: 100%;
+}
+
+#right-panel {
+  height: 100%;
+  width: 55%;
+  border-left: 2px solid black;
+}
+
+#filter-section {
+  padding: 10px;
+  border-bottom: 2px solid black;
+  height: 165px;
+}
+
+#filters {
+  display: flex;
+  justify-content: space-between;
+}
+
+#order-div {
+  margin-top: 10px;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.margin-select {
+  margin-bottom: 10px;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.center-height {
+  display: flex;
+  align-items: center;
+}
+
+.display-block {
+  display: block;
+}
+
+/* -------------------------------------- select option ------------------------------------- */
+.select-form-box {
+  width: fit-content;
+}
+
+.select-dropdown,
+.select-dropdown * {
+  position: relative;
+}
+
+.select-dropdown {
+  position: relative;
+  background-color: #fff;
+  border-radius: 7px;
+  width: 100%;
+}
+
+  .select-dropdown select {
+    font-size: 1.1rem;
+    font-weight: normal;
+    width: 100%;
+    padding: 8px 24px 8px 10px;
+    border: none;
+    background-color: transparent;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    user-select: none;
+  }
+
+    .select-dropdown select option {
+      height: fit-content;
+    }
+
+    .select-dropdown select:active, .select-dropdown select:focus {
+      outline: none;
+      box-shadow: none;
+    }
+
+  .select-dropdown:after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 8px;
+    width: 0;
+    height: 0;
+    margin-top: -2px;
+    border-top: 5px solid #aaa;
+    border-right: 5px solid transparent;
+    border-left: 5px solid transparent;
+  }
+
+/* -------------------------------------- services ------------------------------------- */
+
+.placeholder {
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+}
+
+#service-section {
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: calc(100vh - 230px);
+}
+
+.service-tab {
+  display: flex;
+  padding: 20px;
+  border-bottom: 2px solid black;
+}
+
+  .service-tab * {
+    text-transform: uppercase;
+  }
+
+  .service-tab > figure {
+    width: 100px;
+    margin-right: 20px;
+  }
+
+    .service-tab > figure > img {
+      width: 100px;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+.service-info {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.small-right-margin {
+  margin-right: 5px;
+}
+
+.star {
+  max-width: 20px;
+  pointer-events: none;
+  user-select: none;
+}

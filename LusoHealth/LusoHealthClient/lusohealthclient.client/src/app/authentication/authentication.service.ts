@@ -11,6 +11,7 @@ import { EmailModel } from '../shared/models/authentication/emailModel';
 import { ResetPassword } from '../shared/models/authentication/resetPassword';
 import { RegisterWithGoogle } from '../shared/models/authentication/registerWithGoogle';
 import { LoginWithGoogle } from '../shared/models/authentication/loginWithGoogle';
+import { ProfessionalType } from '../shared/models/authentication/professionalType';
 
 @Injectable({
   providedIn: 'root'
@@ -134,7 +135,3 @@ export class AuthenticationService {
     this.userSource.next(user);
   }
 }
-  export interface ProfessionalType {
-    id: number;
-    name: string;
-  }

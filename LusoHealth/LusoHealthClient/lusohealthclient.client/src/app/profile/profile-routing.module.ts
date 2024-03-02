@@ -7,7 +7,7 @@ import { PerfilPacienteComponent } from './perfil-paciente/perfil-paciente.compo
 
 const routes: Routes = [
   { path: 'edit-profile', component: EditPerfilComponent },
-  { path: 'professional-profile', component: PrivateProfileProfessionalComponent },
+  { path: 'edit-professional-profile', component: PrivateProfileProfessionalComponent },
   { path: 'patient-profile', component: PerfilPacienteComponent }
 ]
 

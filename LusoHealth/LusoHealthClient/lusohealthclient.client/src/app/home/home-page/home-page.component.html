@@ -1,0 +1,57 @@
+<div class="header">
+  <!-- <h1 *ngIf="(authenticationService.user$ | async) === null">Bem vindo ao LusoHealth!</h1>
+   <h1 *ngIf="(authenticationService.user$ | async) as user">Bem-vindo ao LusoHealth, {{ getFirstAndLastName(user.name) }}</h1>-->
+  <h1>LusoHealth</h1>
+
+  <div id="searchSection">
+    <div id="searchDiv" [class.rounded-bottom]=" searchResults.length > 0">
+      <input class="searchBar" type="text" placeholder="Pesquise por especialidades"
+             (input)="onSearchInput($event)">
+      <figure class="searchIcon">
+        <img src="assets/images/HomePage/search.png" alt="Ícone de pesquisa de filtros">
+      </figure>
+    </div>
+    <ul id="myUL">
+      <li class="option" *ngFor="let specialty of searchResults" (click)="selectSpecialty(specialty)">
+        <a href="#">{{ specialty.name }} - {{ getProfessionalTypeName(specialty.professionalTypeId) }}</a></li>
+    </ul>
+
+    <div class="populares">
+      <div class="form-buttons-row" *ngIf="(topSpecialties.length > 0)">
+        <p class="populares-texto">Populares:</p>
+        <button class="btn">{{topSpecialties[0].name}}</button>
+        <button class="btn">{{topSpecialties[1].name}}</button>
+        <button class="btn">{{topSpecialties[2].name}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+  <section class="categorias" *ngFor="let professionalType of professionalTypes">
+    <p class="categoria-texto">{{ professionalType.name }}</p>
+    <div class="categoria">
+      <div *ngFor="let service of fourServices">
+        <ng-container *ngIf="service.professional.professionalType === professionalType.name">
+          <div class="tab">
+            <div id="icons">
+              <figure class="rating">{{ returnStars(service) === 0 ? '-' : returnStars(service)}} <img alt="Estrela" class="star" src="/assets/images/profile/star.png"></figure>
+            </div>
+            <div class="content">
+              <div class="content-name">
+                <span>{{ service.professional.professionalInfo.firstName  }} {{ service.professional.professionalInfo.lastName }}</span>
+              </div>
+              <div>
+                <span>Especialidades:</span>
+                <p>{{service.specialty}}</p>
+              </div>
+              <div><p>{{service.professional.location}}</p></div>
+              <p>Preço por hora: {{service.pricePerHour}}€</p>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </section>
+

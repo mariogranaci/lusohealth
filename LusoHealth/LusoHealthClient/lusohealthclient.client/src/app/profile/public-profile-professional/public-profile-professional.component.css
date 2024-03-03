@@ -1,4 +1,4 @@
-
+@import url('https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
 
 main {
   padding: 0 7%;
@@ -860,3 +860,47 @@ app-validation-messages {
     position: fixed;
 }
 */
+
+.rating {
+  margin: 10px auto 0 auto;
+  border: none;
+  width: 80%;
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+}
+
+  .rating > label {
+    color: #90A0A3;
+    width: 50px;
+    cursor: pointer;
+  }
+
+    .rating > label::before {
+      margin: 5px;
+      font-size: 50px;
+      font-family: FontAwesome;
+      content: "\f005";
+      display: inline-block;
+    }
+
+    .rating > label > input {
+      display: none;
+    }
+
+.starOn {
+  color: #FECE31 !important;
+}
+
+/*.rating > input:checked ~ label,
+    .rating:not(:checked) > label:hover,
+    .rating:not(:checked) > label:hover ~ label {
+      color: #FECE31;
+    }
+
+      .rating > input:checked + label:hover,
+      .rating > input:checked ~ label:hover,
+      .rating > label:hover ~ input:checked ~ label,
+      .rating > input:checked ~ label:hover ~ label {
+        color: #FECE31;
+      }*/

@@ -200,7 +200,8 @@ export class PublicProfileProfessionalComponent implements OnInit {
     }
   }
   getPdfs() {
-    this.profileService.getPdfs().subscribe(
+    if (this.professionalId)
+    this.profileService.getPdfsById(this.professionalId).subscribe(
       pdfs => {
         this.pdfList = pdfs;
       },

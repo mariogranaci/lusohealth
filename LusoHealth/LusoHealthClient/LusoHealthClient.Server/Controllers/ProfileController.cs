@@ -694,31 +694,57 @@ namespace LusoHealthClient.Server.Controllers
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 if (string.IsNullOrEmpty(userId)) return BadRequest("Não foi possível encontrar o utilizador");
 
-                var user = await _userManager.FindByIdAsync(userId);
-                if (user == null) return NotFound("Não foi possível encontrar o utilizador");
+                var response = await GetPdfs(userId);
 
-                var certificates = await _context.Certificates
-                    .Where(c => c.IdProfessional == user.Id)
-                    .ToListAsync();
+                if (response.Result is NotFoundResult) { return NotFound("Não foi possível encontrar o profissional"); }
 
-                List<CertificateDto> certificateDtos = new List<CertificateDto>();
-                foreach (var certificate in certificates)
-                {
-                    CertificateDto certificateDto = new CertificateDto
-                    {
-                        CertificateId = certificate.Id,
-                        Name = certificate.Name,
-                        Path = certificate.Path 
-                    };
-                    certificateDtos.Add(certificateDto);
-                }
-
-                return certificateDtos;
+                return response.Value;
             }
             catch (Exception)
             {
                 return BadRequest("Failed to retrieve PDFs. Please try again.");
             }
+        }
+
+        [HttpGet("get-pdfs/{id}")]
+        public async Task<ActionResult<List<CertificateDto>>> GetPdfsById(string id)
+        {
+            try
+            {
+                var response = await GetPdfs(id);
+
+                if (response.Result is NotFoundResult) { return NotFound("Não foi possível encontrar o profissional"); }
+
+                return response.Value;
+            }
+            catch (Exception)
+            {
+                return BadRequest("Failed to retrieve PDFs. Please try again.");
+            }
+        }
+
+        private async Task<ActionResult<List<CertificateDto>>> GetPdfs(string id) 
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null) return NotFound("Não foi possível encontrar o utilizador");
+
+            var certificates = await _context.Certificates
+                .Where(c => c.IdProfessional == user.Id)
+                .ToListAsync();
+
+            List<CertificateDto> certificateDtos = new List<CertificateDto>();
+            foreach (var certificate in certificates)
+            {
+                CertificateDto certificateDto = new CertificateDto
+                {
+                    CertificateId = certificate.Id,
+                    Name = certificate.Name,
+                    Path = certificate.Path
+                };
+                certificateDtos.Add(certificateDto);
+            }
+
+            return certificateDtos;
         }
 
         [HttpDelete("delete-pdf/{id}")]

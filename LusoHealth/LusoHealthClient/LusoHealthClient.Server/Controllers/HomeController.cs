@@ -112,6 +112,67 @@ namespace LusoHealthClient.Server.Controllers
             return services;
         }
 
+        [HttpPost("get-professionals-on-location")]
+        public async Task<ActionResult<List<ProfessionalDto>>> GetProfessionalsOnLocation(LocationDto locationDto)
+        {
+            double latNE = locationDto.LatitudeNorthEast;
+            double longNE = locationDto.LongitudeNorthEast;
+            double latSW = locationDto.LatitudeSouthWest;
+            double longSW = locationDto.LongitudeSouthWest;
+
+            var professionalsUnfiltered = await _context.Professionals
+            .Include(pt => pt.ProfessionalType)
+            .ToListAsync();
+
+            var professionals = professionalsUnfiltered.Where(p =>
+                {
+                    var locationParts = p.Location.Split(';');
+                    var lat = double.Parse(locationParts[0]);
+                    var lng = double.Parse(locationParts[1]);
+                    return lat <= latNE && lat >= latSW && lng <= longNE && lng >= longSW;
+                }).ToList();
+
+            if (professionals == null)
+            {
+                return NotFound("Não foi possível encontrar os profissionais");
+            }
+
+            var professionalsDtoList = new List<ProfessionalDto>();
+
+            foreach (var professional in professionals)
+            {
+                var user = await _context.Users.FindAsync(professional.UserID);
+
+                var servicesFromDB = await _context.Services
+                    .Include(s => s.Specialty)
+                    .Where(s => s.IdProfessional == professional.UserID)
+                    .ToListAsync();
+                var services = GetServiceProfileDtos(servicesFromDB);
+
+                var reviewsFromDB = await _context.Reviews
+                    .Include(r => r.Service)
+                    .Where(r => r.Service.IdProfessional == professional.UserID)
+                    .ToListAsync();
+                var reviews = GetReviewDtos(reviewsFromDB);
+
+                var professionalDto = new ProfessionalDto
+                {
+                    ProfessionalInfo = new UserProfileDto { FirstName = user.FirstName, LastName = user.LastName },
+                    Services = services,
+                    Certificates = null,
+                    Reviews = reviews,
+                    Location = professional.Location,
+                    Description = professional.Description,
+                    ProfessionalType = professional.ProfessionalType.Name
+                };
+
+                professionalsDtoList.Add(professionalDto);
+            }
+
+            return professionalsDtoList;
+        }
+
+
         #region private helper methods
         private async Task<List<ServicesDto>> GetServiceDtos(List<Service> services)
         {

@@ -20,6 +20,7 @@ export class MapaComponent implements OnInit {
   zoom = 14;
   center: google.maps.LatLngLiteral = { lat: 38.736946, lng: -9.142685 };
   map: google.maps.Map | undefined;
+  mapMoved: boolean = false;
 
   ngOnInit() {
     const loader = new Loader({
@@ -48,12 +49,15 @@ export class MapaComponent implements OnInit {
       zoom: this.zoom,
       mapId: 'lusohealth'
     });
-    this.getCurrentLocation();
     if (this.map) {
-      this.map.addListener('idle', () => {
-        this.fetchProfessionalsBasedOnMapBounds();
+      this.map.addListener('dragend', () => {
+        this.mapMoved = true;
+      });
+      this.map.addListener('zoom_changed', () => {
+        this.mapMoved = true;
       });
     }
+    this.getCurrentLocation();
   }
 
   initAutocomplete(): void {
@@ -128,17 +132,12 @@ export class MapaComponent implements OnInit {
         // Pega o canto nordeste e sudoeste dos limites
         const ne = bounds.getNorthEast();
         const sw = bounds.getSouthWest();
+        this.mapMoved = false;
 
-        // Aqui você pode agora fazer uma chamada para a sua API backend
-        // para buscar os profissionais que estão dentro desses limites
-        // Exemplo:
-        // this.yourService.fetchProfessionals(ne.lat(), ne.lng(), sw.lat(), sw.lng())
-        // .subscribe(professionals => {
-        //   // Fazer algo com os dados dos profissionais, como colocá-los no mapa
-        // });
-
-        console.log(`Limites do Mapa: NE: ${ne.lat()}, ${ne.lng()} - SW: ${sw.lat()}, ${sw.lng()}`);
+        console.log(`Limites Atuais do Mapa: NE: ${ne.lat()}, ${ne.lng()} - SW: ${sw.lat()}, ${sw.lng()}`);
       }
     }
   }
+
+
 }

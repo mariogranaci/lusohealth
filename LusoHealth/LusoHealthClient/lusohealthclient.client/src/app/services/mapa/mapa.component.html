@@ -224,6 +224,6 @@
   <section id="right-panel">
     <input id="pac-input" #searchBox class="controls" type="text" placeholder="Search Box" />
     <div id="map"></div>
-    <button class="button-over-map">Pesquisar nesta área</button>
+    <button *ngIf="mapMoved" (click)="fetchProfessionalsBasedOnMapBounds()" class="button-over-map">Pesquisar nesta área</button>
   </section>
 </main>

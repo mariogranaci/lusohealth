@@ -176,6 +176,30 @@ main {
   width: 100%;
 }
 
+.button-over-map {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  padding: 10px 20px;
+  background-color: #1875e7;
+  color: white;
+  border: none; /* Sem borda para um visual mais limpo */
+  border-radius: 20px; /* Bordas arredondadas */
+  cursor: pointer; /* Cursor de ponteiro para indicar que é clicável */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3); /* Sombra para destacar o botão do mapa */
+  transition: background-color ease-in-out 0.3s;
+}
+
+  .button-over-map:hover {
+    background-color: #1b69c8; /* Cor de fundo ao passar o mouse */
+  }
+
+  .button-over-map:active {
+    transform: translate(-50%, 2px);
+  }
+
 .controls {
   margin-top: 10px;
   border: 1px solid transparent;

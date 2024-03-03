@@ -29,6 +29,7 @@ export class EditPerfilComponent implements OnInit {
   nif: string | null = null;
   genero: string | null = null;
   provider = false;
+  imagemNome: string = '';
 
   caminhoDaImagem: string | null = "https://static.vecteezy.com/ti/vetor-gratis/p3/3715527-imagem-perfil-icone-masculino-icone-humano-ou-pessoa-sinal-e-simbolo-vetor.jpg";
   arquivoSelecionado: File | null = null;
@@ -37,110 +38,86 @@ export class EditPerfilComponent implements OnInit {
   constructor(private fb: FormBuilder,
     private profileService: ProfileService) { }
 
-  /* selecionarArquivo(event: any) {
+
+
+  openFiles() {
+    const imgupload = document.getElementById('imgupload') as HTMLInputElement;
+
+    if (imgupload != null) {
+      imgupload.click();
+    }
+  }
+
+ /* selecionarArquivo(event: any) {
     const inputElement = event.target;
 
     if (inputElement.files && inputElement.files.length > 0) {
-      this.arquivoSelecionado = inputElement.files[0];
+      const newArquivoSelecionado = inputElement.files[0];
 
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.caminhoDaImagem = e.target.result;
-      };
-      if (this.arquivoSelecionado)
-        reader.readAsDataURL(this.arquivoSelecionado);
+      if (newArquivoSelecionado) {
+        this.convertFileToDataURL(newArquivoSelecionado).then((dataURL) => {
+     
+          if (dataURL !== this.caminhoDaImagem) {
+            this.caminhoDaImagem = dataURL;
+            this.uploadImage();
+          }
+        });
+      }
     }
-  } */
+  }*/
+
+
+  convertFileToDataURL(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+
+      reader.onloadend = () => {
+        const dataURL = reader.result as string;
+        resolve(dataURL);
+      };
+
+      reader.onerror = (error) => reject(error);
+
+      reader.readAsDataURL(file);
+    });
+  }
 
   selecionarArquivo(event: any) {
-   
+    const inputElement = event.target;
 
-    const submitButton = document.getElementById('submit-image');
-    if (submitButton) {
-      const inputElement = event.target;
+    if (inputElement.files && inputElement.files.length > 0) {
+      const newArquivoSelecionado = inputElement.files[0];
 
-      if (inputElement.files && inputElement.files.length > 0) {
-        this.arquivoSelecionado = inputElement.files[0];
+      if (newArquivoSelecionado) {
+        this.arquivoSelecionado = newArquivoSelecionado;  
 
-        const reader = new FileReader();
-        reader.onload = (e: any) => {
-          this.caminhoDaImagem = e.target.result;
-        };
-        if (this.arquivoSelecionado)
-          reader.readAsDataURL(this.arquivoSelecionado);
-      }
-      submitButton.click();
-    }
-  }
-
-  /* openFiles() {
-    const OpenImgUpload = document.getElementById('OpenImgUpload');
-    const imgupload = document.getElementById('imgupload');
-
-    if (OpenImgUpload != null && imgupload != null) {
-      OpenImgUpload.addEventListener('click', function () {
-        imgupload.click();
-      });
-    }
-
-  } */
-
-  openFiles() {
-    const OpenImgUpload = document.getElementById('OpenImgUpload');
-    const imgupload = document.getElementById('imgupload');
-
-    if (OpenImgUpload != null && imgupload != null) {
-      OpenImgUpload.addEventListener('click', function () {
-        imgupload.click();
-      });
-    }
-
-  }
-
-  enviarFormulario() {
-    this.responseText = '';
-    console.log("Oi gato2");
-    
-      if (this.arquivoSelecionado) {
-        // Convert the selected file to base64 string
-        this.convertFileToBase64(this.arquivoSelecionado).then((base64String) => {
-          // Create a UserProfile model with the base64String (assuming "Picture" corresponds to the URL property)
-          const model = new UserProfile(null, null, null, null, null, null, null, base64String, null);
-
-          // Call the updatePicture method from the profile service
-          this.profileService.updatePicture(model).subscribe(
-            (response: any) => {
-              console.log("caminho:", this.caminhoDaImagem);
-              this.caminhoDaImagem = response.value.newImagePath;
-              this.responseText = response.value.message;
-            },
-            (error) => {
-              // Handle errors (logging or displaying error messages)
-              console.error('Error updating profile picture', error);
-              if (error.error.errors) {
-                this.errorMessages = error.error.errors;
-              } else {
-                this.errorMessages.push(error.error);
-              }
+        if (this.arquivoSelecionado) {
+          this.convertFileToDataURL(this.arquivoSelecionado).then((dataURL) => {
+            if (dataURL !== this.caminhoDaImagem) {
+              this.caminhoDaImagem = dataURL;
+              this.uploadImage();
             }
-          );
-        });
-      } else {
-        // If no file is selected, update the profile with the current caminhoDaImagem
-        const model = new UserProfile(null, null, null, null, null, null, null, this.caminhoDaImagem, null);
+          });
+        }    
+      }
+    }
+  }
 
-        // Call the updatePicture method from the profile service
-        this.profileService.updatePicture(model).subscribe(
+  uploadImage() {
+    if (this.arquivoSelecionado) {
+      this.convertFileToDataURL(this.arquivoSelecionado).then((dataURL) => {
+        const updatePictureModel = {
+          oldPictureUrl: this.caminhoDaImagem,
+          newPictureUrl: dataURL
+        };
+
+        this.profileService.updatePicture(updatePictureModel).subscribe(
           (response: any) => {
-            // Update the responseText with the success message
-            
-            this.caminhoDaImagem = response.value.newImagePath;
-            console.log("caminho:", this.caminhoDaImagem);
+            console.log(response);
+            this.imagemNome = response.value.newImagePath;
             this.responseText = response.value.message;
           },
           (error) => {
-            // Handle errors (logging or displaying error messages)
-            console.error('Error updating profile picture', error);
             if (error.error.errors) {
               this.errorMessages = error.error.errors;
             } else {
@@ -148,26 +125,13 @@ export class EditPerfilComponent implements OnInit {
             }
           }
         );
-      }
-    
+      });
+    }
   }
 
 
 
-  convertFileToBase64(file: File): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64String = reader.result as string;
-        resolve(base64String.split(',')[1]); 
-      };
-      reader.onerror = (error) => reject(error);
-      reader.readAsDataURL(file);
-    });
-  }
 
-
-  
 
   getUserProfileInfo() {
     this.profileService.getUserData().subscribe({
@@ -191,7 +155,6 @@ export class EditPerfilComponent implements OnInit {
   ngOnInit() {
     this.initializeForm();
     this.setFields();
-    this.openFiles();
   }
 
   ngOnDestroy(): void {

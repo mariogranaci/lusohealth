@@ -14,6 +14,7 @@ import { Description } from '../shared/models/profile/description';
 import { Review } from '../shared/models/profile/review';
 import { jwtDecode } from 'jwt-decode';
 import { Certificate } from '../shared/models/profile/certificate';
+import { UpdatePicture } from '../shared/models/profile/updatePicture';
 
 @Injectable({
   providedIn: 'root'
@@ -81,7 +82,7 @@ export class ProfileService {
     return this.http.put(`${environment.appUrl}/api/profile/update-password`, model, { headers });
   }
 
-  updatePicture(model: UserProfile) {
+  updatePicture(model: UpdatePicture) {
     const headers = this.getHeaders();
     return this.http.put(`${environment.appUrl}/api/profile/update-picture`, model, { headers });
   }

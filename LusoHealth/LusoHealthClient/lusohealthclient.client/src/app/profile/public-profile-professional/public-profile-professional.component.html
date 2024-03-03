@@ -2,51 +2,25 @@
 
   <section class="form-row">
 
-    <div id="button">
-      <button class="btn-edit" [routerLink]="['/edit-profile']">Editar Perfil</button>
+    <div id="button" *ngIf="(isPatient)">
+      <button class="top-right-btn btn-red">Reportar</button>
     </div>
 
     <figure>
       <img class="image" alt="Imagem de Perfil" [src]="profileImagePath" />
     </figure>
 
-    <div class="row">
-      <div class="left">
-        <label for="nome">Nome:</label>
-        <p type="text" class="info" id="nome" name="nome"></p>
+    <div class="top-center-row">
+      <div class="top-center-row-container">
+        <div class="top-center-row-text" id="nome"></div>
       </div>
-      <div class="right">
-        <label for="apelido">Apelido:</label>
-        <p type="text" class="info" id="apelido" name="apelido"></p>
-      </div>
-    </div>
-    <div class="row">
-      <div class="left">
-        <label for="email">Email:</label>
-        <p type="email" class="info" id="email" name="email"></p>
-      </div>
-      <div class="right">
-        <label for="telemovel">Telemóvel:</label>
-        <p class="info" type="tel" id="telemovel" name="telemovel"></p>
+      <div class="top-center-row-container" id="top-center-row-container-right">
+        <img class="email-img" src="/assets/images/Perfil/open-mail.png" />
+        <div class="top-center-row-text" id="email"></div>
       </div>
     </div>
-    <div class="row">
-      <div class="left">
-        <div class="gender">
-          <label>Género:</label>
-          <p class="info" type="text" id="gender" name="gender"></p>
-        </div>
-      </div>
-      <div class="right">
-        <label for="nif">NIF:</label>
-        <p class="info" type="text" id="nif" name="nif"></p>
-      </div>
-    </div>
-  </section>
 
-  <div class="center-row">
-    <button type="button" class="btn btn-blue" (click)="openPopup('add')">Adicionar Especialidade</button>
-  </div>
+  </section>
 
   <div class="left-align-row">
     <h2>Especialidades</h2>
@@ -57,30 +31,18 @@
       <tr>
         <th>Especialidade</th>
         <th>Preço por Hora</th>
-        <th>Presencial</th>
-        <th>Online</th>
-        <th>Domicílio</th>
-        <th>Ações</th>
+        <th>Tipos de Consultas</th>
+        <th *ngIf="(isPatient)"></th>
       </tr>
     </thead>
     <tbody *ngIf="(userData && (userData.services.length > 0))">
-      <!--<tr>
-        <td colspan="6" class="specialities-not-found-placeholder">Não tem especialidades associadas.</td>
-      </tr>-->
       <tr *ngFor="let service of userData.services">
         <td>{{ service.specialty }}</td>
         <td>{{ service.pricePerHour | currency:'EUR' }}</td>
-        <td>{{ service.presential ? 'Sim' : 'Não' }}</td>
-        <td>{{ service.online ? 'Sim' : 'Não' }}</td>
-        <td>{{ service.home ? 'Sim' : 'Não' }}</td>
-        <td>
+        <td>{{ appointmentTypesToString(service) }}</td>
+        <td *ngIf="(isPatient)">
           <div class="buttons-container">
-            <button class="action-button" (click)="showSpecialtyEdit(service)">
-              <img src="assets/images/profile/pencil.png" alt="Edit">
-            </button>
-            <button class="action-button" (click)="deleteSpeciality(service.serviceId)">
-              <img src="assets/images/profile/bin.png" alt="Edit">
-            </button>
+            <button class="btn btn-blue">Marcar</button>
           </div>
         </td>
       </tr>
@@ -88,7 +50,7 @@
     </tbody>
     <tbody *ngIf="!(userData && (userData.services.length > 0))">
       <tr>
-        <td colspan="6" class="specialities-not-found-placeholder">Não tem especialidades associadas.</td>
+        <td colspan="4" class="specialities-not-found-placeholder">Não tem especialidades associadas.</td>
       </tr>
     </tbody>
   </table>
@@ -97,7 +59,17 @@
     <h2>Descrição</h2>
   </div>
 
-  <form [formGroup]="updateDescriptionForm" id="update-description-form" autocomplete="off" (ngSubmit)="updateDescription()">
+  <div class="description-text">
+    <p class="pre-wrap-text" *ngIf="(userData && userData.description && userData.description.length > 0)">
+      {{ userData.description }}
+    </p>
+    <p *ngIf="!(userData && userData.description  && userData.description.length > 0)">
+      Este profissional ainda não tem uma descrição.
+    </p>
+
+  </div>
+
+  <!--<form [formGroup]="updateDescriptionForm" id="update-description-form" autocomplete="off" (ngSubmit)="updateDescription()">
     <div class="description-container">
       <textarea formControlName="description" id="description" name="description" placeholder="Insira a sua descrição..."
                 [class.is-invalid]="submittedDescription && updateDescriptionForm.get('description')?.errors"></textarea>
@@ -115,19 +87,19 @@
     <div class="right-align-row">
       <button type="submit" class="btn btn-blue">Atualizar</button>
     </div>
-  </form>
+  </form>-->
 
   <div class="left-align-row">
     <h2>Certificados</h2>
   </div>
 
   <div id="certificates-container">
-    <div id="add-single-container">
+    <!--<div id="add-single-container">
       <button id="add-button" (click)="fileInput.click()">
         <img src="assets/images/profile/add.png" alt="Adicionar Certificado">
       </button>
       <input #fileInput type="file" style="display: none;" (change)="onFileSelected($event)" accept=".pdf">
-    </div>
+    </div>-->
     <div class="single-container" *ngFor="let pdf of pdfList">
       <button type="button" class="pdf-image-btn" (click)="openPdf(pdf.path)">
         <img src="assets/images/profile/pdf.png" />
@@ -135,17 +107,18 @@
       <div class="pdf-label">
         <abbr class="abbr-pdf-label" (click)="openPdf(pdf.path)" title="{{pdf.name}}">{{pdf.name}}</abbr>
       </div>
-      <div class="align-right-container">
+      <!--<div class="align-right-container">
         <button class="delete-button" (click)="deletePdf(pdf.certificateId)">
           <img src="assets/images/profile/bin.png" alt="Delete">
         </button>
-      </div>
+      </div>-->
     </div>
   </div>
 
 
-  <div class="left-align-row">
+  <div class="display-row">
     <h2>Reviews</h2>
+    <button class="btn btn-blue" id="add-review-btn" (click)="addReview()" *ngIf="(isPatient)">Adicionar Review</button>
   </div>
 
   <div class="no-review" *ngIf="!(userData && userData.reviews.length > 0)">

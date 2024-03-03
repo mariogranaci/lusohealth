@@ -1,60 +1,54 @@
 <main>
-    <div class="title">
-        <h1>Marcar Consulta</h1>
-        <figure><img id="img-perfil" src="https://static.vecteezy.com/ti/vetor-gratis/p3/3715527-imagem-perfil-icone-masculino-icone-humano-ou-pessoa-sinal-e-simbolo-vetor.jpg" /></figure>
-    </div>
+  <div class="title">
+    <h1>Marcar Consulta</h1>
+    <figure><img id="img-perfil" src="/assets/images/Perfil/profileImage.jpg" /></figure>
+    <div class="name" id="name-title"></div>
+  </div>
 
     <div class="select-dropdown">
         <select>
             <option value="Option 1">Tipo de Consulta</option>
-            <option value="Option 2">Consulta 1</option>
-            <option value="Option 3">Consulta 2</option>
-            <option value="Option 4">Consulta 3</option>
+            <option value="Option 2">Presencial</option>
+            <option value="Option 3">Online</option>
+            <option value="Option 4">Domicílio</option>
         </select>
     </div>
 
     <div>
-        <h3>Consulta de [Categaria] - [Especialidade]</h3>
+      <h3>Consulta de {{especialidade}} - {{categoria}} </h3>
         <div class="appointement">
             <div id="title-data">
-                <h3 id="">Sugestão de Marcação</h3>
-                <p class="text-appointement">4 janeiro 2024 </p>
+              <div><h3 id="">Sugestão de Marcação</h3></div>
+               <div class="text-appointement">4 janeiro 2024 </div>
             </div>
             <div id="name-button">
-                <p class="hours"><b>18:00</b></p>
-                <p class="text-appointement">João Barbosa</p>
-                <button class="btn-edit">Marcar</button>
+                <div class="hours"><b>18:00</b></div>
+                <div class="type-appointment">Presencial</div>
+                <button class="btn-edit" (click)="marcarClick()">Marcar</button>
             </div>
         </div>
     </div>
 
-    <div class="calender-slots">
+    <div class="checkbox">
+      <input type="checkbox" id="myCheckbox" [(ngModel)]="checked">
+      <label for="myCheckbox" > Quero marcar para outra data</label>
+    </div>
+   
+    <div class="calender-slots" *ngIf="checked">
       <!--<div class="calender">
-        calendario
-      </div>-->
-      <app-calendario></app-calendario>
+    calendario
+  </div>-->
+      <app-calendario ></app-calendario>
 
       <div class="slots">
-        <h3>Vagas disponíveis</h3>
+        <h3 id="title-slots">Vagas disponíveis</h3>
         <div class="box-slot">
           <div class="left">
             <div class="hours-slots"><b>17:30</b></div>
             <div class="data-slots">8 janeiro 2024 </div>
           </div>
           <div class="right">
-            <div class="name">João Barbosa</div>
-            <button class="btn-edit">Marcar</button>
-          </div>
-        </div>
-        <hr />
-
-        <div class="box-slot">
-          <div class="left">
-            <div class="hours-slots"><b>17:30</b></div>
-            <div class="data-slots">8 janeiro 2024 </div>
-          </div>
-          <div class="right">
-            <div class="name">João Barbosa</div>
+            <div class="type-appointment">Presencial</div>
             <button class="btn-edit">Marcar</button>
           </div>
         </div>
@@ -65,7 +59,7 @@
             <div class="data-slots">8 janeiro 2024 </div>
           </div>
           <div class="right">
-            <div class="name">João Barbosa</div>
+            <div class="type-appointment">Presencial</div>
             <button class="btn-edit">Marcar</button>
           </div>
         </div>
@@ -76,12 +70,22 @@
             <div class="data-slots">8 janeiro 2024 </div>
           </div>
           <div class="right">
-            <div class="name">João Barbosa</div>
+            <div class="type-appointment">Presencial</div>
             <button class="btn-edit">Marcar</button>
           </div>
         </div>
         <hr />
-
+        <div class="box-slot">
+          <div class="left">
+            <div class="hours-slots"><b>17:30</b></div>
+            <div class="data-slots">8 janeiro 2024 </div>
+          </div>
+          <div class="right">
+            <div class="type-appointment">Presencial</div>
+            <button class="btn-edit">Marcar</button>
+          </div>
+        </div>
+        <hr />
       </div>
     </div>
 </main>

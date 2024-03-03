@@ -5,6 +5,7 @@ import { MarcarConsultaComponent } from './marcar-consulta/marcar-consulta.compo
 import { MarcacoesComponent } from './marcacoes/marcacoes.component';
 import { MapaComponent } from './mapa/mapa.component';
 
+
 const routes: Routes = [
   { path: 'make-appointment', component: MarcarConsultaComponent },
   { path: 'services', component: MarcacoesComponent },

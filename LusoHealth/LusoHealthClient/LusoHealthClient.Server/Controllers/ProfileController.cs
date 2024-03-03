@@ -1,9 +1,12 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.IO;
+using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Mime;
 using System.Security.Claims;
 using LusoHealthClient.Server.Data;
+using LusoHealthClient.Server.DTOs.Administration;
 using LusoHealthClient.Server.DTOs.Profile;
 using LusoHealthClient.Server.Models.FeedbackAndReports;
 using LusoHealthClient.Server.Models.Professionals;
@@ -14,6 +17,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace LusoHealthClient.Server.Controllers
 {
@@ -170,12 +174,12 @@ namespace LusoHealthClient.Server.Controllers
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            if (userIdClaim == null)
-            {
-                return BadRequest("Não foi possível encontrar o utilizador");
-            }
+			if (userIdClaim == null)
+			{
+				return BadRequest("Não foi possível encontrar o utilizador");
+			}
 
-            var user = await _userManager.FindByIdAsync(userIdClaim);
+			var user = await _userManager.FindByIdAsync(userIdClaim);
 
             if (user == null)
             {
@@ -836,3 +840,4 @@ namespace LusoHealthClient.Server.Controllers
         #endregion
     }
 }
+

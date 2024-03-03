@@ -17,6 +17,10 @@ h3 {
   margin: 20px 50px;
 }
 
+#submit-image {
+    display:none;
+}
+
 #img-perfil {
   height:150px;
   width:150px;

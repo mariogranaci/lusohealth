@@ -73,7 +73,22 @@ namespace LusoHealthClient.Server.Controllers
 
             if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
 
-            var user = await _userManager.FindByIdAsync(userIdClaim);
+            return await GetProfessionalInfo(userIdClaim);
+        }
+
+        [HttpGet("get-professional-info/{id}")]
+        public async Task<ActionResult<ProfessionalDto>> GetProfessionalProfile(string id)
+        {
+            var response = await GetProfessionalInfo(id);
+
+            if (response.Result is NotFoundResult) { return NotFound("Não foi possível encontrar o profissional"); }
+            
+            return response.Value;
+        }
+
+        private async Task<ActionResult<ProfessionalDto>> GetProfessionalInfo(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
 
             if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
 
@@ -104,7 +119,7 @@ namespace LusoHealthClient.Server.Controllers
                 .Where(r => r.Service.IdProfessional == user.Id)
                 .ToListAsync();
             var reviews = GetReviewDtos(reviewsFromDB);
-            
+
             var professional = await _context.Professionals.Include(pt => pt.ProfessionalType).FirstOrDefaultAsync(p => p.UserID == user.Id);
             //var certificates = GetCertificateDtos(professional.Certificates);
             //var professionalType = await _context.ProfessionalTypes.FirstOrDefaultAsync(pt => pt.Id == professional.ProfessionalTypeId);
@@ -350,43 +365,74 @@ namespace LusoHealthClient.Server.Controllers
                 var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
 
-                var user = await _userManager.FindByIdAsync(userIdClaim);
-                if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
+                /*var user = await _userManager.FindByIdAsync(userIdClaim);
+                if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }*/
 
-                var professional = await _context.Professionals.FirstOrDefaultAsync(p => p.UserID == user.Id);
+                var professional = await _context.Professionals.FirstOrDefaultAsync(p => p.UserID == userIdClaim);
                 if (professional == null) { return NotFound("Não foi possível encontrar o profissional"); }
 
-                if (id <= 0)
-                {
-                    var reviewsFromDB = await _context.Reviews
-                        .Include(r => r.Service)
-                        .ThenInclude(s => s.Specialty)
-                        .Include(r => r.Patient)
-                        .ThenInclude(p => p.User)
-                        .Where(r => r.Service.IdProfessional == user.Id)
-                        .ToListAsync();
-                    if (reviewsFromDB == null) { return NotFound("Não foi possível encontrar as reviews"); }
-                    var reviews = GetReviewDtos(reviewsFromDB);
-                    return reviews;
-                } else
-                {
-                    var reviewsFromDB = await _context.Reviews
-                        .Include(r => r.Service)
-                        .ThenInclude(s => s.Specialty)
-                        .Include(r => r.Patient)
-                        .ThenInclude(p => p.User)
-                        .Where(r => r.Service.IdProfessional == user.Id && r.Service.IdSpecialty == id)
-                        .ToListAsync();
-                    if (reviewsFromDB == null) { return NotFound("Não foi possível encontrar as reviews"); }
-                    var reviews = GetReviewDtos(reviewsFromDB);
-                    return reviews;
-                }
+                var reviews = await GetFilteredReviewsByService(id, userIdClaim);
+
+                if (reviews == null) { return NotFound("Não foi possível encontrar as reviews"); }
+
+                return reviews;
 
             } catch (Exception)
             {
                 return BadRequest("Não foi possível encontrar as reviews. Tente novamente.");
             }
 
+        }
+
+        [HttpGet("filter-reviews-by-service/{idSpecialty}/{idProfessional}")]
+        public async Task<ActionResult<List<ReviewDto>>> FilterReviewsByService(int idSpecialty, string idProfessional)
+        {
+            try
+            {
+                var professional = await _context.Professionals.FirstOrDefaultAsync(p => p.UserID == idProfessional);
+                if (professional == null) { return NotFound("Não foi possível encontrar o profissional"); }
+
+                var reviews = await GetFilteredReviewsByService(idSpecialty, idProfessional);
+
+                if (reviews == null) { return NotFound("Não foi possível encontrar as reviews"); }
+
+                return reviews;
+
+            }
+            catch (Exception)
+            {
+                return BadRequest("Não foi possível encontrar as reviews. Tente novamente.");
+            }
+        }
+
+        private async Task<ActionResult<List<ReviewDto>>> GetFilteredReviewsByService (int idSpecialty, string idProfessional)
+        {
+            if (idSpecialty <= 0)
+            {
+                var reviewsFromDB = await _context.Reviews
+                    .Include(r => r.Service)
+                    .ThenInclude(s => s.Specialty)
+                    .Include(r => r.Patient)
+                    .ThenInclude(p => p.User)
+                    .Where(r => r.Service.IdProfessional == idProfessional)
+                    .ToListAsync();
+                if (reviewsFromDB == null) { return NotFound("Não foi possível encontrar as reviews"); }
+                var reviews = GetReviewDtos(reviewsFromDB);
+                return reviews;
+            }
+            else
+            {
+                var reviewsFromDB = await _context.Reviews
+                    .Include(r => r.Service)
+                    .ThenInclude(s => s.Specialty)
+                    .Include(r => r.Patient)
+                    .ThenInclude(p => p.User)
+                    .Where(r => r.Service.IdProfessional == idProfessional && r.Service.IdSpecialty == idSpecialty)
+                    .ToListAsync();
+                if (reviewsFromDB == null) { return NotFound("Não foi possível encontrar as reviews"); }
+                var reviews = GetReviewDtos(reviewsFromDB);
+                return reviews;
+            }
         }
 
         [HttpGet("get-relatives")]
@@ -560,7 +606,7 @@ namespace LusoHealthClient.Server.Controllers
         }
 
         [HttpPost("add-review")]
-        public async Task<ActionResult> AddReview(ReviewDto reviewDto)
+        public async Task<ActionResult> AddReview(AddReviewDto reviewDto)
         {
             try
             {
@@ -569,6 +615,10 @@ namespace LusoHealthClient.Server.Controllers
 
                 var user = await _userManager.FindByIdAsync(userId);
                 if (user == null) return NotFound("Não foi possível encontrar o utilizador");
+
+                var reviewExists = await _context.Reviews.AnyAsync(r => r.IdPatient == user.Id && r.IdService == reviewDto.IdService);
+
+                if (reviewExists) return BadRequest("Já adicionou uma review para este serviço");
 
                 var review = new Review
                 {

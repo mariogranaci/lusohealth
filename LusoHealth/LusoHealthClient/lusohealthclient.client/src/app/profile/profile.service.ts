@@ -14,6 +14,7 @@ import { Description } from '../shared/models/profile/description';
 import { Review } from '../shared/models/profile/review';
 import { jwtDecode } from 'jwt-decode';
 import { Certificate } from '../shared/models/profile/certificate';
+import { AddReview } from '../shared/models/profile/addReview';
 
 @Injectable({
   providedIn: 'root'
@@ -64,6 +65,11 @@ export class ProfileService {
   getProfessionalInfo(): Observable<Professional> {
     const headers = this.getHeaders();
     return this.http.get<Professional>(`${environment.appUrl}/api/profile/get-professional-info`, { headers });
+  }
+
+  getProfessionalInfoById(id: string): Observable<Professional> {
+    const headers = this.getHeaders();
+    return this.http.get<Professional>(`${environment.appUrl}/api/profile/get-professional-info/${id}`, { headers });
   }
 
   getServices(): Observable<Specialty[]> {
@@ -124,6 +130,16 @@ export class ProfileService {
   filterReviewsByService(idService: number): Observable<Review[]> {
     const headers = this.getHeaders();
     return this.http.get<Review[]>(`${environment.appUrl}/api/profile/filter-reviews-by-service/${idService}`, { headers });
+  }
+
+  filterReviewsByServiceById(idSpecialty: number, idProfessional: string): Observable<Review[]> {
+    const headers = this.getHeaders();
+    return this.http.get<Review[]>(`${environment.appUrl}/api/profile/filter-reviews-by-service/${idSpecialty}/${idProfessional}`, { headers });
+  }
+
+  addReview(review: AddReview): Observable<any> {
+    const headers = this.getHeaders();
+    return this.http.post<any>(`${environment.appUrl}/api/profile/add-review`, review, { headers });
   }
 
   uploadPdf(pdfFile: File): Observable<any> {

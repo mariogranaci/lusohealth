@@ -27,7 +27,6 @@ import { GoogleMapsModule } from '@angular/google-maps';
     CalendarioComponent,
     FormsModule,
     MatPaginatorModule,
-    GoogleMapsModule
   ],
   exports: [
     HttpClientModule

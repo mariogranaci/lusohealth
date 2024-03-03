@@ -386,7 +386,6 @@ namespace LusoHealthClient.Server.Controllers
             {
                 return BadRequest("Não foi possível encontrar as reviews. Tente novamente.");
             }
-
         }
 
         [HttpGet("get-relatives")]
@@ -646,6 +645,9 @@ namespace LusoHealthClient.Server.Controllers
 
                 var user = await _userManager.FindByIdAsync(userId);
                 if (user == null) return NotFound("Não foi possível encontrar o utilizador");
+
+                var professional = await _context.Professionals.FirstOrDefaultAsync(p => p.UserID == user.Id);
+                if (professional == null) return NotFound("Não foi possível encontrar o profissional");
 
                 var certificates = await _context.Certificates
                     .Where(c => c.IdProfessional == user.Id)

@@ -15,6 +15,7 @@ import { Review } from '../shared/models/profile/review';
 import { jwtDecode } from 'jwt-decode';
 import { Certificate } from '../shared/models/profile/certificate';
 import { AddReview } from '../shared/models/profile/addReview';
+import { UpdatePicture } from '../shared/models/profile/updatePicture';
 
 @Injectable({
   providedIn: 'root'
@@ -87,7 +88,7 @@ export class ProfileService {
     return this.http.put(`${environment.appUrl}/api/profile/update-password`, model, { headers });
   }
 
-  updatePicture(model: UserProfile) {
+  updatePicture(model: UpdatePicture) {
     const headers = this.getHeaders();
     return this.http.put(`${environment.appUrl}/api/profile/update-picture`, model, { headers });
   }
@@ -112,6 +113,11 @@ export class ProfileService {
     return this.http.put<Relative>(`${environment.appUrl}/api/profile/update-relative/${relative.id}`, relative, { headers });
   }
 
+
+  addReport(relative: Relative): Observable<Relative> {
+    const headers = this.getHeaders();
+    return this.http.post<Relative>(`${environment.appUrl}/api/profile/add-relative`, relative, { headers });
+  }
   updateSpecialty(service: Service): Observable<Service> {
     const headers = this.getHeaders();
     return this.http.put<Service>(`${environment.appUrl}/api/profile/update-service`, service, { headers });

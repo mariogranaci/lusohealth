@@ -168,22 +168,42 @@
     </div>
   </div>
 
-  <div class="overlay" id="overlay" (click)="closePopup()">
+  <div style="display: flex;" class="overlay" id="overlay" (click)="closePopup()">
     <a class="close-button" (click)="closePopup()">
       <img src="assets/images/login/close.png" alt="Close button" class="close-image">
     </a>
-    <form [formGroup]="addSpecialityForm" id="add-speciality-container" class="overlay-container" autocomplete="off" (ngSubmit)="addSpeciality()" (click)="stopPropagation($event)">
+    <form style="display: block;" [formGroup]="addSpecialityForm" id="add-speciality-container" class="overlay-container" autocomplete="off" (click)="stopPropagation($event)">
 
-      <h2>Adicionar Especialidade</h2>
+      <h2>Adicionar Review</h2>
 
       <div class="speciality-form-box">
         <label for="add-speciality-select">Selecionar Especialidade</label>
         <div class="select-dropdown" id="speciality-select-div" [class.is-invalid]="submittedAdd && addSpecialityForm.get('selectSpeciality')?.errors">
-          <select formControlName="selectSpeciality" id="add-speciality-select" required>
-            <option value="" disabled hidden>Selecione uma especialidade</option>
-            <option *ngFor="let specialty of specialties" value="{{ specialty.id }}">{{ specialty.name }}</option>
+          <select formControlName="selectSpeciality" id="add-speciality-select" required *ngIf="(userData && userData.services && (userData.services.length > 0))">
+            <option hidden disable>Selecione uma especialidade</option>
+            <option *ngFor="let service of userData.services" value="{{ service.specialtyId }}">{{ service.specialty }}</option>
           </select>
         </div>
+      </div>
+
+        <div class="speciality-form-box">
+          <div class="rating">
+            <label id="label-star-5" for="star5" [class.starOn]="radioStar5">
+              <input type="radio" id="star5" name="rating" value="5" (change)="checkInput(5)" />
+            </label>
+            <label id="label-star-4" for="star4" [class.starOn]="radioStar4">
+              <input type="radio" id="star4" name="rating" value="4" (change)="checkInput(4)" />
+            </label>
+            <label id="label-star-3" for="star3" [class.starOn]="radioStar3">
+              <input type="radio" id="star3" name="rating" value="3" (change)="checkInput(3)" />
+            </label>
+            <label id="label-star-2" for="star2" [class.starOn]="radioStar2">
+              <input type="radio" id="star2" name="rating" value="2" (change)="checkInput(2)" />
+            </label>
+            <label id="label-star-1" for="star1" [class.starOn]="radioStar1">
+              <input type="radio" id="star1" name="rating" value="1" (change)="checkInput(1)" />
+            </label>
+          </div>
       </div>
 
       <div class="speciality-form-box">

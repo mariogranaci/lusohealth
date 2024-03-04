@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject, take, takeUntil } from 'rxjs';
 import { Service } from '../../shared/models/profile/service';
@@ -37,6 +37,11 @@ export class PublicProfileProfessionalComponent implements OnInit {
   pdfList: Certificate[] = [];
   public isPatient = false;
   public professionalId: string | undefined;
+  radioStar1 = false;
+  radioStar2 = false;
+  radioStar3 = false;
+  radioStar4 = false;
+  radioStar5 = false;
 
   constructor(private authenticationService: AuthenticationService,
     private formBuilder: FormBuilder,
@@ -72,7 +77,6 @@ export class PublicProfileProfessionalComponent implements OnInit {
           this.getProfessionalInfo(id).then(() => {
             this.setUserFields();
             this.changeSpecialtyReview("0");
-            this.getSpecialties();
             this.getPdfs();
           });
 
@@ -90,10 +94,52 @@ export class PublicProfileProfessionalComponent implements OnInit {
     this.unsubscribe$.complete();
   }
 
+  checkInput(value: number): void {
+
+
+    switch (value) {
+      case 1:
+        this.radioStar1 = true;
+        this.radioStar2 = false;
+        this.radioStar3 = false;
+        this.radioStar4 = false;
+        this.radioStar5 = false;
+        break;
+      case 2:
+        this.radioStar1 = true;
+        this.radioStar2 = true;
+        this.radioStar3 = false;
+        this.radioStar4 = false;
+        this.radioStar5 = false;
+        break;
+      case 3:
+        this.radioStar1 = true;
+        this.radioStar2 = true;
+        this.radioStar3 = true;
+        this.radioStar4 = false;
+        this.radioStar5 = false;
+        break;
+      case 4:
+        this.radioStar1 = true;
+        this.radioStar2 = true;
+        this.radioStar3 = true;
+        this.radioStar4 = true;
+        this.radioStar5 = false;
+        break;
+      case 5:
+        this.radioStar1 = true;
+        this.radioStar2 = true;
+        this.radioStar3 = true;
+        this.radioStar4 = true;
+        this.radioStar5 = true;
+        break;
+    }
+  }
+
   initializeForm() {
 
     this.addSpecialityForm = this.formBuilder.group({
-      selectSpeciality: ['', [Validators.required]],
+      selectSpeciality: ['Selecione uma especialidade', [Validators.required]],
       price: ['', [Validators.required, Validators.min(1), Validators.max(1000)]],
       presencial: ['', [Validators.required]],
       online: ['', [Validators.required]],
@@ -127,15 +173,21 @@ export class PublicProfileProfessionalComponent implements OnInit {
     });
   }
 
-  getSpecialties() {
-    this.profileService.getServices().pipe(takeUntil(this.unsubscribe$)).subscribe(
-      (specialties: Specialty[]) => {
-        this.specialties = specialties;
-      },
-      error => {
-      }
-    );
-  }
+  /*getSpecialties() {
+
+    if (this.professionalId) {
+      this.profileService.getServicesByProfessionalId(this.professionalId).pipe(takeUntil(this.unsubscribe$)).subscribe(
+        (specialties: Specialty[]) => {
+          console.log(specialties);
+          this.specialties = specialties;
+        },
+        error => {
+          console.log(error);
+          this.errorMessages.push('Erro ao carregar os serviços.');
+        }
+      );
+    }
+  }*/
 
   setUserFields() {
     const nomeElement = document.getElementById('nome');
@@ -375,6 +427,19 @@ export class PublicProfileProfessionalComponent implements OnInit {
       });
     }
   }
+
+
+
+
+  /*--------------------------------------------------------------------------------*/
+
+
+
+  /*-------------------------------------- Reviews ---------------------------------*/
+
+
+
+
 
   selectReviewEventReceiver(event: Event) {
     const target = event.target as HTMLSelectElement;

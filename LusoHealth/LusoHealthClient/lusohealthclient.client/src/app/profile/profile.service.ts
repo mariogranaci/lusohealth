@@ -82,10 +82,33 @@ export class ProfileService {
     return this.http.put(`${environment.appUrl}/api/profile/update-password`, model, { headers });
   }
 
-  updatePicture(model: UpdatePicture) {
-    const headers = this.getHeaders();
-    return this.http.put(`${environment.appUrl}/api/profile/update-picture`, model, { headers });
+  updatePicture(pictureFile: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('imageFile', pictureFile);
+    
+    const headers = new HttpHeaders({
+      'Authorization': 'Bearer ' + this.getJWT() // replace this.getToken() with your token retrieval logic
+    });
+
+    return this.http.put(`${environment.appUrl}/api/profile/update-picture`, formData, { headers });
   }
+
+  getProfilePicture(): Observable<Blob> {
+  const headers = new HttpHeaders({
+    'Authorization': 'Bearer ' + this.getJWT(),
+    'Content-Type': 'application/json',
+  });
+
+    return this.http.get(`${environment.appUrl}/api/profile/get-profile-picture`, {
+    headers: headers,
+    responseType: 'blob'
+  }).pipe(
+    catchError(error => {
+      throw ('Error downloading image: ' + error);
+    })
+  );
+}
+
 
   deleteRelative(relativeId: number): Observable<Relative> {
     const headers = this.getHeaders();

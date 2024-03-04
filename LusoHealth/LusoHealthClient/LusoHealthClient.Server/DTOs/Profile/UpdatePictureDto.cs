@@ -2,7 +2,6 @@
 {
 	public class UpdatePictureDto
 	{
-		public string? OldPictureUrl { get; set; }
-		public string? NewPictureUrl { get; set; }
+		public string PictureUrl { get; set; }
 	}
 }

@@ -105,7 +105,7 @@ export class EditPerfilComponent implements OnInit {
         // Convert the selected file to base64 string
         this.convertFileToBase64(this.arquivoSelecionado).then((base64String) => {
           // Create a UserProfile model with the base64String (assuming "Picture" corresponds to the URL property)
-          const model = new UserProfile(null, null, null, null, null, null, null, base64String, null);
+          const model = new UserProfile(null, null, null, null, null, null, null, null, base64String, null);
 
           // Call the updatePicture method from the profile service
           this.profileService.updatePicture(model).subscribe(
@@ -127,7 +127,7 @@ export class EditPerfilComponent implements OnInit {
         });
       } else {
         // If no file is selected, update the profile with the current caminhoDaImagem
-        const model = new UserProfile(null, null, null, null, null, null, null, this.caminhoDaImagem, null);
+        const model = new UserProfile(null, null, null, null, null, null, null, null, this.caminhoDaImagem, null);
 
         // Call the updatePicture method from the profile service
         this.profileService.updatePicture(model).subscribe(
@@ -267,7 +267,7 @@ export class EditPerfilComponent implements OnInit {
       && this.nif === nif && this.telemovel === telemovel && this.genero === genero)) {
 
 
-      const model = new UserProfile(firstName, lastName, email, nif, telemovel, null, genero, null, null);
+      const model = new UserProfile(null, firstName, lastName, email, nif, telemovel, null, genero, null, null);
 
       if (this.perfilForm.valid) {
         this.profileService.updateUserData(model).subscribe({

@@ -157,7 +157,7 @@ namespace LusoHealthClient.Server.Controllers
 
                 var professionalDto = new ProfessionalDto
                 {
-                    ProfessionalInfo = new UserProfileDto { FirstName = user.FirstName, LastName = user.LastName, Picture = user.ProfilePicPath },
+                    ProfessionalInfo = new UserProfileDto {Id = user.Id, FirstName = user.FirstName, LastName = user.LastName, Picture = user.ProfilePicPath },
                     Services = services,
                     Certificates = null,
                     Reviews = reviews,

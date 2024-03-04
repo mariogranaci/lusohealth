@@ -28,7 +28,6 @@ export class MapaComponent implements OnInit {
   mapMoved: boolean = false;
   markers: Marker[] = [];
   private unsubscribe$ = new Subject<void>();
-  geocoder: google.maps.Geocoder | undefined;
   concelho: string | null = null;
 
   constructor(private servicesService: ServicesService) { }
@@ -46,7 +45,6 @@ export class MapaComponent implements OnInit {
     loader.load().then(async () => {
       this.initMap();
       this.initAutocomplete();
-      this.geocoder = new google.maps.Geocoder();
     });
   }
 
@@ -85,9 +83,7 @@ export class MapaComponent implements OnInit {
           window.alert("No details available for input: '" + place.name + "'");
           return;
         }
-        console.log(place.address_components);
         if (this.map) {
-          console.log('Mapa existe');
           if (place.geometry.viewport) {
             this.map.fitBounds(place.geometry.viewport);
             this.map.setZoom(this.zoom);
@@ -113,6 +109,7 @@ export class MapaComponent implements OnInit {
             this.map.setCenter(currentPosition);
             this.map.setZoom(this.zoom);
 
+
             // Crie um marcador avançado para a posição do usuário
             const currentPositionMarkerImage = document.createElement('img');
             currentPositionMarkerImage.style.width = '30px';
@@ -123,7 +120,7 @@ export class MapaComponent implements OnInit {
               content: currentPositionMarkerImage,
               title: 'Sua Localização',
             });
-            console.log(`Localização do usuário: ${currentPosition.lat}, ${currentPosition.lng}`);
+            this.fetchProfessionalsBasedOnMapBounds();
           }
         },
         (err) => {
@@ -136,7 +133,7 @@ export class MapaComponent implements OnInit {
         }
       );
     } else {
-      console.log("Geolocalização não é suportada por este navegador.");
+      alert("Geolocalização não é suportada por este navegador.");
     }
   }
 
@@ -161,14 +158,13 @@ export class MapaComponent implements OnInit {
           (professionals: Professional[]) => {
             this.updateProfessionalsWithConcelho(professionals).then(() => {
               this.professionals = professionals;
-              console.log(this.professionals.length);
               professionals.forEach((professional) => {
-                console.log(professional.location);
+                console.log(professional);
                 this.createMarker(professional);
               });
             });
           }, (error) => {
-            console.log(error);
+            console.error(error);
           }
         );
       }
@@ -181,8 +177,6 @@ export class MapaComponent implements OnInit {
       const location = professional.location.replace(/,/g, '.').split(';');
       const latitude = parseFloat(location[0]);
       const longitude = parseFloat(location[1]);
-      console.log(`Profissional: ${professionalInfo.firstName + ' ' + professionalInfo.lastName}`);
-      console.log(`Latitude: ${latitude} - Longitude: ${longitude}`);
       const professionalLocationMarker = new Marker({
         position: { lat: latitude, lng: longitude },
         map: this.map,

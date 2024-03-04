@@ -5,6 +5,7 @@ namespace LusoHealthClient.Server.DTOs.Profile
 {
     public class UserProfileDto
     {
+        public string? Id { get; set; }
         //[MaxLength(50, ErrorMessage = "Não pode introduzir mais de {1} caracteres")]
         //[MinLength(3, ErrorMessage = "O nome tem um mínimo de {1} caracteres")]
         public string? FirstName { get; set; }

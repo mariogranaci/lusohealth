@@ -5,6 +5,10 @@ import { } from '@angular/google-maps';
 import { Loader } from '@googlemaps/js-api-loader';
 import { environment } from '../../../environments/environment.development';
 import { Marker } from '@googlemaps/adv-markers-utils';
+import { ServicesService } from '../services.service';
+import { Professional } from '../../shared/models/profile/professional';
+import { Subject, takeUntil } from 'rxjs';
+import { Bounds } from '../../shared/models/services/bounds';
 
 declare var google: any;
 
@@ -17,10 +21,15 @@ export class MapaComponent implements OnInit {
   @ViewChild('searchBox', { static: false }) searchBox?: ElementRef;
   professionalTypes: ProfessionalType[] = [];
   specialties: Specialty[] = [];
+  professionals: Professional[] = [];
   zoom = 14;
   center: google.maps.LatLngLiteral = { lat: 38.736946, lng: -9.142685 };
   map: google.maps.Map | undefined;
   mapMoved: boolean = false;
+  markers: Marker[] = [];
+  private unsubscribe$ = new Subject<void>();
+
+  constructor(private servicesService: ServicesService) { }
 
   ngOnInit() {
     const loader = new Loader({
@@ -37,6 +46,11 @@ export class MapaComponent implements OnInit {
       this.initAutocomplete();
       console.log("Autocomplete carregado");
     });
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   async initMap() {
@@ -125,19 +139,58 @@ export class MapaComponent implements OnInit {
   }
 
   fetchProfessionalsBasedOnMapBounds(): void {
+    this.clearMarkers();
     if (this.map) {
-      // Pega os limites do mapa atual
       const bounds = this.map.getBounds();
       if (bounds) {
-        // Pega o canto nordeste e sudoeste dos limites
         const ne = bounds.getNorthEast();
         const sw = bounds.getSouthWest();
         this.mapMoved = false;
 
         console.log(`Limites Atuais do Mapa: NE: ${ne.lat()}, ${ne.lng()} - SW: ${sw.lat()}, ${sw.lng()}`);
+        //const boundsMap = new Bounds(ne.lat(), ne.lng(), sw.lat(), sw.lng());
+        const boundsMap: Bounds = {
+          latitudeNorthEast: ne.lat(),
+          longitudeNorthEast: ne.lng(),
+          latitudeSouthWest: sw.lat(),
+          longitudeSouthWest: sw.lng()
+        };
+        this.servicesService.getProfessionalsOnLocation(boundsMap).pipe(takeUntil(this.unsubscribe$)).subscribe(
+          (professionals: Professional[]) => {
+            this.professionals = professionals;
+            professionals.forEach((professional) => {
+              this.createMarker(professional);
+            });
+          }, (error) => {
+            console.log(error);
+          }
+        );
       }
     }
   }
 
+  createMarker(professional: Professional): void {
+    const professionalInfo = professional.professionalInfo;
+    if (professional.location) {
+      const location = professional.location.replace(/,/g, '.').split(';');
+      const latitude = parseFloat(location[0]);
+      const longitude = parseFloat(location[1]);
+      console.log(`Profissional: ${professionalInfo.firstName + ' ' + professionalInfo.lastName}`);
+      console.log(`Latitude: ${latitude} - Longitude: ${longitude}`);
+      const professionalLocationMarker = new Marker({
+        position: { lat: latitude, lng: longitude },
+        map: this.map,
+        title: professional.professionalInfo.firstName + ' ' + professional.professionalInfo.lastName,
+      });
+      this.markers.push(professionalLocationMarker);
+    }
+  }
+
+  clearMarkers() {
+    for (let marker of this.markers) {
+      marker.map = null;
+    }
+    this.markers = [];
+  }
 
 }

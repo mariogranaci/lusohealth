@@ -227,8 +227,13 @@ main {
   transform: translateX(-50%)
 }
 
+#no-professionals {
+    text-align: center;
+    font-weight: bold;
+}
+
 @media only screen and (max-width: 1200px) {
-    #pac-input {
+  #pac-input {
       width: 50%;
     }
 }

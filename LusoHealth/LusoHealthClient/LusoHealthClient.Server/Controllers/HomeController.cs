@@ -113,7 +113,7 @@ namespace LusoHealthClient.Server.Controllers
         }
 
         [HttpPost("get-professionals-on-location")]
-        public async Task<ActionResult<List<ProfessionalDto>>> GetProfessionalsOnLocation(LocationDto locationDto)
+        public async Task<ActionResult<List<ProfessionalDto>>> GetProfessionalsOnLocation(BoundsDto locationDto)
         {
             double latNE = locationDto.LatitudeNorthEast;
             double longNE = locationDto.LongitudeNorthEast;
@@ -157,7 +157,7 @@ namespace LusoHealthClient.Server.Controllers
 
                 var professionalDto = new ProfessionalDto
                 {
-                    ProfessionalInfo = new UserProfileDto { FirstName = user.FirstName, LastName = user.LastName },
+                    ProfessionalInfo = new UserProfileDto { FirstName = user.FirstName, LastName = user.LastName, Picture = user.ProfilePicPath },
                     Services = services,
                     Certificates = null,
                     Reviews = reviews,

@@ -50,14 +50,14 @@
         </div>
       </div>
     </section>
-    <section id="service-section">
-      <div class="service-tab">
+    <section id="service-section" *ngIf="professionals.length > 0">
+      <div class="service-tab" *ngFor="let professional of professionals">
         <figure>
           <img src="/assets/images/Perfil/profileImage.jpg" alt="Foto de Perfil" />
         </figure>
         <div class="service-info">
-          <div class="row">
-            <h3>Nome do Profissional</h3>
+          <div class="row" *ngIf="professional.professionalInfo.firstName && professional.professionalInfo.lastName">
+            <h3>{{ professional.professionalInfo.firstName.split(' ')[0] + ' ' + professional.professionalInfo.lastName.split(' ')[0] }}</h3>
             <div class="row center-height">
               <img class="placeholder" src="/assets/images/Mapa/placeholder.png" alt="Localização" />
               <p>Localização</p>
@@ -72,153 +72,12 @@
           </div>
         </div>
       </div>
-      <div class="service-tab">
-        <figure>
-          <img src="/assets/images/Perfil/profileImage.jpg" alt="Foto de Perfil" />
-        </figure>
-        <div class="service-info">
-          <div class="row">
-            <h3>Nome do Profissional</h3>
-            <div class="row center-height">
-              <img class="placeholder" src="/assets/images/Mapa/placeholder.png" alt="Localização" />
-              <p>Localização</p>
-            </div>
-          </div>
-          <div class="row center-height">
-            <div class="row center-height">
-              <span class="small-right-margin">5,0</span>
-              <img src="assets/images/profile/star.png" alt="Estrela" class="star display-block" />
-            </div>
-            <p>Categoria</p>
-          </div>
-        </div>
+    </section>
+    <section id="service-section" *ngIf="professionals.length === 0">
+      <div>
+
       </div>
-      <div class="service-tab">
-        <figure>
-          <img src="/assets/images/Perfil/profileImage.jpg" alt="Foto de Perfil" />
-        </figure>
-        <div class="service-info">
-          <div class="row">
-            <h3>Nome do Profissional</h3>
-            <div class="row center-height">
-              <img class="placeholder" src="/assets/images/Mapa/placeholder.png" alt="Localização" />
-              <p>Localização</p>
-            </div>
-          </div>
-          <div class="row center-height">
-            <div class="row center-height">
-              <span class="small-right-margin">5,0</span>
-              <img src="assets/images/profile/star.png" alt="Estrela" class="star display-block" />
-            </div>
-            <p>Categoria</p>
-          </div>
-        </div>
-      </div>
-      <div class="service-tab">
-        <figure>
-          <img src="/assets/images/Perfil/profileImage.jpg" alt="Foto de Perfil" />
-        </figure>
-        <div class="service-info">
-          <div class="row">
-            <h3>Nome do Profissional</h3>
-            <div class="row center-height">
-              <img class="placeholder" src="/assets/images/Mapa/placeholder.png" alt="Localização" />
-              <p>Localização</p>
-            </div>
-          </div>
-          <div class="row center-height">
-            <div class="row center-height">
-              <span class="small-right-margin">5,0</span>
-              <img src="assets/images/profile/star.png" alt="Estrela" class="star display-block" />
-            </div>
-            <p>Categoria</p>
-          </div>
-        </div>
-      </div>
-      <div class="service-tab">
-        <figure>
-          <img src="/assets/images/Perfil/profileImage.jpg" alt="Foto de Perfil" />
-        </figure>
-        <div class="service-info">
-          <div class="row">
-            <h3>Nome do Profissional</h3>
-            <div class="row center-height">
-              <img class="placeholder" src="/assets/images/Mapa/placeholder.png" alt="Localização" />
-              <p>Localização</p>
-            </div>
-          </div>
-          <div class="row center-height">
-            <div class="row center-height">
-              <span class="small-right-margin">5,0</span>
-              <img src="assets/images/profile/star.png" alt="Estrela" class="star display-block" />
-            </div>
-            <p>Categoria</p>
-          </div>
-        </div>
-      </div>
-      <div class="service-tab">
-        <figure>
-          <img src="/assets/images/Perfil/profileImage.jpg" alt="Foto de Perfil" />
-        </figure>
-        <div class="service-info">
-          <div class="row">
-            <h3>Nome do Profissional</h3>
-            <div class="row center-height">
-              <img class="placeholder" src="/assets/images/Mapa/placeholder.png" alt="Localização" />
-              <p>Localização</p>
-            </div>
-          </div>
-          <div class="row center-height">
-            <div class="row center-height">
-              <span class="small-right-margin">5,0</span>
-              <img src="assets/images/profile/star.png" alt="Estrela" class="star display-block" />
-            </div>
-            <p>Categoria</p>
-          </div>
-        </div>
-      </div>
-      <div class="service-tab">
-        <figure>
-          <img src="/assets/images/Perfil/profileImage.jpg" alt="Foto de Perfil" />
-        </figure>
-        <div class="service-info">
-          <div class="row">
-            <h3>Nome do Profissional</h3>
-            <div class="row center-height">
-              <img class="placeholder" src="/assets/images/Mapa/placeholder.png" alt="Localização" />
-              <p>Localização</p>
-            </div>
-          </div>
-          <div class="row center-height">
-            <div class="row center-height">
-              <span class="small-right-margin">5,0</span>
-              <img src="assets/images/profile/star.png" alt="Estrela" class="star display-block" />
-            </div>
-            <p>Categoria</p>
-          </div>
-        </div>
-      </div>
-      <div class="service-tab">
-        <figure>
-          <img src="/assets/images/Perfil/profileImage.jpg" alt="Foto de Perfil" />
-        </figure>
-        <div class="service-info">
-          <div class="row">
-            <h3>Nome do Profissional</h3>
-            <div class="row center-height">
-              <img class="placeholder" src="/assets/images/Mapa/placeholder.png" alt="Localização" />
-              <p>Localização</p>
-            </div>
-          </div>
-          <div class="row center-height">
-            <div class="row center-height">
-              <span class="small-right-margin">5,0</span>
-              <img src="assets/images/profile/star.png" alt="Estrela" class="star display-block" />
-            </div>
-            <p>Categoria</p>
-          </div>
-        </div>
-      </div>
+      <p id="no-professionals">Não existem profissionais neste local</p>
     </section>
   </section>
   <section id="right-panel">

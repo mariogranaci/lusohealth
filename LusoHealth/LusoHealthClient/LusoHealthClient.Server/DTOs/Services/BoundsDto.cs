@@ -1,6 +1,6 @@
 ﻿namespace LusoHealthClient.Server.DTOs.Services
 {
-    public class LocationDto
+    public class BoundsDto
     {
         public double LatitudeNorthEast { get; set; }
         public double LongitudeNorthEast { get; set; }

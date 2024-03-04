@@ -174,6 +174,16 @@ export class ProfileService {
     );
   }
 
+  getPdfsById(id : string): Observable<Certificate[]> {
+    const headers = this.getHeaders();
+
+    return this.http.get<Certificate[]>(`${environment.appUrl}/api/profile/get-pdfs/${id}`, { headers }).pipe(
+      catchError(error => {
+        throw 'Error getting PDFs: ' + error;
+      })
+    );
+  }
+
   deletePdf(certificateId: number): Observable<any> {
     const headers = this.getHeaders();
 

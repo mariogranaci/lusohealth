@@ -6,6 +6,7 @@ import { MarcacoesComponent } from './marcacoes/marcacoes.component';
 import { MapaComponent } from './mapa/mapa.component';
 import { GoogleMapsModule } from '@angular/google-maps';
 
+
 const routes: Routes = [
   { path: 'make-appointment', component: MarcarConsultaComponent },
   { path: 'services', component: MarcacoesComponent },

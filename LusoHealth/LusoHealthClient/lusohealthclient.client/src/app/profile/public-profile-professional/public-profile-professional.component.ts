@@ -1,24 +1,24 @@
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { User } from '../../shared/models/authentication/user';
-import { AuthenticationService } from '../../authentication/authentication.service';
-import { take } from 'rxjs';
-import { Component, OnInit } from '@angular/core';
-import { ProfileService } from '../profile.service';
-import { Subject, takeUntil } from 'rxjs';
-import { Professional } from '../../shared/models/profile/professional';
+import { Subject, take, takeUntil } from 'rxjs';
 import { Service } from '../../shared/models/profile/service';
+import { Professional } from '../../shared/models/profile/professional';
 import { Specialty } from '../../shared/models/profile/specialty';
 import { Review } from '../../shared/models/profile/review';
 import { Certificate } from '../../shared/models/profile/certificate';
+import { AuthenticationService } from '../../authentication/authentication.service';
+import { ProfileService } from '../profile.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { User } from '../../shared/models/authentication/user';
 
 @Component({
-  selector: 'app-private-profile-professional',
-  templateUrl: './private-profile-professional.component.html',
-  styleUrl: './private-profile-professional.component.css'
+  selector: 'app-public-profile-professional',
+  templateUrl: './public-profile-professional.component.html',
+  styleUrl: './public-profile-professional.component.css'
 })
-export class PrivateProfileProfessionalComponent implements OnInit {
-  private unsubscribe$ = new Subject<void>();
+
+export class PublicProfileProfessionalComponent implements OnInit {
+  private unsubscribe$ = new Subject<void>();;
   addSpecialityForm: FormGroup = new FormGroup({});
   editSpecialityForm: FormGroup = new FormGroup({});
   updateDescriptionForm: FormGroup = new FormGroup({});
@@ -35,11 +35,19 @@ export class PrivateProfileProfessionalComponent implements OnInit {
   public reviews: Review[] = [];
   public averageStars = 0;
   pdfList: Certificate[] = [];
+  public isPatient = false;
+  public professionalId: string | undefined;
+  radioStar1 = false;
+  radioStar2 = false;
+  radioStar3 = false;
+  radioStar4 = false;
+  radioStar5 = false;
 
   constructor(private authenticationService: AuthenticationService,
     private formBuilder: FormBuilder,
     private profileService: ProfileService,
-    private router: Router) {
+    private router: Router,
+    private activateRoute: ActivatedRoute) {
     this.authenticationService.user$.pipe(take(1)).subscribe({
       next: (user: User | null) => {
         if (!user) {
@@ -49,8 +57,8 @@ export class PrivateProfileProfessionalComponent implements OnInit {
           const decodedToken = this.profileService.getDecodedToken();
 
           if (decodedToken) {
-            if (decodedToken.role !== "Professional") {
-              this.router.navigateByUrl('/');
+            if (decodedToken.role === "Patient") {
+              this.isPatient = true;
             }
           }
         }
@@ -58,30 +66,80 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     });
   }
   ngOnInit(): void {
-    this.initializeForm();
-    this.getProfessionalInfo().then(() => {
-      this.setUserFields();
-      this.getDescription();
-      this.changeSpecialtyReview("0");
-    });
-    this.getSpecialties();
-    this.getPdfs();
+    this.activateRoute.queryParamMap.subscribe({
+      next: (params: any) => {
+        const id = params.get('id');
 
+        if (id) {
+          this.professionalId = id;
+
+          this.initializeForm();
+          this.getProfessionalInfo(id).then(() => {
+            this.setUserFields();
+            this.changeSpecialtyReview("0");
+            this.getPdfs();
+          });
+
+        }
+        else {
+          this.router.navigateByUrl('/error');
+        }
+      }
+    });
   }
+
 
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
 
-  reloadTableData(): void {
-    this.getProfessionalInfo();
+  checkInput(value: number): void {
+
+
+    switch (value) {
+      case 1:
+        this.radioStar1 = true;
+        this.radioStar2 = false;
+        this.radioStar3 = false;
+        this.radioStar4 = false;
+        this.radioStar5 = false;
+        break;
+      case 2:
+        this.radioStar1 = true;
+        this.radioStar2 = true;
+        this.radioStar3 = false;
+        this.radioStar4 = false;
+        this.radioStar5 = false;
+        break;
+      case 3:
+        this.radioStar1 = true;
+        this.radioStar2 = true;
+        this.radioStar3 = true;
+        this.radioStar4 = false;
+        this.radioStar5 = false;
+        break;
+      case 4:
+        this.radioStar1 = true;
+        this.radioStar2 = true;
+        this.radioStar3 = true;
+        this.radioStar4 = true;
+        this.radioStar5 = false;
+        break;
+      case 5:
+        this.radioStar1 = true;
+        this.radioStar2 = true;
+        this.radioStar3 = true;
+        this.radioStar4 = true;
+        this.radioStar5 = true;
+        break;
+    }
   }
 
   initializeForm() {
 
     this.addSpecialityForm = this.formBuilder.group({
-      selectSpeciality: ['', [Validators.required]],
+      selectSpeciality: ['Selecione uma especialidade', [Validators.required]],
       price: ['', [Validators.required, Validators.min(1), Validators.max(1000)]],
       presencial: ['', [Validators.required]],
       online: ['', [Validators.required]],
@@ -100,11 +158,12 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     });
   }
 
-  getProfessionalInfo(): Promise<void> {
+  getProfessionalInfo(id: string): Promise<void> {
     return new Promise<void>((resolve, reject) => {
-      this.profileService.getProfessionalInfo().pipe(takeUntil(this.unsubscribe$)).subscribe(
+      this.profileService.getProfessionalInfoById(id).pipe(takeUntil(this.unsubscribe$)).subscribe(
         (userData: Professional) => {
           this.userData = userData;
+          console.log(userData);
           resolve();
         },
         error => {
@@ -114,37 +173,60 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     });
   }
 
-  getSpecialties() {
-    this.profileService.getServices().pipe(takeUntil(this.unsubscribe$)).subscribe(
-      (specialties: Specialty[]) => {
-        this.specialties = specialties;
-      },
-      error => {
-      }
-    );
-  }
+  /*getSpecialties() {
+
+    if (this.professionalId) {
+      this.profileService.getServicesByProfessionalId(this.professionalId).pipe(takeUntil(this.unsubscribe$)).subscribe(
+        (specialties: Specialty[]) => {
+          console.log(specialties);
+          this.specialties = specialties;
+        },
+        error => {
+          console.log(error);
+          this.errorMessages.push('Erro ao carregar os serviços.');
+        }
+      );
+    }
+  }*/
 
   setUserFields() {
-
     const nomeElement = document.getElementById('nome');
-    const apelidoElement = document.getElementById('apelido');
     const emailElement = document.getElementById('email');
-    const telemovelElement = document.getElementById('telemovel');
-    const nifElement = document.getElementById('nif');
-    const genderElement = document.getElementById('gender');
 
-    if (nomeElement && apelidoElement && emailElement && telemovelElement && nifElement && genderElement && this.userData) {
-      nomeElement.textContent = this.userData.professionalInfo.firstName;
-      apelidoElement.textContent = this.userData.professionalInfo.lastName;
-      emailElement.textContent = this.userData.professionalInfo.email;
-      telemovelElement.textContent = this.userData.professionalInfo.telemovel;
-      nifElement.textContent = this.userData.professionalInfo.nif;
-      genderElement.textContent = (this.userData.professionalInfo.genero === "M") ? "Masculino" : "Feminino";
+    if (nomeElement && emailElement && this.userData && this.userData.professionalInfo) {
+      const { firstName, lastName, email, picture } = this.userData.professionalInfo;
 
-      if (this.userData.professionalInfo.picture) {
-        this.profileImagePath = this.userData.professionalInfo.picture;
+      if (firstName && lastName) {
+        nomeElement.textContent = firstName + ' ' + lastName;
+      }
+
+      if (email) {
+        emailElement.textContent = email;
+      }
+
+      if (picture) {
+        this.profileImagePath = picture;
       }
     }
+  }
+
+  appointmentTypesToString(service: Service): string {
+    const types: string[] = [];
+
+    if (service.presential) {
+      types.push("Presencial");
+    }
+    if (service.online) {
+      types.push("Online");
+    }
+    if (service.home) {
+      types.push("Domicílio");
+    }
+
+    if (types.length == 0)
+      return "Nenhum";
+
+    return types.join(", ");
   }
 
   onFileSelected(event: any) {
@@ -155,7 +237,7 @@ export class PrivateProfileProfessionalComponent implements OnInit {
       this.profileService.uploadPdf(file).subscribe(
         response => {
           console.log('PDF uploaded successfully.');
-          this.getPdfs(); 
+          this.getPdfs();
 
           if (response && response.pdfUrl) {
             this.openPdf(response.pdfUrl);
@@ -170,7 +252,8 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     }
   }
   getPdfs() {
-    this.profileService.getPdfs().subscribe(
+    if (this.professionalId)
+    this.profileService.getPdfsById(this.professionalId).subscribe(
       pdfs => {
         this.pdfList = pdfs;
       },
@@ -209,69 +292,6 @@ export class PrivateProfileProfessionalComponent implements OnInit {
         console.error('Error downloading PDF:', error);
       }
     );
-  }
-
-  getDescription() {
-    const descriptionElement = document.getElementById('description');
-
-    if (descriptionElement && this.userData && this.userData.description) {
-      this.updateDescriptionForm.setValue({
-        description: this.userData.description
-      });
-    }
-  }
-
-  updateDescription() {
-    this.submittedDescription = true;
-    this.errorMessages = [];
-    /*this.responseText = '';*/
-
-    this.showCheckAnimation();
-
-    if (this.updateDescriptionForm.valid) {
-
-      const form = this.updateDescriptionForm.value;
-
-      if (this.userData?.description != form.description) {
-
-        var description = { description: form.description }
-
-        this.profileService.updateDescription(description).subscribe({
-          next: (response: any) => {
-            this.reloadTableData();
-            //this.responseText = response.value.message;
-            this.submittedDescription = false;
-            console.log("Alterado");
-            const check = document.getElementById('check');
-
-            if (check) {
-              check.click();
-            }
-
-            setTimeout(() => {
-              this.hideCheckAnimation();
-            }, 1800);
-
-          },
-          error: (error) => {
-            if (error.error.errors) {
-              this.errorMessages = error.error.errors;
-              this.errorHideCheckAnimation();
-            } else {
-              this.errorMessages.push(error.error);
-              this.errorHideCheckAnimation();
-            }
-          }
-        })
-      }
-      else {
-        this.errorHideCheckAnimation();
-        this.errorMessages.push("A nova descrição é igual à anterior.");
-      }
-    }
-    else {
-      this.errorHideCheckAnimation();
-    }
   }
 
   showCheckAnimation() {
@@ -327,7 +347,6 @@ export class PrivateProfileProfessionalComponent implements OnInit {
 
       this.profileService.addSpecialty(specialtyform).subscribe({
         next: (response: any) => {
-          this.reloadTableData();
           /*this.responseText = response.value.message;*/
           this.submittedAdd = false;
           this.addSpecialityForm.reset();
@@ -366,7 +385,6 @@ export class PrivateProfileProfessionalComponent implements OnInit {
 
         this.profileService.updateSpecialty(specialtyform).subscribe({
           next: (response: any) => {
-            this.reloadTableData();
             /*this.responseText = response.value.message;*/
             this.submittedEdit = false;
             this.editSpecialityForm.reset();
@@ -381,23 +399,6 @@ export class PrivateProfileProfessionalComponent implements OnInit {
           }
         })
       }
-    }
-  }
-
-  deleteSpeciality(specialtyId: number | null) {
-    if (specialtyId != null) {
-      this.profileService.deleteSpecialty(specialtyId).subscribe({
-        next: () => {
-          this.reloadTableData();
-        },
-        error: (error) => {
-          if (error.error.errors) {
-            this.errorMessages = error.error.errors;
-          } else {
-            this.errorMessages.push(error.error);
-          }
-        }
-      });
     }
   }
 
@@ -427,6 +428,19 @@ export class PrivateProfileProfessionalComponent implements OnInit {
       });
     }
   }
+
+
+
+
+  /*--------------------------------------------------------------------------------*/
+
+
+
+  /*-------------------------------------- Reviews ---------------------------------*/
+
+
+
+
 
   selectReviewEventReceiver(event: Event) {
     const target = event.target as HTMLSelectElement;
@@ -459,10 +473,48 @@ export class PrivateProfileProfessionalComponent implements OnInit {
   }
 
   filterReviews(serviceId: number) {
-    this.profileService.filterReviewsByService(serviceId).subscribe({
-      next: (reviews: Review[]) => {
-        this.reviews = reviews;
-        this.getAverageStars();
+
+    if (this.professionalId) {
+      this.profileService.filterReviewsByServiceById(serviceId, this.professionalId).subscribe({
+        next: (reviews: Review[]) => {
+          this.reviews = reviews;
+          this.getAverageStars();
+        },
+        error: (error) => {
+          if (error.error.errors) {
+            this.errorMessages = error.error.errors;
+          } else {
+            this.errorMessages.push(error.error);
+          }
+        }
+      });
+    }
+    else {
+      this.errorMessages.push("Erro ao carregar reviews.");
+    }
+  }
+
+  private getAverageStars() {
+    var sum = 0;
+    for (let i = 0; i < this.reviews.length; i++) {
+      sum += this.reviews[i].stars;
+    }
+    this.averageStars = sum / this.reviews.length;
+  }
+
+
+  addReview() {
+
+    var newReview = {
+      idService: 1,
+      stars: 4,
+      description: "Este gajo é o maior.",
+    }
+    console.log(newReview);
+    this.profileService.addReview(newReview).subscribe({
+      next: (response: any) => {
+        /*this.responseText = response.value.message;*/
+        console.log(newReview);
       },
       error: (error) => {
         if (error.error.errors) {
@@ -471,18 +523,15 @@ export class PrivateProfileProfessionalComponent implements OnInit {
           this.errorMessages.push(error.error);
         }
       }
-    });
+    })
   }
 
-  private getAverageStars()
-  {
-    var sum = 0;
-    for (let i = 0; i < this.reviews.length; i++)
-    {
-      sum += this.reviews[i].stars;
-    }
-    this.averageStars = sum / this.reviews.length;
-  }
+
+
+  /* ------------------------  Popups  -------------------------*/
+
+
+
 
   openPopup(opcao: string) {
     const overlay = document.getElementById('overlay');

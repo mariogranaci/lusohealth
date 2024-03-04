@@ -14,6 +14,8 @@ import { Description } from '../shared/models/profile/description';
 import { Review } from '../shared/models/profile/review';
 import { jwtDecode } from 'jwt-decode';
 import { Certificate } from '../shared/models/profile/certificate';
+import { AddReview } from '../shared/models/profile/addReview';
+import { UpdatePicture } from '../shared/models/profile/updatePicture';
 
 @Injectable({
   providedIn: 'root'
@@ -66,6 +68,11 @@ export class ProfileService {
     return this.http.get<Professional>(`${environment.appUrl}/api/profile/get-professional-info`, { headers });
   }
 
+  getProfessionalInfoById(id: string): Observable<Professional> {
+    const headers = this.getHeaders();
+    return this.http.get<Professional>(`${environment.appUrl}/api/profile/get-professional-info/${id}`, { headers });
+  }
+
   getServices(): Observable<Specialty[]> {
     const headers = this.getHeaders();
     return this.http.get<Specialty[]>(`${environment.appUrl}/api/profile/get-specialties`, { headers });
@@ -81,7 +88,7 @@ export class ProfileService {
     return this.http.put(`${environment.appUrl}/api/profile/update-password`, model, { headers });
   }
 
-  updatePicture(model: UserProfile) {
+  updatePicture(model: UpdatePicture) {
     const headers = this.getHeaders();
     return this.http.put(`${environment.appUrl}/api/profile/update-picture`, model, { headers });
   }
@@ -106,6 +113,11 @@ export class ProfileService {
     return this.http.put<Relative>(`${environment.appUrl}/api/profile/update-relative/${relative.id}`, relative, { headers });
   }
 
+
+  addReport(relative: Relative): Observable<Relative> {
+    const headers = this.getHeaders();
+    return this.http.post<Relative>(`${environment.appUrl}/api/profile/add-relative`, relative, { headers });
+  }
   updateSpecialty(service: Service): Observable<Service> {
     const headers = this.getHeaders();
     return this.http.put<Service>(`${environment.appUrl}/api/profile/update-service`, service, { headers });
@@ -124,6 +136,16 @@ export class ProfileService {
   filterReviewsByService(idService: number): Observable<Review[]> {
     const headers = this.getHeaders();
     return this.http.get<Review[]>(`${environment.appUrl}/api/profile/filter-reviews-by-service/${idService}`, { headers });
+  }
+
+  filterReviewsByServiceById(idSpecialty: number, idProfessional: string): Observable<Review[]> {
+    const headers = this.getHeaders();
+    return this.http.get<Review[]>(`${environment.appUrl}/api/profile/filter-reviews-by-service/${idSpecialty}/${idProfessional}`, { headers });
+  }
+
+  addReview(review: AddReview): Observable<any> {
+    const headers = this.getHeaders();
+    return this.http.post<any>(`${environment.appUrl}/api/profile/add-review`, review, { headers });
   }
 
   uploadPdf(pdfFile: File): Observable<any> {
@@ -146,6 +168,16 @@ export class ProfileService {
     const headers = this.getHeaders();
 
     return this.http.get<Certificate[]>(`${environment.appUrl}/api/profile/get-pdfs`, { headers }).pipe(
+      catchError(error => {
+        throw 'Error getting PDFs: ' + error;
+      })
+    );
+  }
+
+  getPdfsById(id : string): Observable<Certificate[]> {
+    const headers = this.getHeaders();
+
+    return this.http.get<Certificate[]>(`${environment.appUrl}/api/profile/get-pdfs/${id}`, { headers }).pipe(
       catchError(error => {
         throw 'Error getting PDFs: ' + error;
       })

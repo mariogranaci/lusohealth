@@ -1,4 +1,4 @@
-
+@import url('https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
 
 main {
   padding: 0 7%;
@@ -11,7 +11,7 @@ main {
 
 
 
-.form-row {
+/*.form-row {
   display: flex;
   flex-direction: column;
   margin-bottom: 20px;
@@ -36,9 +36,10 @@ main {
   padding: 10px 10px;
   width: 100%;
   background: white;
-}
+}*/
 
-.btn-edit {
+.top-right-btn {
+  text-transform: uppercase;
   width: fit-content;
   height: 50px;
   border: none;
@@ -47,22 +48,20 @@ main {
   border-radius: 30px;
   padding: 10px 25px;
   font-weight: 500;
-  background-color: #1875E7;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0s;
   position: absolute;
   right: 30px;
   display: inline-block;
-  box-shadow: inset 2px 2px 2px 0px rgba(37, 80, 209, 0.5), 7px 7px 20px 0px rgba(0, 0, 0, .1), 4px 4px 5px 0px rgba(0, 0, 0, .1);
   outline: none;
+  user-select: none;
 }
 
-  .btn-edit:active {
+  .top-right-btn:active {
     transform: translateY(2px);
   }
 
-  .btn-edit:hover {
-    background-color: #1b69c8;
+  .top-right-btn:hover {
     cursor: pointer;
   }
 
@@ -121,6 +120,7 @@ figure {
   border-radius: 25px;
   font-size: 20px;
   transition: background-color 0.3s ease, transform 0s;
+  user-select: none;
 }
 
   .btn:hover {
@@ -153,6 +153,36 @@ figure {
   margin-bottom: 10px;
 }
 
+
+.top-center-row {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-top: 30px;
+  margin-bottom: 40px;
+}
+
+.top-center-row-container {
+  flex: 1 1 45%;
+  min-width: min-content;
+  max-width: 45%;
+  display: flex;
+  align-items: center;
+}
+
+#top-center-row-container-right {
+  justify-content: flex-end;
+}
+
+.top-center-row-text {
+  font-size: 25px;
+  overflow-wrap: anywhere;
+}
+
+.email-img {
+  width: 30px;
+  margin-right: 10px;
+}
 
 
 
@@ -191,6 +221,7 @@ td {
   th:nth-child(1) {
     width: 35%;
     border-left: none;
+    border-top-left-radius: 10px;
   }
 
   td:nth-child(1) {
@@ -203,39 +234,37 @@ td {
 
   td:nth-child(2),
   th:nth-child(2) {
-    width: 15%;
+    width: 20%;
   }
 
   td:nth-child(3),
   th:nth-child(3) {
-    width: 10%;
+    width: 25%;
   }
 
   td:nth-child(4),
   th:nth-child(4) {
-    width: 10%;
-  }
-
-  td:nth-child(5),
-  th:nth-child(5) {
-    width: 150px;
-  }
-
-  td:nth-child(6),
-  th:nth-child(6) {
     width: 20%;
   }
 
-thead tr {
-  color: #fff;
-  background-color: #1875e7;
-  display: block;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
+  th:last-child {
+    border-top-right-radius: 10px;
+  }
+
+thead {
+  width: 100%;
 }
 
+  thead tr {
+    color: #fff;
+  }
+
+    thead tr th {
+      background-color: #1875e7;
+    }
+
 tbody {
-  display: block;
+  width: 100%;
   overflow: auto;
 }
 
@@ -281,7 +310,18 @@ tbody {
 /*----------------------------- Descrição -------------------------*/
 
 
+.pre-wrap-text {
+  white-space: pre-wrap;
+}
 
+.description-text {
+  height: fit-content;
+  width: 100%;
+  text-align: justify;
+  text-justify: inter-word;
+  word-break: break-word;
+  hyphens: auto;
+}
 
 #update-description-form {
 }
@@ -430,6 +470,9 @@ tbody {
   border-radius: 20px;
   padding: 15px;
   text-align: center;
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
 }
 
 .pdf-image-btn > img {
@@ -536,6 +579,9 @@ tbody {
 
 
 
+#add-review-btn {
+  margin: 0;
+}
 
 .display-row {
   display: flex;
@@ -543,7 +589,6 @@ tbody {
   align-items: center;
   justify-content: space-between;
 }
-
 
 .no-review {
   margin: 70px 0;
@@ -815,3 +860,47 @@ app-validation-messages {
     position: fixed;
 }
 */
+
+.rating {
+  margin: 10px auto 0 auto;
+  border: none;
+  width: 80%;
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+}
+
+  .rating > label {
+    color: #90A0A3;
+    width: 50px;
+    cursor: pointer;
+  }
+
+    .rating > label::before {
+      margin: 5px;
+      font-size: 50px;
+      font-family: FontAwesome;
+      content: "\f005";
+      display: inline-block;
+    }
+
+    .rating > label > input {
+      display: none;
+    }
+
+.starOn {
+  color: #FECE31 !important;
+}
+
+/*.rating > input:checked ~ label,
+    .rating:not(:checked) > label:hover,
+    .rating:not(:checked) > label:hover ~ label {
+      color: #FECE31;
+    }
+
+      .rating > input:checked + label:hover,
+      .rating > input:checked ~ label:hover,
+      .rating > label:hover ~ input:checked ~ label,
+      .rating > input:checked ~ label:hover ~ label {
+        color: #FECE31;
+      }*/

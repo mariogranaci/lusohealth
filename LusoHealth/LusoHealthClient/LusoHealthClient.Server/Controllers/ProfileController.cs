@@ -1,9 +1,12 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.IO;
+using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Mime;
 using System.Security.Claims;
 using LusoHealthClient.Server.Data;
+using LusoHealthClient.Server.DTOs.Administration;
 using LusoHealthClient.Server.DTOs.Profile;
 using LusoHealthClient.Server.Models.FeedbackAndReports;
 using LusoHealthClient.Server.Models.Professionals;
@@ -14,24 +17,23 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace LusoHealthClient.Server.Controllers
 {
     [Authorize]
-	[Route("api/[controller]")]
-	[ApiController]
-	public class ProfileController : ControllerBase
-	{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class ProfileController : ControllerBase
+    {
 
-		private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
         private readonly UserManager<User> _userManager;
-        private readonly ILogger<ProfileController> _logger;
 
-        public ProfileController(ApplicationDbContext context, UserManager<User> userManager, ILogger<ProfileController> logger)
+        public ProfileController(ApplicationDbContext context, UserManager<User> userManager)
         {
             _context = context;
             _userManager = userManager;
-            _logger = logger;
         }
 
         [HttpGet("get-user")]
@@ -51,7 +53,8 @@ namespace LusoHealthClient.Server.Controllers
                 return NotFound("Não foi possível encontrar o utilizador");
             }
 
-            UserProfileDto userProfileDto = new UserProfileDto {
+            UserProfileDto userProfileDto = new UserProfileDto
+            {
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Email = user.Email,
@@ -60,7 +63,7 @@ namespace LusoHealthClient.Server.Controllers
                 DataNascimento = user.BirthDate,
                 Genero = user.Gender,
                 Picture = user.ProfilePicPath,
-				Provider = user.Provider,
+                Provider = user.Provider,
             };
 
             return userProfileDto;
@@ -73,7 +76,22 @@ namespace LusoHealthClient.Server.Controllers
 
             if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
 
-            var user = await _userManager.FindByIdAsync(userIdClaim);
+            return await GetProfessionalInfo(userIdClaim);
+        }
+
+        [HttpGet("get-professional-info/{id}")]
+        public async Task<ActionResult<ProfessionalDto>> GetProfessionalProfile(string id)
+        {
+            var response = await GetProfessionalInfo(id);
+
+            if (response.Result is NotFoundResult) { return NotFound("Não foi possível encontrar o profissional"); }
+
+            return response.Value;
+        }
+
+        private async Task<ActionResult<ProfessionalDto>> GetProfessionalInfo(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
 
             if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
 
@@ -104,7 +122,7 @@ namespace LusoHealthClient.Server.Controllers
                 .Where(r => r.Service.IdProfessional == user.Id)
                 .ToListAsync();
             var reviews = GetReviewDtos(reviewsFromDB);
-            
+
             var professional = await _context.Professionals.Include(pt => pt.ProfessionalType).FirstOrDefaultAsync(p => p.UserID == user.Id);
             //var certificates = GetCertificateDtos(professional.Certificates);
             //var professionalType = await _context.ProfessionalTypes.FirstOrDefaultAsync(pt => pt.Id == professional.ProfessionalTypeId);
@@ -152,9 +170,51 @@ namespace LusoHealthClient.Server.Controllers
         }
 
         [HttpPut("update-user-info")]
-		public async Task<ActionResult> UpdateUserInfo(UserProfileDto model)
-		{
-			var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        public async Task<ActionResult> UpdateUserInfo(UserProfileDto model)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+			if (userIdClaim == null)
+			{
+				return BadRequest("Não foi possível encontrar o utilizador");
+			}
+
+			var user = await _userManager.FindByIdAsync(userIdClaim);
+
+            if (user == null)
+            {
+                return NotFound("Não foi possível encontrar o utilizador");
+            }
+
+            if (!user.EmailConfirmed) return BadRequest("O email ainda não foi confirmado. Confirme o seu email para poder recuperar a sua password");
+
+            try
+            {
+                user.FirstName = model.FirstName.Trim();
+                user.LastName = model.LastName.Trim();
+                user.Email = model.Email.ToLower().Trim();
+                user.NormalizedEmail = model.Email.ToLower().Trim();
+                user.PhoneNumber = model.Telemovel.Trim().IsNullOrEmpty() ? null : model.Telemovel.Trim();
+                user.Nif = model.Nif.Trim();
+                user.Gender = model.Genero != null ? (char)model.Genero : user.Gender;
+
+
+                var result = await _userManager.UpdateAsync(user);
+
+                if (result.Succeeded)
+                    return Ok(new JsonResult(new { title = "Perfil Alterado", message = "Os seus dados foram alterados com sucesso." }));
+                return BadRequest("Não foi possivel alterar os seus dados.Tente Novamente.");
+            }
+            catch (Exception)
+            {
+                return BadRequest("Não foi possivel alterar os seus dados.Tente Novamente.");
+            }
+        }
+
+        [HttpPut("update-password")]
+        public async Task<ActionResult> UpdatePassword(UpdatePasswordDto model)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             if (userIdClaim == null)
             {
@@ -167,74 +227,32 @@ namespace LusoHealthClient.Server.Controllers
             {
                 return NotFound("Não foi possível encontrar o utilizador");
             }
-			
-            if (!user.EmailConfirmed) return BadRequest("O email ainda não foi confirmado. Confirme o seu email para poder recuperar a sua password");
 
-			try
-			{
-				user.FirstName = model.FirstName.Trim();
-				user.LastName = model.LastName.Trim();
-				user.Email = model.Email.ToLower().Trim();
-                user.NormalizedEmail = model.Email.ToLower().Trim();
-				user.PhoneNumber = model.Telemovel.Trim().IsNullOrEmpty() ? null : model.Telemovel.Trim();
-				user.Nif = model.Nif.Trim();
-				user.Gender = model.Genero != null ? (char) model.Genero : user.Gender;
-
-
-                var result = await _userManager.UpdateAsync(user);
-
-				if (result.Succeeded)
-					return Ok(new JsonResult(new { title = "Perfil Alterado", message = "Os seus dados foram alterados com sucesso." }));
-				return BadRequest("Não foi possivel alterar os seus dados.Tente Novamente.");
-			}
-			catch (Exception)
-			{
-				return BadRequest("Não foi possivel alterar os seus dados.Tente Novamente.");
-			}
-		}
-
-		[HttpPut("update-password")]
-		public async Task<ActionResult> UpdatePassword(UpdatePasswordDto model)
-		{
-			var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-			if (userIdClaim == null)
-			{
-				return BadRequest("Não foi possível encontrar o utilizador");
-			}
-
-			var user = await _userManager.FindByIdAsync(userIdClaim);
-
-			if (user == null)
-			{
-				return NotFound("Não foi possível encontrar o utilizador");
-			}
-
-			try
-			{
-				var isCurrentPasswordValid = await _userManager.CheckPasswordAsync(user, model.CurrentPassword);
-				if (!isCurrentPasswordValid)
+            try
+            {
+                var isCurrentPasswordValid = await _userManager.CheckPasswordAsync(user, model.CurrentPassword);
+                if (!isCurrentPasswordValid)
                 {
-					return BadRequest("A password atual está incorreta.");
-				}
-				else if (model.NewPassword != model.ConfirmNewPassword)
-				{
-					return BadRequest("As novas passwords não condizem.");
-				}
+                    return BadRequest("A password atual está incorreta.");
+                }
+                else if (model.NewPassword != model.ConfirmNewPassword)
+                {
+                    return BadRequest("As novas passwords não condizem.");
+                }
 
-				var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+                var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
 
-				if (result.Succeeded)
-				{
-					return Ok(new JsonResult(new { title = "Password Alterada", message = "A sua password foi alterada com sucesso." }));
-				}
-				return BadRequest("Falha ao atualizar a password. Tente novamente.");
-			}
-			catch (Exception)
-			{
-				return BadRequest("Falha ao atualizar a password. Tente novamente.");
-			}
-		}
+                if (result.Succeeded)
+                {
+                    return Ok(new JsonResult(new { title = "Password Alterada", message = "A sua password foi alterada com sucesso." }));
+                }
+                return BadRequest("Falha ao atualizar a password. Tente novamente.");
+            }
+            catch (Exception)
+            {
+                return BadRequest("Falha ao atualizar a password. Tente novamente.");
+            }
+        }
 
         [HttpPost("add-service")]
         public async Task<ActionResult> AddService(ServiceDto model)
@@ -270,7 +288,8 @@ namespace LusoHealthClient.Server.Controllers
                 await _context.SaveChangesAsync();
 
                 return Ok(new JsonResult(new { title = "Serviço Adicionado", message = "O seu serviço foi adicionado com sucesso." }));
-            } catch (Exception)
+            }
+            catch (Exception)
             {
                 return BadRequest("Não foi possível adicionar o serviço. Tente novamente.");
             }
@@ -350,41 +369,73 @@ namespace LusoHealthClient.Server.Controllers
                 var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
 
-                var user = await _userManager.FindByIdAsync(userIdClaim);
-                if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
+                /*var user = await _userManager.FindByIdAsync(userIdClaim);
+                if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }*/
 
-                var professional = await _context.Professionals.FirstOrDefaultAsync(p => p.UserID == user.Id);
+                var professional = await _context.Professionals.FirstOrDefaultAsync(p => p.UserID == userIdClaim);
                 if (professional == null) { return NotFound("Não foi possível encontrar o profissional"); }
 
-                if (id <= 0)
-                {
-                    var reviewsFromDB = await _context.Reviews
-                        .Include(r => r.Service)
-                        .ThenInclude(s => s.Specialty)
-                        .Include(r => r.Patient)
-                        .ThenInclude(p => p.User)
-                        .Where(r => r.Service.IdProfessional == user.Id)
-                        .ToListAsync();
-                    if (reviewsFromDB == null) { return NotFound("Não foi possível encontrar as reviews"); }
-                    var reviews = GetReviewDtos(reviewsFromDB);
-                    return reviews;
-                } else
-                {
-                    var reviewsFromDB = await _context.Reviews
-                        .Include(r => r.Service)
-                        .ThenInclude(s => s.Specialty)
-                        .Include(r => r.Patient)
-                        .ThenInclude(p => p.User)
-                        .Where(r => r.Service.IdProfessional == user.Id && r.Service.IdSpecialty == id)
-                        .ToListAsync();
-                    if (reviewsFromDB == null) { return NotFound("Não foi possível encontrar as reviews"); }
-                    var reviews = GetReviewDtos(reviewsFromDB);
-                    return reviews;
-                }
+                var reviews = await GetFilteredReviewsByService(id, userIdClaim);
 
-            } catch (Exception)
+                if (reviews == null) { return NotFound("Não foi possível encontrar as reviews"); }
+
+                return reviews;
+
+            }
+            catch (Exception)
             {
                 return BadRequest("Não foi possível encontrar as reviews. Tente novamente.");
+            }
+        }
+
+        [HttpGet("filter-reviews-by-service/{idSpecialty}/{idProfessional}")]
+        public async Task<ActionResult<List<ReviewDto>>> FilterReviewsByService(int idSpecialty, string idProfessional)
+        {
+            try
+            {
+                var professional = await _context.Professionals.FirstOrDefaultAsync(p => p.UserID == idProfessional);
+                if (professional == null) { return NotFound("Não foi possível encontrar o profissional"); }
+
+                var reviews = await GetFilteredReviewsByService(idSpecialty, idProfessional);
+
+                if (reviews == null) { return NotFound("Não foi possível encontrar as reviews"); }
+
+                return reviews;
+
+            }
+            catch (Exception)
+            {
+                return BadRequest("Não foi possível encontrar as reviews. Tente novamente.");
+            }
+        }
+
+        private async Task<ActionResult<List<ReviewDto>>> GetFilteredReviewsByService(int idSpecialty, string idProfessional)
+        {
+            if (idSpecialty <= 0)
+            {
+                var reviewsFromDB = await _context.Reviews
+                    .Include(r => r.Service)
+                    .ThenInclude(s => s.Specialty)
+                    .Include(r => r.Patient)
+                    .ThenInclude(p => p.User)
+                    .Where(r => r.Service.IdProfessional == idProfessional)
+                    .ToListAsync();
+                if (reviewsFromDB == null) { return NotFound("Não foi possível encontrar as reviews"); }
+                var reviews = GetReviewDtos(reviewsFromDB);
+                return reviews;
+            }
+            else
+            {
+                var reviewsFromDB = await _context.Reviews
+                    .Include(r => r.Service)
+                    .ThenInclude(s => s.Specialty)
+                    .Include(r => r.Patient)
+                    .ThenInclude(p => p.User)
+                    .Where(r => r.Service.IdProfessional == idProfessional && r.Service.IdSpecialty == idSpecialty)
+                    .ToListAsync();
+                if (reviewsFromDB == null) { return NotFound("Não foi possível encontrar as reviews"); }
+                var reviews = GetReviewDtos(reviewsFromDB);
+                return reviews;
             }
         }
 
@@ -464,7 +515,7 @@ namespace LusoHealthClient.Server.Controllers
                     BirthDate = relativeDto.DataNascimento,
                     Gender = relativeDto.Genero,
                     Location = relativeDto.Localizacao,
-                    IdPatient = user.Id 
+                    IdPatient = user.Id
                 };
 
                 _context.Relatives.Add(relative);
@@ -535,7 +586,7 @@ namespace LusoHealthClient.Server.Controllers
         }
 
         [HttpGet("get-specialties")]
-        public async Task<ActionResult<List<Models.Professionals.Specialty>>> GetSpecialties()
+        public async Task<ActionResult<List<Specialty>>> GetSpecialties()
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
@@ -559,7 +610,7 @@ namespace LusoHealthClient.Server.Controllers
         }
 
         [HttpPost("add-review")]
-        public async Task<ActionResult> AddReview(ReviewDto reviewDto)
+        public async Task<ActionResult> AddReview(AddReviewDto reviewDto)
         {
             try
             {
@@ -568,6 +619,10 @@ namespace LusoHealthClient.Server.Controllers
 
                 var user = await _userManager.FindByIdAsync(userId);
                 if (user == null) return NotFound("Não foi possível encontrar o utilizador");
+
+                var reviewExists = await _context.Reviews.AnyAsync(r => r.IdPatient == user.Id && r.IdService == reviewDto.IdService);
+
+                if (reviewExists) return BadRequest("Já adicionou uma review para este serviço");
 
                 var review = new Review
                 {
@@ -603,12 +658,12 @@ namespace LusoHealthClient.Server.Controllers
                 var file = Request.Form.Files[0];
                 var folderName = Path.Combine("Uploads", "Certificates");
                 var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
-                if (file.Length > 0) 
+                if (file.Length > 0)
                 {
                     var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
                     var fullPath = Path.Combine(pathToSave, fileName);
                     var dbPath = Path.Combine(folderName, fileName);
-                    using (var stream = new FileStream(fullPath, FileMode.Create)) 
+                    using (var stream = new FileStream(fullPath, FileMode.Create))
                     {
                         file.CopyTo(stream);
                     }
@@ -624,15 +679,15 @@ namespace LusoHealthClient.Server.Controllers
 
                     return Ok(new JsonResult(new { title = "PDF Uploaded", message = "PDF file uploaded successfully." }));
                 }
-                else 
+                else
                 {
                     return BadRequest("Failed to upload PDF. Please try again.");
-                }    
+                }
             }
             catch (Exception)
             {
                 return BadRequest("Failed to upload PDF. Please try again.");
-            }  
+            }
         }
 
         [HttpGet("get-pdfs")]
@@ -643,34 +698,57 @@ namespace LusoHealthClient.Server.Controllers
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 if (string.IsNullOrEmpty(userId)) return BadRequest("Não foi possível encontrar o utilizador");
 
-                var user = await _userManager.FindByIdAsync(userId);
-                if (user == null) return NotFound("Não foi possível encontrar o utilizador");
+                var response = await GetPdfs(userId);
 
-                var professional = await _context.Professionals.FirstOrDefaultAsync(p => p.UserID == user.Id);
-                if (professional == null) return NotFound("Não foi possível encontrar o profissional");
+                if (response.Result is NotFoundResult) { return NotFound("Não foi possível encontrar o profissional"); }
 
-                var certificates = await _context.Certificates
-                    .Where(c => c.IdProfessional == user.Id)
-                    .ToListAsync();
-
-                List<CertificateDto> certificateDtos = new List<CertificateDto>();
-                foreach (var certificate in certificates)
-                {
-                    CertificateDto certificateDto = new CertificateDto
-                    {
-                        CertificateId = certificate.Id,
-                        Name = certificate.Name,
-                        Path = certificate.Path 
-                    };
-                    certificateDtos.Add(certificateDto);
-                }
-
-                return certificateDtos;
+                return response.Value;
             }
             catch (Exception)
             {
                 return BadRequest("Failed to retrieve PDFs. Please try again.");
             }
+        }
+
+        [HttpGet("get-pdfs/{id}")]
+        public async Task<ActionResult<List<CertificateDto>>> GetPdfsById(string id)
+        {
+            try
+            {
+                var response = await GetPdfs(id);
+
+                if (response.Result is NotFoundResult) { return NotFound("Não foi possível encontrar o profissional"); }
+
+                return response.Value;
+            }
+            catch (Exception)
+            {
+                return BadRequest("Failed to retrieve PDFs. Please try again.");
+            }
+        }
+
+        private async Task<ActionResult<List<CertificateDto>>> GetPdfs(string id) 
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null) return NotFound("Não foi possível encontrar o utilizador");
+
+            var certificates = await _context.Certificates
+                .Where(c => c.IdProfessional == user.Id)
+                .ToListAsync();
+
+            List<CertificateDto> certificateDtos = new List<CertificateDto>();
+            foreach (var certificate in certificates)
+            {
+                CertificateDto certificateDto = new CertificateDto
+                {
+                    CertificateId = certificate.Id,
+                    Name = certificate.Name,
+                    Path = certificate.Path
+                };
+                certificateDtos.Add(certificateDto);
+            }
+
+            return certificateDtos;
         }
 
         [HttpDelete("delete-pdf/{id}")]
@@ -748,27 +826,27 @@ namespace LusoHealthClient.Server.Controllers
             return serviceDtos;
         }
 
-		private List<CertificateDto> GetCertificateDtos(List<Certificate> certificates)
-		{
-			var certificateDtos = new List<CertificateDto>();
-			foreach (var certificate in certificates)
-			{
-				var certificateDto = new CertificateDto
-				{
-					CertificateId = certificate.Id,
-					Name = certificate.Name,
-					Path = certificate.Path
-				};
-				certificateDtos.Add(certificateDto);
-			}
-			return certificateDtos;
-		}
+        private List<CertificateDto> GetCertificateDtos(List<Certificate> certificates)
+        {
+            var certificateDtos = new List<CertificateDto>();
+            foreach (var certificate in certificates)
+            {
+                var certificateDto = new CertificateDto
+                {
+                    CertificateId = certificate.Id,
+                    Name = certificate.Name,
+                    Path = certificate.Path
+                };
+                certificateDtos.Add(certificateDto);
+            }
+            return certificateDtos;
+        }
 
-		private List<ReviewDto> GetReviewDtos(List<Review> reviews)
-		{
-			var reviewDtos = new List<ReviewDto>();
-			foreach (var review in reviews)
-			{
+        private List<ReviewDto> GetReviewDtos(List<Review> reviews)
+        {
+            var reviewDtos = new List<ReviewDto>();
+            foreach (var review in reviews)
+            {
                 Console.WriteLine(review);
                 ReviewDto reviewDto = new ReviewDto
                 {
@@ -776,14 +854,15 @@ namespace LusoHealthClient.Server.Controllers
                     PatientName = review.Patient.User.FirstName + " " + review.Patient.User.LastName,
                     PatientPicture = review.Patient.User.ProfilePicPath ?? "/assets/images/Perfil/profileImage.jpg",
                     IdService = review.IdService,
-					ServiceName = review.Service.Specialty.Name,
-					Stars = review.Stars,
-					Description = review.Description
-				};
+                    ServiceName = review.Service.Specialty.Name,
+                    Stars = review.Stars,
+                    Description = review.Description
+                };
                 reviewDtos.Add(reviewDto);
-			}
-			return reviewDtos;
-		}
+            }
+            return reviewDtos;
+        }
         #endregion
     }
 }
+

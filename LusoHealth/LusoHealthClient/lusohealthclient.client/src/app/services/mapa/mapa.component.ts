@@ -28,6 +28,8 @@ export class MapaComponent implements OnInit {
   mapMoved: boolean = false;
   markers: Marker[] = [];
   private unsubscribe$ = new Subject<void>();
+  geocoder: google.maps.Geocoder | undefined;
+  concelho: string | null = null;
 
   constructor(private servicesService: ServicesService) { }
 
@@ -37,14 +39,14 @@ export class MapaComponent implements OnInit {
       version: "weekly",
       libraries: [
         "places",
+        "geocoding"
       ]
     });
 
     loader.load().then(async () => {
       this.initMap();
-      console.log('Mapa carregado');
       this.initAutocomplete();
-      console.log("Autocomplete carregado");
+      this.geocoder = new google.maps.Geocoder();
     });
   }
 
@@ -147,19 +149,23 @@ export class MapaComponent implements OnInit {
         const sw = bounds.getSouthWest();
         this.mapMoved = false;
 
-        console.log(`Limites Atuais do Mapa: NE: ${ne.lat()}, ${ne.lng()} - SW: ${sw.lat()}, ${sw.lng()}`);
-        //const boundsMap = new Bounds(ne.lat(), ne.lng(), sw.lat(), sw.lng());
         const boundsMap: Bounds = {
           latitudeNorthEast: ne.lat(),
           longitudeNorthEast: ne.lng(),
           latitudeSouthWest: sw.lat(),
           longitudeSouthWest: sw.lng()
         };
+
+
         this.servicesService.getProfessionalsOnLocation(boundsMap).pipe(takeUntil(this.unsubscribe$)).subscribe(
           (professionals: Professional[]) => {
-            this.professionals = professionals;
-            professionals.forEach((professional) => {
-              this.createMarker(professional);
+            this.updateProfessionalsWithConcelho(professionals).then(() => {
+              this.professionals = professionals;
+              console.log(this.professionals.length);
+              professionals.forEach((professional) => {
+                console.log(professional.location);
+                this.createMarker(professional);
+              });
             });
           }, (error) => {
             console.log(error);
@@ -193,4 +199,58 @@ export class MapaComponent implements OnInit {
     this.markers = [];
   }
 
+  getProfessionalName(professional: Professional): string {
+    let name = '';
+    if (professional.professionalInfo.firstName && professional.professionalInfo.lastName) {
+      name = professional.professionalInfo.firstName.split(' ')[0] + ' ' + professional.professionalInfo.lastName.split(' ')[0];
+    }
+    return name;
+  }
+
+  getProfessionalCategory(professional: Professional): string {
+    return professional.professionalType;
+  }
+
+  getProfessionalRating(professional: Professional): string {
+    if (professional.reviews.length === 0) return '-';
+    let rating = 0;
+    if (professional.reviews.length > 0) {
+      professional.reviews.forEach((review) => {
+        rating += review.stars;
+      });
+      rating = rating / professional.reviews.length;
+    }
+    return rating.toFixed(1).replace('.', ',');
+  }
+
+  async updateProfessionalsWithConcelho(professionals: Professional[]): Promise<void> {
+    const geocoder = new google.maps.Geocoder();
+
+    for (const professional of professionals) {
+      const location = professional.location?.replace(/,/g, '.').split(';');
+      if (location && location.length === 2) {
+        const latlng = {
+          lat: parseFloat(location[0]),
+          lng: parseFloat(location[1])
+        };
+
+        // Note: Esta é uma função que retorna uma Promise para resolver a geocodificação reversa
+        professional.concelho = await this.getConcelho(latlng, geocoder);
+      }
+    }
+  }
+
+
+  getConcelho(latlng: { lat: number, lng: number }, geocoder: any): Promise<string> {
+    return new Promise((resolve, reject) => {
+      geocoder.geocode({ 'location': latlng }, (results: { address_components: any[]; }[], status: any) => {
+        if (status === google.maps.GeocoderStatus.OK) {
+          const concelho = results[0]?.address_components.find(ac => ac.types.includes('administrative_area_level_2'))?.long_name || 'Não disponível';
+          resolve(concelho);
+        } else {
+          resolve('Não disponível');
+        }
+      });
+    });
+  }
 }

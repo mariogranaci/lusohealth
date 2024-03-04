@@ -219,17 +219,24 @@ main {
   font-size: 15px;
   font-weight: 300;
   text-overflow: ellipsis;
-  /* Posicione o campo de pesquisa no mapa */
   position: absolute;
   left: 60%;
   top: 5px;
   z-index: 5;
-  transform: translateX(-50%)
+  transform: translateX(-50%);
+}
+
+#no-professionals-div {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #no-professionals {
-    text-align: center;
-    font-weight: bold;
+  text-align: center;
+  font-weight: bold;
 }
 
 @media only screen and (max-width: 1200px) {

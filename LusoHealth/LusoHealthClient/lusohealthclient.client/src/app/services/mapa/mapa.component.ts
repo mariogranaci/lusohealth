@@ -21,7 +21,11 @@ export class MapaComponent implements OnInit {
   @ViewChild('searchBox', { static: false }) searchBox?: ElementRef;
   professionalTypes: ProfessionalType[] = [];
   specialties: Specialty[] = [];
+  specialtiesFiltered: Specialty[] = [];
   professionals: Professional[] = [];
+  filteredProfessionals: Professional[] = [];
+  unsortedProfessionals: Professional[] = [];
+
   zoom = 14;
   center: google.maps.LatLngLiteral = { lat: 38.736946, lng: -9.142685 };
   map: google.maps.Map | undefined;
@@ -29,10 +33,14 @@ export class MapaComponent implements OnInit {
   markers: Marker[] = [];
   private unsubscribe$ = new Subject<void>();
   concelho: string | null = null;
+  specialtyId: number = -1;
+  professionalTypeId: number = -1;
 
   constructor(private servicesService: ServicesService) { }
 
   ngOnInit() {
+    this.getProfessionalTypes();
+    this.getSpecialties();
     const loader = new Loader({
       apiKey: environment.googleMapsApiKey,
       version: "weekly",
@@ -45,6 +53,7 @@ export class MapaComponent implements OnInit {
     loader.load().then(async () => {
       this.initMap();
       this.initAutocomplete();
+      
     });
   }
 
@@ -53,7 +62,8 @@ export class MapaComponent implements OnInit {
     this.unsubscribe$.complete();
   }
 
-  async initMap() {
+
+  async initMap(){
     await google.maps.importLibrary('marker');
 
     const domElement = document.querySelector('#map');
@@ -70,8 +80,8 @@ export class MapaComponent implements OnInit {
       this.map.addListener('zoom_changed', () => {
         this.mapMoved = true;
       });
+      this.getCurrentLocation();
     }
-    this.getCurrentLocation();
   }
 
   initAutocomplete(): void {
@@ -120,7 +130,7 @@ export class MapaComponent implements OnInit {
               content: currentPositionMarkerImage,
               title: 'Sua Localização',
             });
-            this.fetchProfessionalsBasedOnMapBounds();
+            this.getProfessionalsOnBounds();
           }
         },
         (err) => {
@@ -137,7 +147,7 @@ export class MapaComponent implements OnInit {
     }
   }
 
-  fetchProfessionalsBasedOnMapBounds(): void {
+  getProfessionalsOnBounds(): void {
     this.clearMarkers();
     if (this.map) {
       const bounds = this.map.getBounds();
@@ -156,12 +166,12 @@ export class MapaComponent implements OnInit {
 
         this.servicesService.getProfessionalsOnLocation(boundsMap).pipe(takeUntil(this.unsubscribe$)).subscribe(
           (professionals: Professional[]) => {
+
+
             this.updateProfessionalsWithConcelho(professionals).then(() => {
               this.professionals = professionals;
-              professionals.forEach((professional) => {
-                console.log(professional);
-                this.createMarker(professional);
-              });
+              this.calculateStarsForProfessionals();
+              this.filterProfessionals();
             });
           }, (error) => {
             console.error(error);
@@ -171,25 +181,51 @@ export class MapaComponent implements OnInit {
     }
   }
 
-  createMarker(professional: Professional): void {
-    const professionalInfo = professional.professionalInfo;
-    if (professional.location) {
-      const location = professional.location.replace(/,/g, '.').split(';');
-      const latitude = parseFloat(location[0]);
-      const longitude = parseFloat(location[1]);
-      const professionalLocationMarker = new Marker({
-        position: { lat: latitude, lng: longitude },
-        map: this.map,
-        title: professional.professionalInfo.firstName + ' ' + professional.professionalInfo.lastName,
-      });
-      this.markers.push(professionalLocationMarker);
+  getBoundsMap(): any {
+    if (this.map) {
+      const bounds = this.map.getBounds();
+      if (bounds) {
+        const ne = bounds.getNorthEast();
+        const sw = bounds.getSouthWest();
+        return {
+          latitudeNorthEast: ne.lat(),
+          longitudeNorthEast: ne.lng(),
+          latitudeSouthWest: sw.lat(),
+          longitudeSouthWest: sw.lng()
+        };
+      }
     }
   }
 
-  clearMarkers() {
-    for (let marker of this.markers) {
-      marker.map = null;
+  fetchProfessionalsBasedOnMapBounds(): void {
+    this.clearMarkers();
+    if (this.map) {
+      this.filteredProfessionals.forEach(professional => {
+        const marker = this.createMarker(professional);
+        this.markers.push(marker);
+      });
     }
+  }
+
+  createMarker(professional: Professional): Marker {
+    if (!professional.location) {
+      throw new Error('Localização do profissional não disponível.');
+    }
+    const [lat, lng] = professional.location.replace(/,/g, '.').split(';').map(coord => parseFloat(coord));
+    const position = new google.maps.LatLng(lat, lng);
+
+    const marker = new Marker({
+      position,
+      map: this.map,
+      title: this.getProfessionalName(professional),
+    });
+
+    return marker;
+  }
+
+  clearMarkers(): void {
+    // Esta função remove todos os marcadores do mapa e limpa o array
+    this.markers.forEach(marker => marker.map = null);
     this.markers = [];
   }
 
@@ -205,21 +241,8 @@ export class MapaComponent implements OnInit {
     return professional.professionalType;
   }
 
-  getProfessionalRating(professional: Professional): string {
-    if (professional.reviews.length === 0) return '-';
-    let rating = 0;
-    if (professional.reviews.length > 0) {
-      professional.reviews.forEach((review) => {
-        rating += review.stars;
-      });
-      rating = rating / professional.reviews.length;
-    }
-    return rating.toFixed(1).replace('.', ',');
-  }
-
   async updateProfessionalsWithConcelho(professionals: Professional[]): Promise<void> {
     const geocoder = new google.maps.Geocoder();
-
     for (const professional of professionals) {
       const location = professional.location?.replace(/,/g, '.').split(';');
       if (location && location.length === 2) {
@@ -228,7 +251,6 @@ export class MapaComponent implements OnInit {
           lng: parseFloat(location[1])
         };
 
-        // Note: Esta é uma função que retorna uma Promise para resolver a geocodificação reversa
         professional.concelho = await this.getConcelho(latlng, geocoder);
       }
     }
@@ -238,6 +260,7 @@ export class MapaComponent implements OnInit {
   getConcelho(latlng: { lat: number, lng: number }, geocoder: any): Promise<string> {
     return new Promise((resolve, reject) => {
       geocoder.geocode({ 'location': latlng }, (results: { address_components: any[]; }[], status: any) => {
+        console.log('Chamada de API');
         if (status === google.maps.GeocoderStatus.OK) {
           const concelho = results[0]?.address_components.find(ac => ac.types.includes('administrative_area_level_2'))?.long_name || 'Não disponível';
           resolve(concelho);
@@ -247,4 +270,139 @@ export class MapaComponent implements OnInit {
       });
     });
   }
+
+  orderBy() {
+    const option = document.getElementById("order-select") as HTMLSelectElement | null;
+    if (option && option.value === 'rank') {
+      this.unsortedProfessionals = this.filteredProfessionals;
+      let sortedProfessionals = [...this.filteredProfessionals];
+
+      // Sort the cloned array
+      sortedProfessionals.sort((prof1, prof2) => {
+        // Assuming getAverageRating is a method that calculates the average rating
+        let ratingA = prof1.averageStars;
+        let ratingB = prof2.averageStars;
+        if (ratingA === undefined || ratingB === undefined) {
+          return 0;
+        }
+        return ratingB - ratingA; // Descending order
+      });
+      this.filteredProfessionals = sortedProfessionals;
+    } else {
+      this.filteredProfessionals = this.unsortedProfessionals;
+    }
+  }
+
+  filterProfessionals(): void {
+    const selectedCategory = document.getElementById("category") as HTMLSelectElement;
+    const selectedSpecialty = document.getElementById("specialty") as HTMLSelectElement;
+    const selectedConsultaTipo = document.getElementById("consulta-tipo") as HTMLSelectElement;
+
+    const professionalTypeId = parseInt(selectedCategory.value);
+    let specialtyId = parseInt(selectedSpecialty.value);
+
+    console.log("professionals", this.professionals);
+
+    // Primeiro filtre por tipo de profissional, se houver um selecionado
+    if (professionalTypeId) {
+      this.filteredProfessionals = this.professionals.filter(professional =>
+        professional.professionalType === this.professionalTypes.find(type => type.id === professionalTypeId)?.name
+      );
+      if (professionalTypeId !== this.professionalTypeId) {
+        selectedSpecialty.value = "0";
+      }
+      this.professionalTypeId = professionalTypeId;
+    }
+
+    specialtyId = parseInt(selectedSpecialty.value);
+    if (specialtyId) {
+      this.filteredProfessionals = this.professionals.filter(professional =>
+        professional.services.some(service => service.specialtyId === specialtyId)
+      );
+    }
+
+    const consultaTipo = selectedConsultaTipo.value;
+    if (professionalTypeId === 0)
+      this.filteredProfessionals = this.professionals;
+
+    console.log("filtered professionals", this.filteredProfessionals);
+
+    // Agora atualize os marcadores no mapa com os profissionais filtrados
+    this.fetchProfessionalsBasedOnMapBounds();
+  }
+
+
+
+  filterProfessionalsType(): void {
+    const selectedCategory = document.getElementById("category") as HTMLSelectElement;
+    const professionalType = this.professionalTypes.find(type => type.id === parseInt(selectedCategory.value));
+    if (professionalType) {
+      this.filteredProfessionals = this.professionals.filter(professional => professional.professionalType === professionalType.name);
+    }
+  }
+
+  updateMapWithFilteredProfessionals(): void {
+    // Limpa os marcadores antigos
+    this.clearMarkers();
+
+    // Adiciona novos marcadores para os profissionais filtrados
+    this.professionals.forEach(professional => {
+      const marker = this.createMarker(professional);
+      this.markers.push(marker);
+    });
+  }
+
+  filterProfessionalsCategory(): void {
+
+  }
+
+  filterSpecialties(): void {
+    const selectedCategory = document.getElementById("category") as HTMLSelectElement;
+    const professionalType = this.professionalTypes.find(type => type.id === parseInt(selectedCategory.value));
+
+    if (professionalType) {
+      this.specialtiesFiltered = this.specialties.filter(specialty => specialty.professionalTypeId === professionalType.id);
+    } else {
+      this.specialtiesFiltered = [];
+    }
+  }
+
+  calculateStarsForProfessionals() {
+    this.professionals.forEach(professional => {
+      professional.averageStars = this.calculateStars(professional);
+      console.log('averageStars', professional.averageStars);
+    });
+  }
+
+  calculateStars(professional: Professional): number {
+    if (professional.reviews.length === 0) return 0;
+
+    const totalStars = professional.reviews.reduce((total, review) => total + review.stars, 0);
+    return totalStars / professional.reviews.length;
+  }
+
+  getProfessionalTypes() {
+    this.servicesService.getProfessionalTypes().pipe(takeUntil(this.unsubscribe$)).subscribe({
+      next: (professionalTypes: ProfessionalType[]) => {
+        this.professionalTypes = professionalTypes;
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    });
+  }
+
+  getSpecialties() {
+    this.servicesService.getSpecialties().pipe(
+      takeUntil(this.unsubscribe$)
+    ).subscribe({
+      next: (specialities: Specialty[]) => {
+        this.specialties = specialities;
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    });
+  }
+
 }

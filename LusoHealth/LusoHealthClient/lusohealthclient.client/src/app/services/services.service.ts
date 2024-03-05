@@ -2,16 +2,15 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
 import { User } from '../shared/models/authentication/user';
-import { MakeAppointment } from '../shared/models/Services/makeAppointment';
 import { Observable } from 'rxjs';
-import { Appointment } from '../shared/models/Services/appointment';
 import { Router } from '@angular/router';
 import { Professional } from '../shared/models/profile/professional';
 import { Specialty } from '../shared/models/profile/specialty';
 import { Service } from '../shared/models/profile/service';
 import { ProfessionalType } from '../shared/models/authentication/professionalType';
-import { Observable } from 'rxjs';
 import { Bounds } from '../shared/models/services/bounds';
+import { MakeAppointment } from '../shared/models/services/makeAppointment';
+import { Appointment } from '../shared/models/services/appointment';
 
 @Injectable({
   providedIn: 'root'

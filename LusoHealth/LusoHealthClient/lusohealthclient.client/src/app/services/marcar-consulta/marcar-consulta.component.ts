@@ -5,8 +5,8 @@ import { User } from '../../shared/models/authentication/user';
 import { ConfirmEmail } from '../../shared/models/authentication/confirmEmail';
 import { Subject, take, takeUntil } from 'rxjs';
 import { ServicesService } from '../services.service';
-import { MakeAppointment } from '../../shared/models/Services/makeAppointment';
-import { Appointment } from '../../shared/models/Services/appointment';
+import { MakeAppointment } from '../../shared/models/services/makeAppointment';
+import { Appointment } from '../../shared/models/services/appointment';
 
 
 @Component({

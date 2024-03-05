@@ -18,7 +18,7 @@ import { ProfessionalType } from '../shared/models/authentication/professionalTy
 })
 export class AuthenticationService {
   private userSource = new ReplaySubject<User | null>(1);
-  user$ = this.userSource.asObservable();
+  public user$ = this.userSource.asObservable();
   private inactivityTimer: any;
 
 

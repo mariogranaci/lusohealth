@@ -12,4 +12,5 @@ export interface Professional {
   description: string | null;
   professionalType: string;
   concelho: string | undefined;
+  averageStars: number | undefined;
 }

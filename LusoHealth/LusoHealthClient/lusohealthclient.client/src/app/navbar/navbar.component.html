@@ -30,10 +30,13 @@
       </ul>
     </li>
     <li class="sub-menu-parent">
-      <a [routerLink]="['/login']" class="nav-link" routerLinkActive="active">
+      <a [routerLink]="['/login']" *ngIf="(authenticationService.user$ | async) === null" class="nav-link" routerLinkActive="active">
         <img class="menu-icons" src="assets/images/NavBar/user-icon.png" alt="Ícone Perfil" />
-        <div id="login-text" class="nav-text" *ngIf="(authenticationService.user$ | async) === null">Login</div>
-        <div id="perfil-text" class="nav-text" *ngIf="(authenticationService.user$ | async) as user">Perfil</div>
+        <div id="login-text" class="nav-text">Login</div>
+      </a>
+      <a [routerLink]="routerProfile" *ngIf="(authenticationService.user$ | async) as user" class="nav-link" routerLinkActive="active">
+        <img class="menu-icons" src="assets/images/NavBar/user-icon.png" alt="Ícone Perfil" />
+        <div id="perfil-text" class="nav-text">Perfil</div>
       </a>
       <ul class="sub-menu">
         <li class="dropdown-element" (click)="logout()" *ngIf="(authenticationService.user$ | async) as user">

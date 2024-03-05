@@ -54,6 +54,9 @@ main {
   display: block;
 }
 
+#speciality-select-box {
+    margin: 0 10px;
+}
 /* -------------------------------------- select option ------------------------------------- */
 .select-form-box {
   width: fit-content;

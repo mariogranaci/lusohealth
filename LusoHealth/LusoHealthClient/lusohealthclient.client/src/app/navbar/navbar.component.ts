@@ -13,7 +13,7 @@ export class NavbarComponent implements OnInit {
   routerProfile: string = '/home';
 
   constructor(public authenticationService: AuthenticationService) {
-    authenticationService.getJWT();
+    var auth = authenticationService.getJWT();
   }
 
   ngOnInit(): void {

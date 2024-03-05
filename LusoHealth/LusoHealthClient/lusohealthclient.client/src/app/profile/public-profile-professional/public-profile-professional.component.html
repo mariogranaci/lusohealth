@@ -172,7 +172,7 @@
     <a class="close-button" (click)="closePopup()">
       <img src="assets/images/login/close.png" alt="Close button" class="close-image">
     </a>
-    <form style="display: block;" [formGroup]="addSpecialityForm" (ngSubmit)="addSpeciality()" id="add-speciality-container" class="overlay-container" autocomplete="off" (click)="stopPropagation($event)">
+    <form [formGroup]="addSpecialityForm" (ngSubmit)="addSpeciality()" id="add-speciality-container" class="overlay-container" autocomplete="off" (click)="stopPropagation($event)">
 
       <h2>Adicionar Review</h2>
 

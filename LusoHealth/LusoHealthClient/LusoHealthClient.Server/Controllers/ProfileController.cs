@@ -562,27 +562,155 @@ namespace LusoHealthClient.Server.Controllers
         }
 
         [HttpPut("update-picture")]
-        public async Task<ActionResult> UpdatePicture(UserProfileDto model)
+        [DisableRequestSizeLimit]
+        public async Task<ActionResult> UpdatePicture()
         {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
-
-            var user = await _userManager.FindByIdAsync(userIdClaim);
-            if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
-
             try
             {
-                user.ProfilePicPath = model.Picture;
-                var result = await _userManager.UpdateAsync(user);
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(userId)) return BadRequest("Não foi possível encontrar o utilizador");
 
-                if (result.Succeeded)
+                var user = await _userManager.FindByIdAsync(userId);
+                if (user == null) return NotFound("Não foi possível encontrar o utilizador");
+                var oldImagePath = user.ProfilePicPath;
+
+                var file = Request.Form.Files[0];
+                var folderName = Path.Combine("Uploads", "ProfilePic");
+                var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+
+                if (file.Length > 0)
+                {
+                    /*var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');*/
+                    var fileName = userId + Path.GetExtension(file.FileName);
+                    var fullPath = Path.Combine(pathToSave, fileName);
+                    var dbPath = Path.Combine(folderName, fileName);
+
+                    if (!string.IsNullOrEmpty(oldImagePath) && System.IO.File.Exists(oldImagePath))
+                    {
+                        System.IO.File.Delete(oldImagePath);
+                    }
+
+                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        file.CopyTo(stream);
+                    }
+
+
+                    user.ProfilePicPath = fullPath;
+                    var result = await _userManager.UpdateAsync(user);
+
+
                     return Ok(new JsonResult(new { title = "Perfil Alterado", message = "A sua foto de perfil foi alterada com sucesso." }));
-                return BadRequest("Não foi possivel alterar a foto de perfil.Tente Novamente.");
-
+                }
+                else
+                {
+                    return BadRequest("Não foi possível alterar a foto de perfil. Tente Novamente.");
+                }
             }
             catch (Exception)
             {
-                return BadRequest("Não foi possivel alterar a foto de perfil.Tente Novamente.");
+                return BadRequest("Não foi possível alterar a foto de perfil.");
+            }
+        }
+
+        [HttpGet("get-profile-picture")]
+        public async Task<IActionResult> GetProfilePicture()
+
+        {
+            try
+            {
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (userIdClaim == null) return BadRequest("Não foi possível encontrar o utilizador");
+
+                var user = await _userManager.FindByIdAsync(userIdClaim);
+                if (user == null) return NotFound("Não foi possível encontrar o utilizador");
+
+                var filePath = user.ProfilePicPath;
+
+                if (string.IsNullOrEmpty(filePath))
+                    return BadRequest("File path cannot be empty");
+
+                if (filePath.StartsWith("https"))
+                {
+                    using (var httpClient = new HttpClient())
+                    {
+                        var response = await httpClient.GetByteArrayAsync(filePath);
+                        var memoryGoogle = new MemoryStream(response);
+
+                        // Determine content type based on file extension (assuming it's an image)
+                        var contentTypeGoogle = GetContentType(filePath);
+                        var fileNameGoogle = Path.GetFileName(new Uri(filePath).LocalPath);
+
+                        return File(memoryGoogle, contentTypeGoogle, fileNameGoogle);
+                    }
+                }
+
+
+                var fullPath = Path.Combine(Directory.GetCurrentDirectory(), filePath);
+                if (!System.IO.File.Exists(fullPath))
+                    return NotFound("File not found");
+
+                var memory = new MemoryStream();
+                using (var stream = new FileStream(fullPath, FileMode.Open))
+                {
+                    await stream.CopyToAsync(memory);
+                }
+                memory.Position = 0;
+
+                // Determine content type based on file extension
+                var contentType = GetContentType(fullPath);
+                var fileName = Path.GetFileName(fullPath);
+
+                return File(memory, contentType, fileName);
+            }
+            catch (Exception)
+            {
+                return BadRequest("Failed to download image. Please try again.");
+            }
+        }
+
+
+        private string GetContentType(string filePath)
+        {
+            var provider = new FileExtensionContentTypeProvider();
+            if (!provider.TryGetContentType(filePath, out var contentType))
+            {
+                contentType = "application/octet-stream"; // Default to binary data if content type cannot be determined
+            }
+
+            return contentType;
+        }
+
+
+
+
+        [HttpPost("add-report")]
+        public async Task<ActionResult> AddReport(ReportDto reportDto)
+        {
+
+            try
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(userId)) return BadRequest("Não foi possível encontrar o utilizador.");
+                var user = await _userManager.FindByIdAsync(userId);
+                if (user == null) return NotFound("Não foi possível encontrar o utilizador.");
+
+                var report = new Report
+                {
+                    Timestamp = DateTime.Now,
+                    IdPatient = user.Id,
+                    IdProfesional = reportDto.IdProfesional,
+                    Description = reportDto.Description,
+                    State = ReportState.Pending
+                };
+
+                _context.Report.Add(report);
+                await _context.SaveChangesAsync();
+                return Ok(new JsonResult(new { message = "Report enviado com sucesso." }));
+            }
+            catch (Exception)
+            {
+                return BadRequest("Ocorreu um erro ao reportar.");
             }
         }
 

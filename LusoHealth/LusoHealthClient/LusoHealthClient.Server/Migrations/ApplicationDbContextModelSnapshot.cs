@@ -603,7 +603,7 @@ namespace LusoHealthClient.Server.Migrations
                         new
                         {
                             Id = 53,
-                            Name = "Pediátrica",
+                            Name = "Pediatria",
                             ProfessionalTypeId = 2,
                             TimesScheduled = 0
                         },
@@ -862,7 +862,7 @@ namespace LusoHealthClient.Server.Migrations
                         new
                         {
                             Id = 119,
-                            Name = "Pediátrica",
+                            Name = "Pediatria",
                             ProfessionalTypeId = 4,
                             TimesScheduled = 0
                         },

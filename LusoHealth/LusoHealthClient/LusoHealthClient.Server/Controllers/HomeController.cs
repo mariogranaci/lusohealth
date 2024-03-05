@@ -213,11 +213,19 @@ namespace LusoHealthClient.Server.Controllers
 
             var professionals = professionalsUnfiltered.Where(p =>
                 {
+                    if (string.IsNullOrEmpty(p.Location)) return false;
+
                     var locationParts = p.Location.Split(';');
-                    var lat = double.Parse(locationParts[0]);
-                    var lng = double.Parse(locationParts[1]);
+
+                    if (locationParts.Length != 2) return false;
+
+                    // Tenta analisar as partes de localização para doubles
+                    if (!double.TryParse(locationParts[0], out var lat)) return false;
+                    if (!double.TryParse(locationParts[1], out var lng)) return false;
+
                     return lat <= latNE && lat >= latSW && lng <= longNE && lng >= longSW;
                 }).ToList();
+
 
             if (professionals == null)
             {

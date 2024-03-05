@@ -2,22 +2,22 @@
   <h4>Filtrar:</h4>
   <div class="dropdown">
     <select id="category" (change)="filterSpecialties(); filterProfessionalsCategory(); filterProfessionalsType(); orderBy()">
-      <option value="-----" disabled hidden selected>Categoria</option>
-      <option>-----</option>
+      <option value="Qualquer" disabled hidden selected>Categoria</option>
+      <option>Qualquer</option>
       <option *ngFor="let professionalType of professionalTypes" value="{{ professionalType.name }}">{{ professionalType.name }}</option>
     </select>
   </div>
   <div class="dropdown">
     <select id="specialty" (change)="filterProfessionalsCategory(); filterProfessionalsType(); orderBy()">
-      <option value="-----" disabled hidden selected>Especialidade</option>
-      <option>-----</option>
+      <option value="Qualquer" disabled hidden selected>Especialidade</option>
+      <option>Qualquer</option>
       <option *ngFor="let specialty of specialtiesFiltered" value="{{specialty.name}}">{{ specialty.name }}</option>
     </select>
   </div>
   <div class="dropdown">
     <select id="type" (change)="filterProfessionalsType(); orderBy()">
-      <option value="-----" disabled hidden selected>Tipo de Consulta</option>
-      <option>-----</option>
+      <option value="Qualquer" disabled hidden selected>Tipo de Consulta</option>
+      <option>Qualquer</option>
       <option value="Online">Online</option>
       <option value="Presential">Presencial</option>
       <option value="Home">Domicilio</option>
@@ -30,7 +30,7 @@
   <h4>Ordenar:</h4>
   <div class="dropdown">
     <select id="order" (change)="orderBy()">
-      <option value="-----" disabled hidden selected>Ordenar</option>
+      <option value="Qualquer" disabled hidden selected>Ordenar</option>
       <option value="Rank">Ranking</option>
       <option value="p<">Preco Ascendente</option>
       <option value="p>">Preco Descendente</option>
@@ -58,10 +58,10 @@
           <span>{{ service.professional.professionalInfo.firstName  }} {{ service.professional.professionalInfo.lastName }}</span>
         </div>
         <div>
-          <span>Especialidades:</span>
+          <span>Especialidade:</span>
           <p>{{service.specialty}}</p>
         </div>
-        <div><p>{{service.professional.location}}</p></div>
+        <!--<div><p>{{service.professional.location}}</p></div>-->
         <p>Preço por hora: {{service.pricePerHour}}€</p>
       </div>
     </div>

@@ -1,7 +1,7 @@
 <section class="form-row">
 
   <div id="button">
-    <button class="btn-edit">Editar Perfil</button>
+    <button [routerLink]="['/edit-profile']" class="btn-edit">Editar Perfil</button>
   </div>
 
   <figure>
@@ -120,8 +120,8 @@
     </div>
 
     <div class="form-buttons-row">
-      <button type="submit" class="btn btn-blue">Adicionar</button>
       <button type="reset" class="btn btn-red">Cancelar</button>
+      <button type="submit" class="btn btn-blue">Adicionar</button>
     </div>
   </form>
 

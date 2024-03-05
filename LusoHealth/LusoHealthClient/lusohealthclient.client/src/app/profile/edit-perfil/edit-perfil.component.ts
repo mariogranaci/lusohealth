@@ -48,26 +48,37 @@ export class EditPerfilComponent implements OnInit {
     }
   }
 
- /* selecionarArquivo(event: any) {
-    const inputElement = event.target;
-
-    if (inputElement.files && inputElement.files.length > 0) {
-      const newArquivoSelecionado = inputElement.files[0];
-
-      if (newArquivoSelecionado) {
-        this.convertFileToDataURL(newArquivoSelecionado).then((dataURL) => {
-     
-          if (dataURL !== this.caminhoDaImagem) {
-            this.caminhoDaImagem = dataURL;
-            this.uploadImage();
-          }
+  getImage(): void {
+    this.profileService.getProfilePicture().subscribe(
+      (blob: Blob) => {
+        this.convertBlobToDataURL(blob).then(dataURL => {
+          // Use the dataURL to set the source of the <img> tag
+          this.caminhoDaImagem = dataURL;
         });
+      },
+      error => {
+        console.error('Error downloading image:', error);
       }
-    }
-  }*/
+    );
+  }
+
+  convertBlobToDataURL(blob: Blob): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+
+      reader.onloadend = () => {
+        const dataURL = reader.result as string;
+        resolve(dataURL);
+      };
+
+      reader.onerror = (error) => reject(error);
+
+      reader.readAsDataURL(blob);
+    });
+  }
 
 
-  convertFileToDataURL(file: File): Promise<string> {
+ /* convertFileToDataURL(file: File): Promise<string> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
 
@@ -80,57 +91,35 @@ export class EditPerfilComponent implements OnInit {
 
       reader.readAsDataURL(file);
     });
-  }
+  }*/
 
-  selecionarArquivo(event: any) {
-    const inputElement = event.target;
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    this.responseText = undefined;
 
-    if (inputElement.files && inputElement.files.length > 0) {
-      const newArquivoSelecionado = inputElement.files[0];
+    if (file.type.startsWith('image/')) {
+      this.profileService.updatePicture(file).subscribe(
+        response => {
+          this.responseText = response.value.message;
+          this.getImage();
 
-      if (newArquivoSelecionado) {
-        this.arquivoSelecionado = newArquivoSelecionado;  
-
-        if (this.arquivoSelecionado) {
-          this.convertFileToDataURL(this.arquivoSelecionado).then((dataURL) => {
-            if (dataURL !== this.caminhoDaImagem) {
-              this.caminhoDaImagem = dataURL;
-              this.uploadImage();
-            }
-          });
-        }    
-      }
-    }
-  }
-
-  uploadImage() {
-    if (this.arquivoSelecionado) {
-      this.convertFileToDataURL(this.arquivoSelecionado).then((dataURL) => {
-        const updatePictureModel = {
-          oldPictureUrl: this.caminhoDaImagem,
-          newPictureUrl: dataURL
-        };
-
-        this.profileService.updatePicture(updatePictureModel).subscribe(
-          (response: any) => {
-            console.log(response);
-            this.imagemNome = response.value.newImagePath;
-            this.responseText = response.value.message;
-          },
-          (error) => {
-            if (error.error.errors) {
-              this.errorMessages = error.error.errors;
-            } else {
-              this.errorMessages.push(error.error);
-            }
+          if (response && response.imageUrl) {
+            
           }
-        );
-      });
+        },
+        error => {
+          if (error.error.errors) {
+            this.errorMessages = error.error.errors;
+          } else {
+            this.errorMessages.push(error.error);
+          }
+          return error;
+        }
+      );
+    } else {
+      this.errorMessages.push('Ficheiro não é uma imagem (JPG ou PNG).');
     }
   }
-
-
-
 
 
   getUserProfileInfo() {
@@ -155,6 +144,7 @@ export class EditPerfilComponent implements OnInit {
   ngOnInit() {
     this.initializeForm();
     this.setFields();
+    this.getImage();
   }
 
   ngOnDestroy(): void {
@@ -175,8 +165,8 @@ export class EditPerfilComponent implements OnInit {
         this.telemovel = userData.telemovel;
         this.nif = userData.nif;
         this.genero = userData.genero;
-        if (userData.picture)
-          this.caminhoDaImagem = userData.picture;
+       /* if (userData.picture)
+          this.caminhoDaImagem = userData.picture;*/
 
           this.perfilForm.setValue({
             firstName: userData.firstName,

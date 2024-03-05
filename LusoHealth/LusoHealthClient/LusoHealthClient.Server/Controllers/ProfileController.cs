@@ -660,7 +660,7 @@ namespace LusoHealthClient.Server.Controllers
                 var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
                 if (file.Length > 0)
                 {
-                    var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                    var fileName = userId + "divider" + ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
                     var fullPath = Path.Combine(pathToSave, fileName);
                     var dbPath = Path.Combine(folderName, fileName);
                     using (var stream = new FileStream(fullPath, FileMode.Create))
@@ -742,7 +742,7 @@ namespace LusoHealthClient.Server.Controllers
                 CertificateDto certificateDto = new CertificateDto
                 {
                     CertificateId = certificate.Id,
-                    Name = certificate.Name,
+                    Name = certificate.Name.Split("divider")[1],
                     Path = certificate.Path
                 };
                 certificateDtos.Add(certificateDto);
@@ -767,6 +767,11 @@ namespace LusoHealthClient.Server.Controllers
 
                 _context.Certificates.Remove(certificate);
                 await _context.SaveChangesAsync();
+
+                if (!string.IsNullOrEmpty(certificate.Path) && System.IO.File.Exists(certificate.Path))
+                {
+                    System.IO.File.Delete(certificate.Path);
+                }
 
                 return Ok(new JsonResult(new { title = "PDF Deleted", message = "PDF file deleted successfully." }));
             }

@@ -18,7 +18,7 @@ import { User } from '../../shared/models/authentication/user';
 })
 
 export class PublicProfileProfessionalComponent implements OnInit {
-  private unsubscribe$ = new Subject<void>();;
+  private unsubscribe$ = new Subject<void>();
   addSpecialityForm: FormGroup = new FormGroup({});
   editSpecialityForm: FormGroup = new FormGroup({});
   updateDescriptionForm: FormGroup = new FormGroup({});

@@ -5,12 +5,16 @@ import { MarcarConsultaComponent } from './marcar-consulta/marcar-consulta.compo
 import { MarcacoesComponent } from './marcacoes/marcacoes.component';
 import { MapaComponent } from './mapa/mapa.component';
 import { GoogleMapsModule } from '@angular/google-maps';
+import { PaymentSuccessComponent } from './payment-success/payment-success.component';
+import { PaymentFailureComponent } from './payment-failure/payment-failure.component';
 
 
 const routes: Routes = [
   { path: 'make-appointment', component: MarcarConsultaComponent },
   { path: 'services', component: MarcacoesComponent },
-  { path: 'map', component: MapaComponent }
+  { path: 'map', component: MapaComponent },
+  { path: 'payment-success', component: PaymentSuccessComponent },
+  { path: 'payment-failure', component: PaymentFailureComponent }
 ]
 
 @NgModule({

@@ -11,6 +11,9 @@ import { ProfessionalType } from '../shared/models/authentication/professionalTy
 import { Bounds } from '../shared/models/services/bounds';
 import { MakeAppointment } from '../shared/models/services/makeAppointment';
 import { Appointment } from '../shared/models/services/appointment';
+import { Session } from '../shared/models/services/session';
+
+declare const Stripe: any;
 
 @Injectable({
   providedIn: 'root'
@@ -19,9 +22,6 @@ export class ServicesService {
   constructor(private http: HttpClient, private router: Router) { }
 
   
-
-
-
   getJWT() {
     const key = localStorage.getItem(environment.userKey);
     if (key) {
@@ -76,5 +76,19 @@ export class ServicesService {
   getProfessionalsOnLocation(model: Bounds): Observable<Professional[]> {
     return this.http.post<Professional[]>(`${environment.appUrl}/api/home/get-professionals-on-location`, model);
   }
+  requestStripeSession(price: string): any {
+    const headers = this.getHeaders();
+    this.http.post<Session>(`${environment.appUrl}/api/payment/create-checkout-session`, { priceId: price }, { headers }).subscribe((session) => {
+      this.redirectToCheckout(session.sessionId);
+    });
+  }
+
+  redirectToCheckout(sessionId: string): void {
+    const stripe = Stripe('pk_test_51OqJA2GgRte7XVeapxEYUWKylVK9W4f7x6xkxMJ93vvHDfaoUXpQAy3DXYebSTqbSJ49rJv6UwetTIC8swpQ51c400qvW4FRxn');
+    stripe.redirectToCheckout({
+      sessionId: sessionId
+    });
+  }
+
 }
 

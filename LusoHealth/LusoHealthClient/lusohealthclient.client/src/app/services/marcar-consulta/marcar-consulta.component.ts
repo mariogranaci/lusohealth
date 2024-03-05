@@ -79,7 +79,9 @@ export class MarcarConsultaComponent {
   }
 
   marcarClick() {
-    const newAppointment = new Appointment(null, "praceta", "Presential", "descrição", "Pending", 1, "5", "2" , parseInt(this.serviceId));
+    this.payement();
+
+    /*const newAppointment = new Appointment(null, "praceta", "Presential", "descrição", "Pending", 1, "5", "2" , parseInt(this.serviceId));
 
     this.service.addAppointment(newAppointment).subscribe(
       response => {
@@ -88,7 +90,11 @@ export class MarcarConsultaComponent {
       error => {
         console.error('Erro ao adicionar o appointment:', error);
       }
-    )
+    )*/
+  }
+
+  payement() {
+    this.service.requestStripeSession("price_1OqKW0GgRte7XVea2ZfkRCce");
   }
 
   toggleCalendar() {

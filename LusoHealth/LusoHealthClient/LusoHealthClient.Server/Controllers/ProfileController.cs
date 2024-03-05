@@ -620,7 +620,7 @@ namespace LusoHealthClient.Server.Controllers
                 var user = await _userManager.FindByIdAsync(userId);
                 if (user == null) return NotFound("Não foi possível encontrar o utilizador");
 
-                var reviewExists = await _context.Reviews.AnyAsync(r => r.IdPatient == user.Id && r.IdService == reviewDto.IdService);
+                var reviewExists = await _context.Reviews.AnyAsync(r => r.IdPatient == user.Id && r.Service.IdSpecialty == reviewDto.IdSpecialty);
 
                 if (reviewExists) return BadRequest("Já adicionou uma review para este serviço");
 

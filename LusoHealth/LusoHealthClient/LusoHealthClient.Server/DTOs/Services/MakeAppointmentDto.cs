@@ -10,6 +10,7 @@
 		public bool Online { get; set; }
 		public bool Presential { get; set; }
 		public bool Home { get; set; }
+		public double PricePerHour { get; set; }
 		public string[]? Availability { get; set; }
 	}
 }

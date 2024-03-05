@@ -140,10 +140,8 @@ export class PublicProfileProfessionalComponent implements OnInit {
 
     this.addSpecialityForm = this.formBuilder.group({
       selectSpeciality: ['Selecione uma especialidade', [Validators.required]],
-      price: ['', [Validators.required, Validators.min(1), Validators.max(1000)]],
-      presencial: ['', [Validators.required]],
-      online: ['', [Validators.required]],
-      domicilio: ['', [Validators.required]]
+      rating: ['', [Validators.required]],
+      description: ['', [Validators.maxLength(200)]]
     });
 
     this.editSpecialityForm = this.formBuilder.group({
@@ -154,7 +152,7 @@ export class PublicProfileProfessionalComponent implements OnInit {
     });
 
     this.updateDescriptionForm = this.formBuilder.group({
-      description: ['', [Validators.maxLength(5000)]],
+      description: ['', [Validators.maxLength(200)]],
     });
   }
 
@@ -334,31 +332,48 @@ export class PublicProfileProfessionalComponent implements OnInit {
 
       const form = this.addSpecialityForm.value;
 
-      var specialtyform = {
-        serviceId: null,
-        specialtyId: form.selectSpeciality,
-        specialty: null,
-        pricePerHour: form.price,
-        online: (form.online === "S") ? true : false,
-        presential: (form.presencial === "S") ? true : false,
-        home: (form.domicilio === "S") ? true : false,
+      //generate the code fo get the serviceId of the the service from userData.services that has the same specialtyId as form.selectSpeciality
+      var serviceId: number | null = null;
+      if (this.userData && this.userData.services) {
+        this.userData.services.forEach((service) => {
+          if (service.specialtyId == form.selectSpeciality) {
+            serviceId = service.serviceId;
+          }
+        });
       }
 
-      this.profileService.addSpecialty(specialtyform).subscribe({
-        next: (response: any) => {
-          /*this.responseText = response.value.message;*/
-          this.submittedAdd = false;
-          this.addSpecialityForm.reset();
-          this.closePopup();
-        },
-        error: (error) => {
-          if (error.error.errors) {
-            this.errorMessages = error.error.errors;
-          } else {
-            this.errorMessages.push(error.error);
-          }
+      if (serviceId) {
+        var newReview = {
+          idService: serviceId,
+          idSpecialty: form.selectSpeciality,
+          stars: form.rating,
+          description: form.description,
         }
-      })
+        console.log(newReview);
+        this.profileService.addReview(newReview).subscribe({
+          next: (response: any) => {
+            /*this.responseText = response.value.message;*/
+            console.log(newReview);
+            this.submittedAdd = false;
+            if (this.professionalId)
+              this.getProfessionalInfo(this.professionalId);
+
+            this.changeSpecialtyReview(this.selectedSpecialtyReview.toString());
+            this.addSpecialityForm.reset();
+            this.closePopup();
+          },
+          error: (error) => {
+            if (error.error.errors) {
+              this.errorMessages = error.error.errors;
+            } else {
+              this.errorMessages.push(error.error);
+            }
+          }
+        })
+      }
+      else {
+        this.errorMessages.push("Algo correu mal!");
+      }
     }
   }
 
@@ -500,32 +515,6 @@ export class PublicProfileProfessionalComponent implements OnInit {
     }
     this.averageStars = sum / this.reviews.length;
   }
-
-
-  addReview() {
-
-    var newReview = {
-      idService: 1,
-      stars: 4,
-      description: "Este gajo é o maior.",
-    }
-    console.log(newReview);
-    this.profileService.addReview(newReview).subscribe({
-      next: (response: any) => {
-        /*this.responseText = response.value.message;*/
-        console.log(newReview);
-      },
-      error: (error) => {
-        if (error.error.errors) {
-          this.errorMessages = error.error.errors;
-        } else {
-          this.errorMessages.push(error.error);
-        }
-      }
-    })
-  }
-
-
 
   /* ------------------------  Popups  -------------------------*/
 

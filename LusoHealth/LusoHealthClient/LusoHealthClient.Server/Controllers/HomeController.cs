@@ -62,6 +62,7 @@ namespace LusoHealthClient.Server.Controllers
 				Category = info.Specialty.ProfessionalType.Name,
 				Online = info.Online,
 				Presential = info.Presential,
+                PricePerHour = info.PricePerHour,
 				Home = info.Home,
 			};
 

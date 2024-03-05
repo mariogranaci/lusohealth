@@ -10,6 +10,9 @@ import { Professional } from '../shared/models/profile/professional';
 import { Specialty } from '../shared/models/profile/specialty';
 import { Service } from '../shared/models/profile/service';
 import { ProfessionalType } from '../shared/models/authentication/professionalType';
+import { Session } from '../shared/models/Services/session';
+
+declare const Stripe: any;
 
 @Injectable({
   providedIn: 'root'
@@ -18,9 +21,6 @@ export class ServicesService {
   constructor(private http: HttpClient, private router: Router) { }
 
   
-
-
-
   getJWT() {
     const key = localStorage.getItem(environment.userKey);
     if (key) {
@@ -71,5 +71,20 @@ export class ServicesService {
   getServices() {
     return this.http.get<Service[]>(`${environment.appUrl}/api/home/get-services`);
   }
+
+  requestStripeSession(price: string): any {
+    const headers = this.getHeaders();
+    this.http.post<Session>(`${environment.appUrl}/api/payment/create-checkout-session`, { priceId: price }, { headers }).subscribe((session) => {
+      this.redirectToCheckout(session.sessionId);
+    });
+  }
+
+  redirectToCheckout(sessionId: string): void {
+    const stripe = Stripe('pk_test_51OqJA2GgRte7XVeapxEYUWKylVK9W4f7x6xkxMJ93vvHDfaoUXpQAy3DXYebSTqbSJ49rJv6UwetTIC8swpQ51c400qvW4FRxn');
+    stripe.redirectToCheckout({
+      sessionId: sessionId
+    });
+  }
+
 }
 

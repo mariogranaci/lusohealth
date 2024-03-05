@@ -10,13 +10,17 @@ import { MarcacoesComponent } from './marcacoes/marcacoes.component';
 import { FormsModule } from '@angular/forms';
 import { MapaComponent } from './mapa/mapa.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { PaymentSuccessComponent } from './payment-success/payment-success.component';
+import { PaymentFailureComponent } from './payment-failure/payment-failure.component';
 
 
 @NgModule({
   declarations: [
     MarcarConsultaComponent,
     MarcacoesComponent,
-    MapaComponent
+    MapaComponent,
+    PaymentSuccessComponent,
+    PaymentFailureComponent
   ],
   imports: [
     CommonModule,

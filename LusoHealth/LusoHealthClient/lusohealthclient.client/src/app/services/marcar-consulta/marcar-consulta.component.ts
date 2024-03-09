@@ -20,6 +20,7 @@ export class MarcarConsultaComponent {
   private unsubscribe$ = new Subject<void>();
   categoria: string = "";
   especialidade: string = "";
+  errorMessages: string[] = [];
 
   constructor(private authenticationService: AuthenticationService,
     private router: Router,
@@ -79,9 +80,11 @@ export class MarcarConsultaComponent {
   }
 
   marcarClick() {
-    this.payement();
+    //this.payement();
 
-    /*const newAppointment = new Appointment(null, "praceta", "Presential", "descrição", "Pending", 1, "5", "2" , parseInt(this.serviceId));
+    this.errorMessages.push("Erro");
+
+    /*const newAppointment = new Appointment(null, "praceta", "Presential", "descrição", "PaymentPending", 1, "5", "2" , parseInt(this.serviceId));
 
     this.service.addAppointment(newAppointment).subscribe(
       response => {

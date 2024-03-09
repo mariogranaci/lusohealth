@@ -6,5 +6,6 @@ namespace LusoHealthClient.Server.DTOs.Services
     {
         [Required]
         public String PriceId { get; set; }
+
     }
 }

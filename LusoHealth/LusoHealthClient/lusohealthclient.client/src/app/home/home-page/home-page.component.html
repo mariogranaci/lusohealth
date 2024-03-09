@@ -38,7 +38,7 @@
     <div class="categoria">
       <div *ngFor="let service of fourServices">
         <ng-container *ngIf="service.professional.professionalType === professionalType.name">
-          <div class="tab" [routerLink]="['/make-appointment', { serviceId: service.serviceId }]">
+          <div class="tab" [routerLink]="['/make-appointment']" [queryParams]="{ serviceId: service.serviceId }">
             <div id="icons">
               <figure class="rating">{{ returnStars(service) === 0 ? '-' : returnStars(service)}} <img alt="Estrela" class="star" src="/assets/images/profile/star.png"></figure>
             </div>

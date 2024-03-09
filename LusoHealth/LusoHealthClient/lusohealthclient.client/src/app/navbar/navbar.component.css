@@ -50,8 +50,9 @@ nav > ul > li > a {
   height: 65px;
 }
 
-sub-menu-parent {
+.sub-menu-parent {
   align-items: center;
+  cursor: pointer;
 }
 
   .nav-text {

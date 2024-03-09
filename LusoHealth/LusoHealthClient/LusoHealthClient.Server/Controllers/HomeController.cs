@@ -1,5 +1,4 @@
 ﻿using LusoHealthClient.Server.Data;
-using LusoHealthClient.Server.DTOs.Administration;
 using LusoHealthClient.Server.DTOs.Profile;
 using LusoHealthClient.Server.DTOs.Services;
 using LusoHealthClient.Server.Models.FeedbackAndReports;
@@ -7,16 +6,11 @@ using LusoHealthClient.Server.Models.Professionals;
 using LusoHealthClient.Server.Models.Services;
 using LusoHealthClient.Server.Models.Users;
 using Microsoft.AspNetCore.Authorization;
-using LusoHealthClient.Server.Models.Users;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client.Platforms.Features.DesktopOs.Kerberos;
-using Microsoft.OpenApi.Extensions;
 using System.Security.Claims;
-using System.Security.Claims;
-using System.Threading.Tasks;
+
 using ServicesDto = LusoHealthClient.Server.DTOs.Services.ServicesDto;
 using ServiceProfileDto = LusoHealthClient.Server.DTOs.Profile.ServiceDto;
 

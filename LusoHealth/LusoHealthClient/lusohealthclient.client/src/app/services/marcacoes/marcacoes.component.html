@@ -49,7 +49,7 @@
 
 <section class="categorias">
   <div class="categoria" *ngFor="let service of paginatedServices">
-    <div class="tab" [routerLink]="['/make-appointment', { serviceId: service.serviceId }]">
+    <div class="tab" [routerLink]="['/make-appointment']" [queryParams]="{ serviceId: service.serviceId }">
       <div id="icons">
         <figure class="rating">{{ returnStars(service) === 0 ? '-' : returnStars(service)}} <img alt="Estrela" class="star" src="/assets/images/profile/star.png"></figure>
       </div>

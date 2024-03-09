@@ -49,7 +49,8 @@
       </div>
     </section>
     <section id="service-section" *ngIf="professionals.length > 0">
-      <div class="service-tab" *ngFor="let professional of filteredProfessionals">
+      <div class="service-tab" *ngFor="let professional of filteredProfessionals" [routerLink]="['/professional-profile']" [queryParams]="{ id: professional.professionalInfo.id }"
+>
         <figure>
           <img src="/assets/images/Perfil/profileImage.jpg" alt="Foto de Perfil" />
         </figure>

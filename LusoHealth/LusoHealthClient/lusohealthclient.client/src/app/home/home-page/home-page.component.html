@@ -36,7 +36,7 @@
   <section class="categorias" *ngFor="let professionalType of professionalTypes">
     <p class="categoria-texto">{{ professionalType.name }}</p>
     <div class="categoria">
-      <div *ngFor="let service of fourServices">
+      <div *ngFor="let service of fourServices(professionalType.name)">
         <ng-container *ngIf="service.professional.professionalType === professionalType.name">
           <div class="tab" [routerLink]="['/make-appointment']" [queryParams]="{ serviceId: service.serviceId }">
             <div id="icons">

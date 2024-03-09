@@ -16,6 +16,7 @@ export class HomePageComponent {
   errorMessages: string[] = [];
   professionalTypes: ProfessionalType[] = [];
   services: Service[] = [];
+  servicesFiltered: Service[] = [];
   specialties: Specialty[] = [];
   searchResults: Specialty[] = [];
   searchTerm: string = '';
@@ -85,8 +86,14 @@ export class HomePageComponent {
     });
   }
 
-  get fourServices(): Service[] {
-    return this.services.slice(0, 4);
+  fourServices(type : String): Service[] {
+    this.servicesFiltered = this.services;
+    this.servicesFiltered.sort((a, b) => {
+
+      return this.returnStars(b) - this.returnStars(a);
+    });
+
+    return this.servicesFiltered.filter(service => service.professional.professionalType === type).slice(0,4);
   }
 
   returnStars(service: Service): number {

@@ -7,5 +7,6 @@ export interface MakeAppointment {
   online: boolean;
   presential: boolean;
   home: boolean;
+  pricePerHour: number;
   availability: string[] | null;
 }

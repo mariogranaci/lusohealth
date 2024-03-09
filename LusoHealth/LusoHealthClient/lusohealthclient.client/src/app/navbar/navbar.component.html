@@ -6,7 +6,7 @@
   </div>
   <ul id="menu">
     <li class="sub-menu-parent">
-      <a [routerLink]="['/services']" class="nav-link" routerLinkActive="active">
+      <a class="nav-link" [routerLink]="['/services']" routerLinkActive="active">
         <img class="menu-icons" src="assets/images/NavBar/doctor-icon.png" alt="Ícone Marcações" />
         <div class="nav-text"> Marcações </div>
       </a>
@@ -17,8 +17,8 @@
         </li>
       </ul>
     </li>
-    <li class="sub-menu-parent">
-      <a routerLink="" class="nav-link" routerLinkActive="active">
+    <li routerLink="" class="sub-menu-parent">
+      <a class="nav-link" routerLinkActive="active">
         <img class="menu-icons" src="assets/images/NavBar/agenda-icon.png" alt="Ícone Agenda" />
         <div id="agenda-text" class="nav-text"> Agenda </div>
       </a>
@@ -29,14 +29,23 @@
         </li>
       </ul>
     </li>
-    <li class="sub-menu-parent">
-      <a [routerLink]="['/login']" class="nav-link" routerLinkActive="active">
+    <li class="sub-menu-parent" [routerLink]="['/login']" *ngIf="(authenticationService.user$ | async) === null">
+      <a class="nav-link" routerLinkActive="active">
         <img class="menu-icons" src="assets/images/NavBar/user-icon.png" alt="Ícone Perfil" />
-        <div id="login-text" class="nav-text" *ngIf="(authenticationService.user$ | async) === null">Login</div>
-        <div id="perfil-text" class="nav-text" *ngIf="(authenticationService.user$ | async) as user">Perfil</div>
+        <div id="login-text" class="nav-text">Login</div>
       </a>
-      <ul class="sub-menu">
-        <li class="dropdown-element" (click)="logout()" *ngIf="(authenticationService.user$ | async) as user">
+    </li>
+    <li class="sub-menu-parent" *ngIf="(authenticationService.user$ | async) as user">
+      <a [routerLink]="['/edit-professional-profile']" *ngIf="userRole === 'Professional'" class="nav-link" routerLinkActive="active">
+        <img class="menu-icons" src="assets/images/NavBar/user-icon.png" alt="Ícone Perfil" />
+        <div id="perfil-text" class="nav-text">Perfil</div>
+      </a>
+      <a [routerLink]="['/patient-profile']" *ngIf="userRole === 'Patient'" class="nav-link" routerLinkActive="active">
+        <img class="menu-icons" src="assets/images/NavBar/user-icon.png" alt="Ícone Perfil" />
+        <div id="perfil-text" class="nav-text">Perfil</div>
+      </a>
+      <ul class="sub-menu" *ngIf="(authenticationService.user$ | async) as user">
+        <li class="dropdown-element" (click)="logout()" *ngIf="user">
           <img src="assets/images/NavBar/logout.png" />
           <a routerLink="" class="nav-link" routerLinkActive="active">Terminar Sessão</a>
         </li>

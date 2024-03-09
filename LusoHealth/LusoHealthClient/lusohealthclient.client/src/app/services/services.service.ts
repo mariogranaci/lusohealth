@@ -2,14 +2,18 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
 import { User } from '../shared/models/authentication/user';
-import { MakeAppointment } from '../shared/models/Services/makeAppointment';
 import { Observable } from 'rxjs';
-import { Appointment } from '../shared/models/Services/appointment';
 import { Router } from '@angular/router';
 import { Professional } from '../shared/models/profile/professional';
 import { Specialty } from '../shared/models/profile/specialty';
 import { Service } from '../shared/models/profile/service';
 import { ProfessionalType } from '../shared/models/authentication/professionalType';
+import { Bounds } from '../shared/models/services/bounds';
+import { MakeAppointment } from '../shared/models/services/makeAppointment';
+import { Appointment } from '../shared/models/services/appointment';
+import { Session } from '../shared/models/services/session';
+
+declare const Stripe: any;
 
 @Injectable({
   providedIn: 'root'
@@ -18,9 +22,6 @@ export class ServicesService {
   constructor(private http: HttpClient, private router: Router) { }
 
   
-
-
-
   getJWT() {
     const key = localStorage.getItem(environment.userKey);
     if (key) {
@@ -71,5 +72,23 @@ export class ServicesService {
   getServices() {
     return this.http.get<Service[]>(`${environment.appUrl}/api/home/get-services`);
   }
+
+  getProfessionalsOnLocation(model: Bounds): Observable<Professional[]> {
+    return this.http.post<Professional[]>(`${environment.appUrl}/api/home/get-professionals-on-location`, model);
+  }
+  requestStripeSession(price: string): any {
+    const headers = this.getHeaders();
+    this.http.post<Session>(`${environment.appUrl}/api/payment/create-checkout-session`, { priceId: price }, { headers }).subscribe((session) => {
+      this.redirectToCheckout(session.sessionId);
+    });
+  }
+
+  redirectToCheckout(sessionId: string): void {
+    const stripe = Stripe('pk_test_51OqJA2GgRte7XVeapxEYUWKylVK9W4f7x6xkxMJ93vvHDfaoUXpQAy3DXYebSTqbSJ49rJv6UwetTIC8swpQ51c400qvW4FRxn');
+    stripe.redirectToCheckout({
+      sessionId: sessionId
+    });
+  }
+
 }
 

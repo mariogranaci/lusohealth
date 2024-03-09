@@ -301,6 +301,7 @@ namespace LusoHealthClient.Server.Services
 
                 var users = new List<User> { user1, user2, user3, user4, user5, user6, userGoogle, user8, user9};
 
+                int counter = 1;
                 foreach (var user in users)
                 {
                     await _userManager.CreateAsync(user, "Pass1234");
@@ -321,11 +322,24 @@ namespace LusoHealthClient.Server.Services
                     }
                     else
                     {
+                        double lisbonLatitude = 38.7074;
+                        double lisbonLongitude = -9.1368;
+                        double radius = 0.1;
+
+                        var random = new Random();
+                        double latOffset = (random.NextDouble() * 2 - 1) * radius;
+                        double lonOffset = (random.NextDouble() * 2 - 1) * radius;
+
+                        double newLatitude = lisbonLatitude + latOffset;
+                        double newLongitude = lisbonLongitude + lonOffset;
+
                         var professionalToAdd = new Professional
                         {
                             UserID = user.Id,
-                            ProfessionalTypeId = 1,
+                            ProfessionalTypeId = counter++,
+                            Location = $"{newLatitude};{newLongitude}"
                         };
+                        if(counter >= 7) counter = 1;
                         await _context.Professionals.AddAsync(professionalToAdd);
                         await _userManager.AddToRoleAsync(user, SD.ProfessionalRole);
                     }

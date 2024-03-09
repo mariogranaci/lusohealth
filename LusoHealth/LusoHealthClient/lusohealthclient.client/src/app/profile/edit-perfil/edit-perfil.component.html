@@ -6,7 +6,7 @@
 </form>-->
 
 <form id="upload-image-form" [formGroup]="pictureForm" class="perfil">
-  <input type="file" id="imgupload" (change)="selecionarArquivo($event)" style="display: none" />
+  <input #fileInput type="file" id="imgupload" (change)="onFileSelected($event)" style="display: none" accept=".jpg, .png" />
   <figure id="img-perfil"><img [src]="caminhoDaImagem" /></figure>
   <button type="button" id="OpenImgUpload" (click)="openFiles()">Alterar Foto</button>
   <button type="submit" id="submit-image">Enviar</button>

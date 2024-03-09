@@ -18,7 +18,7 @@ import { Certificate } from '../../shared/models/profile/certificate';
   styleUrl: './private-profile-professional.component.css'
 })
 export class PrivateProfileProfessionalComponent implements OnInit {
-  private unsubscribe$ = new Subject<void>();;
+  private unsubscribe$ = new Subject<void>();
   addSpecialityForm: FormGroup = new FormGroup({});
   editSpecialityForm: FormGroup = new FormGroup({});
   updateDescriptionForm: FormGroup = new FormGroup({});

@@ -3,7 +3,7 @@
   <section class="form-row">
 
     <div id="button" *ngIf="(isPatient)">
-      <button class="top-right-btn btn-red">Reportar</button>
+      <button style="display: none;" class="top-right-btn btn-red">Reportar</button>
     </div>
 
     <figure>
@@ -118,7 +118,7 @@
 
   <div class="display-row">
     <h2>Reviews</h2>
-    <button class="btn btn-blue" id="add-review-btn" (click)="addReview()" *ngIf="(isPatient)">Adicionar Review</button>
+    <button class="btn btn-blue" id="add-review-btn" (click)="openPopup('add')" *ngIf="(isPatient && userData && userData.services && (userData.services.length > 0))">Adicionar Review</button>
   </div>
 
   <div class="no-review" *ngIf="!(userData && userData.reviews.length > 0)">
@@ -168,11 +168,11 @@
     </div>
   </div>
 
-  <div style="display: flex;" class="overlay" id="overlay" (click)="closePopup()">
+  <div class="overlay" id="overlay" (click)="closePopup()">
     <a class="close-button" (click)="closePopup()">
       <img src="assets/images/login/close.png" alt="Close button" class="close-image">
     </a>
-    <form style="display: block;" [formGroup]="addSpecialityForm" id="add-speciality-container" class="overlay-container" autocomplete="off" (click)="stopPropagation($event)">
+    <form [formGroup]="addSpecialityForm" (ngSubmit)="addSpeciality()" id="add-speciality-container" class="overlay-container" autocomplete="off" (click)="stopPropagation($event)">
 
       <h2>Adicionar Review</h2>
 
@@ -186,65 +186,29 @@
         </div>
       </div>
 
-        <div class="speciality-form-box">
-          <div class="rating">
-            <label id="label-star-5" for="star5" [class.starOn]="radioStar5">
-              <input type="radio" id="star5" name="rating" value="5" (change)="checkInput(5)" />
-            </label>
-            <label id="label-star-4" for="star4" [class.starOn]="radioStar4">
-              <input type="radio" id="star4" name="rating" value="4" (change)="checkInput(4)" />
-            </label>
-            <label id="label-star-3" for="star3" [class.starOn]="radioStar3">
-              <input type="radio" id="star3" name="rating" value="3" (change)="checkInput(3)" />
-            </label>
-            <label id="label-star-2" for="star2" [class.starOn]="radioStar2">
-              <input type="radio" id="star2" name="rating" value="2" (change)="checkInput(2)" />
-            </label>
-            <label id="label-star-1" for="star1" [class.starOn]="radioStar1">
-              <input type="radio" id="star1" name="rating" value="1" (change)="checkInput(1)" />
-            </label>
-          </div>
+      <div class="speciality-form-box">
+        <div class="rating">
+          <label id="label-star-5" for="star5" [class.starOn]="radioStar5">
+            <input type="radio" id="star5" formControlName="rating" name="rating" value="5" (change)="checkInput(5)" />
+          </label>
+          <label id="label-star-4" for="star4" [class.starOn]="radioStar4">
+            <input type="radio" id="star4" formControlName="rating" name="rating" value="4" (change)="checkInput(4)" />
+          </label>
+          <label id="label-star-3" for="star3" [class.starOn]="radioStar3">
+            <input type="radio" id="star3" formControlName="rating" name="rating" value="3" (change)="checkInput(3)" />
+          </label>
+          <label id="label-star-2" for="star2" [class.starOn]="radioStar2">
+            <input type="radio" id="star2" formControlName="rating" name="rating" value="2" (change)="checkInput(2)" />
+          </label>
+          <label id="label-star-1" for="star1" [class.starOn]="radioStar1">
+            <input type="radio" id="star1" formControlName="rating" name="rating" value="1" (change)="checkInput(1)" checked="checked"/>
+          </label>
+        </div>
       </div>
 
       <div class="speciality-form-box">
-        <label for="add-price">Preço por Hora:</label>
-        <div class="input-wrapper">
-          <input formControlName="price" type="number" id="add-price" name="price" required oninput="this.value = this.value.replace(/[^0-9]/g, '');" [class.is-invalid]="submittedAdd && addSpecialityForm.get('price')?.errors">
-          <span class="euro-symbol">€ </span>
-        </div>
-        <span class="text-danger" *ngIf="submittedAdd && (addSpecialityForm.get('price')?.hasError('required') || addSpecialityForm.get('price')?.hasError('min') ||  addSpecialityForm.get('price')?.hasError('max'))">
-          O preço tem de estar entre 1€ e 1000€
-        </span>
-      </div>
-      <div class="speciality-form-box">
-        <label>Deseja ter consultas Presenciais?</label>
-        <div class="radio-row">
-          <label for="add-presencial-sim" class="radio-label"><input formControlName="presencial" type="radio" name="presencial" value="S" id="add-presencial-sim"> Sim</label>
-          <label for="add-presencial-nao" class="radio-label"><input formControlName="presencial" type="radio" name="presencial" value="N" id="add-presencial-nao"> Não</label>
-        </div>
-        <span class="text-danger" *ngIf="submittedAdd && addSpecialityForm.get('presencial')?.hasError('required')">
-          Escoha uma opção
-        </span>
-      </div>
-      <div class="speciality-form-box">
-        <label>Deseja ter consultas Online?</label>
-        <div class="radio-row">
-          <label for="add-online-sim" class="radio-label"><input formControlName="online" type="radio" name="online" value="S" id="add-online-sim"> Sim</label>
-          <label for="add-online-nao" class="radio-label"><input formControlName="online" type="radio" name="online" value="N" id="add-online-nao"> Não</label>
-        </div>
-        <span class="text-danger" *ngIf="submittedAdd && addSpecialityForm.get('online')?.hasError('required')">
-          Escoha uma opção
-        </span>
-      </div>
-      <div class="speciality-form-box">
-        <label>Deseja ter consultas Domicílio?</label>
-        <div class="radio-row">
-          <label for="add-domicilio-sim" class="radio-label"><input formControlName="domicilio" type="radio" name="domicilio" value="S" id="add-domicilio-sim"> Sim</label>
-          <label for="add-domicilio-nao" class="radio-label"><input formControlName="domicilio" type="radio" name="domicilio" value="N" id="add-domicilio-nao"> Não</label>
-        </div>
-        <span class="text-danger" *ngIf="submittedAdd && addSpecialityForm.get('domicilio')?.hasError('required')">
-          Escoha uma opção
-        </span>
+        <label for="add-price">Descrição:</label>
+        <textarea formControlName="description" id="description-review" name="description" placeholder="Insira a sua descrição..."></textarea>
       </div>
 
       <div class="form-buttons-row">

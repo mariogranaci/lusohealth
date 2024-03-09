@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LusoHealthClient.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240303235803_lusohealth")]
-    partial class lusohealth
+    [Migration("20240305051729_LusoHealth")]
+    partial class LusoHealth
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -606,7 +606,7 @@ namespace LusoHealthClient.Server.Migrations
                         new
                         {
                             Id = 53,
-                            Name = "Pediátrica",
+                            Name = "Pediatria",
                             ProfessionalTypeId = 2,
                             TimesScheduled = 0
                         },
@@ -865,7 +865,7 @@ namespace LusoHealthClient.Server.Migrations
                         new
                         {
                             Id = 119,
-                            Name = "Pediátrica",
+                            Name = "Pediatria",
                             ProfessionalTypeId = 4,
                             TimesScheduled = 0
                         },

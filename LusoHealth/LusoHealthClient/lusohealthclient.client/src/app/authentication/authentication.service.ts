@@ -12,14 +12,16 @@ import { ResetPassword } from '../shared/models/authentication/resetPassword';
 import { RegisterWithGoogle } from '../shared/models/authentication/registerWithGoogle';
 import { LoginWithGoogle } from '../shared/models/authentication/loginWithGoogle';
 import { ProfessionalType } from '../shared/models/authentication/professionalType';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService {
   private userSource = new ReplaySubject<User | null>(1);
-  user$ = this.userSource.asObservable();
+  public user$ = this.userSource.asObservable();
   private inactivityTimer: any;
+  public role: string | undefined;
 
 
   constructor(private http: HttpClient, private router: Router) { }
@@ -29,6 +31,9 @@ export class AuthenticationService {
       map((user: User) => {
         if (user) {
           this.setUser(user);
+          const decodedToken: any = jwtDecode(user.jwt);
+          console.log(decodedToken.role);
+          this.role = decodedToken.role;
         }
       })
     );
@@ -63,6 +68,7 @@ export class AuthenticationService {
     this.userSource.next(null);
     clearTimeout(this.inactivityTimer);
     this.router.navigateByUrl('/');
+    this.role = undefined;
   }
 
   refreshUser(jwt: string | null) {

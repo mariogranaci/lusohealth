@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace LusoHealthClient.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class lusohealth : Migration
+    public partial class LusoHealth : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -479,7 +479,7 @@ namespace LusoHealthClient.Server.Migrations
                     { 50, "Pneumologia", 1, 0 },
                     { 51, "Sem Especialidade", 2, 0 },
                     { 52, "Médico-Cirúrgica", 2, 0 },
-                    { 53, "Pediátrica", 2, 0 },
+                    { 53, "Pediatria", 2, 0 },
                     { 54, "Obstétrica e Ginecológica", 2, 0 },
                     { 55, "Saúde Mental", 2, 0 },
                     { 56, "Geriátrica", 2, 0 },
@@ -516,7 +516,7 @@ namespace LusoHealthClient.Server.Migrations
                     { 116, "Neurológica", 4, 0 },
                     { 117, "Ortopédica", 4, 0 },
                     { 118, "Respiratória", 4, 0 },
-                    { 119, "Pediátrica", 4, 0 },
+                    { 119, "Pediatria", 4, 0 },
                     { 120, "Geriátrica", 4, 0 },
                     { 121, "Cardiovascular", 4, 0 },
                     { 122, "Aquática", 4, 0 },

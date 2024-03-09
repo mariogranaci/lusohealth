@@ -904,3 +904,14 @@ app-validation-messages {
       .rating > input:checked ~ label:hover ~ label {
         color: #FECE31;
       }*/
+
+#description-review {
+  width: 100%;
+  height: 350px;
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 10px;
+  resize: none;
+  border: 0;
+  overflow-y: auto;
+}

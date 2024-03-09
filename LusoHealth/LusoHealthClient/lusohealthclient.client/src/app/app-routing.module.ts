@@ -6,6 +6,7 @@ const routes: Routes = [
   { path: '', loadChildren: () => import('./home/home.module').then(m => m.HomeModule) },
   { path: '', loadChildren: () => import('./profile/profile.module').then(m => m.ProfileModule) },
   { path: '', loadChildren: () => import('./services/services.module').then(m => m.ServicesModule) },
+  { path: '', loadChildren: () => import('./agenda/agenda.module').then(m => m.AgendaModule) },
   { path: '', loadChildren: () => import('./authentication/authentication.module').then(m => m.AuthenticationModule) },
   { path: 'not-found', component: NotFoundComponent },
   { path: '**', component: NotFoundComponent, pathMatch: 'full' },

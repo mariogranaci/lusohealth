@@ -66,7 +66,6 @@ main {
   user-select: none;
 }
 
-
 .tab {
   display: flex;
   align-items: center;
@@ -79,6 +78,7 @@ main {
   min-width: 300px;
   min-height: 230px;
   width: 300px;
+  cursor: pointer;
 }
 
 .categorias {
@@ -153,21 +153,14 @@ main {
     max-width: 40px;
     align-items: center;
     padding-right: 40px;
+    pointer-events: none;
+    /*user-select: none;*/
   }
-
-    #searchDiv figure:hover {
-      cursor: pointer;
-    }
 
     #searchDiv figure img {
       width: 35px;
       height: 35px;
       transition: transform 400ms ease-out;
-    }
-
-    #searchDiv figure:hover img {
-      transform: scale(1.1);
-      transition: transform 200ms ease-in;
     }
 
 .searchBar {
@@ -208,15 +201,22 @@ main {
   height: 47px;
 }
 
-  #myUL li a {
-    border: 1px solid #ddd; 
-    background-color: #f6f6f6;
-    padding: 12px;
-    text-decoration: none;
-    font-size: 18px; 
-    color: black; 
-    display: block; 
-  }
+.gray {
+    color: grey;
+    font-size: 13px;
+}
+
+#myUL li a {
+  border: 1px solid #ddd;
+  background-color: #f6f6f6;
+  padding: 12px;
+  text-decoration: none;
+  font-size: 18px;
+  color: black;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
     #myUL li a:hover:not(.header) {
       background-color: #eee; 

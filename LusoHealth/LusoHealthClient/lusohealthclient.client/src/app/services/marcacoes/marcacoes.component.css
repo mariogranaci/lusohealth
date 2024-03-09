@@ -146,6 +146,7 @@ main {
   min-width: 300px;
   min-height: 230px;
   width: 300px;
+  cursor: pointer;
 }
 
 .categorias {

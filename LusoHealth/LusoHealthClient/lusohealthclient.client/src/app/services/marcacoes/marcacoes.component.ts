@@ -242,7 +242,7 @@ export class MarcacoesComponent {
     const selectedCategory = document.getElementById("category") as HTMLSelectElement | null;
     const selectedSpecialty = document.getElementById("specialty") as HTMLSelectElement | null;
 
-    if (selectedCategory && selectedCategory.value != "-----") {
+    if (selectedCategory && selectedCategory.value != "Qualquer") {
 
       const professionalType = this.professionalTypes.find(type => type.name.trim() === selectedCategory.value.trim());
 
@@ -278,7 +278,7 @@ export class MarcacoesComponent {
 
             this.servicesTemp = this.servicesFilteredAgain;
 
-          } else if (selectedSpecialty.value == "-----") {
+          } else if (selectedSpecialty.value == "Qualquer") {
 
             this.servicesFiltered = this.services.filter(service => {
               return service.professional.professionalType.trim() === professionalType.name.trim();
@@ -301,10 +301,9 @@ export class MarcacoesComponent {
   }
 
   filterProfessionalsType(): void {
-
     const selectedType = document.getElementById("type") as HTMLSelectElement | null;
 
-    if (selectedType && selectedType.value != "-----") {
+    if (selectedType && selectedType.value != "Qualquer") {
       this.servicesFilteredAgain = this.servicesFiltered.filter(s => {
         return this.services.find(service => service.serviceId === s.serviceId);
       });
@@ -374,7 +373,7 @@ export class MarcacoesComponent {
     const selectedSpecialty = document.getElementById("specialty") as HTMLSelectElement | null;
     const selectedType = document.getElementById("type") as HTMLSelectElement | null;
 
-    if (selectedCategory && selectedCategory.value != "-----") {
+    if (selectedCategory && selectedCategory.value != "Qualquer") {
 
       const professionalType = this.professionalTypes.find(type => type.name.trim() === selectedCategory.value.trim());
 
@@ -392,7 +391,7 @@ export class MarcacoesComponent {
             this.professionalsFiltered = this.professionalsFiltered.filter(professional => {
               return this.findHighestRatedSpecialty(professional).trim() === specialty.name.trim();
             });
-          } else if (selectedSpecialty.value == "-----") {
+          } else if (selectedSpecialty.value == "Qualquer") {
             this.professionalsFiltered = this.professionals.filter(professional => {
               return professional.professionalType.trim() === professionalType.name.trim();
             });

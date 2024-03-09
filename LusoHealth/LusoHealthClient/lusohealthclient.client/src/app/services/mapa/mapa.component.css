@@ -12,12 +12,13 @@ main {
 #right-panel {
   height: 100%;
   width: 55%;
-  border-left: 2px solid black;
+  position: relative;
+  /*border-left: 2px solid black;*/
 }
 
 #filter-section {
   padding: 10px;
-  border-bottom: 2px solid black;
+  /*border-bottom: 2px solid black;*/
   height: 165px;
 }
 
@@ -53,6 +54,9 @@ main {
   display: block;
 }
 
+#speciality-select-box {
+    margin: 0 10px;
+}
 /* -------------------------------------- select option ------------------------------------- */
 .select-form-box {
   width: fit-content;
@@ -122,10 +126,20 @@ main {
 }
 
 .service-tab {
+  background-color: white;
   display: flex;
   padding: 20px;
-  border-bottom: 2px solid black;
+  /*border-bottom: 2px solid black;*/
+  margin-bottom: 10px;
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.3);
+  transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
+  cursor: pointer;
 }
+
+  .service-tab:hover {
+    box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.4);
+    transform: translateY(-3px);
+  }
 
   .service-tab * {
     text-transform: uppercase;
@@ -157,4 +171,79 @@ main {
   max-width: 20px;
   pointer-events: none;
   user-select: none;
+}
+/* -------------------------------------- map ------------------------------------- */
+
+#map {
+  height: 100%; 
+  width: 100%;
+}
+
+.button-over-map {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  padding: 10px 20px;
+  background-color: #1875e7;
+  color: white;
+  border: none; /* Sem borda para um visual mais limpo */
+  border-radius: 20px; /* Bordas arredondadas */
+  cursor: pointer; /* Cursor de ponteiro para indicar que é clicável */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3); /* Sombra para destacar o botão do mapa */
+  transition: background-color ease-in-out 0.3s;
+}
+
+  .button-over-map:hover {
+    background-color: #1b69c8; /* Cor de fundo ao passar o mouse */
+  }
+
+  .button-over-map:active {
+    transform: translate(-50%, 2px);
+  }
+
+.controls {
+  margin-top: 10px;
+  border: 1px solid transparent;
+  border-radius: 2px 0 0 2px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  padding: 10px;
+  outline: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+#pac-input {
+  background-color: #fff;
+  border-radius: 5px;
+  width: 60%;
+  font-family: Roboto;
+  font-size: 15px;
+  font-weight: 300;
+  text-overflow: ellipsis;
+  position: absolute;
+  left: 60%;
+  top: 5px;
+  z-index: 5;
+  transform: translateX(-50%);
+}
+
+#no-professionals-div {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#no-professionals {
+  text-align: center;
+  font-weight: bold;
+}
+
+@media only screen and (max-width: 1200px) {
+  #pac-input {
+      width: 50%;
+    }
 }

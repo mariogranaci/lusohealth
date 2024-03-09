@@ -1,5 +1,4 @@
 ﻿using LusoHealthClient.Server.Data;
-using LusoHealthClient.Server.DTOs.Administration;
 using LusoHealthClient.Server.DTOs.Profile;
 using LusoHealthClient.Server.DTOs.Services;
 using LusoHealthClient.Server.Models.FeedbackAndReports;
@@ -7,16 +6,11 @@ using LusoHealthClient.Server.Models.Professionals;
 using LusoHealthClient.Server.Models.Services;
 using LusoHealthClient.Server.Models.Users;
 using Microsoft.AspNetCore.Authorization;
-using LusoHealthClient.Server.Models.Users;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client.Platforms.Features.DesktopOs.Kerberos;
-using Microsoft.OpenApi.Extensions;
 using System.Security.Claims;
-using System.Security.Claims;
-using System.Threading.Tasks;
+
 using ServicesDto = LusoHealthClient.Server.DTOs.Services.ServicesDto;
 using ServiceProfileDto = LusoHealthClient.Server.DTOs.Profile.ServiceDto;
 
@@ -62,6 +56,7 @@ namespace LusoHealthClient.Server.Controllers
 				Category = info.Specialty.ProfessionalType.Name,
 				Online = info.Online,
 				Presential = info.Presential,
+                PricePerHour = info.PricePerHour,
 				Home = info.Home,
 			};
 
@@ -197,6 +192,75 @@ namespace LusoHealthClient.Server.Controllers
 
             return services;
         }
+
+        [HttpPost("get-professionals-on-location")]
+        public async Task<ActionResult<List<ProfessionalDto>>> GetProfessionalsOnLocation(BoundsDto locationDto)
+        {
+            double latNE = locationDto.LatitudeNorthEast;
+            double longNE = locationDto.LongitudeNorthEast;
+            double latSW = locationDto.LatitudeSouthWest;
+            double longSW = locationDto.LongitudeSouthWest;
+
+            var professionalsUnfiltered = await _context.Professionals
+            .Include(pt => pt.ProfessionalType)
+            .ToListAsync();
+
+            var professionals = professionalsUnfiltered.Where(p =>
+                {
+                    if (string.IsNullOrEmpty(p.Location)) return false;
+
+                    var locationParts = p.Location.Split(';');
+
+                    if (locationParts.Length != 2) return false;
+
+                    // Tenta analisar as partes de localização para doubles
+                    if (!double.TryParse(locationParts[0], out var lat)) return false;
+                    if (!double.TryParse(locationParts[1], out var lng)) return false;
+
+                    return lat <= latNE && lat >= latSW && lng <= longNE && lng >= longSW;
+                }).ToList();
+
+
+            if (professionals == null)
+            {
+                return NotFound("Não foi possível encontrar os profissionais");
+            }
+
+            var professionalsDtoList = new List<ProfessionalDto>();
+
+            foreach (var professional in professionals)
+            {
+                var user = await _context.Users.FindAsync(professional.UserID);
+
+                var servicesFromDB = await _context.Services
+                    .Include(s => s.Specialty)
+                    .Where(s => s.IdProfessional == professional.UserID)
+                    .ToListAsync();
+                var services = GetServiceProfileDtos(servicesFromDB);
+
+                var reviewsFromDB = await _context.Reviews
+                    .Include(r => r.Service)
+                    .Where(r => r.Service.IdProfessional == professional.UserID)
+                    .ToListAsync();
+                var reviews = GetReviewDtos(reviewsFromDB);
+
+                var professionalDto = new ProfessionalDto
+                {
+                    ProfessionalInfo = new UserProfileDto {Id = user.Id, FirstName = user.FirstName, LastName = user.LastName, Picture = user.ProfilePicPath },
+                    Services = services,
+                    Certificates = null,
+                    Reviews = reviews,
+                    Location = professional.Location,
+                    Description = professional.Description,
+                    ProfessionalType = professional.ProfessionalType.Name
+                };
+
+                professionalsDtoList.Add(professionalDto);
+            }
+
+            return professionalsDtoList;
+        }
+
 
         #region private helper methods
         private async Task<List<ServicesDto>> GetServiceDtos(List<Service> services)

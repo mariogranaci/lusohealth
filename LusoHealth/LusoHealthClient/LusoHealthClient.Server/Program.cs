@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using LusoHealthClient.Server.Services;
 using LusoHealthClient.Server.Data;
 using LusoHealthClient.Server.Models.Users;
+using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -63,6 +64,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = false,
         };
     });
+
+StripeConfiguration.ApiKey = builder.Configuration["StripeSettings:PrivateKey"];
 
 builder.Services.AddCors();
 

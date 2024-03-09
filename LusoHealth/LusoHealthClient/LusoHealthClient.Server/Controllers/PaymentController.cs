@@ -32,20 +32,20 @@ namespace LusoHealthClient.Server.Controllers
                     {
                         PriceData = new SessionLineItemPriceDataOptions
                         {
-                            UnitAmountDecimal = 10 * 100, // Stripe expects amount in cents
+                            UnitAmountDecimal = Math.Round((decimal) req.Amount, 2) * 100,
                             Currency = "eur", // Change as per your currency
                             ProductData = new SessionLineItemPriceDataProductDataOptions
                             {
-                                Name = "Service",
-                                Description = "Description of the service",
+                                Name = req.ServiceName,
+                                /*Description = "Description of the service",*/
                             },
                         },
                         Quantity = 1,
                     },
                 },
                 Mode = "payment",
-                SuccessUrl = "https://localhost:4200/payment-success?session_id={CHECKOUT_SESSION_ID}",
-                CancelUrl = "https://localhost:4200/payment-failure?session_id={CHECKOUT_SESSION_ID}",
+                SuccessUrl = "https://localhost:4200/payment-success?session_id={CHECKOUT_SESSION_ID}" + "&id=" + req.AppointmentId,
+                CancelUrl = "https://localhost:4200/payment-failure?session_id={CHECKOUT_SESSION_ID}" + "&id=" + req.AppointmentId,
             };
             var service = new SessionService();
 

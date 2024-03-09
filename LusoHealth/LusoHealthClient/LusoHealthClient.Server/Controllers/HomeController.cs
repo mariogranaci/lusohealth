@@ -103,11 +103,11 @@ namespace LusoHealthClient.Server.Controllers
 				_context.Appointment.Add(appointmentInfo);
 				await _context.SaveChangesAsync();
 
-				return Ok(new { message = "A consulta foi marcada com sucesso." });
+				return Ok(new { message = "A consulta foi marcada com sucesso.", appointmentId = appointmentInfo.Id });
 			}
 			catch (Exception ex)
 			{
-				return StatusCode(StatusCodes.Status500InternalServerError, $"Erro ao enviar o report: {ex.Message}");
+				return StatusCode(StatusCodes.Status500InternalServerError, $"Erro ao marcar consulta: {ex.Message}");
 			}
 		}
 	

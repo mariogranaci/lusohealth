@@ -83,7 +83,6 @@ export class MarcacoesComponent {
       ).subscribe({
         next: (services: any) => {
           this.services = services;
-          console.log(this.services);
           resolve();
         },
         error: (error) => {

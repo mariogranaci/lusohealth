@@ -23,19 +23,23 @@
   <button class="btn-top" (click)="resetDropdowns()">Limpar</button>
 
   <h2>Próximos Agendamentos</h2>
-  <div class="appointement">
-    <div id="info">
-      <div id="title-data">
-        <h3>Consulta de especialidade </h3>
-        <div class="text-appointement">4 janeiro 2024 </div>
-        <div class="text-appointement">localizacao da consulta </div>
+  <div *ngFor="let appointment of appointments">
+    <div class="appointment">
+      <div id="info">
+        <div id="title-data">
+          <h3> Consulta de {{ findSpecialtyByServiceId(appointment.idService) }}</h3>
+          <div class="text-appointment">{{ convertToDate(appointment.timesTamp) }}</div>
+          <div class="text-appointment">{{ appointment.location }}</div>
+        </div>
+        <div id="name-button">
+          <div class="hours"><b>{{ convertToHours(appointment.timesTamp) }}</b></div>
+          <div class="name" id="name-title">{{ getProfessionalById(appointment.idService) }}</div>
+          <div class="type-appointment">{{ getAppointmentType(appointment.type) }}</div>
+        </div>
       </div>
-      <div id="name-button">
-        <div class="hours"><b>18:00</b></div>
-        <div class="name" id="name-title">joao</div>
-        <div class="type-appointment">Consulta Presencial</div>
-      </div>
+      <button class="btn">Ver Detalhes</button>
     </div>
-    <button class="btn">Ver Detalhes</button>
   </div>
+
 </main>
+

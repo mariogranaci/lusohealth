@@ -342,14 +342,20 @@ namespace LusoHealthClient.Server.Services
 					Review review3 = new Review { IdPatient = random.Next(1, 16).ToString(), IdService = service.Id, Stars = random.Next(1, 5), Description = "" };
 					reviews.AddRange(new List<Review> { review1, review2, review3 });
 
+					DateTime dataAtual = DateTime.Now;
 					
+					int diasAleatorios = random.Next(0, 366);
+
+					
+					 
+
 					Appointment appointment1 = new Appointment { Timestamp = DateTime.Now, Type = AppointmentType.Online, 
 						State = AppointmentState.Scheduled, Duration = random.Next(1, 3), IdProfesional = service.IdProfessional, 
 						IdPatient = random.Next(1, 16).ToString() , IdService = service.Id };
 
 					Appointment appointment4 = new Appointment
 					{
-						Timestamp = DateTime.Now,
+						Timestamp = dataAtual.AddDays(-diasAleatorios),
 						Type = AppointmentType.Online,
 						State = AppointmentState.Scheduled,
 						Duration = random.Next(1, 3),
@@ -359,7 +365,7 @@ namespace LusoHealthClient.Server.Services
 					};
 					Appointment appointment5 = new Appointment
 					{
-						Timestamp = DateTime.Now,
+						Timestamp = dataAtual.AddDays(-diasAleatorios),
 						Type = AppointmentType.Online,
 						State = AppointmentState.Scheduled,
 						Duration = random.Next(1, 3),
@@ -370,7 +376,7 @@ namespace LusoHealthClient.Server.Services
 
 					Appointment appointment6 = new Appointment
 					{
-						Timestamp = DateTime.Now,
+						Timestamp = dataAtual.AddDays(-diasAleatorios),
 						Type = AppointmentType.Online,
 						State = AppointmentState.Scheduled,
 						Duration = random.Next(1, 3),
@@ -381,7 +387,7 @@ namespace LusoHealthClient.Server.Services
 
 					Appointment appointment7 = new Appointment
 					{
-						Timestamp = DateTime.Now,
+						Timestamp = dataAtual.AddDays(-diasAleatorios),
 						Type = AppointmentType.Online,
 						State = AppointmentState.Scheduled,
 						Duration = random.Next(1, 3),
@@ -392,7 +398,7 @@ namespace LusoHealthClient.Server.Services
 
 					Appointment appointment2 = new Appointment
 					{
-						Timestamp = DateTime.Now,
+						Timestamp = dataAtual.AddDays(-diasAleatorios),
 						Type = AppointmentType.Presential,
 						State = AppointmentState.Pending,
 						Duration = random.Next(1, 3),
@@ -403,7 +409,7 @@ namespace LusoHealthClient.Server.Services
 
 					Appointment appointment3 = new Appointment
 					{
-						Timestamp = DateTime.Now,
+						Timestamp = dataAtual.AddDays(-diasAleatorios),
 						Type = AppointmentType.Home,
 						State = AppointmentState.Done,
 						Duration = random.Next(1, 3),

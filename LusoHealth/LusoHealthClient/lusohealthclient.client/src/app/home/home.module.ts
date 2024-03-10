@@ -5,11 +5,12 @@ import { HomeRoutingModule } from './home-routing.module';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
+import { AboutUsComponent } from './about-us/about-us.component';
 
 
 
 @NgModule({
-  declarations: [HomePageComponent],
+  declarations: [HomePageComponent, AboutUsComponent],
   imports: [
     CommonModule,
     HomeRoutingModule,

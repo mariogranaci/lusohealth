@@ -9,6 +9,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="src\assets\images\login\" />
+    <Folder Include="src\assets\images\AboutUs\" />
     <Folder Include="src\assets\images\profile\" />
   </ItemGroup>
 </Project>

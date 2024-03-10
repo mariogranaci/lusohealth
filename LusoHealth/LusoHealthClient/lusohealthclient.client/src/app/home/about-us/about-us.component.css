@@ -1,0 +1,23 @@
+.img {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/assets/images/AboutUs/background-image.png');
+  background-position: center;
+  opacity: 0.9;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Arial, sans-serif;
+}
+
+.text {
+  display:flex;
+  flex-direction:column;
+  font-size: 25px; 
+  text-align:justify;
+  color:white;
+  width:70%;
+}
+
+  .text p {
+    margin: 20px 0; 
+  }

@@ -93,7 +93,9 @@ export class HomePageComponent {
       return this.returnStars(b) - this.returnStars(a);
     });
 
-    return this.servicesFiltered.filter(service => service.professional.professionalType === type).slice(0,4);
+    //return this.servicesFiltered.filter(service => service.professional.professionalType === type).slice(0, 4);
+
+    return this.services;
   }
 
   returnStars(service: Service): number {

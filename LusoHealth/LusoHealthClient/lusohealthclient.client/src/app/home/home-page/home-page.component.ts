@@ -16,7 +16,6 @@ export class HomePageComponent {
   errorMessages: string[] = [];
   professionalTypes: ProfessionalType[] = [];
   services: Service[] = [];
-  servicesFiltered: Service[] = [];
   specialties: Specialty[] = [];
   searchResults: Specialty[] = [];
   searchTerm: string = '';
@@ -71,6 +70,10 @@ export class HomePageComponent {
       ).subscribe({
         next: (services: any) => {
           this.services = services;
+          this.services.sort((a, b) => {
+
+            return this.returnStars(b) - this.returnStars(a);
+          });
           resolve();
         },
         error: (error) => {
@@ -86,16 +89,9 @@ export class HomePageComponent {
     });
   }
 
-  fourServices(type : String): Service[] {
-    this.servicesFiltered = this.services;
-    this.servicesFiltered.sort((a, b) => {
-
-      return this.returnStars(b) - this.returnStars(a);
-    });
-
-    //return this.servicesFiltered.filter(service => service.professional.professionalType === type).slice(0, 4);
-
-    return this.services;
+  fourServices(type: String): Service[] {
+    const services = this.services.filter(service => service.professional.professionalType === type).slice(0, 4);
+    return services;
   }
 
   returnStars(service: Service): number {

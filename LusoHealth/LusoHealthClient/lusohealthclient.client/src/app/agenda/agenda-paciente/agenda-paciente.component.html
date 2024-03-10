@@ -1,1 +1,41 @@
-<p>agenda-paciente works!</p>
+<div class="title">
+  <h1>Próximas Consultas</h1>
+</div>
+
+<main>
+  <div class="firstRow">
+    <div class="dropdown">
+      <select id="category" (change)="filterSpecialties()">
+        <option value="Qualquer" disabled hidden selected>Tipo de Profissional</option>
+        <option>Qualquer</option>
+        <option *ngFor="let professionalType of professionalTypes" value="{{ professionalType.name }}">{{ professionalType.name }}</option>
+      </select>
+    </div>
+    <div class="dropdown">
+      <select id="specialty">
+        <option value="Qualquer" disabled hidden selected>Especialidade</option>
+        <option>Qualquer</option>
+        <option *ngFor="let specialty of specialtiesFiltered" value="{{specialty.name}}">{{ specialty.name }}</option>
+      </select>
+    </div>
+  </div>
+  <button class="btn-top">Pesquisar</button>
+  <button class="btn-top" (click)="resetDropdowns()">Limpar</button>
+
+  <h2>Próximos Agendamentos</h2>
+  <div class="appointement">
+    <div id="info">
+      <div id="title-data">
+        <h3>Consulta de especialidade </h3>
+        <div class="text-appointement">4 janeiro 2024 </div>
+        <div class="text-appointement">localizacao da consulta </div>
+      </div>
+      <div id="name-button">
+        <div class="hours"><b>18:00</b></div>
+        <div class="name" id="name-title">joao</div>
+        <div class="type-appointment">Consulta Presencial</div>
+      </div>
+    </div>
+    <button class="btn">Ver Detalhes</button>
+  </div>
+</main>

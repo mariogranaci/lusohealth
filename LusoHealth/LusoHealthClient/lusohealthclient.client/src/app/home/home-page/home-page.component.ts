@@ -102,7 +102,8 @@ export class HomePageComponent {
     }
 
     const sumStars = reviewsForService.reduce((sum, review) => sum + review.stars, 0);
-    return sumStars / reviewsForService.length;
+    const averageStars = sumStars / reviewsForService.length;
+    return parseFloat(averageStars.toFixed(1)); // Round to one decimal place
   }
 
   getProfessionalTypeName(professionalTypeID: number): string | undefined {

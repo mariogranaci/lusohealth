@@ -206,7 +206,7 @@ export class MarcacoesComponent {
     console.log("Selected specialty:", specialty);
   }
 
-  returnStars(service: Service): number{
+  returnStars(service: Service): number {
     const reviewsForService = service.professional.reviews.filter(review => review.idService === service.serviceId);
 
     if (reviewsForService.length === 0) {
@@ -214,7 +214,8 @@ export class MarcacoesComponent {
     }
 
     const sumStars = reviewsForService.reduce((sum, review) => sum + review.stars, 0);
-    return sumStars / reviewsForService.length;
+    const averageStars = sumStars / reviewsForService.length;
+    return parseFloat(averageStars.toFixed(1)); // Round to one decimal place
   }
 
 

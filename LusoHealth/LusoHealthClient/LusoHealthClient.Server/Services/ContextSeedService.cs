@@ -1,4 +1,7 @@
 ﻿using LusoHealthClient.Server.Data;
+using LusoHealthClient.Server.Models.FeedbackAndReports;
+using LusoHealthClient.Server.Models.Professionals;
+using LusoHealthClient.Server.Models.Services;
 using LusoHealthClient.Server.Models.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -98,260 +101,334 @@ namespace LusoHealthClient.Server.Services
                     new Claim(ClaimTypes.Name, manager.FirstName + " " + manager.LastName)
                 ]);
 
-                var user1 = new User
-                {
-                    Id = "1",
-                    FirstName = "User1",
-                    LastName = "Family",
-                    Email = "user1@mail.com",
-                    NormalizedEmail = "user1@mail.com",
-                    Gender = 'M',
-                    Nif = "123456789",
-                    UserType = 'U',
-                    PhoneNumber = "987654321",
-                    PhoneNumberConfirmed = false,
-                    EmailConfirmed = true,
-                    IsSuspended = false,
-                    IsBlocked = false,
-                    ProfilePicPath = null,
-                    TwoFactorEnabled = false,
-                    LockoutEnabled = false,
-                    AccessFailedCount = 0,
-                    UserName = "123456789" + '_' + DateTime.Now.Millisecond,
-                    BirthDate = new DateTime(1990, 1, 1)
-                };
-                var user2 = new User
-                {
-                    Id = "2",
-                    FirstName = "User2",
-                    LastName = "Family",
-                    Email = "user2@mail.com",
-                    NormalizedEmail = "user2@mail.com",
-                    Gender = 'F',
-                    Nif = "987654321",
-                    UserType = 'U',
-                    PhoneNumber = "123456789",
-                    PhoneNumberConfirmed = false,
-                    EmailConfirmed = true,
-                    IsSuspended = false,
-                    IsBlocked = false,
-                    ProfilePicPath = null,
-                    TwoFactorEnabled = false,
-                    LockoutEnabled = false,
-                    AccessFailedCount = 0,
-                    UserName = "987654321" + '_' + DateTime.Now.Millisecond,
-                    BirthDate = new DateTime(1995, 5, 15)
-                };
-                var user3 = new User
-                {
-                    Id = "3",
-                    FirstName = "User3",
-                    LastName = "Family",
-                    Email = "user3@mail.com",
-                    NormalizedEmail = "user3@mail.com",
-                    Gender = 'M',
-                    Nif = "111223344",
-                    UserType = 'U',
-                    PhoneNumber = "555555555",
-                    PhoneNumberConfirmed = false,
-                    EmailConfirmed = true,
-                    IsSuspended = false,
-                    IsBlocked = false,
-                    ProfilePicPath = null,
-                    TwoFactorEnabled = false,
-                    LockoutEnabled = false,
-                    AccessFailedCount = 0,
-                    UserName = "111223344" + '_' + DateTime.Now.Millisecond,
-                    BirthDate = new DateTime(1988, 8, 8)
-                };
-                var user4 = new User
-                {
-                    Id = "4",
-                    FirstName = "User4",
-                    LastName = "Family",
-                    Email = "user4@mail.com",
-                    NormalizedEmail = "user4@mail.com",
-                    Gender = 'F',
-                    Nif = "999888777",
-                    UserType = 'U',
-                    PhoneNumber = "444444444",
-                    PhoneNumberConfirmed = false,
-                    EmailConfirmed = true,
-                    IsSuspended = false,
-                    IsBlocked = false,
-                    ProfilePicPath = null,
-                    TwoFactorEnabled = false,
-                    LockoutEnabled = false,
-                    AccessFailedCount = 0,
-                    UserName = "999888777" + '_' + DateTime.Now.Millisecond,
-                    BirthDate = new DateTime(1992, 12, 25)
-                };
-                var user5 = new User
-                {
-                    Id = "5",
-                    FirstName = "User5",
-                    LastName = "Family",
-                    Email = "user5@mail.com",
-                    NormalizedEmail = "user5@mail.com",
-                    Gender = 'M',
-                    Nif = "555444333",
-                    UserType = 'P',
-                    PhoneNumber = "333333333",
-                    PhoneNumberConfirmed = false,
-                    EmailConfirmed = true,
-                    IsSuspended = false,
-                    IsBlocked = false,
-                    ProfilePicPath = null,
-                    TwoFactorEnabled = false,
-                    LockoutEnabled = false,
-                    AccessFailedCount = 0,
-                    UserName = "333333333" + '_' + DateTime.Now.Millisecond,
-                    BirthDate = new DateTime(1997, 7, 7)
-                };
-                var user6 = new User
-                {
-                    Id = "6",
-                    FirstName = "User6",
-                    LastName = "Family",
-                    Email = "user6@mail.com",
-                    NormalizedEmail = "user6@mail.com",
-                    Gender = 'F',
-                    Nif = "777666555",
-                    UserType = 'P',
-                    PhoneNumber = "222222222",
-                    PhoneNumberConfirmed = false,
-                    EmailConfirmed = true,
-                    IsSuspended = false,
-                    IsBlocked = false,
-                    ProfilePicPath = null,
-                    TwoFactorEnabled = false,
-                    LockoutEnabled = false,
-                    AccessFailedCount = 0,
-                    UserName = "777666555" + '_' + DateTime.Now.Millisecond,
-                    BirthDate = new DateTime(1994, 4, 14)
-                };
-                var userGoogle = new User
-                {
-                    Id = "7",
-                    FirstName = "User",
-                    LastName = "Google",
-                    Email = "usergoogle@mail.com",
-                    NormalizedEmail = "usergoogle@mail.com",
-                    Gender = 'M',
-                    Nif = "123215648",
-                    UserType = 'P',
-                    PhoneNumber = "231564789",
-                    PhoneNumberConfirmed = false,
-                    EmailConfirmed = true,
-                    IsSuspended = false,
-                    IsBlocked = false,
-                    ProfilePicPath = "https://img.freepik.com/fotos-premium/empreendedor-deprimido-triste-em-homem-de-trabalhador-de-terno-formal-sentado-perto-de-uma-rua-ao-ar-livre-perto-do-centro-de-negocios-de-escritorio-moderno-homem-de-negocios-chateado-perdeu-o-emprego-devido-a-um-funcionario-de-crise-financeira-tem-problema-lado-de-fora_321831-6752.jpg",
-                    TwoFactorEnabled = false,
-                    LockoutEnabled = false,
-                    AccessFailedCount = 0,
-                    UserName = "123215648_" + DateTime.Now.Millisecond,
-                    BirthDate = new DateTime(1994, 4, 14),
-                    Provider = "google",
 
-                };
-                var user8 = new User
-                {
-                    Id = "8",
-                    FirstName = "User6",
-                    LastName = "Family",
-                    Email = "user8@mail.com",
-                    NormalizedEmail = "user8@mail.com",
-                    Gender = 'F',
-                    Nif = "151513165",
-                    UserType = 'U',
-                    PhoneNumber = null,
-                    PhoneNumberConfirmed = false,
-                    EmailConfirmed = true,
-                    IsSuspended = false,
-                    IsBlocked = false,
-                    ProfilePicPath = null,
-                    TwoFactorEnabled = false,
-                    LockoutEnabled = false,
-                    AccessFailedCount = 0,
-                    UserName = "123456798_" + DateTime.Now.Millisecond,
-                    BirthDate = new DateTime(1990, 1, 1),
-                };
-                var user9 = new User
-                {
-                    Id = "9",
-                    FirstName = "Professional",
-                    LastName = "User",
-                    Email = "user9@mail.com",
-                    NormalizedEmail = "user9@mail.com",
-                    Gender = 'M',
-                    Nif = "159765432",
-                    UserType = 'P',
-                    PhoneNumber = null,
-                    PhoneNumberConfirmed = false,
-                    EmailConfirmed = true,
-                    IsSuspended = false,
-                    IsBlocked = false,
-                    ProfilePicPath = null,
-                    TwoFactorEnabled = false,
-                    LockoutEnabled = false,
-                    AccessFailedCount = 0,
-                    UserName = "159765432" + DateTime.Now.Millisecond,
-                    BirthDate = new DateTime(1990, 1, 1),
-                };
+				var random = new Random();
+				var users = new List<User> ();
 
-                var users = new List<User> { user1, user2, user3, user4, user5, user6, userGoogle, user8, user9};
+				for (int i = 1; i <= 15; i++)
+				{
+					
+					var patientUser = new User
+					{
+						Id = i.ToString(),
+						FirstName = $"User{i}",
+						LastName = "Family",
+						Email = $"user{i}@mail.com",
+						NormalizedEmail = $"user{i}@mail.com",
+						Gender = i % 2 == 0 ? 'M' : 'F',
+						Nif = (12345678 + i).ToString(),
+						UserType = 'U',
+						PhoneNumber = null,
+						PhoneNumberConfirmed = false,
+						EmailConfirmed = true,
+						IsSuspended = false,
+						IsBlocked = false,
+						ProfilePicPath = null,
+						TwoFactorEnabled = false,
+						LockoutEnabled = false,
+						AccessFailedCount = 0,
+						UserName = ("12345678" + i) + '_' + DateTime.Now.Millisecond,
+						BirthDate = DateTime.Now.AddYears(-18 - random.Next(1, 15)),
+					};
+					users.Add(patientUser);
+				}
 
-                int counter = 1;
-                foreach (var user in users)
+
+				for (int i = 16; i <= 71; i++)
+                {
+					
+					var professionalUser = new User
+                    {
+                        Id = i.ToString(),
+                        FirstName = $"Professional{i}",
+                        LastName = "User",
+                        Email = $"professional{i}@mail.com",
+                        NormalizedEmail = $"professional{i}@mail.com",
+                        Gender = i % 2 == 0 ? 'M' : 'F',
+                        Nif = (12345678 + i).ToString(),
+                        UserType = 'P',
+                        PhoneNumber = null,
+                        PhoneNumberConfirmed = false,
+                        EmailConfirmed = true,
+                        IsSuspended = false,
+                        IsBlocked = false,
+                        ProfilePicPath = null,
+                        TwoFactorEnabled = false,
+                        LockoutEnabled = false,
+                        AccessFailedCount = 0,
+                        UserName = ("12345678" + i) + '_' + DateTime.Now.Millisecond,
+                        BirthDate = DateTime.Now.AddYears(-18 - random.Next(1, 15)),
+                    };
+					users.Add(professionalUser);
+				}
+
+                
+
+
+				List<Professional> usersProfessionals = new List<Professional>();
+				List<Patient> usersPatients = new List<Patient>();
+				List<Service> services = new List<Service>();
+				
+				int counter = 1;
+				
+				foreach (var user in users)
                 {
                     await _userManager.CreateAsync(user, "Pass1234");
                     if (user.UserType == 'U')
                     {
-                        var patientToAdd = new Patient
-                        {
-                            UserID = user.Id
-                        };
-                        await _context.Patients.AddAsync(patientToAdd);
+						var patientToAdd = new Patient
+						{
+							UserID = user.Id	
+						};
+						
+						await _context.Patients.AddAsync(patientToAdd);
                         await _userManager.AddToRoleAsync(user, SD.PatientRole);
+						usersPatients.Add(patientToAdd);
 
-                        var relative1 = new Relative { IdPatient = patientToAdd.UserID, Name = "Mário Granaci", Gender = 'M', BirthDate = new DateTime(2003, 4, 29) };
+						var relative1 = new Relative { IdPatient = patientToAdd.UserID, Name = "Mário Granaci", Gender = 'M', BirthDate = new DateTime(2003, 4, 29) };
                         var relative2 = new Relative { IdPatient = patientToAdd.UserID, Name = "Jaime Vieira", Gender = 'F', BirthDate = new DateTime(2002, 9, 24) };
                         var relative3 = new Relative { IdPatient = patientToAdd.UserID, Name = "Marta Silva", Gender= 'F', BirthDate = new DateTime(1998, 12, 15) };
-                        var relative4 = new Relative { IdPatient = patientToAdd.UserID, Name = "Miguel Silva", Gender = 'M', BirthDate = new DateTime(1996, 5, 5) };
-                        await _context.Relatives.AddRangeAsync(relative1, relative2, relative3, relative4);
-                    }
+                     
+                        if (user.Id == "4" || user.Id == "7" || user.Id == "12")
+						 await   _context.Relatives.AddRangeAsync(relative1, relative2, relative3);
+
+
+					}
                     else
                     {
-                        double lisbonLatitude = 38.7074;
-                        double lisbonLongitude = -9.1368;
-                        double radius = 0.1;
+						var professionalToAdd = new Professional
+						{
+							UserID = user.Id,
+							ProfessionalTypeId = counter++,
+							Location = null,
+							Services = new List<Service> (),
+							Reviews = new List<Review> (),
+						};
+						if (counter >= 9) counter = 1;
 
-                        var random = new Random();
-                        double latOffset = (random.NextDouble() * 2 - 1) * radius;
-                        double lonOffset = (random.NextDouble() * 2 - 1) * radius;
+						await _userManager.AddToRoleAsync(user, SD.ProfessionalRole);
+                        usersProfessionals.Add(professionalToAdd);
+						
 
-                        double newLatitude = lisbonLatitude + latOffset;
-                        double newLongitude = lisbonLongitude + lonOffset;
-
-                        var professionalToAdd = new Professional
-                        {
-                            UserID = user.Id,
-                            ProfessionalTypeId = counter++,
-                            Location = $"{newLatitude};{newLongitude}"
-                        };
-                        if(counter >= 7) counter = 1;
-                        await _context.Professionals.AddAsync(professionalToAdd);
-                        await _userManager.AddToRoleAsync(user, SD.ProfessionalRole);
-                    }
+					}
                     await _userManager.AddClaimsAsync(user,
                         [
                             new Claim(ClaimTypes.NameIdentifier, user.Id),
                             new Claim(ClaimTypes.Email, user.Email),
                             new Claim(ClaimTypes.Name, user.FirstName + " " + user.LastName)
-                        ]);
-                }
-                await _context.SaveChangesAsync();
-            }
-        }
+                        ]);					
+				}
+				
+
+				int counterProfessionals = 1;
+                int counterServices = 1;
+				int counterLocations = 1;
+				
+
+				//Adicionar serviços a 5 profisssionais por tipo
+				foreach (var professional in usersProfessionals)
+                {
+					
+					
+					if(counterProfessionals > 7){
+						counterProfessionals = 1;
+						counterServices++;
+					}
+
+
+
+					if (counterProfessionals <= 5 )
+                    {
+						switch (counterServices)
+						{
+							case 1:
+								Service service1 = new Service {IdProfessional = professional.UserID, IdSpecialty = random.Next(1, 50), PricePerHour = random.Next(10, 25), Online = true, Presential = false, Home = true };
+								professional.Services.Add(service1);
+								break;
+
+							case 2:
+								Service service2 = new Service { IdProfessional = professional.UserID, IdSpecialty = random.Next(51, 71), PricePerHour = random.Next(15, 25), Online = false, Presential = true, Home = true };
+								professional.Services.Add(service2);
+								break;
+
+							case 3:
+								Service service3 = new Service { IdProfessional = professional.UserID, IdSpecialty = random.Next(101, 113), PricePerHour = random.Next(13, 28), Online = true, Presential = true, Home = false };
+								professional.Services.Add(service3);
+								break;
+
+							case 4:
+								Service service4 = new Service { IdProfessional = professional.UserID, IdSpecialty = random.Next(114, 132), PricePerHour = random.Next(11, 30), Online = true, Presential = true, Home = true };
+								professional.Services.Add(service4);
+								break;
+
+							case 5:
+								professional.Services.Add(new Service { IdProfessional = professional.UserID, IdSpecialty = random.Next(133, 144), PricePerHour = random.Next(9, 33), Online = false, Presential = false, Home = true });
+								break;
+
+							case 6:
+								professional.Services.Add(new Service {  IdProfessional = professional.UserID, IdSpecialty = random.Next(145, 171), PricePerHour = random.Next(14, 25), Online = false, Presential = true, Home = true });
+								break;
+
+							case 7:
+								professional.Services.Add(new Service {   IdProfessional = professional.UserID, IdSpecialty = random.Next(172, 179), PricePerHour = random.Next(10, 20), Online = true, Presential = false, Home = true });
+								break;
+
+							case 8:
+								professional.Services.Add(new Service {  IdProfessional = professional.UserID, IdSpecialty = random.Next(180, 198), PricePerHour = random.Next(13, 27), Online = true, Presential = false, Home = true });
+								break;
+
+							default:
+								break;
+						}
+
+					}
+
+
+
+					double portugalLatitude = 39.3999;
+					double portugalLongitude = -8.2245;
+					double radius = 1.0;
+
+										  
+					double latOffset = (random.NextDouble() * 2 - 1) * radius;
+					double lonOffset = (random.NextDouble() * 2 - 1) * radius;
+
+					double newLatitude = portugalLatitude + latOffset;
+					double newLongitude = portugalLongitude + lonOffset;
+
+					
+					if (counterLocations <= 15)
+					{
+						professional.Location = $"{newLatitude};{newLongitude}";
+					}
+					
+
+					counterLocations++;
+					counterProfessionals++;
+					
+				}
+
+				//10 reports , 3 para o mesmo profissional
+				Report report1 = new Report { Timestamp = DateTime.Now, IdPatient = usersPatients[0].UserID , IdProfesional = usersProfessionals[0].UserID, Description = "Não apareceu a consulta e fiquei sem o dinheiro." , State = ReportState.Pending };
+				Report report2 = new Report { Timestamp = DateTime.Now, IdPatient = usersPatients[1].UserID, IdProfesional = usersProfessionals[0].UserID, Description = "O profissional não compareceu.", State = ReportState.Pending };
+				Report report3 = new Report { Timestamp = DateTime.Now, IdPatient = usersPatients[2].UserID, IdProfesional = usersProfessionals[0].UserID, Description = "Médico falso.", State = ReportState.Pending };
+				Report report4 = new Report { Timestamp = DateTime.Now, IdPatient = usersPatients[3].UserID, IdProfesional = usersProfessionals[1].UserID, Description = "Médico falso.", State = ReportState.Pending };
+				Report report5 = new Report { Timestamp = DateTime.Now, IdPatient = usersPatients[4].UserID, IdProfesional = usersProfessionals[2].UserID, Description = "O profissional não compareceu.", State = ReportState.Pending };
+				Report report6 = new Report { Timestamp = DateTime.Now, IdPatient = usersPatients[5].UserID, IdProfesional = usersProfessionals[3].UserID, Description = "Não apareceu a consulta e fiquei sem o dinheiro.", State = ReportState.Pending };
+				Report report7 = new Report { Timestamp = DateTime.Now, IdPatient = usersPatients[6].UserID, IdProfesional = usersProfessionals[4].UserID, Description = "O profissional não compareceu.", State = ReportState.Pending };
+				Report report8 = new Report { Timestamp = DateTime.Now, IdPatient = usersPatients[7].UserID, IdProfesional = usersProfessionals[5].UserID, Description = "Médico falso.", State = ReportState.Pending };
+				Report report9 = new Report { Timestamp = DateTime.Now, IdPatient = usersPatients[8].UserID, IdProfesional = usersProfessionals[6].UserID, Description = "Não apareceu a consulta e fiquei sem o dinheiro. ", State = ReportState.Pending };
+				Report report10 = new Report { Timestamp = DateTime.Now, IdPatient = usersPatients[9].UserID, IdProfesional = usersProfessionals[7].UserID, Description = "O profissional não compareceu.", State = ReportState.Pending };
+
+				await _context.Professionals.AddRangeAsync(usersProfessionals);
+				await _context.Report.AddRangeAsync(report1,report2,report3,report4,report5,report6,report7,report8,report9,report10);
+				await _context.SaveChangesAsync();
+
+
+				var infoService = await _context.Services
+					.Include(s => s.Specialty)
+					.ThenInclude(o => o.ProfessionalType)
+					.Include(p => p.Professional)
+					.ThenInclude(u => u.User)
+					.ToListAsync();
+
+				//3 Reviews para todos os profissionais
+				List<Review> reviews = new List<Review>();
+				List<Appointment> appointments = new List<Appointment>();
+				foreach (var service in infoService)
+				{
+					Review review1 = new Review { IdPatient = random.Next(1, 16).ToString(), IdService = service.Id , Stars = random.Next(1, 5), Description = ""};
+					Review review2 = new Review { IdPatient = random.Next(1, 16).ToString(), IdService = service.Id, Stars = random.Next(1, 5), Description = "" };
+					Review review3 = new Review { IdPatient = random.Next(1, 16).ToString(), IdService = service.Id, Stars = random.Next(1, 5), Description = "" };
+					reviews.AddRange(new List<Review> { review1, review2, review3 });
+
+					
+					Appointment appointment1 = new Appointment { Timestamp = DateTime.Now, Type = AppointmentType.Online, 
+						State = AppointmentState.Scheduled, Duration = random.Next(1, 3), IdProfesional = service.IdProfessional, 
+						IdPatient = random.Next(1, 16).ToString() , IdService = service.Id };
+
+					Appointment appointment4 = new Appointment
+					{
+						Timestamp = DateTime.Now,
+						Type = AppointmentType.Online,
+						State = AppointmentState.Scheduled,
+						Duration = random.Next(1, 3),
+						IdProfesional = service.IdProfessional,
+						IdPatient = random.Next(1, 16).ToString(),
+						IdService = service.Id
+					};
+					Appointment appointment5 = new Appointment
+					{
+						Timestamp = DateTime.Now,
+						Type = AppointmentType.Online,
+						State = AppointmentState.Scheduled,
+						Duration = random.Next(1, 3),
+						IdProfesional = service.IdProfessional,
+						IdPatient = random.Next(1, 16).ToString(),
+						IdService = service.Id
+					};
+
+					Appointment appointment6 = new Appointment
+					{
+						Timestamp = DateTime.Now,
+						Type = AppointmentType.Online,
+						State = AppointmentState.Scheduled,
+						Duration = random.Next(1, 3),
+						IdProfesional = service.IdProfessional,
+						IdPatient = random.Next(1, 16).ToString(),
+						IdService = service.Id
+					};
+
+					Appointment appointment7 = new Appointment
+					{
+						Timestamp = DateTime.Now,
+						Type = AppointmentType.Online,
+						State = AppointmentState.Scheduled,
+						Duration = random.Next(1, 3),
+						IdProfesional = service.IdProfessional,
+						IdPatient = random.Next(1, 16).ToString(),
+						IdService = service.Id
+					};
+
+					Appointment appointment2 = new Appointment
+					{
+						Timestamp = DateTime.Now,
+						Type = AppointmentType.Presential,
+						State = AppointmentState.Pending,
+						Duration = random.Next(1, 3),
+						IdProfesional = service.IdProfessional,
+						IdPatient = random.Next(1, 16).ToString(),
+						IdService = service.Id
+					};
+
+					Appointment appointment3 = new Appointment
+					{
+						Timestamp = DateTime.Now,
+						Type = AppointmentType.Home,
+						State = AppointmentState.Done,
+						Duration = random.Next(1, 3),
+						IdProfesional = service.IdProfessional,
+						IdPatient = random.Next(1, 16).ToString(),
+						IdService = service.Id
+					};
+
+					appointments.AddRange(new List<Appointment> { appointment1, appointment2 , appointment3, appointment4 , appointment5 , appointment6 , appointment7});
+
+				}
+
+				
+
+				await _context.Reviews.AddRangeAsync(reviews);
+				await _context.Appointment.AddRangeAsync(appointments);
+				await _context.SaveChangesAsync();
+				
+
+
+
+
+
+
+			}
+		}
     }
 }

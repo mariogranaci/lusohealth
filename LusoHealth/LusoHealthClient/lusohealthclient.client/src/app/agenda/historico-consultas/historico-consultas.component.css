@@ -183,6 +183,8 @@ main {
 .more-container {
   text-align: center;
   margin: 30px auto;
+  display: flex;
+  justify-content: center;
 }
 
 #more {

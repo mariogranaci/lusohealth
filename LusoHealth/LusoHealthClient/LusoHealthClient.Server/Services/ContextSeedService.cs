@@ -221,7 +221,7 @@ namespace LusoHealthClient.Server.Services
 				
 
 				int counterProfessionals = 1;
-                int counterServices = 1;
+               
 				int counterLocations = 1;
 				
 
@@ -232,32 +232,35 @@ namespace LusoHealthClient.Server.Services
 					
 					if(counterProfessionals > 7){
 						counterProfessionals = 1;
-						counterServices++;
 					}
 
 
 
 					if (counterProfessionals <= 5 )
                     {
-						switch (counterServices)
+						switch (professional.ProfessionalTypeId)
 						{
 							case 1:
-								Service service1 = new Service {IdProfessional = professional.UserID, IdSpecialty = random.Next(1, 50), PricePerHour = random.Next(10, 25), Online = true, Presential = false, Home = true };
+								int rnd1 = random.Next(1, 50);
+								Service service1 = new Service {IdProfessional = professional.UserID, IdSpecialty = rnd1, PricePerHour = random.Next(10, 25), Online = true, Presential = false, Home = true };
 								professional.Services.Add(service1);
 								break;
 
 							case 2:
-								Service service2 = new Service { IdProfessional = professional.UserID, IdSpecialty = random.Next(51, 71), PricePerHour = random.Next(15, 25), Online = false, Presential = true, Home = true };
+								int rnd2 = random.Next(51, 71);
+								Service service2 = new Service { IdProfessional = professional.UserID, IdSpecialty = rnd2, PricePerHour = random.Next(15, 25), Online = false, Presential = true, Home = true };
 								professional.Services.Add(service2);
 								break;
 
 							case 3:
-								Service service3 = new Service { IdProfessional = professional.UserID, IdSpecialty = random.Next(101, 113), PricePerHour = random.Next(13, 28), Online = true, Presential = true, Home = false };
+								int rnd3 = random.Next(101, 113);
+								Service service3 = new Service { IdProfessional = professional.UserID, IdSpecialty = rnd3, PricePerHour = random.Next(13, 28), Online = true, Presential = true, Home = false };
 								professional.Services.Add(service3);
 								break;
 
 							case 4:
-								Service service4 = new Service { IdProfessional = professional.UserID, IdSpecialty = random.Next(114, 132), PricePerHour = random.Next(11, 30), Online = true, Presential = true, Home = true };
+								int rnd4 = random.Next(114, 132);
+								Service service4 = new Service { IdProfessional = professional.UserID, IdSpecialty = rnd4, PricePerHour = random.Next(11, 30), Online = true, Presential = true, Home = true };
 								professional.Services.Add(service4);
 								break;
 

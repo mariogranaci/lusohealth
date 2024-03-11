@@ -5,6 +5,7 @@ import { Appointment } from '../shared/models/services/appointment';
 import { environment } from '../../environments/environment.development';
 import { User } from '../shared/models/authentication/user';
 import { jwtDecode } from 'jwt-decode';
+import { Specialty } from '../shared/models/profile/specialty';
 
 @Injectable({
   providedIn: 'root'
@@ -50,5 +51,10 @@ export class AgendaService {
   getNextAppointments() {
     const headers = this.getHeaders();
     return this.http.get<Appointment[]>(`${environment.appUrl}/api/agenda/get-next-appointments`, { headers });
+  }
+
+  getSpecialties() {
+    const headers = this.getHeaders();
+    return this.http.get<Specialty[]>(`${environment.appUrl}/api/agenda/get-specialties`, { headers });
   }
 }

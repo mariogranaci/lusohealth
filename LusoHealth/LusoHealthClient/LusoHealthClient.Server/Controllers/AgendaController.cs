@@ -68,11 +68,32 @@ namespace LusoHealthClient.Server.Controllers
 
                 if (appointments == null || !appointments.Any()) { return NotFound("Não foi possível encontrar as marcações"); }
 
-                return Ok(appointments);
+                return appointments;
             }
             catch (Exception)
             {
                 return BadRequest("Não foi possível encontrar as marcações. Tente novamente.");
+            }
+        }
+
+        [HttpGet("get-specialties")]
+        public async Task<ActionResult<List<Specialty>>> GetSpecialties()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
+
+            var user = await _userManager.FindByIdAsync(userIdClaim);
+            if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
+
+            try
+            {
+                var specialties = _context.Specialties.ToList();
+                if (specialties == null) { return NotFound("Não foi possível encontrar as especialidades"); }
+                return specialties;
+            }
+            catch (Exception)
+            {
+                return BadRequest("Não foi possível encontrar as especialidades. Tente novamente.");
             }
         }
     }

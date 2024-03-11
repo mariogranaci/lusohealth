@@ -23,8 +23,12 @@ export class AgendaPacienteComponent {
   specialtiesFiltered: Specialty[] = [];
 
   appointments: Appointment[] = [];
+  appointmentsFiltered: Appointment[] = [];
 
   services: Service[] = [];
+
+  displayedAppointments: Appointment[] = [];
+  initialAppointmentCount = 3;
 
   constructor(public servicesService: ServicesService, public agendaService: AgendaService) {}
 
@@ -65,9 +69,8 @@ export class AgendaPacienteComponent {
     ).subscribe({
       next: (appointments: Appointment[]) => {
         this.appointments = appointments;
-        console.log(this.appointments[0].timesTamp);
-        this.appointments[0].timesTamp = new Date ('2025-03-10T17:45:00');
-        console.log(this.appointments[0].timesTamp);
+        this.appointmentsFiltered = appointments;
+        this.updateDisplayedAppointments();
       },
       error: (error) => {
         console.log(error);
@@ -81,7 +84,7 @@ export class AgendaPacienteComponent {
   }
 
   getSpecialties() {
-    this.servicesService.getSpecialties().pipe(
+    this.agendaService.getSpecialties().pipe(
       takeUntil(this.unsubscribe$)
     ).subscribe({
       next: (specialities: Specialty[]) => {
@@ -127,6 +130,10 @@ export class AgendaPacienteComponent {
 
     categoryDropdown.selectedIndex = 0;
     specialtyDropdown.selectedIndex = 0;
+
+    this.specialtiesFiltered = [];
+
+    this.updateDisplayedAppointments();
   }
 
   filterSpecialties(): void {
@@ -145,21 +152,54 @@ export class AgendaPacienteComponent {
     }
   }
 
-  findSpecialtyByServiceId(serviceId: number | null): String | null {
-    const service = this.services.find(s => s.serviceId === serviceId);
-    if (service) {
-      return service.specialty;
+  filterProfessionalsCategory(): void {
+
+    this.appointmentsFiltered = this.appointments;
+
+    const selectedCategory = document.getElementById("category") as HTMLSelectElement | null;
+    const selectedSpecialty = document.getElementById("specialty") as HTMLSelectElement | null;
+
+    if (selectedCategory && selectedCategory.value != "Qualquer") {
+
+      const professionalType = this.professionalTypes.find(type => type.name.trim() === selectedCategory.value.trim());
+
+      if (professionalType) {
+
+        this.appointmentsFiltered = this.appointments.filter(appointment => {
+          return this.getProfessionalById(appointment.idService)?.professionalType.trim() === professionalType.name.trim();
+        });
+
+        if (selectedSpecialty) {
+
+          const specialty = this.specialties.find(type => type.name.trim() === selectedSpecialty.value.trim());
+
+          if (specialty) {
+
+            this.appointmentsFiltered = this.appointments.filter(appointment => {
+              const specialtyFound = this.findSpecialtyByServiceId(appointment.idService);
+              if (specialtyFound)
+              {
+                return (specialtyFound.trim() === specialty.name.trim());
+              }
+              return false;
+            });
+          } else if (selectedSpecialty.value == "Qualquer") {
+
+            this.appointmentsFiltered = this.appointments.filter(appointment => {
+              return this.getProfessionalById(appointment.idService)?.professionalType.trim() === professionalType.name.trim();
+            });
+          }
+        }
+      }
     }
-    return null;
+    else {
+      this.appointmentsFiltered = this.appointments;
+      this.updateDisplayedAppointments();
+    }
+    this.updateDisplayedAppointments();
   }
 
-  getProfessionalById(serviceId: number | null): string {
-    const professional = this.services.find(s => s.professional.services.find(p => p.serviceId === serviceId))?.professional;
-
-    return professional?.professionalInfo.firstName + " " + professional?.professionalInfo.lastName;
-  }
-
-  getAppointmentType(type: string | null): string{
+  getAppointmentType(type: string | null): string {
     switch (type) {
       case "0":
         return 'Presencial';
@@ -172,18 +212,38 @@ export class AgendaPacienteComponent {
     }
   }
 
-  convertToHours(dateTimeString: Date | null): number {
+  findSpecialtyByServiceId(serviceId: number | null): String | null {
+    const service = this.services.find(s => s.serviceId === serviceId);
+    if (service) {
+      return service.specialty;
+    }
+    return null;
+  }
+
+  getProfessionalNameById(serviceId: number | null): string {
+    const professional = this.services.find(s => s.professional.services.find(p => p.serviceId === serviceId))?.professional;
+
+    return professional?.professionalInfo.firstName + " " + professional?.professionalInfo.lastName;
+  }
+
+  getProfessionalById(serviceId: number | null): Professional | undefined {
+    const professional = this.services.find(s => s.professional.services.find(p => p.serviceId === serviceId))?.professional;
+
+    return professional;
+  }
+
+  convertToHours(dateTimeString: Date | null): string {
     if (!dateTimeString) {
-      return 0; // Or any other default value you prefer
+      return ""; // Or any other default value you prefer
     }
 
-    // Create a new Date object from the input string
     let dateTime: Date = new Date(dateTimeString);
 
-    // Extract hours in 24-hour format
     let hours: number = dateTime.getHours();
 
-    return hours;
+    let min: number = dateTime.getMinutes();
+
+    return hours + ":" + min;
   }
 
   convertToDate(dateTimeString: Date | null): string {
@@ -209,4 +269,14 @@ export class AgendaPacienteComponent {
 
     return formattedDate;
   }
+
+  loadMoreAppointments() {
+    this.initialAppointmentCount += 3;
+    this.updateDisplayedAppointments();
+  }
+
+  updateDisplayedAppointments() {
+    this.displayedAppointments = this.appointmentsFiltered.slice(0, this.initialAppointmentCount);
+  }
+
 }

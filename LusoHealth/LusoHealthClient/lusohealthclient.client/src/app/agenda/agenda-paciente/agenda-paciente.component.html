@@ -5,41 +5,42 @@
 <main>
   <div class="firstRow">
     <div class="dropdown">
-      <select id="category" (change)="filterSpecialties()">
+      <select id="category" (change)="filterSpecialties();filterProfessionalsCategory()">
         <option value="Qualquer" disabled hidden selected>Tipo de Profissional</option>
         <option>Qualquer</option>
         <option *ngFor="let professionalType of professionalTypes" value="{{ professionalType.name }}">{{ professionalType.name }}</option>
       </select>
     </div>
     <div class="dropdown">
-      <select id="specialty">
+      <select id="specialty" (change)="filterProfessionalsCategory()">
         <option value="Qualquer" disabled hidden selected>Especialidade</option>
         <option>Qualquer</option>
         <option *ngFor="let specialty of specialtiesFiltered" value="{{specialty.name}}">{{ specialty.name }}</option>
       </select>
     </div>
   </div>
-  <button class="btn-top">Pesquisar</button>
   <button class="btn-top" (click)="resetDropdowns()">Limpar</button>
 
   <h2>Próximos Agendamentos</h2>
-  <div *ngFor="let appointment of appointments">
+  <div *ngFor="let appointment of displayedAppointments">
     <div class="appointment">
       <div id="info">
         <div id="title-data">
-          <h3> Consulta de {{ findSpecialtyByServiceId(appointment.idService) }}</h3>
-          <div class="text-appointment">{{ convertToDate(appointment.timesTamp) }}</div>
+          <h3>Consulta de {{ findSpecialtyByServiceId(appointment.idService) }}</h3>
+          <div class="text-appointment">{{ convertToDate(appointment.timestamp) }}</div>
           <div class="text-appointment">{{ appointment.location }}</div>
         </div>
         <div id="name-button">
-          <div class="hours"><b>{{ convertToHours(appointment.timesTamp) }}</b></div>
-          <div class="name" id="name-title">{{ getProfessionalById(appointment.idService) }}</div>
+          <div class="hours"><b>{{ convertToHours(appointment.timestamp) }}</b></div>
+          <div class="name" id="name-title">{{ getProfessionalNameById(appointment.idService) }}</div>
           <div class="type-appointment">{{ getAppointmentType(appointment.type) }}</div>
         </div>
       </div>
       <button class="btn">Ver Detalhes</button>
     </div>
   </div>
-
+  <div class="more-container" *ngIf="appointmentsFiltered.length > displayedAppointments.length">
+    <button class="btn" id="more" (click)="loadMoreAppointments()"><img class="arrow" src="/assets/images/Agenda/arrow-down.png" /></button>
+  </div>
 </main>
 

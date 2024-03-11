@@ -1,0 +1,52 @@
+<div class="title">
+  <h1>Histórico de Consultas</h1>
+</div>
+
+<main>
+  <div class="firstRow">
+    <div class="dropdown">
+      <select id="category" (change)="filterSpecialties();filterProfessionalsCategory()">
+        <option value="Qualquer" disabled hidden selected>Tipo de Profissional</option>
+        <option>Qualquer</option>
+        <option *ngFor="let professionalType of professionalTypes" value="{{ professionalType.name }}">{{ professionalType.name }}</option>
+      </select>
+    </div>
+    <div class="dropdown" (change)="filterProfessionalsCategory()">
+      <select id="specialty">
+        <option value="Qualquer" disabled hidden selected>Especialidade</option>
+        <option>Qualquer</option>
+        <option *ngFor="let specialty of specialtiesFiltered" value="{{specialty.name}}">{{ specialty.name }}</option>
+      </select>
+    </div>
+    <div class="dropdown">
+      <select id="order" (change)="orderBy()">
+        <option value="Qualquer" disabled hidden selected>Ordenar</option>
+        <option value="d<">Data Ascendente</option>
+        <option value="d>">Data Descendente</option>
+      </select>
+    </div>
+  </div>
+  <button class="btn-top" (click)="resetDropdowns()">Limpar</button>
+
+  <h2>Agendamentos Anteriores</h2>
+  <div *ngFor="let appointment of displayedAppointments">
+    <div class="appointment">
+      <div id="info">
+        <div id="title-data">
+          <h3>Consulta de {{ findSpecialtyByServiceId(appointment.idService) }}</h3>
+          <div class="text-appointment">{{ convertToDate(appointment.timestamp) }}</div>
+          <div class="text-appointment">{{ appointment.location }}</div>
+        </div>
+        <div id="name-button">
+          <div class="hours"><b>{{ convertToHours(appointment.timestamp) }}</b></div>
+          <div class="name" id="name-title">{{ getProfessionalNameById(appointment.idService) }}</div>
+          <div class="type-appointment">{{ getAppointmentType(appointment.type) }}</div>
+        </div>
+      </div>
+      <button class="btn">Ver Detalhes</button>
+    </div>
+  </div>
+  <div class="more-container" *ngIf="appointmentsFiltered.length > displayedAppointments.length">
+    <button class="btn" id="more" (click)="loadMoreAppointments()"><img class="arrow" src="/assets/images/Agenda/arrow-down.png" /></button>
+  </div>
+</main>

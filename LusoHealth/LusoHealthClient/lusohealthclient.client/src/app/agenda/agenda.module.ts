@@ -5,12 +5,16 @@ import { AgendaRoutingModule } from './agenda-routing.module';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
+import { AgendaPacienteComponent } from './agenda-paciente/agenda-paciente.component';
+import { HistoricoConsultasComponent } from './historico-consultas/historico-consultas.component';
 
 
 
 @NgModule({
   declarations: [
-    DisponibilidadeComponent
+    DisponibilidadeComponent,
+    AgendaPacienteComponent,
+    HistoricoConsultasComponent
   ],
   imports: [
     CommonModule,

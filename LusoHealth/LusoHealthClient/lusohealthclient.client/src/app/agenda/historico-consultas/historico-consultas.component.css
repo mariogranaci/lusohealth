@@ -177,7 +177,7 @@ main {
 }
 
 .arrow {
-  height: 30px;
+  width: 30px;
 }
 
 .more-container {
@@ -185,10 +185,12 @@ main {
   margin: 30px auto;
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
 #more {
-  width: fit-content;
-  padding: 10px 10px;
-  height: 50px;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

@@ -82,7 +82,9 @@ namespace LusoHealthClient.Server.Controllers
 
 				var appointmentInfo = new Appointment
 				{
+                    //corrigir -------------------------------------------------------------------------------------------------
 					Timestamp = DateTime.Now,
+                    //-----------------------------------------------------------------------------------------------------------
 					Location = appointmentDto.Location,
 					Type = AppointmentType.Presential,
 					Description = appointmentDto.Description,

@@ -83,10 +83,9 @@ export class MarcarConsultaComponent {
   }
 
   marcarClick() {
-    //this.payement();
 
     if (this.serviceInfo) {
-      const newAppointment = new Appointment(null, "praceta", "Presential", "descrição", "PaymentPending", 1, "5", "2", parseInt(this.serviceId));
+      const newAppointment = new Appointment(null, null, null, null, null, 1, null, null, parseInt(this.serviceId));
 
       this.service.addAppointment(newAppointment).subscribe(
         response => {

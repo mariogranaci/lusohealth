@@ -20,11 +20,13 @@ namespace LusoHealthClient.Server.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<User> _userManager;
+        private readonly IConfiguration _config;
 
-        public PaymentController(ApplicationDbContext context, UserManager<User> userManager)
+        public PaymentController(ApplicationDbContext context, UserManager<User> userManager, IConfiguration config)
         {
             _context = context;
             _userManager = userManager;
+            _config = config;
         }
 
         [HttpPost("create-checkout-session")]
@@ -72,8 +74,8 @@ namespace LusoHealthClient.Server.Controllers
                     },
                 },
                 Mode = "payment",
-                SuccessUrl = "https://localhost:4200/payment-success?session_id={CHECKOUT_SESSION_ID}",
-                CancelUrl = "https://localhost:4200/payment-failure?session_id={CHECKOUT_SESSION_ID}",
+                SuccessUrl = _config["JWT:ClientUrl"] + "/payment-success?session_id={CHECKOUT_SESSION_ID}",
+                CancelUrl = _config["JWT:ClientUrl"] + "/payment-failure?session_id={CHECKOUT_SESSION_ID}",
                 Metadata = new Dictionary<string, string>
                 {
                     { "user_id", userId },

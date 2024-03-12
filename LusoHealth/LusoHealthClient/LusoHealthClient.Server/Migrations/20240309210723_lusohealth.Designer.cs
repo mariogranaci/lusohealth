@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LusoHealthClient.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240308000344_lusohealth")]
+    [Migration("20240309210723_lusohealth")]
     partial class lusohealth
     {
         /// <inheritdoc />
@@ -1448,6 +1448,9 @@ namespace LusoHealthClient.Server.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Location")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PaymentIntentId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("State")

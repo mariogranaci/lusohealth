@@ -91,7 +91,7 @@ export class MarcarConsultaComponent {
       this.service.addAppointment(newAppointment).subscribe(
         response => {
           console.log('Consulta marcada com sucesso:', response.appointmentId);
-          this.payement(response.appointmentId);
+          this.payment(response.appointmentId);
         },
         error => {
           console.error('Erro ao adicionar o appointment:', error);
@@ -105,7 +105,7 @@ export class MarcarConsultaComponent {
      
   }
 
-  payement(appointmentId: number) {
+  private payment(appointmentId: number) {
     if (this.serviceInfo) {
       this.service.requestStripeSession(this.serviceInfo.pricePerHour, appointmentId, this.serviceInfo.specialty);
     }

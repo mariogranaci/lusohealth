@@ -1447,6 +1447,9 @@ namespace LusoHealthClient.Server.Migrations
                     b.Property<string>("Location")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("PaymentIntentId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int?>("State")
                         .HasColumnType("int");
 

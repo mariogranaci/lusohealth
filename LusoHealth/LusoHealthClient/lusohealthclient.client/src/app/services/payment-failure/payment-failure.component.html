@@ -1,1 +1,20 @@
-<p>payment-failure works!</p>
+<main>
+  <div *ngIf="errorMessages.length > 0">
+    <app-validation-messages [errorMessages]="errorMessages"></app-validation-messages>
+  </div>
+  <div class="container" *ngIf="!loading">
+    <svg class="checkmark error" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+      <circle class="checkmark_circle_error" cx="26" cy="26" r="25" fill="none" />
+      <path class="checkmark_check" stroke-linecap="round" fill="none" d="M16 16 36 36 M36 16 16 36" />
+    </svg>
+
+    <h2>Ocorreu um erro ao efetuar o pagamento.</h2>
+
+    <button type="button" class="btn" [routerLink]="['/']">Voltar à Página Principal</button>
+
+  </div>
+</main>
+
+<div class="loading-container" *ngIf="loading">
+  <loading-spinner></loading-spinner>
+</div>

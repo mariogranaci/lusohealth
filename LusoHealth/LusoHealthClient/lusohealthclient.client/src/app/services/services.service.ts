@@ -19,9 +19,12 @@ declare const Stripe: any;
   providedIn: 'root'
 })
 export class ServicesService {
+
+  private stripe = Stripe('pk_test_51OqJA2GgRte7XVeapxEYUWKylVK9W4f7x6xkxMJ93vvHDfaoUXpQAy3DXYebSTqbSJ49rJv6UwetTIC8swpQ51c400qvW4FRxn');
+
   constructor(private http: HttpClient, private router: Router) { }
 
-  
+
   getJWT() {
     const key = localStorage.getItem(environment.userKey);
     if (key) {
@@ -53,9 +56,9 @@ export class ServicesService {
   }
 
 
-  addAppointment(appointment: Appointment): Observable<Appointment> {
+  addAppointment(appointment: Appointment): Observable<any> {
     const headers = this.getHeaders();
-    return this.http.post<Appointment>(`${environment.appUrl}/api/home/add-appointment`, appointment, { headers });
+    return this.http.post<any>(`${environment.appUrl}/api/home/add-appointment`, appointment, { headers });
   }
   getProfessionalTypes() {
     return this.http.get<ProfessionalType[]>(`${environment.appUrl}/api/home/get-professional-types`);
@@ -76,19 +79,32 @@ export class ServicesService {
   getProfessionalsOnLocation(model: Bounds): Observable<Professional[]> {
     return this.http.post<Professional[]>(`${environment.appUrl}/api/home/get-professionals-on-location`, model);
   }
-  requestStripeSession(price: string): any {
+  requestStripeSession(amount: number, appointmentId: number, serviceName: string): any {
     const headers = this.getHeaders();
-    this.http.post<Session>(`${environment.appUrl}/api/payment/create-checkout-session`, { priceId: price }, { headers }).subscribe((session) => {
+    this.http.post<Session>(`${environment.appUrl}/api/payment/create-checkout-session`, { amount: amount, appointmentId: appointmentId, serviceName: serviceName }, { headers }).subscribe((session) => {
       this.redirectToCheckout(session.sessionId);
     });
   }
 
   redirectToCheckout(sessionId: string): void {
-    const stripe = Stripe('pk_test_51OqJA2GgRte7XVeapxEYUWKylVK9W4f7x6xkxMJ93vvHDfaoUXpQAy3DXYebSTqbSJ49rJv6UwetTIC8swpQ51c400qvW4FRxn');
-    stripe.redirectToCheckout({
+    this.stripe.redirectToCheckout({
       sessionId: sessionId
     });
   }
 
-}
+  getSessionDetails(sessionId: string): Observable<any> {
+    const headers = this.getHeaders();
+    return this.http.get<any>(`${environment.appUrl}/api/payment/get-session-details/${sessionId}`, { headers });
+  }
 
+  updateAppointmentState(appointmentId: number, paymentIntentId: string): Observable<any> {
+    const headers = this.getHeaders();
+    return this.http.post<any>(`${environment.appUrl}/api/payment/update-appointment-to-pending`, { appointmentId: appointmentId, paymentIntentId: paymentIntentId }, { headers });
+  }
+
+  cancelAppointment(appointmentId: number): Observable<any> {
+    const headers = this.getHeaders();
+    return this.http.delete<any>(`${environment.appUrl}/api/payment/cancel-appointment/${appointmentId}`, { headers });
+  }
+
+}

@@ -16,7 +16,7 @@ using ServiceProfileDto = LusoHealthClient.Server.DTOs.Profile.ServiceDto;
 
 namespace LusoHealthClient.Server.Controllers
 {
-	[Route("api/[controller]")]
+    [Route("api/[controller]")]
 	[ApiController]
 	public class HomeController : ControllerBase
 	{
@@ -83,11 +83,13 @@ namespace LusoHealthClient.Server.Controllers
 
 				var appointmentInfo = new Appointment
 				{
+                    //corrigir -------------------------------------------------------------------------------------------------
 					Timestamp = DateTime.Now,
+                    //-----------------------------------------------------------------------------------------------------------
 					Location = appointmentDto.Location,
 					Type = AppointmentType.Presential,
 					Description = appointmentDto.Description,
-					State = AppointmentState.Pending,
+					State = AppointmentState.PaymentPending,
 					Duration = appointmentDto.Duration,	
 					IdPatient = user.Id,
 					IdProfesional = info.IdProfessional,
@@ -97,11 +99,11 @@ namespace LusoHealthClient.Server.Controllers
 				_context.Appointment.Add(appointmentInfo);
 				await _context.SaveChangesAsync();
 
-				return Ok(new { message = "A consulta foi marcada com sucesso." });
+				return Ok(new { message = "A consulta foi marcada com sucesso.", appointmentId = appointmentInfo.Id });
 			}
 			catch (Exception ex)
 			{
-				return StatusCode(StatusCodes.Status500InternalServerError, $"Erro ao enviar o report: {ex.Message}");
+				return StatusCode(StatusCodes.Status500InternalServerError, $"Erro ao marcar consulta: {ex.Message}");
 			}
 		}
 	

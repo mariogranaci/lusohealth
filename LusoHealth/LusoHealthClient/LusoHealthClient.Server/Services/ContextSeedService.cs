@@ -1,4 +1,5 @@
 ﻿using LusoHealthClient.Server.Data;
+using LusoHealthClient.Server.Models.Appointments;
 using LusoHealthClient.Server.Models.FeedbackAndReports;
 using LusoHealthClient.Server.Models.Professionals;
 using LusoHealthClient.Server.Models.Services;
@@ -224,7 +225,6 @@ namespace LusoHealthClient.Server.Services
                
 				int counterLocations = 1;
 				
-
 				//Adicionar serviços a 5 profisssionais por tipo
 				foreach (var professional in usersProfessionals)
                 {
@@ -244,47 +244,52 @@ namespace LusoHealthClient.Server.Services
 								int rnd1 = random.Next(1, 50);
 								Service service1 = new Service {IdProfessional = professional.UserID, IdSpecialty = rnd1, PricePerHour = random.Next(10, 25), Online = true, Presential = false, Home = true };
 								professional.Services.Add(service1);
-								break;
+                                break;
 
 							case 2:
 								int rnd2 = random.Next(51, 71);
 								Service service2 = new Service { IdProfessional = professional.UserID, IdSpecialty = rnd2, PricePerHour = random.Next(15, 25), Online = false, Presential = true, Home = true };
 								professional.Services.Add(service2);
-								break;
+                                break;
 
 							case 3:
 								int rnd3 = random.Next(101, 113);
 								Service service3 = new Service { IdProfessional = professional.UserID, IdSpecialty = rnd3, PricePerHour = random.Next(13, 28), Online = true, Presential = true, Home = false };
 								professional.Services.Add(service3);
-								break;
+                                break;
 
 							case 4:
 								int rnd4 = random.Next(114, 132);
 								Service service4 = new Service { IdProfessional = professional.UserID, IdSpecialty = rnd4, PricePerHour = random.Next(11, 30), Online = true, Presential = true, Home = true };
 								professional.Services.Add(service4);
-								break;
+                                break;
 
 							case 5:
-								professional.Services.Add(new Service { IdProfessional = professional.UserID, IdSpecialty = random.Next(133, 144), PricePerHour = random.Next(9, 33), Online = false, Presential = false, Home = true });
-								break;
+                                Service service5 = new Service { IdProfessional = professional.UserID, IdSpecialty = random.Next(133, 144), PricePerHour = random.Next(9, 33), Online = false, Presential = false, Home = true };
+                                professional.Services.Add(service5);
+                                break;
 
 							case 6:
-								professional.Services.Add(new Service {  IdProfessional = professional.UserID, IdSpecialty = random.Next(145, 171), PricePerHour = random.Next(14, 25), Online = false, Presential = true, Home = true });
-								break;
+                                Service service6 = new Service { IdProfessional = professional.UserID, IdSpecialty = random.Next(145, 171), PricePerHour = random.Next(14, 25), Online = false, Presential = true, Home = true };
+                                professional.Services.Add(service6);
+                                break;
 
 							case 7:
-								professional.Services.Add(new Service {   IdProfessional = professional.UserID, IdSpecialty = random.Next(172, 179), PricePerHour = random.Next(10, 20), Online = true, Presential = false, Home = true });
-								break;
+                                Service service7 = new Service { IdProfessional = professional.UserID, IdSpecialty = random.Next(172, 179), PricePerHour = random.Next(10, 20), Online = true, Presential = false, Home = true };
+                                professional.Services.Add(service7);
+                                break;
 
 							case 8:
-								professional.Services.Add(new Service {  IdProfessional = professional.UserID, IdSpecialty = random.Next(180, 198), PricePerHour = random.Next(13, 27), Online = true, Presential = false, Home = true });
-								break;
+                                Service service8 = new Service { IdProfessional = professional.UserID, IdSpecialty = random.Next(180, 198), PricePerHour = random.Next(13, 27), Online = true, Presential = false, Home = true };
+                                professional.Services.Add(service8);
+                                break;
 
 							default:
 								break;
 						}
 
 					}
+
 
 
 
@@ -311,6 +316,8 @@ namespace LusoHealthClient.Server.Services
 					
 				}
 
+
+
 				//10 reports , 3 para o mesmo profissional
 				Report report1 = new Report { Timestamp = DateTime.Now, IdPatient = usersPatients[0].UserID , IdProfesional = usersProfessionals[0].UserID, Description = "Não apareceu a consulta e fiquei sem o dinheiro." , State = ReportState.Pending };
 				Report report2 = new Report { Timestamp = DateTime.Now, IdPatient = usersPatients[1].UserID, IdProfesional = usersProfessionals[0].UserID, Description = "O profissional não compareceu.", State = ReportState.Pending };
@@ -336,6 +343,7 @@ namespace LusoHealthClient.Server.Services
 					.ToListAsync();
 
 				//3 Reviews para todos os profissionais
+				List<AvailableSlot> availableSlots = new List<AvailableSlot>();
 				List<Review> reviews = new List<Review>();
 				List<Appointment> appointments = new List<Appointment>();
 				foreach (var service in infoService)
@@ -349,10 +357,23 @@ namespace LusoHealthClient.Server.Services
 					
 					int diasAleatorios = random.Next(0, 366);
 
-					
-					 
+                    for (int i = 0; i < 5; i++)
+                    {
+                        AvailableSlot slot = new AvailableSlot { IdService = service.Id, Start = new DateTime(2024, 5, 15, 9, i * 10, 0), SlotDuation = 10, AppointmentType = AppointmentType.Presential, IsAvailable = true };
+                        availableSlots.Add(slot);
+                    }
+                    for (int i = 0; i < 5; i++)
+                    {
+                        AvailableSlot slot = new AvailableSlot { IdService = service.Id, Start = new DateTime(2024, 5, 15, 10, i * 10, 0), SlotDuation = 10, AppointmentType = AppointmentType.Online, IsAvailable = true };
+                        availableSlots.Add(slot);
+                    }
+                    for (int i = 0; i < 5; i++)
+                    {
+                        AvailableSlot slot = new AvailableSlot { IdService = service.Id, Start = new DateTime(2024, 5, 15, 11 + i, 0, 0), SlotDuation = 10, AppointmentType = AppointmentType.Home, IsAvailable = true };
+                        availableSlots.Add(slot);
+                    }
 
-					Appointment appointment1 = new Appointment { Timestamp = DateTime.Now, Type = AppointmentType.Online, 
+                    Appointment appointment1 = new Appointment { Timestamp = DateTime.Now, Type = AppointmentType.Online, 
 						State = AppointmentState.Scheduled, Duration = random.Next(1, 3), IdProfesional = service.IdProfessional, 
 						IdPatient = random.Next(1, 16).ToString() , IdService = service.Id };
 
@@ -426,6 +447,7 @@ namespace LusoHealthClient.Server.Services
 				}
 
 				
+                await _context.AvailableSlots.AddRangeAsync(availableSlots);
 
 				await _context.Reviews.AddRangeAsync(reviews);
 				await _context.Appointment.AddRangeAsync(appointments);

@@ -1,1 +1,63 @@
-<p>disponibilidade works!</p>
+<main>
+  <h1>Consultas e Disponibilidade</h1>
+  <full-calendar [options]="calendarOptions"></full-calendar>
+</main>
+
+<!--<form [formGroup]="editSpecialityForm" id="edit-speciality-container" class="overlay-container" autocomplete="off" (ngSubmit)="editSpeciality()" (click)="stopPropagation($event)">
+
+  <h2>Editar Especialidade</h2>
+
+  <input type="hidden" formControlName="id" id="id-speciality-form" name="id" value="">
+
+  <div class="speciality-name" id="speciality-name">
+
+  </div>
+
+  <div class="speciality-form-box">
+    <label for="edit-price">Preço por Hora:</label>
+    <div class="input-wrapper">
+      <input formControlName="price" type="number" id="edit-price" name="price" required oninput="this.value = this.value.replace(/[^0-9]/g, '');" [class.is-invalid]="submittedEdit && editSpecialityForm.get('price')?.errors">
+      <span class="euro-symbol">€ </span>
+    </div>
+    <span class="text-danger" *ngIf="submittedEdit && (editSpecialityForm.get('price')?.hasError('required') || editSpecialityForm.get('price')?.hasError('min') ||  editSpecialityForm.get('price')?.hasError('max'))">
+      O preço tem de estar entre 1€ e 1000€
+    </span>
+  </div>
+  <div class="speciality-form-box">
+    <label>Deseja ter consultas Presenciais?</label>
+    <div class="radio-row">
+      <label for="edit-presencial-sim" class="radio-label"><input formControlName="presencial" type="radio" name="presencial" value="S" id="edit-presencial-sim"> Sim</label>
+      <label for="edit-presencial-nao" class="radio-label"><input formControlName="presencial" type="radio" name="presencial" value="N" id="edit-presencial-nao"> Não</label>
+    </div>
+    <span class="text-danger" *ngIf="submittedEdit && editSpecialityForm.get('presencial')?.hasError('required')">
+      Escoha uma opção
+    </span>
+  </div>
+  <div class="speciality-form-box">
+    <label>Deseja ter consultas Online?</label>
+    <div class="radio-row">
+      <label for="edit-online-sim" class="radio-label"><input formControlName="online" type="radio" name="online" value="S" id="edit-online-sim"> Sim</label>
+      <label for="edit-online-nao" class="radio-label"><input formControlName="online" type="radio" name="online" value="N" id="edit-online-nao"> Não</label>
+    </div>
+    <span class="text-danger" *ngIf="submittedEdit && editSpecialityForm.get('online')?.hasError('required')">
+      Escoha uma opção
+    </span>
+  </div>
+  <div class="speciality-form-box">
+    <label>Deseja ter consultas Domicílio?</label>
+    <div class="radio-row">
+      <label for="edit-domicilio-sim" class="radio-label"><input formControlName="domicilio" type="radio" name="domicilio" value="S" id="edit-domicilio-sim"> Sim</label>
+      <label for="edit-domicilio-nao" class="radio-label"><input formControlName="domicilio" type="radio" name="domicilio" value="N" id="edit-domicilio-nao"> Não</label>
+    </div>
+    <span class="text-danger" *ngIf="submittedEdit && editSpecialityForm.get('domicilio')?.hasError('required')">
+      Escoha uma opção
+    </span>
+  </div>
+
+  <div class="form-buttons-row">
+    <button type="submit" class="btn btn-blue">Adicionar</button>
+
+    <button type="reset" class="btn btn-red" (click)="closePopup()">Cancelar</button>
+  </div>
+
+</form>-->

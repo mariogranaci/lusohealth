@@ -132,7 +132,7 @@ export class HistoricoConsultasComponent {
 
     this.specialtiesFiltered = [];
 
-    this.updateDisplayedAppointments();
+    this.filterProfessionalsCategory();
   }
 
   filterSpecialties(): void {

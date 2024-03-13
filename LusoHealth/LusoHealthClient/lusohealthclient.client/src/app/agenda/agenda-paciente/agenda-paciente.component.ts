@@ -133,7 +133,7 @@ export class AgendaPacienteComponent {
 
     this.specialtiesFiltered = [];
 
-    this.updateDisplayedAppointments();
+    this.filterProfessionalsCategory();
   }
 
   filterSpecialties(): void {

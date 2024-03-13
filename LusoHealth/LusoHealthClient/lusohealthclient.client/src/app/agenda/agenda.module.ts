@@ -8,6 +8,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AgendaPacienteComponent } from './agenda-paciente/agenda-paciente.component';
 import { HistoricoConsultasComponent } from './historico-consultas/historico-consultas.component';
 import { AgendaProfissionalComponent } from './agenda-profissional/agenda-profissional.component';
+import { FullCalendarModule } from '@fullcalendar/angular';
 
 
 
@@ -22,7 +23,8 @@ import { AgendaProfissionalComponent } from './agenda-profissional/agenda-profis
     CommonModule,
     AgendaRoutingModule,
     RouterModule,
-    SharedModule
+    SharedModule,
+    FullCalendarModule
   ],
   exports: [
     HttpClientModule

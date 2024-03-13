@@ -8,7 +8,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace LusoHealthClient.Server.Migrations
 {
     /// <inheritdoc />
+<<<<<<<< HEAD:LusoHealth/LusoHealthClient/LusoHealthClient.Server/Migrations/20240311135815_LusHet.cs
     public partial class LusHet : Migration
+========
+    public partial class lusohealth : Migration
+>>>>>>>> origin/dev:LusoHealth/LusoHealthClient/LusoHealthClient.Server/Migrations/20240313003539_lusohealth.cs
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -349,6 +353,7 @@ namespace LusoHealthClient.Server.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     State = table.Column<int>(type: "int", nullable: true),
                     Duration = table.Column<int>(type: "int", nullable: true),
+                    PaymentIntentId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IdProfesional = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     IdPatient = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     IdService = table.Column<int>(type: "int", nullable: true)

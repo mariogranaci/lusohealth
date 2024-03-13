@@ -1,1 +1,19 @@
-<p>payment-success works!</p>
+<main>
+  <div *ngIf="errorMessages.length > 0">
+    <app-validation-messages [errorMessages]="errorMessages"></app-validation-messages>
+  </div>
+  <div class="container" *ngIf="!loading">
+    <svg class="checkmark success" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+      <circle class="checkmark_circle_success" cx="26" cy="26" r="25" fill="none" /><path class="checkmark_check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" stroke-linecap="round" />
+    </svg>
+
+    <h2>O pagamento da consulta foi confirmado com sucesso.</h2>
+
+    <button type="button" class="btn" [routerLink]="['/']">Voltar à Página Principal</button>
+
+  </div>
+</main>
+
+<div class="loading-container" *ngIf="loading">
+  <loading-spinner></loading-spinner>
+</div>

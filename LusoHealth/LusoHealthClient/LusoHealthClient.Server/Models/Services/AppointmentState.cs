@@ -2,7 +2,8 @@
 {
 	public enum AppointmentState
 	{
-		Pending,
+        PaymentPending,
+        Pending,
 		Scheduled,
 		InProgress,
 		Done

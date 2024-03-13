@@ -1,7 +1,9 @@
 ﻿using LusoHealthClient.Server.Data;
+using LusoHealthClient.Server.Models.Appointments;
 using LusoHealthClient.Server.Models.Professionals;
 using LusoHealthClient.Server.Models.Services;
 using LusoHealthClient.Server.Models.Users;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -10,6 +12,7 @@ using System.Security.Claims;
 
 namespace LusoHealthClient.Server.Controllers
 {
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class AgendaController : ControllerBase
@@ -96,5 +99,23 @@ namespace LusoHealthClient.Server.Controllers
                 return BadRequest("Não foi possível encontrar as especialidades. Tente novamente.");
             }
         }
+
+        [HttpGet("get-slots")]
+        public async Task<ActionResult<List<AvailableSlot>>> GetSlots()
+        {
+            try
+            {
+                var slots = _context.AvailableSlots.Where(s => s.IdService == 1).ToList();
+
+                if (slots == null) { return NotFound("Não foi possível encontrar os slots"); }
+                return slots;
+            }
+            catch (Exception)
+            {
+                return BadRequest("Não foi possível encontrar os slots. Tente novamente.");
+            }
+        }
+
+
     }
 }

@@ -1,24 +1,53 @@
-﻿using LusoHealthClient.Server.DTOs.Services;
+﻿using System.Security.Claims;
+using LusoHealthClient.Server.Data;
+using LusoHealthClient.Server.DTOs.Services;
+using LusoHealthClient.Server.Models.Services;
+using LusoHealthClient.Server.Models.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Stripe;
 using Stripe.Checkout;
 
 namespace LusoHealthClient.Server.Controllers
 {
-    /*[Authorize(Roles="Patient")]*/
+    [Authorize(Roles="Patient")]
     [Route("api/[controller]")]
     [ApiController]
     public class PaymentController : ControllerBase
     {
-        public PaymentController()
+        private readonly ApplicationDbContext _context;
+        private readonly UserManager<User> _userManager;
+        private readonly IConfiguration _config;
+
+        public PaymentController(ApplicationDbContext context, UserManager<User> userManager, IConfiguration config)
         {
+            _context = context;
+            _userManager = userManager;
+            _config = config;
         }
 
         [HttpPost("create-checkout-session")]
         public async Task<IActionResult> CreateCheckoutSession([FromBody] CreateCheckoutSessionRequest req)
         {
+            string? userId;
+            string? userEmail;
+            try
+            {
+                userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(userId)) return BadRequest("Não foi possível encontrar o utilizador.");
+
+                var user = await _userManager.FindByIdAsync(userId);
+                if (user == null) return NotFound("Não foi possível encontrar o utilizador.");
+
+                userEmail = user.Email;
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Erro ao marcar consulta: {ex.Message}");
+            }
 
             var options = new SessionCreateOptions
             {
@@ -26,26 +55,32 @@ namespace LusoHealthClient.Server.Controllers
                     {
                         "card",
                     },
+                CustomerEmail = userEmail,
                 LineItems = new List<SessionLineItemOptions>
                 {
                     new SessionLineItemOptions
                     {
                         PriceData = new SessionLineItemPriceDataOptions
                         {
-                            UnitAmountDecimal = 10 * 100, // Stripe expects amount in cents
+                            UnitAmountDecimal = Math.Round((decimal) req.Amount, 2) * 100,
                             Currency = "eur", // Change as per your currency
                             ProductData = new SessionLineItemPriceDataProductDataOptions
                             {
-                                Name = "Service",
-                                Description = "Description of the service",
+                                Name = "Consulta de " + req.ServiceName,
+                                /*Description = "Description of the service",*/
                             },
                         },
                         Quantity = 1,
                     },
                 },
                 Mode = "payment",
-                SuccessUrl = "https://localhost:4200/payment-success?session_id={CHECKOUT_SESSION_ID}",
-                CancelUrl = "https://localhost:4200/payment-failure?session_id={CHECKOUT_SESSION_ID}",
+                SuccessUrl = _config["JWT:ClientUrl"] + "/payment-success?session_id={CHECKOUT_SESSION_ID}",
+                CancelUrl = _config["JWT:ClientUrl"] + "/payment-failure?session_id={CHECKOUT_SESSION_ID}",
+                Metadata = new Dictionary<string, string>
+                {
+                    { "user_id", userId },
+                    { "appointment_id", req.AppointmentId + "" }
+                }
             };
             var service = new SessionService();
 
@@ -70,96 +105,98 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        /*[HttpPost("create-checkout-session")]
-        public async Task<IActionResult> CreateCheckoutSession([FromBody] decimal price)
+        [HttpGet("get-session-details/{sessionId}")]
+        public async Task<ActionResult> GetStripeSession(string sessionId)
         {
-
-            var options = new SessionCreateOptions
-            {
-                PaymentMethodTypes = new List<string>
-                    {
-                        "card",
-                    },
-                LineItems = new List<SessionLineItemOptions>
-                    {
-                        new SessionLineItemOptions
-                        {
-                            PriceData = new SessionLineItemPriceDataOptions
-                            {
-                                Currency = "eur",
-                                UnitAmount = (long)(price * 100), // Convert price to cents
-                                ProductData = new SessionLineItemPriceDataProductDataOptions
-                                {
-                                    Name = "Your Product Name",
-                                },
-                            },
-                            Quantity = 1,
-                        },
-                    },
-                Mode = "payment",
-                SuccessUrl = "https://localhost:4200/payment-success",
-                CancelUrl = "https://localhost:4200/payment-failure",
-            };
-            var service = new SessionService();
-
             try
             {
-                var session = await service.CreateAsync(options);
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(userId)) return BadRequest("Não foi possível encontrar o utilizador.");
 
-                return Ok(new { SessionId = session.Id });
+                var user = await _userManager.FindByIdAsync(userId);
+                if (user == null) return NotFound("Não foi possível encontrar o utilizador.");
+
+
+                var service = new SessionService();
+
+                var session = await service.GetAsync(sessionId);
+                return Ok(session);
             }
             catch (StripeException ex)
             {
-                // Log the exception or handle it accordingly
-                return BadRequest(new { error = ex.Message });
-            }
-        }*/
-
-        /*[HttpPost("create-checkout-session")]
-        public async Task<IActionResult> CreateCheckoutSession([FromBody] CreateCheckoutSessionRequest req)
-        {
-            var options = new SessionCreateOptions
-            {
-                SuccessUrl = req.SuccessUrl,
-                CancelUrl = req.FailureUrl,
-                PaymentMethodTypes = new List<string>
-                {
-                    "card",
-                },
-                Mode = "subscription",
-                LineItems = new List<SessionLineItemOptions>
-                {
-                    new SessionLineItemOptions
-                    {
-                        Price = req.Price,
-                        Quantity = 1,
-                    },
-                },
-            };
-
-            var service = new SessionService();
-            service.Create(options);
-            try
-            {
-                var session = await service.CreateAsync(options);
-                return Ok(new CreateCheckoutSessionResponse
-                {
-                    SessionId = session.Id,
-                    PublicKey = _stripeSettings.PublicKey
-                });
-            }
-            catch (StripeException e)
-            {
-                Console.WriteLine(e.StripeError.Message);
                 return BadRequest(new ErrorResponse
                 {
                     ErrorMessage = new ErrorMessage
                     {
-                        Message = e.StripeError.Message,
+                        Message = ex.StripeError.Message,
                     }
                 });
             }
-        }*/
+        }
+
+        [HttpPost("update-appointment-to-pending")]
+        public async Task<ActionResult> ChangeAppointmentState(UpdateAppointmentToPaidDto dto)
+        {
+            try
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(userId)) return BadRequest("Não foi possível encontrar o utilizador.");
+
+                var user = await _userManager.FindByIdAsync(userId);
+                if (user == null) return NotFound("Não foi possível encontrar o utilizador.");
+
+
+                var appointment = await _context.Appointment.FirstOrDefaultAsync(a => a.Id == dto.AppointmentId);
+                if (appointment == null) return NotFound("Consulta não encontrada.");
+
+                var userIdOfAppointment = appointment.IdPatient;
+
+                if (userIdOfAppointment != userId) 
+                    return Unauthorized("Não tem permissões para alterar o estado desta consulta.");
+
+                appointment.State = AppointmentState.Pending;
+                appointment.PaymentIntentId = dto.PaymentIntentId;
+                _context.Appointment.Update(appointment);
+                await _context.SaveChangesAsync();
+
+                return Ok(new { message = "Estado da consulta alterado com sucesso."});
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Erro ao confimar pagamento: {ex.Message}");
+            }
+            
+        }
+
+        [HttpDelete("cancel-appointment/{appointmentId}")]
+        public async Task<ActionResult> CancelAppointment(int appointmentId)
+        {
+            try
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(userId)) return BadRequest("Não foi possível encontrar o utilizador.");
+
+                var user = await _userManager.FindByIdAsync(userId);
+                if (user == null) return NotFound("Não foi possível encontrar o utilizador.");
+
+                var appointment = await _context.Appointment.FirstOrDefaultAsync(a => a.Id == appointmentId);
+                if (appointment == null) return NotFound("Consulta não encontrada.");
+
+                var userIdOfAppointment = appointment.IdPatient;
+
+                if (userIdOfAppointment != userId) 
+                    return Unauthorized("Não tem permissões para cancelar esta consulta.");
+
+                _context.Appointment.Remove(appointment);
+                await _context.SaveChangesAsync();
+
+                return Ok(new { message = "Consulta cancelada com sucesso." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Erro ao cancelar consulta: {ex.Message}");
+            }
+        }
 
     }
 }

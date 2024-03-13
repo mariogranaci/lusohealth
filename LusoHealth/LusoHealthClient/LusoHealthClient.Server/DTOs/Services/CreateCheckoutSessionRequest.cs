@@ -4,7 +4,8 @@ namespace LusoHealthClient.Server.DTOs.Services
 {
     public class CreateCheckoutSessionRequest
     {
-        [Required]
-        public String PriceId { get; set; }
+        public decimal Amount { get; set; }
+        public int AppointmentId { get; set; }
+        public string ServiceName { get; set; }
     }
 }

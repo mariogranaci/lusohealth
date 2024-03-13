@@ -1,4 +1,5 @@
-﻿using LusoHealthClient.Server.Models.FeedbackAndReports;
+﻿using LusoHealthClient.Server.Models.Appointments;
+using LusoHealthClient.Server.Models.FeedbackAndReports;
 using LusoHealthClient.Server.Models.Professionals;
 using LusoHealthClient.Server.Models.Services;
 using LusoHealthClient.Server.Models.Users;
@@ -21,6 +22,7 @@ namespace LusoHealthClient.Server.Data
 		public DbSet<Appointment> Appointment { get; set; }
 		public DbSet<Relative> Relatives { get; set; }
 		public DbSet<Certificate> Certificates { get; set; }
+		public DbSet<AvailableSlot> AvailableSlots { get; set; }
 		public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
 		{
 		}

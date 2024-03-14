@@ -1,4 +1,5 @@
 ﻿using LusoHealthClient.Server.Data;
+using LusoHealthClient.Server.DTOs.Profile;
 using LusoHealthClient.Server.Models.Appointments;
 using LusoHealthClient.Server.Models.Professionals;
 using LusoHealthClient.Server.Models.Services;
@@ -35,51 +36,130 @@ namespace LusoHealthClient.Server.Controllers
             var user = await _userManager.FindByIdAsync(userIdClaim);
             if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
 
-            try
-            {
-                var currentTime = DateTime.UtcNow;
-                var appointments = _context.Appointment
-                    .Where(p => p.IdPatient == user.Id && p.Timestamp < currentTime)
-                    .ToList();
+			try
+			{
+				if (User.IsInRole("Patient"))
+				{
+					var currentTime = DateTime.UtcNow;
+					var appointments = _context.Appointment
+					.Where(p => p.IdPatient == user.Id && p.Timestamp < currentTime)
+					.ToList();
 
-                if (appointments == null || !appointments.Any()) { return NotFound("Não foi possível encontrar as marcações"); }
+					if (appointments == null || !appointments.Any()) { return NotFound("Não foi possível encontrar as marcações"); }
 
-                return appointments;
-            }
-            catch (Exception)
-            {
-                return BadRequest("Não foi possível encontrar as marcações. Tente novamente.");
-            }
+					return appointments;
+				}
+				else if (User.IsInRole("Professional"))
+				{
+					var currentTime = DateTime.UtcNow;
+					var appointments = _context.Appointment
+					.Where(p => p.IdProfesional == user.Id && p.Timestamp < currentTime)
+					.ToList();
+
+					if (appointments == null || !appointments.Any()) { return NotFound("Não foi possível encontrar as marcações"); }
+
+					return appointments;
+				}
+				else
+				{
+					return BadRequest("Não foi possível encontrar as marcações. Tente novamente.");
+				}
+			}
+			catch (Exception)
+			{
+				return BadRequest("Não foi possível encontrar as marcações. Tente novamente.");
+			}
         }
 
 
-        [HttpGet("get-next-appointments")]
-        public async Task<ActionResult<List<Appointment>>> getNextAppointments()
-        {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
+		[HttpGet("get-next-appointments")]
+		public async Task<ActionResult<List<Appointment>>> getNextAppointments()
+		{
+			var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+			if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
 
-            var user = await _userManager.FindByIdAsync(userIdClaim);
-            if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
+			var user = await _userManager.FindByIdAsync(userIdClaim);
+			if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
 
-            try
-            {
-                var currentTime = DateTime.UtcNow;
-                var appointments = _context.Appointment
-                    .Where(p => p.IdPatient == user.Id && p.Timestamp > currentTime)
-                    .ToList();
+			try
+			{
+				if (User.IsInRole("Patient"))
+				{
 
-                if (appointments == null || !appointments.Any()) { return NotFound("Não foi possível encontrar as marcações"); }
+					var currentTime = DateTime.UtcNow;
+					var appointments = _context.Appointment.Include(a => a.Patient).ThenInclude(b => b.User)
+						.Where(p => p.IdPatient == user.Id && p.Timestamp > currentTime && p.State == AppointmentState.Scheduled)
+						.ToList();
 
-                return appointments;
-            }
-            catch (Exception)
-            {
-                return BadRequest("Não foi possível encontrar as marcações. Tente novamente.");
-            }
-        }
+					if (appointments == null || !appointments.Any()) { return NotFound("Não foi possível encontrar as marcações"); }
 
-        [HttpGet("get-specialties")]
+					return appointments;
+
+
+				}
+				else if (User.IsInRole("Professional"))
+				{
+					var currentTime = DateTime.UtcNow;
+					var appointments = _context.Appointment.Include(a => a.Patient).ThenInclude(b => b.User)
+						.Where(p => p.IdProfesional == user.Id && p.Timestamp > currentTime && p.State == AppointmentState.Scheduled)
+						.ToList();
+
+					if (appointments == null || !appointments.Any()) { return NotFound("Não foi possível encontrar as marcações"); }
+
+					return appointments;
+				}
+                else
+                {
+					return BadRequest("Não foi possível encontrar as marcações. Tente novamente.");
+				}
+
+			}
+
+			catch (Exception)
+			{
+				return BadRequest("Não foi possível encontrar as marcações. Tente novamente.");
+			}
+
+		}
+
+
+		[HttpGet("get-pending-appointments")]
+		public async Task<ActionResult<List<Appointment>>> getPendingAppointments()
+		{
+			var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+			if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
+
+			var user = await _userManager.FindByIdAsync(userIdClaim);
+			if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
+
+			try
+			{
+				if (User.IsInRole("Professional")) {
+					var currentTime = DateTime.UtcNow;
+					var appointments = _context.Appointment.Include(a => a.Patient).ThenInclude(b => b.User)
+						.Where(p => p.IdProfesional == user.Id && p.Timestamp > currentTime && p.State == AppointmentState.Pending)
+						.ToList();
+
+					if (appointments == null || !appointments.Any()) { return NotFound("Não foi possível encontrar as marcações"); }
+
+					return appointments;
+				}
+				else
+				{
+					return BadRequest("Não foi possível encontrar as marcações. Tente novamente.");
+				}
+
+			}
+
+			catch (Exception)
+			{
+				return BadRequest("Não foi possível encontrar as marcações. Tente novamente.");
+			}
+
+		}
+
+
+		[HttpGet("get-specialties")]
         public async Task<ActionResult<List<Specialty>>> GetSpecialties()
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -115,6 +195,8 @@ namespace LusoHealthClient.Server.Controllers
                 return BadRequest("Não foi possível encontrar os slots. Tente novamente.");
             }
         }
+
+
 
 
     }

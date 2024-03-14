@@ -1503,9 +1503,6 @@ namespace LusoHealthClient.Server.Migrations
                     b.Property<string>("UserID")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Agenda")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("UserID");
 
                     b.ToTable("Patients");
@@ -1515,9 +1512,6 @@ namespace LusoHealthClient.Server.Migrations
                 {
                     b.Property<string>("UserID")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Agenda")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");

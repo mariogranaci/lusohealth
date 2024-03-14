@@ -7,6 +7,7 @@ import { SharedModule } from '../shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
 import { AgendaPacienteComponent } from './agenda-paciente/agenda-paciente.component';
 import { HistoricoConsultasComponent } from './historico-consultas/historico-consultas.component';
+import { AgendaProfissionalComponent } from './agenda-profissional/agenda-profissional.component';
 import { FullCalendarModule } from '@fullcalendar/angular';
 
 
@@ -15,7 +16,8 @@ import { FullCalendarModule } from '@fullcalendar/angular';
   declarations: [
     DisponibilidadeComponent,
     AgendaPacienteComponent,
-    HistoricoConsultasComponent
+    HistoricoConsultasComponent,
+    AgendaProfissionalComponent
   ],
   imports: [
     CommonModule,

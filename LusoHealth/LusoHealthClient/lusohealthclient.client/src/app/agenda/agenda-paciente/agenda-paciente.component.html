@@ -22,6 +22,9 @@
   <button class="btn-top" (click)="resetDropdowns()">Limpar</button>
 
   <h2>Próximos Agendamentos</h2>
+  <div *ngIf="displayedAppointments.length === 0">
+    <p class="noAppointments">Não existem nenhumas consultas com estes filtros.</p>
+  </div>
   <div *ngFor="let appointment of displayedAppointments">
     <div class="appointment">
       <div id="info">
@@ -33,7 +36,7 @@
         <div id="name-button">
           <div class="hours"><b>{{ convertToHours(appointment.timestamp) }}</b></div>
           <div class="name" id="name-title">{{ getProfessionalNameById(appointment.idService) }}</div>
-          <div class="type-appointment">{{ getAppointmentType(appointment.type) }}</div>
+          <div class="type-appointment">{{ getAppointmentType(appointment.type + "") }}</div>
         </div>
       </div>
       <button class="btn">Ver Detalhes</button>

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using LusoHealthClient.Server.Models.Services;
 
 namespace LusoHealthClient.Server.Models.Users
 {
@@ -7,7 +8,7 @@ namespace LusoHealthClient.Server.Models.Users
     {
         [Key, ForeignKey("User")]
         public string UserID { get; set; }
-        public string? Agenda { get; set; }
+        //public List<Appointment>? Agenda { get; set; }
         public List<Relative>? FamilyAggregate { get; set; }
 
         #region Navigation Properties

@@ -53,6 +53,11 @@ export class AgendaService {
     return this.http.get<Appointment[]>(`${environment.appUrl}/api/agenda/get-next-appointments`, { headers });
   }
 
+  getPendingAppointments() {
+    const headers = this.getHeaders();
+    return this.http.get<Appointment[]>(`${environment.appUrl}/api/agenda/get-pending-appointments`, { headers });
+  }
+
   getSpecialties() {
     const headers = this.getHeaders();
     return this.http.get<Specialty[]>(`${environment.appUrl}/api/agenda/get-specialties`, { headers });

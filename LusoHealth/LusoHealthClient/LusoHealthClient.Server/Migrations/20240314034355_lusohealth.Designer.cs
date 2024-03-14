@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LusoHealthClient.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240313220258_LusoHealth")]
-    partial class LusoHealth
+    [Migration("20240314034355_lusohealth")]
+    partial class lusohealth
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1506,9 +1506,6 @@ namespace LusoHealthClient.Server.Migrations
                     b.Property<string>("UserID")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Agenda")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("UserID");
 
                     b.ToTable("Patients");
@@ -1518,9 +1515,6 @@ namespace LusoHealthClient.Server.Migrations
                 {
                     b.Property<string>("UserID")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Agenda")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");

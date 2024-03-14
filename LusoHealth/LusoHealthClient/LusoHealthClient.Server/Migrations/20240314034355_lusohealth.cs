@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace LusoHealthClient.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class LusoHealth : Migration
+    public partial class lusohealth : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -219,8 +219,7 @@ namespace LusoHealthClient.Server.Migrations
                 name: "Patients",
                 columns: table => new
                 {
-                    UserID = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Agenda = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    UserID = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -239,7 +238,6 @@ namespace LusoHealthClient.Server.Migrations
                 {
                     UserID = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Location = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Agenda = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ProfessionalTypeId = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },

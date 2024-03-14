@@ -18,8 +18,8 @@ namespace LusoHealthClient.Server.Models.Users
         public List<Review>? Reviews { get; set; }
         public string? Description { get; set; }
         public List<Certificate>? Certificates { get; set; }
-        public List<Appointment>? Agenda { get; set; }
-        public List<AvailableSlot>? AvailableSlots { get; set; }
+        //public List<Appointment>? Agenda { get; set; }
+        //public List<AvailableSlot>? AvailableSlots { get; set; }
 
         #region Navigation Properties
         public User User { get; set; }

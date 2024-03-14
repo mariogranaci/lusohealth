@@ -178,8 +178,18 @@ export class AgendaProfissionalComponent {
 
  getPatientNameById(idPatient: string | null): string {
    const patient = this.appointments.find(p => p.idPatient === idPatient);
-   return patient?.patient.user.firstName + " " + patient?.patient.user.lastName;
+   if (patient) {
+     return patient.patient.user.firstName + " " + patient.patient.user.lastName;
+   }
+   return '';
+  }
 
+  getPatientNamePendingById(idPatient: string | null): string {
+    const patient = this.appointmentsPending.find(p => p.idPatient === idPatient);
+    if (patient) {
+      return patient.patient.user.firstName + " " + patient.patient.user.lastName;
+    }
+    return '';
   }
 
   getProfessionalById(serviceId: number | null): Professional | undefined {
@@ -238,7 +248,7 @@ export class AgendaProfissionalComponent {
 
   updateDisplayedAppointments() {
     this.displayedAppointments = this.appointments.slice(0, this.initialAppointmentCount);
-    console.log(typeof this.displayedAppointments[0].type);
+    //console.log(typeof this.displayedAppointments[0].type);
   }
 
   updateDisplayedAppointmentsPending() {

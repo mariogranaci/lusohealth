@@ -88,7 +88,7 @@ namespace LusoHealthClient.Server.Controllers
 
 					var currentTime = DateTime.UtcNow;
 					var appointments = _context.Appointment.Include(a => a.Patient).ThenInclude(b => b.User)
-						.Where(p => p.IdPatient == user.Id && p.Timestamp > currentTime)
+						.Where(p => p.IdPatient == user.Id && p.Timestamp > currentTime && p.State == AppointmentState.Scheduled)
 						.ToList();
 
 					if (appointments == null || !appointments.Any()) { return NotFound("Não foi possível encontrar as marcações"); }
@@ -101,7 +101,7 @@ namespace LusoHealthClient.Server.Controllers
 				{
 					var currentTime = DateTime.UtcNow;
 					var appointments = _context.Appointment.Include(a => a.Patient).ThenInclude(b => b.User)
-						.Where(p => p.IdProfesional == user.Id && p.Timestamp > currentTime)
+						.Where(p => p.IdProfesional == user.Id && p.Timestamp > currentTime && p.State == AppointmentState.Scheduled)
 						.ToList();
 
 					if (appointments == null || !appointments.Any()) { return NotFound("Não foi possível encontrar as marcações"); }
@@ -134,6 +134,7 @@ namespace LusoHealthClient.Server.Controllers
 
 			try
 			{
+				if (User.IsInRole("Professional")) {
 					var currentTime = DateTime.UtcNow;
 					var appointments = _context.Appointment.Include(a => a.Patient).ThenInclude(b => b.User)
 						.Where(p => p.IdProfesional == user.Id && p.Timestamp > currentTime && p.State == AppointmentState.Pending)
@@ -142,7 +143,11 @@ namespace LusoHealthClient.Server.Controllers
 					if (appointments == null || !appointments.Any()) { return NotFound("Não foi possível encontrar as marcações"); }
 
 					return appointments;
-				
+				}
+				else
+				{
+					return BadRequest("Não foi possível encontrar as marcações. Tente novamente.");
+				}
 
 			}
 

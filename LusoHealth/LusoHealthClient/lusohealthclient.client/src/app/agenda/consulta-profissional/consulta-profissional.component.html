@@ -1,0 +1,47 @@
+<div class="title">
+  <h1 *ngIf="service?.specialty">Consulta de {{ service?.specialty}}</h1>
+</div>
+
+<main>
+  <div class="appointments">
+    <div class="appointment">
+      <div id="info">
+        <div id="title-data">
+          <h3>Consulta {{appointment?.type}} </h3>
+          <div class="text-appointment">Data e Hora: {{convertToDate()}} às {{convertToTime()}}</div>
+          <div class="text-appointment" *ngIf="appointment?.location && appointment?.type !== 'Online'">Localização: {{appointment?.location}} </div>
+        </div>
+      </div>
+    </div>
+    <div class="appointment">
+      <div id="info">
+        <div id="title-data-under">
+          <h3>Consulta para: </h3>
+          <div class="text-appointment">{{patient?.firstName}} {{patient?.lastName}}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="appointment">
+      <div id="info">
+        <div id="title-data">
+          <h3>Informações do Profissional </h3>
+          <h4>Nome: </h4>
+          <div class="text-appointment">{{professional?.professionalInfo?.firstName}} {{professional?.professionalInfo?.lastName}}</div>
+        </div>
+        <div id="title-data-under">
+          <h4>Tipo: </h4>
+          <div class="text-appointment">{{professional?.professionalType}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="right-panel">
+    <button class="btn">Cancelar Consulta</button>
+    <div *ngIf="appointment?.type === 'Presential' || appointment?.type === 'Home'" id="map"></div>
+    <button *ngIf="appointment?.type === 'Online'" class="btn">Aceder ao chat</button>
+  </section>
+
+</main>
+

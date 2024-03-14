@@ -62,4 +62,9 @@ export class AgendaService {
     const headers = this.getHeaders();
     return this.http.get<Specialty[]>(`${environment.appUrl}/api/agenda/get-specialties`, { headers });
   }
+
+  getAppointmentInfo(id: number) {
+    const headers = this.getHeaders();
+    return this.http.get<Appointment[]>(`${environment.appUrl}/api/agenda/get-appointment-info/${id}`, { headers });
+  }
 }

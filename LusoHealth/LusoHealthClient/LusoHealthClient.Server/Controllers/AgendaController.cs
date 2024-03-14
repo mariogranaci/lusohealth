@@ -1,5 +1,6 @@
 ﻿using LusoHealthClient.Server.Data;
 using LusoHealthClient.Server.DTOs.Profile;
+using LusoHealthClient.Server.DTOs.Services;
 using LusoHealthClient.Server.Models.Appointments;
 using LusoHealthClient.Server.Models.Professionals;
 using LusoHealthClient.Server.Models.Services;
@@ -13,28 +14,28 @@ using System.Security.Claims;
 
 namespace LusoHealthClient.Server.Controllers
 {
-    //[Authorize]
-    [Route("api/[controller]")]
-    [ApiController]
-    public class AgendaController : ControllerBase
-    {
-        private readonly ApplicationDbContext _context;
-        private readonly UserManager<User> _userManager;
+	//[Authorize]
+	[Route("api/[controller]")]
+	[ApiController]
+	public class AgendaController : ControllerBase
+	{
+		private readonly ApplicationDbContext _context;
+		private readonly UserManager<User> _userManager;
 
-        public AgendaController(ApplicationDbContext context, UserManager<User> userManager)
-        {
-            _context = context;
-            _userManager = userManager;
-        }
+		public AgendaController(ApplicationDbContext context, UserManager<User> userManager)
+		{
+			_context = context;
+			_userManager = userManager;
+		}
 
-        [HttpGet("get-previous-appointments")]
-        public async Task<ActionResult<List<Appointment>>> GetPreviousAppointments()
-        {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
+		[HttpGet("get-previous-appointments")]
+		public async Task<ActionResult<List<Appointment>>> GetPreviousAppointments()
+		{
+			var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+			if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
 
-            var user = await _userManager.FindByIdAsync(userIdClaim);
-            if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
+			var user = await _userManager.FindByIdAsync(userIdClaim);
+			if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
 
 			try
 			{
@@ -69,7 +70,7 @@ namespace LusoHealthClient.Server.Controllers
 			{
 				return BadRequest("Não foi possível encontrar as marcações. Tente novamente.");
 			}
-        }
+		}
 
 
 		[HttpGet("get-next-appointments")]
@@ -108,8 +109,8 @@ namespace LusoHealthClient.Server.Controllers
 
 					return appointments;
 				}
-                else
-                {
+				else
+				{
 					return BadRequest("Não foi possível encontrar as marcações. Tente novamente.");
 				}
 
@@ -160,44 +161,68 @@ namespace LusoHealthClient.Server.Controllers
 
 
 		[HttpGet("get-specialties")]
-        public async Task<ActionResult<List<Specialty>>> GetSpecialties()
+		public async Task<ActionResult<List<Specialty>>> GetSpecialties()
+		{
+			var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+			if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
+
+			var user = await _userManager.FindByIdAsync(userIdClaim);
+			if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
+
+			try
+			{
+				var specialties = _context.Specialties.ToList();
+				if (specialties == null) { return NotFound("Não foi possível encontrar as especialidades"); }
+				return specialties;
+			}
+			catch (Exception)
+			{
+				return BadRequest("Não foi possível encontrar as especialidades. Tente novamente.");
+			}
+		}
+
+		[HttpGet("get-slots")]
+		public async Task<ActionResult<List<AvailableSlot>>> GetSlots()
+		{
+			try
+			{
+				var slots = _context.AvailableSlots.Where(s => s.IdService == 1).ToList();
+
+				if (slots == null) { return NotFound("Não foi possível encontrar os slots"); }
+				return slots;
+			}
+			catch (Exception)
+			{
+				return BadRequest("Não foi possível encontrar os slots. Tente novamente.");
+			}
+		}
+
+		[Authorize]
+        [HttpGet("get-appointment-info/{id}")]
+        public async Task<ActionResult<AppointmentDto>> GetAppointmentInfo(int id)
         {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
+            var info = await _context.Appointment.FirstOrDefaultAsync(x => x.Id == id);
 
-            var user = await _userManager.FindByIdAsync(userIdClaim);
-            if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
+            if (info == null)
+            {
+                return BadRequest("Não foi possível encontrar a informação da consulta.");
+            }
 
-            try
+            AppointmentDto appointmentDto = new AppointmentDto
             {
-                var specialties = _context.Specialties.ToList();
-                if (specialties == null) { return NotFound("Não foi possível encontrar as especialidades"); }
-                return specialties;
-            }
-            catch (Exception)
-            {
-                return BadRequest("Não foi possível encontrar as especialidades. Tente novamente.");
-            }
+                Timestamp = info.Timestamp,
+                Location = info.Location,
+                Type = info.Type.ToString(),
+                Description = info.Description,
+                State = info.State.ToString(),
+                Duration = info.Duration,
+                IdPatient = info.IdPatient,
+                IdProfessional = info.IdProfesional, 
+                IdService = info.Id
+            };
+
+            return appointmentDto;
         }
-
-        [HttpGet("get-slots")]
-        public async Task<ActionResult<List<AvailableSlot>>> GetSlots()
-        {
-            try
-            {
-                var slots = _context.AvailableSlots.Where(s => s.IdService == 1).ToList();
-
-                if (slots == null) { return NotFound("Não foi possível encontrar os slots"); }
-                return slots;
-            }
-            catch (Exception)
-            {
-                return BadRequest("Não foi possível encontrar os slots. Tente novamente.");
-            }
-        }
-
-
-
-
+		
     }
 }

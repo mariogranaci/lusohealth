@@ -188,5 +188,20 @@ main {
 }
 
 .arrow {
-  height: 30px;
+  width: 30px;
+}
+
+.more-container {
+  text-align: center;
+  margin: 30px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#more {
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

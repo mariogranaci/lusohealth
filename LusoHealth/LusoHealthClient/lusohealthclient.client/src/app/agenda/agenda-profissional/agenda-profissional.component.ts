@@ -7,10 +7,7 @@ import { Specialty } from '../../shared/models/profile/specialty';
 import { ProfessionalType } from '../../shared/models/authentication/professionalType';
 import { Subject, take, takeUntil } from 'rxjs';
 import { Professional } from '../../shared/models/profile/professional';
-import { AuthenticationService } from '../../authentication/authentication.service';
-import { User } from '../../shared/models/authentication/user';
-import { ProfileService } from '../../profile/profile.service';
-import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-agenda-profissional',
@@ -26,40 +23,25 @@ export class AgendaProfissionalComponent {
 
   specialties: Specialty[] = [];
 
-  appointments: Appointment[] = [];
+  appointments: any[] = [];
+  appointmentsPending: any[] = [];
 
   services: Service[] = [];
+
+  displayedAppointmentsPending: Appointment[] = [];
+  initialAppointmentPendingCount = 3;
 
   displayedAppointments: Appointment[] = [];
   initialAppointmentCount = 3;
 
-  constructor(private authenticationService: AuthenticationService, public servicesService: ServicesService,
-    public agendaService: AgendaService, private profileService: ProfileService,private router: Router) {
-    this.authenticationService.user$.pipe(take(1)).subscribe({
-      next: (user: User | null) => {
-        if (!user) {
-          this.router.navigateByUrl('/');
-        }
-        else {
-          const decodedToken = this.profileService.getDecodedToken();
-
-          if (decodedToken) {
-            if (decodedToken.role !== "Professional") {
-              this.router.navigateByUrl('/');
-            }
-          }
-        }
-      }
-    });
-  }
+  constructor(public servicesService: ServicesService,public agendaService: AgendaService) {}
 
   ngOnInit() {
     this.getServices().then(() => {
       this.getProfessionalTypes();
       this.getSpecialties();
       this.getNextAppointments();
-      console.log(this.getNextAppointments());
-      console.log(this.getSpecialties());
+      this.getPendingAppointments();
     });
   }
 
@@ -104,6 +86,26 @@ export class AgendaProfissionalComponent {
       }
     });
   }
+
+  getPendingAppointments() {
+    this.agendaService.getPendingAppointments().pipe(
+      takeUntil(this.unsubscribe$)
+    ).subscribe({
+      next: (appointments: Appointment[]) => {
+        this.appointmentsPending = appointments;
+        this.updateDisplayedAppointmentsPending();
+      },
+      error: (error) => {
+        console.log(error);
+        if (error.error.errors) {
+          this.errorMessages = error.error.errors;
+        } else {
+          this.errorMessages.push(error.error);
+        }
+      }
+    });
+  }
+
 
   getSpecialties() {
     this.agendaService.getSpecialties().pipe(
@@ -169,11 +171,11 @@ export class AgendaProfissionalComponent {
     return null;
   }
 
- /* getPatientNameById(idPatient: number | null): string {
-    const patient = this.appointments.find(p => p.idPatien
+ getPatientNameById(idPatient: string | null): string {
+   const patient = this.appointments.find(p => p.idPatient === idPatient);
+   return patient?.patient.user.firstName + " " + patient?.patient.user.lastName;
 
-   
-  }*/
+  }
 
   getProfessionalById(serviceId: number | null): Professional | undefined {
     const professional = this.services.find(s => s.professional.services.find(p => p.serviceId === serviceId))?.professional;
@@ -224,8 +226,16 @@ export class AgendaProfissionalComponent {
     this.updateDisplayedAppointments();
   }
 
+  loadMoreAppointmentsPending() {
+    this.initialAppointmentPendingCount += 3;
+    this.updateDisplayedAppointmentsPending();
+  }
+
   updateDisplayedAppointments() {
     this.displayedAppointments = this.appointments.slice(0, this.initialAppointmentCount);
   }
 
+  updateDisplayedAppointmentsPending() {
+    this.displayedAppointmentsPending = this.appointmentsPending.slice(0, this.initialAppointmentPendingCount);
+  }
 }

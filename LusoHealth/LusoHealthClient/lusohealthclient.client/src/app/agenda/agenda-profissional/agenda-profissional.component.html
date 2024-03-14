@@ -19,7 +19,7 @@
               <div id="title-data">
                 <h3>Consulta de {{ findSpecialtyByServiceId(appointment.idService) }}</h3>
                 <div class="text-appointment">{{ convertToDate(appointment.timestamp) }}</div>
-                <div class="text-appointment">Nome Paciente</div>
+                <div class="text-appointment">{{getPatientNameById(appointment.idPatient)}}</div>
                 <div class="text-appointment">{{ getAppointmentType(appointment.type) }}</div>
               </div>
               <div class="hours"><b>{{ convertToHours(appointment.timestamp) }}</b></div>
@@ -39,27 +39,28 @@
 
       <div class="schedules">
           <h2>Pedidos de Consultas</h2>
-        <div class="appointment">
-          <div id="info">
-            <div id="title-data">
-              <h3>Consulta de [Especialidade]</h3>
-              <div class="text-appointment">9 janeiro 2024</div>
-              <div class="text-appointment">Manuela Dias</div>
-              <div class="text-appointment">Consulta Presencial</div>
+        <div *ngFor="let appointment of displayedAppointmentsPending">
+          <div class="appointment">
+            <div id="info">
+              <div id="title-data">
+                <h3>Consulta de {{ findSpecialtyByServiceId(appointment.idService) }}</h3>
+                <div class="text-appointment">{{ convertToDate(appointment.timestamp) }}</div>
+                <div class="text-appointment">{{getPatientNameById(appointment.idPatient)}}</div>
+                <div class="text-appointment">{{ getAppointmentType(appointment.type) }}</div>
+              </div>
+              <div class="hours"><b>{{ convertToHours(appointment.timestamp) }}</b></div>
             </div>
-            <div class="hours"><b>18:00</b></div>
+            <div class="buttons">
+              <button class="btn">Detalhes</button>
+              <button class="icon-btn"><img class="icon" src="/assets/images/Agenda/checked.png" /></button>
+              <button class="icon-btn"><img class="icon" src="/assets/images/Agenda/cancel.png" /></button>
+            </div>
           </div>
-          <div class="buttons">
-            <button class="btn">Detalhes</button>
-            <button class="icon-btn"><img class="icon" src="/assets/images/Agenda/checked.png" /></button>
-            <button class="icon-btn"><img class="icon" src="/assets/images/Agenda/cancel.png" /></button>
-          </div>
-
         </div>
 
 
-        <div class="more-container">
-          <button class="btn" id="more"><img class="arrow" src="/assets/images/Agenda/arrow-down.png" /></button>
+        <div class="more-container" *ngIf="appointmentsPending.length > displayedAppointmentsPending.length">
+          <button class="btn" id="more" (click)="loadMoreAppointmentsPending()"><img class="arrow" src="/assets/images/Agenda/arrow-down.png" /></button>
         </div>
       </div>
     </div>

@@ -8,11 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace LusoHealthClient.Server.Migrations
 {
     /// <inheritdoc />
-<<<<<<<< HEAD:LusoHealth/LusoHealthClient/LusoHealthClient.Server/Migrations/20240311135815_LusHet.cs
-    public partial class LusHet : Migration
-========
     public partial class lusohealth : Migration
->>>>>>>> origin/dev:LusoHealth/LusoHealthClient/LusoHealthClient.Server/Migrations/20240313003539_lusohealth.cs
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -64,6 +60,23 @@ namespace LusoHealthClient.Server.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AvailableSlots",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Start = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    SlotDuation = table.Column<int>(type: "int", nullable: false),
+                    IdService = table.Column<int>(type: "int", nullable: false),
+                    AppointmentType = table.Column<int>(type: "int", nullable: false),
+                    IsAvailable = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AvailableSlots", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -723,6 +736,9 @@ namespace LusoHealthClient.Server.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "AvailableSlots");
 
             migrationBuilder.DropTable(
                 name: "Certificates");

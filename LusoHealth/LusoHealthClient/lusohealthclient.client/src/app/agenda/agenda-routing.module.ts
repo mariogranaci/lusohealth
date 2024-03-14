@@ -14,8 +14,8 @@ const routes: Routes = [
   { path: 'patient-agenda', component: AgendaPacienteComponent },
   { path: 'historico-consultas', component: HistoricoConsultasComponent },
   { path: 'professional-agenda', component: AgendaProfissionalComponent },
-  { path: 'consulta-paciente', component: ConsultaPacienteComponent },
-  { path: 'consulta-profissional', component: ConsultaProfissionalComponent }
+  { path: 'patient-appointment', component: ConsultaPacienteComponent },
+  { path: 'professional-appointment', component: ConsultaProfissionalComponent }
 ]
 
 @NgModule({

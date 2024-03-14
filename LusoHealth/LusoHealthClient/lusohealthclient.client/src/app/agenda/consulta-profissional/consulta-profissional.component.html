@@ -6,7 +6,7 @@
   <div class="appointments">
     <div class="appointment">
       <div id="info">
-        <div id="title-data">
+        <div id="title-data-under">
           <h3>Consulta {{appointment?.type}} </h3>
           <div class="text-appointment">Data e Hora: {{convertToDate()}} às {{convertToTime()}}</div>
           <div class="text-appointment" *ngIf="appointment?.location && appointment?.type !== 'Online'">Localização: {{appointment?.location}} </div>
@@ -25,20 +25,27 @@
     <div class="appointment">
       <div id="info">
         <div id="title-data">
-          <h3>Informações do Profissional </h3>
+          <h3>Informações do Paciente </h3>
+          <figure>
+            <img class="image" alt="Imagem de Perfil" src="/assets/images/Perfil/profileImage.jpg" />
+          </figure>
           <h4>Nome: </h4>
-          <div class="text-appointment">{{professional?.professionalInfo?.firstName}} {{professional?.professionalInfo?.lastName}}</div>
+          <div class="text-appointment">{{patient?.firstName}} {{patient?.lastName}}</div>
         </div>
         <div id="title-data-under">
-          <h4>Tipo: </h4>
-          <div class="text-appointment">{{professional?.professionalType}}</div>
+          <h4>Género: </h4>
+          <div class="text-appointment"> {{patient?.genero === 'F' ? 'Feminino' : 'Masculino'}}</div>
         </div>
       </div>
     </div>
   </div>
 
   <section class="right-panel">
-    <button class="btn">Cancelar Consulta</button>
+    <div>
+      <button class="btn">Alterar Consulta</button>
+      <button class="btn">Aceitar Consulta</button>
+      <button class="btn">Rejeitar Consulta</button>
+    </div>
     <div *ngIf="appointment?.type === 'Presential' || appointment?.type === 'Home'" id="map"></div>
     <button *ngIf="appointment?.type === 'Online'" class="btn">Aceder ao chat</button>
   </section>

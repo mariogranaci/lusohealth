@@ -6,7 +6,7 @@
   <div class="appointments">
     <div class="appointment">
       <div id="info">
-        <div id="title-data">
+        <div id="title-data-under">
           <h3>Consulta {{appointment?.type}} </h3>
           <div class="text-appointment">Data e Hora: {{convertToDate()}} às {{convertToTime()}}</div>
           <div class="text-appointment" *ngIf="appointment?.location && appointment?.type !== 'Online'">Localização: {{appointment?.location}} </div>

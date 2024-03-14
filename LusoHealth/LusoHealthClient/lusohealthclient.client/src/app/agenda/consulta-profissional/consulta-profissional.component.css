@@ -15,7 +15,7 @@ main {
 }
 
 #title-data {
-  margin-bottom: 50px;
+  margin-bottom: 30px;
 }
 
 .appointments {
@@ -25,8 +25,8 @@ main {
 }
 
 .appointment {
-  margin-bottom: 80px;
-  width: 90%;
+  margin-bottom: 60px;
+  width: 60%;
   display: flex;
   flex-direction: column;
   padding: 20px;
@@ -72,7 +72,7 @@ main {
 }
 
 .btn {
-  margin: auto 0 210px;
+  margin: auto 10px 210px;
   width: 230px;
   align-self: center;
   height: 50px;
@@ -97,3 +97,10 @@ main {
     background-color: #1b69c8;
     cursor: pointer;
   }
+
+.image {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin-bottom: 10px;
+}

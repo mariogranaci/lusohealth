@@ -113,7 +113,7 @@ export class AgendaProfissionalComponent {
     ).subscribe({
       next: (specialities: Specialty[]) => {
         this.specialties = specialities;
-
+        /*console.log(this.specialties);*/
       },
       error: (error) => {
         console.log(error);
@@ -150,17 +150,22 @@ export class AgendaProfissionalComponent {
 
 
 
-  getAppointmentType(type: string | null): string {
-    switch (type) {
-      case "0":
-        return 'Presencial';
-      case "1":
-        return 'Online';
-      case "2":
-        return 'Domiciliária';
-      default:
-        return '';
+  getAppointmentType(type: string | null ): string {
+    /*console.log(type);*/
+    if (type) {
+      const number = parseInt(type);
+      switch (number) {
+        case 0:
+          return 'Presencial';
+        case 1:
+          return 'Online';
+        case 2:
+          return 'Domiciliária';
+        default:
+          return '';
+      }
     }
+    return '';
   }
 
   findSpecialtyByServiceId(serviceId: number | null): String | null {
@@ -233,6 +238,7 @@ export class AgendaProfissionalComponent {
 
   updateDisplayedAppointments() {
     this.displayedAppointments = this.appointments.slice(0, this.initialAppointmentCount);
+    console.log(typeof this.displayedAppointments[0].type);
   }
 
   updateDisplayedAppointmentsPending() {

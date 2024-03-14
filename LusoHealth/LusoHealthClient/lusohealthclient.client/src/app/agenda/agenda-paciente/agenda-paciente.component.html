@@ -33,7 +33,7 @@
         <div id="name-button">
           <div class="hours"><b>{{ convertToHours(appointment.timestamp) }}</b></div>
           <div class="name" id="name-title">{{ getProfessionalNameById(appointment.idService) }}</div>
-          <div class="type-appointment">{{ getAppointmentType(appointment.type) }}</div>
+          <div class="type-appointment">{{ getAppointmentType(appointment.type + "") }}</div>
         </div>
       </div>
       <button class="btn">Ver Detalhes</button>

@@ -20,7 +20,7 @@
                 <h3>Consulta de {{ findSpecialtyByServiceId(appointment.idService) }}</h3>
                 <div class="text-appointment">{{ convertToDate(appointment.timestamp) }}</div>
                 <div class="text-appointment">{{getPatientNameById(appointment.idPatient)}}</div>
-                <div class="text-appointment">{{ getAppointmentType(appointment.type) }}</div>
+                <div class="text-appointment">{{ getAppointmentType(appointment.type + "") }}</div>
               </div>
               <div class="hours"><b>{{ convertToHours(appointment.timestamp) }}</b></div>
             </div>
@@ -46,7 +46,7 @@
                 <h3>Consulta de {{ findSpecialtyByServiceId(appointment.idService) }}</h3>
                 <div class="text-appointment">{{ convertToDate(appointment.timestamp) }}</div>
                 <div class="text-appointment">{{getPatientNameById(appointment.idPatient)}}</div>
-                <div class="text-appointment">{{ getAppointmentType(appointment.type) }}</div>
+                <div class="text-appointment">{{ getAppointmentType(appointment.type + "") }}</div>
               </div>
               <div class="hours"><b>{{ convertToHours(appointment.timestamp) }}</b></div>
             </div>

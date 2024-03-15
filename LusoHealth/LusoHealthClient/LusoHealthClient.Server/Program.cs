@@ -74,7 +74,7 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
     options.InvalidModelStateResponseFactory = actionContext =>
     {
         var errors = actionContext.ModelState
-            .Where(e => e.Value.Errors.Count > 0)
+            .Where(e => e.Value?.Errors.Count > 0)
             .SelectMany(kvp => kvp.Value.Errors.Select(error => new
             {
                 Message = error.ErrorMessage,

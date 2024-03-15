@@ -105,7 +105,7 @@ namespace LusoHealthClient.Server.Controllers
         {
             try
             {
-                var slots = _context.AvailableSlots.Where(s => s.IdService == 1).ToList();
+                var slots = await _context.AvailableSlots.Where(s => s.IdService == 1).ToListAsync();
 
                 if (slots == null) { return NotFound("Não foi possível encontrar os slots"); }
                 return slots;

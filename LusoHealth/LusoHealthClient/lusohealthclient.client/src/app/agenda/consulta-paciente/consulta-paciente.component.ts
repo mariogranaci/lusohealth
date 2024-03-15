@@ -9,8 +9,6 @@ import { Appointment } from '../../shared/models/services/appointment';
 import { ProfileService } from '../../profile/profile.service';
 import { User } from '../../shared/models/authentication/user';
 import { UserProfile } from '../../shared/models/profile/userProfile';
-
-import { Loader } from '@googlemaps/js-api-loader';
 import { environment } from '../../../environments/environment.development';
 import { Marker } from '@googlemaps/adv-markers-utils';
 
@@ -27,7 +25,7 @@ export class ConsultaPacienteComponent {
 
   service: Service | undefined;
 
-  appointmentId: number = this.route.snapshot.queryParams['appointmentId'];
+  appointmentId: number = this.route.snapshot.queryParams['appointment'];
   appointment: Appointment | undefined;
   professional: Professional | undefined;
   patient: UserProfile | undefined;
@@ -42,54 +40,16 @@ export class ConsultaPacienteComponent {
     public profileService: ProfileService) { }
 
   ngOnInit() {
-    const loader = new Loader({
-      apiKey: environment.googleMapsApiKey,
-      version: "weekly",
-      libraries: [
-        "places",
-        "geocoding"
-      ]
-    });
-    loader.load().then(async () => {
-      this.initMap();
-
-    });
     this.getAppointmentInfo().then(() => {
       this.getServiceInfo();
       this.getProfessional();
       this.getUser();
-      console.log(this.appointment);
     });
   }
 
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
-  }
-
-  async initMap() {
-    await google.maps.importLibrary('marker');
-
-    const domElement = document.querySelector('#map');
-    if (domElement instanceof HTMLElement) {
-      // Continue with map initialization
-      this.map = new google.maps.Map(domElement, {
-        center: { lat: 38.7074, lng: -9.1368 },
-        zoom: this.zoom,
-        mapId: 'lusohealth'
-      });
-      // Other map initialization logic
-    } else {
-      console.error('Map container element not found');
-    }
-    if (this.map) {
-      this.map.addListener('dragend', () => {
-        this.mapMoved = true;
-      });
-      this.map.addListener('zoom_changed', () => {
-        this.mapMoved = true;
-      });
-    }
   }
 
   getAppointmentInfo(): Promise<void>{

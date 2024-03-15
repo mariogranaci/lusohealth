@@ -218,7 +218,8 @@ namespace LusoHealthClient.Server.Controllers
                 Duration = info.Duration,
                 IdPatient = info.IdPatient,
                 IdProfessional = info.IdProfesional, 
-                IdService = info.Id
+                IdService = info.IdService,
+				Id = info.Id,
             };
 
             return appointmentDto;

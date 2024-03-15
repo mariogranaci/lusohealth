@@ -24,7 +24,7 @@ export class ConsultaProfissionalComponent {
 
   service: Service | undefined;
 
-  appointmentId: number = this.route.snapshot.queryParams['appointmentId'];
+  appointmentId: number = this.route.snapshot.queryParams['appointment'];
   appointment: Appointment | undefined;
   professional: Professional | undefined;
   patient: UserProfile | undefined;

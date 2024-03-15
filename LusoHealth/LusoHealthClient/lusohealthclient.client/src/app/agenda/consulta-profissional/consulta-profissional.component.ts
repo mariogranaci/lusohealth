@@ -29,28 +29,10 @@ export class ConsultaProfissionalComponent {
   professional: Professional | undefined;
   patient: UserProfile | undefined;
 
-  zoom = 14;
-  center: google.maps.LatLngLiteral = { lat: 38.736946, lng: -9.142685 };
-  map: google.maps.Map | undefined;
-  mapMoved: boolean = false;
-  markers: Marker[] = [];
-
   constructor(public servicesService: ServicesService, public agendaService: AgendaService, private route: ActivatedRoute,
     public profileService: ProfileService) { }
 
   ngOnInit() {
-    const loader = new Loader({
-      apiKey: environment.googleMapsApiKey,
-      version: "weekly",
-      libraries: [
-        "places",
-        "geocoding"
-      ]
-    });
-    loader.load().then(async () => {
-      this.initMap();
-
-    });
     this.getAppointmentInfo().then(() => {
       this.getServiceInfo();
       this.getProfessional();
@@ -62,31 +44,6 @@ export class ConsultaProfissionalComponent {
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
-  }
-
-  async initMap() {
-    await google.maps.importLibrary('marker');
-
-    const domElement = document.querySelector('#map');
-    if (domElement instanceof HTMLElement) {
-      // Continue with map initialization
-      this.map = new google.maps.Map(domElement, {
-        center: { lat: 38.7074, lng: -9.1368 },
-        zoom: this.zoom,
-        mapId: 'lusohealth'
-      });
-      // Other map initialization logic
-    } else {
-      console.error('Map container element not found');
-    }
-    if (this.map) {
-      this.map.addListener('dragend', () => {
-        this.mapMoved = true;
-      });
-      this.map.addListener('zoom_changed', () => {
-        this.mapMoved = true;
-      });
-    }
   }
 
   getAppointmentInfo(): Promise<void> {
@@ -151,21 +108,24 @@ export class ConsultaProfissionalComponent {
   }
 
   getUser() {
-    this.profileService.getUserData().pipe(
-      takeUntil(this.unsubscribe$)
-    ).subscribe({
-      next: (patient: any) => {
-        this.patient = patient;
-      },
-      error: (error) => {
-        console.log(error);
-        if (error.error.errors) {
-          this.errorMessages = error.error.errors;
-        } else {
-          this.errorMessages.push(error.error);
+    if (this.appointment?.idPatient)
+    {
+      this.profileService.getUserById(this.appointment?.idPatient).pipe(
+        takeUntil(this.unsubscribe$)
+      ).subscribe({
+        next: (patient: any) => {
+          this.patient = patient;
+        },
+        error: (error) => {
+          console.log(error);
+          if (error.error.errors) {
+            this.errorMessages = error.error.errors;
+          } else {
+            this.errorMessages.push(error.error);
+          }
         }
-      }
-    });
+      });
+    }
   }
 
   getProfessionalNameById(): string {

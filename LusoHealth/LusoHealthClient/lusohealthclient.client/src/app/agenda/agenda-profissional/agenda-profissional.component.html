@@ -24,7 +24,7 @@
               </div>
               <div class="hours"><b>{{ convertToHours(appointment.timestamp) }}</b></div>
             </div>
-            <button class="btn">Ver Detalhes</button>
+            <button class="btn" [routerLink]="['/professional-appointment']" [queryParams]="{ appointment: appointment.id }">Ver Detalhes</button>
           </div>
         </div>
 

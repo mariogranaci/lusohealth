@@ -70,6 +70,32 @@ namespace LusoHealthClient.Server.Controllers
             return userProfileDto;
         }
 
+        [HttpGet("get-user/{id}")]
+        public async Task<ActionResult<UserProfileDto>> GetUserById(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+
+            if (user == null)
+            {
+                return NotFound("Não foi possível encontrar o utilizador");
+            }
+
+            UserProfileDto userProfileDto = new UserProfileDto
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Nif = user.Nif,
+                Telemovel = user.PhoneNumber,
+                DataNascimento = user.BirthDate,
+                Genero = user.Gender,
+                Picture = user.ProfilePicPath,
+                Provider = user.Provider,
+            };
+
+            return userProfileDto;
+        }
+
         [HttpGet("get-professional-info")]
         public async Task<ActionResult<ProfessionalDto>> GetProfessionalProfile()
         {

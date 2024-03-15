@@ -104,3 +104,8 @@ main {
   border-radius: 50%;
   margin-bottom: 10px;
 }
+
+.buttons {
+  display: flex;
+  flex-wrap: nowrap;
+}

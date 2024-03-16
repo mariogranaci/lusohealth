@@ -1,9 +1,11 @@
 const PROXY_CONFIG = [
   {
     context: [
-      "/weatherforecast",
+      //"/weatherforecast",
+      "/api",
     ],
-    target: "https://localhost:7090",
+    //target: "https://localhost:7090",
+    target: "https://lusohealthbackend.azurewebsites.net",
     secure: false
   }
 ]

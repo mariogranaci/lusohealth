@@ -136,7 +136,16 @@ using var scope = app.Services.CreateScope();
 try
 {
     var contextSeedService = scope.ServiceProvider.GetService<ContextSeedService>();
-    await contextSeedService.InitializeContextAsync();
+    if (app.Environment.IsDevelopment())
+    {
+        Console.WriteLine("\n\n\n\n\n\n\n\n\nDEVELOPMENT\n\n\n\n\n\n\n\n\n\n");
+        Console.WriteLine(builder.Configuration.GetConnectionString("DefaultConnection"));
+        await contextSeedService.InitializeContextAsync();
+    } else if (app.Environment.IsProduction())
+    {
+        await contextSeedService.InitializeProductionAsync();
+    }
+
 } catch (Exception ex)
 {
     var logger = scope.ServiceProvider.GetService<ILogger<Program>>();

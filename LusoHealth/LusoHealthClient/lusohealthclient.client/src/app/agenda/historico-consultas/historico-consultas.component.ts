@@ -236,15 +236,15 @@ export class HistoricoConsultasComponent {
       return ""; // Or any other default value you prefer
     }
 
-    // Create a new Date object from the input string
     let dateTime: Date = new Date(dateTimeString);
 
-    // Extract hours in 24-hour format
     let hours: number = dateTime.getHours();
+    let formattedHours: string = hours < 10 ? '0' + hours : hours.toString();
 
     let min: number = dateTime.getMinutes();
+    let formattedMinutes: string = min < 10 ? '0' + min : min.toString();
 
-    return hours + ":" + min;
+    return formattedHours + ":" + formattedMinutes;
   }
 
   convertToDate(dateTimeString: Date | null): string {

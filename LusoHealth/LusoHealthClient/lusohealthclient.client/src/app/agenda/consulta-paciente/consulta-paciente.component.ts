@@ -143,10 +143,7 @@ export class ConsultaPacienteComponent {
     return this.service?.professional;
   }
 
-  convertToTime(): string {
-
-    const dateTimeString = this.appointment?.timestamp;
-
+  convertToHours(dateTimeString: Date | null): string {
     if (!dateTimeString) {
       return ""; // Or any other default value you prefer
     }
@@ -154,10 +151,12 @@ export class ConsultaPacienteComponent {
     let dateTime: Date = new Date(dateTimeString);
 
     let hours: number = dateTime.getHours();
+    let formattedHours: string = hours < 10 ? '0' + hours : hours.toString();
 
     let min: number = dateTime.getMinutes();
+    let formattedMinutes: string = min < 10 ? '0' + min : min.toString();
 
-    return hours + ":" + min;
+    return formattedHours + ":" + formattedMinutes;
   }
 
   convertToDate(): string {

@@ -143,7 +143,10 @@ export class ConsultaPacienteComponent {
     return this.service?.professional;
   }
 
-  convertToHours(dateTimeString: Date | null): string {
+  convertToHours(): string {
+
+    const dateTimeString = this.appointment?.timestamp;
+
     if (!dateTimeString) {
       return ""; // Or any other default value you prefer
     }

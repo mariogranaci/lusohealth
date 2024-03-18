@@ -190,7 +190,7 @@ main {
   width: 100%;
 }
 
-input[type="number"], input[type="text"], input[type="date"] {
+input[type="date"] {
   min-height: 40px;
   border: none;
   border-radius: 7px;
@@ -204,25 +204,6 @@ input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
-}
-
-.radio-row {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
-}
-
-.radio-label {
-  display: flex;
-  align-items: center;
-}
-
-input[type="radio"] {
-  width: 17px;
-  margin-right: 10px;
-  height: 17px;
-  margin-top: -1px;
-  vertical-align: middle;
 }
 
 .form-buttons-row {

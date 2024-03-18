@@ -132,6 +132,25 @@ export class ConsultaPacienteComponent {
     });
   }
 
+  changeAppointmentCancel() {
+    this.appointmentService.cancelAppointment(this.appointment).pipe(
+      takeUntil(this.unsubscribe$)
+    ).subscribe({
+      next: (appointment: any) => {
+        console.log("Appointment canceled successfully:", appointment);
+        this.appointment = appointment;
+      },
+      error: (error) => {
+        console.log("Error canceling appointment:", error);
+        if (error.error.errors) {
+          this.errorMessages = error.error.errors;
+        } else {
+          this.errorMessages.push(error.error);
+        }
+      }
+    });
+  }
+
   getProfessionalNameById(): string {
     if (this.service?.professional) {
       return this.service?.professional.professionalInfo.firstName + " " + this.service?.professional.professionalInfo.lastName;
@@ -187,6 +206,49 @@ export class ConsultaPacienteComponent {
     let formattedDate: string = `${day} ${monthsInPortuguese[month]} ${year}`;
 
     return formattedDate;
+  }
+
+  openPopup(opcao: string) {
+    const overlay = document.getElementById('overlay');
+    const remove = document.getElementById('remove-appointment-container');
+
+    if (remove) {
+      remove.style.display = "none";
+    }
+
+    if (overlay) {
+      overlay.style.display = 'flex';
+      if (opcao == "remove") {
+        if (remove) {
+          remove.style.display = "block";
+        }
+      }
+    }
+  }
+
+  closePopup() {
+    const overlay = document.getElementById('overlay');
+    const add = document.getElementById('add-appointment-container');
+    const edit = document.getElementById('edit-appointment-container');
+
+    if (overlay) {
+      overlay.style.display = 'none';
+      if (edit) {
+        edit.style.display = "none";
+      }
+      if (add) {
+        add.style.display = "none";
+      }
+    }
+  }
+
+  cancelAppointment() {
+    this.changeAppointmentCancel();
+    this.closePopup();
+  }
+
+  stopPropagation(event: Event) {
+    event.stopPropagation();
   }
 
 }

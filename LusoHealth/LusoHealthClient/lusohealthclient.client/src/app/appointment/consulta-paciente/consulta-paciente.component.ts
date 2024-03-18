@@ -1,23 +1,24 @@
 import { Component } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
-import { Service } from '../../shared/models/services/service';
-import { Appointment } from '../../shared/models/services/appointment';
-import { UserProfile } from '../../shared/models/profile/userProfile';
-import { Professional } from '../../shared/models/profile/professional';
 import { ServicesService } from '../../services/services.service';
-import { AgendaService } from '../agenda.service';
+import { AppointmentService } from '../appointment.service';
+import { Subject, takeUntil } from 'rxjs';
+import { Professional } from '../../shared/models/profile/professional';
+import { Service } from '../../shared/models/services/service';
 import { ActivatedRoute } from '@angular/router';
+import { Appointment } from '../../shared/models/services/appointment';
 import { ProfileService } from '../../profile/profile.service';
-import { Loader } from '@googlemaps/js-api-loader';
+import { User } from '../../shared/models/authentication/user';
+import { UserProfile } from '../../shared/models/profile/userProfile';
 import { environment } from '../../../environments/environment.development';
 import { Marker } from '@googlemaps/adv-markers-utils';
 
+
 @Component({
-  selector: 'app-consulta-profissional',
-  templateUrl: './consulta-profissional.component.html',
-  styleUrl: './consulta-profissional.component.css'
+  selector: 'app-consulta-paciente',
+  templateUrl: './consulta-paciente.component.html',
+  styleUrl: './consulta-paciente.component.css'
 })
-export class ConsultaProfissionalComponent {
+export class ConsultaPacienteComponent {
 
   private unsubscribe$ = new Subject<void>();
   errorMessages: string[] = [];
@@ -29,7 +30,13 @@ export class ConsultaProfissionalComponent {
   professional: Professional | undefined;
   patient: UserProfile | undefined;
 
-  constructor(public servicesService: ServicesService, public agendaService: AgendaService, private route: ActivatedRoute,
+  zoom = 14;
+  center: google.maps.LatLngLiteral = { lat: 38.736946, lng: -9.142685 };
+  map: google.maps.Map | undefined;
+  mapMoved: boolean = false;
+  markers: Marker[] = [];
+
+  constructor(public servicesService: ServicesService, public appointmentService: AppointmentService, private route: ActivatedRoute,
     public profileService: ProfileService) { }
 
   ngOnInit() {
@@ -37,7 +44,6 @@ export class ConsultaProfissionalComponent {
       this.getServiceInfo();
       this.getProfessional();
       this.getUser();
-      console.log(this.appointment);
     });
   }
 
@@ -46,9 +52,9 @@ export class ConsultaProfissionalComponent {
     this.unsubscribe$.complete();
   }
 
-  getAppointmentInfo(): Promise<void> {
+  getAppointmentInfo(): Promise<void>{
     return new Promise<void>((resolve, reject) => {
-      this.agendaService.getAppointmentInfo(this.appointmentId).pipe(
+      this.appointmentService.getAppointmentInfo(this.appointmentId).pipe(
         takeUntil(this.unsubscribe$)
       ).subscribe({
         next: (appointement: any) => {
@@ -68,7 +74,8 @@ export class ConsultaProfissionalComponent {
   }
 
   getServiceInfo() {
-    if (this.appointment && this.appointment.idService != null) {
+    if (this.appointment && this.appointment.idService != null)
+    {
       this.servicesService.getServiceInfo(this.appointment.idService).pipe(
         takeUntil(this.unsubscribe$)
       ).subscribe({
@@ -108,24 +115,21 @@ export class ConsultaProfissionalComponent {
   }
 
   getUser() {
-    if (this.appointment?.idPatient)
-    {
-      this.profileService.getUserById(this.appointment?.idPatient).pipe(
-        takeUntil(this.unsubscribe$)
-      ).subscribe({
-        next: (patient: any) => {
-          this.patient = patient;
-        },
-        error: (error) => {
-          console.log(error);
-          if (error.error.errors) {
-            this.errorMessages = error.error.errors;
-          } else {
-            this.errorMessages.push(error.error);
-          }
+    this.profileService.getUserData().pipe(
+      takeUntil(this.unsubscribe$)
+    ).subscribe({
+      next: (patient: any) => {
+        this.patient = patient;
+      },
+      error: (error) => {
+        console.log(error);
+        if (error.error.errors) {
+          this.errorMessages = error.error.errors;
+        } else {
+          this.errorMessages.push(error.error);
         }
-      });
-    }
+      }
+    });
   }
 
   getProfessionalNameById(): string {

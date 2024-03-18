@@ -5,13 +5,11 @@ import { Appointment } from '../shared/models/services/appointment';
 import { environment } from '../../environments/environment.development';
 import { User } from '../shared/models/authentication/user';
 import { jwtDecode } from 'jwt-decode';
-import { Specialty } from '../shared/models/profile/specialty';
-import { AvailableSlot } from '../shared/models/services/availableSlot';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AgendaService {
+export class AppointmentService {
 
   constructor(private http: HttpClient, private router: Router) { }
 
@@ -44,28 +42,18 @@ export class AgendaService {
     return headers;
   }
 
-  getPreviousAppointments() {
+  getAppointmentInfo(id: number) {
     const headers = this.getHeaders();
-    return this.http.get<Appointment[]>(`${environment.appUrl}/api/agenda/get-previous-appointments`, { headers });
+    return this.http.get<Appointment[]>(`${environment.appUrl}/api/appointment/get-appointment-info/${id}`, { headers });
   }
 
-  getNextAppointments() {
+  cancelAppointment(id: number) {
     const headers = this.getHeaders();
-    return this.http.get<Appointment[]>(`${environment.appUrl}/api/agenda/get-next-appointments`, { headers });
+    return this.http.patch<Appointment>(`${environment.appUrl}/api/appointment/cancel-appointment/${id}`, { headers });
   }
 
-  getPendingAppointments() {
+  scheduleAppointment(id: number) {
     const headers = this.getHeaders();
-    return this.http.get<Appointment[]>(`${environment.appUrl}/api/agenda/get-pending-appointments`, { headers });
-  }
-
-  getSpecialties() {
-    const headers = this.getHeaders();
-    return this.http.get<Specialty[]>(`${environment.appUrl}/api/agenda/get-specialties`, { headers });
-  }
-
-  getSlots(id: number ,data: Date) {
-    const headers = this.getHeaders();
-    return this.http.get<AvailableSlot[]>(`${environment.appUrl}/api/agenda/get-slots`, { headers });
+    return this.http.patch<Appointment>(`${environment.appUrl}/api/appointment/schedule-appointment/${id}`, { headers });
   }
 }

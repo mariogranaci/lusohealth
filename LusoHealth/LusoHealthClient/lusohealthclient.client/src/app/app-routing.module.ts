@@ -8,6 +8,7 @@ const routes: Routes = [
   { path: '', loadChildren: () => import('./services/services.module').then(m => m.ServicesModule) },
   { path: '', loadChildren: () => import('./agenda/agenda.module').then(m => m.AgendaModule) },
   { path: '', loadChildren: () => import('./authentication/authentication.module').then(m => m.AuthenticationModule) },
+  { path: '', loadChildren: () => import('./appointment/appointment.module').then(m => m.AppointmentModule) },
   { path: 'not-found', component: NotFoundComponent },
   { path: '**', component: NotFoundComponent, pathMatch: 'full' },
 ];

@@ -14,7 +14,7 @@ using System.Security.Claims;
 
 namespace LusoHealthClient.Server.Controllers
 {
-	//[Authorize]
+	[Authorize]
 	[Route("api/[controller]")]
 	[ApiController]
 	public class AgendaController : ControllerBase
@@ -181,49 +181,26 @@ namespace LusoHealthClient.Server.Controllers
 			}
 		}
 
-		[HttpGet("get-slots")]
-		public async Task<ActionResult<List<AvailableSlot>>> GetSlots()
-		{
-			try
-			{
-				var slots = _context.AvailableSlots.Where(s => s.IdService == 1).ToList();
-
-				if (slots == null) { return NotFound("Não foi possível encontrar os slots"); }
-				return slots;
-			}
-			catch (Exception)
-			{
-				return BadRequest("Não foi possível encontrar os slots. Tente novamente.");
-			}
-		}
-
-		[Authorize]
-        [HttpGet("get-appointment-info/{id}")]
-        public async Task<ActionResult<AppointmentDto>> GetAppointmentInfo(int id)
+        [HttpGet("get-slots")]
+        public async Task<ActionResult<List<AvailableSlot>>> GetSlots( slot)
         {
-            var info = await _context.Appointment.FirstOrDefaultAsync(x => x.Id == id);
-
-            if (info == null)
+            try
             {
-                return BadRequest("Não foi possível encontrar a informação da consulta.");
+                var slots = await _context.AvailableSlots
+                                          .Where(s => s.IdService == serviceId && s.Start >= date.Date)
+                                          .ToListAsync();
+
+                if (slots == null || slots.Count == 0)
+                {
+                    return NotFound("Não foi possível encontrar os slots para o serviço e data especificados");
+                }
+
+                return slots;
             }
-
-            AppointmentDto appointmentDto = new AppointmentDto
+            catch (Exception)
             {
-                Timestamp = info.Timestamp,
-                Location = info.Location,
-                Type = info.Type.ToString(),
-                Description = info.Description,
-                State = info.State.ToString(),
-                Duration = info.Duration,
-                IdPatient = info.IdPatient,
-                IdProfessional = info.IdProfesional, 
-                IdService = info.IdService,
-				Id = info.Id,
-            };
-
-            return appointmentDto;
+                return BadRequest("Não foi possível encontrar os slots. Tente novamente.");
+            }
         }
-		
     }
 }

@@ -44,16 +44,16 @@ export class AppointmentService {
 
   getAppointmentInfo(id: number) {
     const headers = this.getHeaders();
-    return this.http.get<Appointment[]>(`${environment.appUrl}/api/appointment/get-appointment-info/${id}`, { headers });
+    return this.http.get<Appointment>(`${environment.appUrl}/api/appointment/get-appointment-info/${id}`, { headers });
   }
 
-  cancelAppointment(id: number) {
+  cancelAppointment(model: Appointment | undefined) {
     const headers = this.getHeaders();
-    return this.http.patch<Appointment>(`${environment.appUrl}/api/appointment/cancel-appointment/${id}`, { headers });
+    return this.http.patch<Appointment>(`${environment.appUrl}/api/appointment/cancel-appointment`, model, { headers });
   }
 
-  scheduleAppointment(id: number) {
+  scheduleAppointment(model: Appointment | undefined) {
     const headers = this.getHeaders();
-    return this.http.patch<Appointment>(`${environment.appUrl}/api/appointment/schedule-appointment/${id}`, { headers });
+    return this.http.patch<Appointment>(`${environment.appUrl}/api/appointment/schedule-appointment`, model, { headers });
   }
 }

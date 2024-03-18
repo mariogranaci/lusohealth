@@ -53,10 +53,11 @@ namespace LusoHealthClient.Server.Controllers
         }
 
 
-        [HttpPatch("cancel-appointment/{id}")]
-        public async Task<ActionResult> CancelAppointment(int id)
+        [HttpPatch("cancel-appointment")]
+        public async Task<ActionResult<AppointmentDto>> CancelAppointment(AppointmentDto model)
         {
-            var appointment = await _context.Appointment.FindAsync(id);
+            if (model == null) return BadRequest("Não foi possível cancelar a consulta.");
+            var appointment = await _context.Appointment.FindAsync(model.Id);
 
             if (appointment == null)
             {
@@ -66,11 +67,12 @@ namespace LusoHealthClient.Server.Controllers
             try
             {
                 appointment.State = AppointmentState.Canceled;
+                model.State = "Canceled";
 
                 _context.Appointment.Update(appointment);
                 await _context.SaveChangesAsync();
 
-                return Ok("Consulta cancelada.");
+                return model;
             }
             catch (Exception)
             {
@@ -78,10 +80,11 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpPatch("schedule-appointment/{id}")]
-        public async Task<ActionResult> UpdateAppointmentState(int id)
+        [HttpPatch("schedule-appointment")]
+        public async Task<ActionResult<AppointmentDto>> UpdateAppointmentState(AppointmentDto model)
         {
-            var appointment = await _context.Appointment.FindAsync(id);
+            if (model == null) return BadRequest("Não foi possível atualizar o estado da consulta.");
+            var appointment = await _context.Appointment.FindAsync(model.Id);
 
             if (appointment == null)
             {
@@ -91,11 +94,12 @@ namespace LusoHealthClient.Server.Controllers
             try
             {
                 appointment.State = AppointmentState.Scheduled;
+                model.State = "Scheduled";
 
                 _context.Appointment.Update(appointment);
                 await _context.SaveChangesAsync();
 
-                return Ok("Estado da consulta atualizado para 'Agendada'.");
+                return model;
             }
             catch (Exception)
             {

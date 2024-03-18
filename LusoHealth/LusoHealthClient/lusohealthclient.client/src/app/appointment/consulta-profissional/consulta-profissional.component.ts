@@ -63,8 +63,8 @@ export class ConsultaProfissionalComponent {
       this.appointmentService.getAppointmentInfo(this.appointmentId).pipe(
         takeUntil(this.unsubscribe$)
       ).subscribe({
-        next: (appointement: any) => {
-          this.appointment = appointement;
+        next: (appointment: any) => {
+          this.appointment = appointment;
           resolve();
         },
         error: (error) => {
@@ -80,11 +80,12 @@ export class ConsultaProfissionalComponent {
   }
 
   changeAppointmentCancel() {
-    this.appointmentService.cancelAppointment(this.appointmentId).pipe(
+    this.appointmentService.cancelAppointment(this.appointment).pipe(
       takeUntil(this.unsubscribe$)
     ).subscribe({
       next: (appointment: any) => {
         console.log("Appointment canceled successfully:", appointment);
+        this.appointment = appointment;
       },
       error: (error) => {
         console.log("Error canceling appointment:", error);
@@ -98,11 +99,12 @@ export class ConsultaProfissionalComponent {
   }
 
   changeAppointmentScheduled() {
-    this.appointmentService.scheduleAppointment(this.appointmentId).pipe(
+    this.appointmentService.scheduleAppointment(this.appointment).pipe(
       takeUntil(this.unsubscribe$)
     ).subscribe({
       next: (appointment: any) => {
         console.log("Appointment scheduled successfully:", appointment);
+        this.appointment = appointment;
       },
       error: (error) => {
         console.error("Error scheduling appointment:", error);

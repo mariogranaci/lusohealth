@@ -1,30 +1,18 @@
 export class AvailableSlot {
-  id: number | null;
-  startDate: Date | null;
-  endDate: Date | null;
-  startTime: Date | null;
-  endTime: Date | null;
-  serviceId: number | null;
-  slotDuration: number | null;
-  type: string;
+  appointmentType: number | undefined;
+  id: number | undefined;
+  idService: number | undefined;
+  isAvailable: boolean | undefined;
+  slotDuration: number | undefined;
+  start: Date | undefined;
 
-  constructor(
-    startDate: Date | null,
-    endDate: Date | null,
-    startTime: Date | null,
-    endTime: Date | null,
-    serviceId: number | null,
-    slotDuration: number | null,
-    type: string,
-    id: number | null
-  ) {
-    this.startDate = startDate;
-    this.endDate = endDate;
-    this.startTime = startTime;
-    this.endTime = endTime;
-    this.serviceId = serviceId;
-    this.slotDuration = slotDuration;
-    this.type = type;
+  constructor(appointmentType: number | undefined, id: number | undefined,
+    idService: number | undefined, isAvailable: boolean | undefined, slotDuration: number | undefined, start: Date | undefined) {
+    this.appointmentType = appointmentType;
     this.id = id;
+    this.idService = idService;
+    this.isAvailable = isAvailable;
+    this.slotDuration = slotDuration;
+    this.start = start;
   }
 }

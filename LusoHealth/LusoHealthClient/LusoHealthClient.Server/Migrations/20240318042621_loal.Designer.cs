@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LusoHealthClient.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240315005947_luhalth")]
-    partial class luhalth
+    [Migration("20240318042621_loal")]
+    partial class loal
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -42,7 +42,7 @@ namespace LusoHealthClient.Server.Migrations
                     b.Property<bool>("IsAvailable")
                         .HasColumnType("bit");
 
-                    b.Property<int>("SlotDuation")
+                    b.Property<int>("SlotDuration")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Start")

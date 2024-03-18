@@ -183,19 +183,14 @@ namespace LusoHealthClient.Server.Controllers
 			}
 		}
 
-        [HttpGet("get-slots")]
-        public async Task<ActionResult<List<AvailableSlot>>> GetSlots( slot)
+        [HttpPost("get-slots")]
+        public async Task<ActionResult<List<AvailableSlot>>> GetSlots(AvailabilityDto slot)
         {
             try
             {
                 var slots = await _context.AvailableSlots
-                                          .Where(s => s.IdService == serviceId && s.Start >= date.Date)
+                                          .Where(s => s.IdService == slot.ServiceId && s.Start.Date == slot.StartDate)
                                           .ToListAsync();
-
-                if (slots == null || slots.Count == 0)
-                {
-                    return NotFound("Não foi possível encontrar os slots para o serviço e data especificados");
-                }
 
                 return slots;
             }
@@ -205,57 +200,57 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpPost("add-slots")]
-        public async Task<ActionResult> AddSlots(AvailabilityDto availabilityDto)
-        {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
+    //    [HttpPost("add-slots")]
+    //    public async Task<ActionResult> AddSlots(AvailabilityDto availabilityDto)
+    //    {
+    //        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+    //        if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
 
-            var user = await _userManager.FindByIdAsync(userIdClaim);
-            if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
+    //        var user = await _userManager.FindByIdAsync(userIdClaim);
+    //        if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
 
-            try
-            {
-                /*var slots = await _context.AvailableSlots
-    .Where(s => s.IdService == availabilityDto.ServiceId
-                && s.Start >= intervalStart // Slot starts after or at the interval start time
-                && s.Start < intervalEnd // Slot starts before the interval end time
-                && s.IsAvailable) // Assuming you're also interested in filtering by availability
-    .ToListAsync();*/
+    //        try
+    //        {
+    //            /*var slots = await _context.AvailableSlots
+    //.Where(s => s.IdService == availabilityDto.ServiceId
+    //            && s.Start >= intervalStart // Slot starts after or at the interval start time
+    //            && s.Start < intervalEnd // Slot starts before the interval end time
+    //            && s.IsAvailable) // Assuming you're also interested in filtering by availability
+    //.ToListAsync();*/
 
-                var totalDuration = (availabilityDto.EndDate - availabilityDto.StartDate).TotalMinutes;
+    //            var totalDuration = (availabilityDto.EndDate - availabilityDto.StartDate).TotalMinutes;
 
-                var numberOfSlots = (int)(totalDuration / availabilityDto.SlotDuration);
+    //            var numberOfSlots = (int)(totalDuration / availabilityDto.SlotDuration);
 
-                var newSlots = new List<AvailableSlot>();
+    //            var newSlots = new List<AvailableSlot>();
 
-                for (int i = 0; i < numberOfSlots; i++)
-                {
-                    var slotStartTime = availabilityDto.StartDate.AddMinutes(i * availabilityDto.SlotDuration);
+    //            for (int i = 0; i < numberOfSlots; i++)
+    //            {
+    //                var slotStartTime = availabilityDto.StartDate.AddMinutes(i * availabilityDto.SlotDuration);
 
-                    var slot = new AvailableSlot
-                    {
-                        Start = slotStartTime,
-                        SlotDuation = availabilityDto.SlotDuration,
-                        IdService = availabilityDto.ServiceId,
-                        AppointmentType = (AppointmentType)Enum.Parse(typeof(AppointmentType), availabilityDto.Type, true),
-                        IsAvailable = true,
-                    };
+    //                var slot = new AvailableSlot
+    //                {
+    //                    Start = slotStartTime,
+    //                    SlotDuation = availabilityDto.SlotDuration,
+    //                    IdService = availabilityDto.ServiceId,
+    //                    AppointmentType = (AppointmentType)Enum.Parse(typeof(AppointmentType), availabilityDto.Type, true),
+    //                    IsAvailable = true,
+    //                };
 
-                    newSlots.Add(slot);
-                }
+    //                newSlots.Add(slot);
+    //            }
 
-                await _context.AvailableSlots.AddRangeAsync(slots);
-                await _context.SaveChangesAsync();
+    //            await _context.AvailableSlots.AddRangeAsync(slots);
+    //            await _context.SaveChangesAsync();
 
-                return Ok("Slots adicionados com sucesso.");
+    //            return Ok("Slots adicionados com sucesso.");
 
-            }
-            catch (Exception)
-            {
-                return BadRequest("Não foi possível adicionar os slots. Tente novamente.");
-            }
-        }
+    //        }
+    //        catch (Exception)
+    //        {
+    //            return BadRequest("Não foi possível adicionar os slots. Tente novamente.");
+    //        }
+    //    }
 
 
         [HttpDelete("delete-slots")]

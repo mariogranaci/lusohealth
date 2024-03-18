@@ -68,24 +68,32 @@
     </div>
   </div>
 
-  <form [formGroup]="editAppointment" (ngSubmit)="convertToHours()"
-        id="edit-appointment-container" class="overlay-container" autocomplete="off" (click)="stopPropagation($event)">
+  <form [formGroup]="editAppointment" id="edit-appointment-container" class="overlay-container" autocomplete="off" (click)="stopPropagation($event)">
 
     <h2>Editar Data da consulta</h2>
 
     <div class="speciality-form-box">
-      <label for="edit-data-nascimento">Data da consulta:</label>
-      <input type="date" id="edit-data-nascimento" name="dataNascimento" formControlName="dataNascimento" [min]="minDate"/>
-      <span class="text-danger" *ngIf="submitted && editAppointment.get('dataNascimento')?.hasError('required')">
+      <label for="edit-data-consulta">Data da consulta:</label>
+      <input type="date" id="edit-data-consulta" name="dataConsulta" formControlName="dataConsulta" [min]="minDate" (input)="changeDate()" />
+      <span class="text-danger" *ngIf="submitted && editAppointment.get('dataConsulta')?.hasError('required')">
         Introduza uma data da consulta
       </span>
-      <span class="text-danger" *ngIf="submitted && editAppointment.get('dataNascimento')?.hasError('error')">
+      <span class="text-danger" *ngIf="submitted && editAppointment.get('dataConsulta')?.hasError('error')">
         Introduza uma data válida
       </span>
     </div>
+    <div class="speciality-form-box">
+      <div id="dropdown">
+        <select id="slots">
+          <option disabled hidden selected>Sem slot</option>
+          <option>Qualquer</option>
+          <option *ngFor="let slot of availableSlots" value="{{slot.id}}">{{ slot.start | date:'shortTime':'':'pt-PT'}}</option>
+        </select>
+      </div>
+    </div>
     <div class="form-buttons-row">
       <button type="reset" (click)="closePopup()" class="btn btn-red">Cancelar</button>
-      <button type="submit" class="btn btn-blue">Adicionar</button>
+      <button type="submit" class="btn btn-blue">Editar</button>
     </div>
   </form>
 </div>

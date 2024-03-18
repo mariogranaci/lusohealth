@@ -10,6 +10,7 @@ import { Service } from '../../shared/models/services/service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AppointmentService } from '../appointment.service';
 import { AgendaService } from '../../agenda/agenda.service';
+import { Availability } from '../../shared/models/services/availability';
 import { AvailableSlot } from '../../shared/models/services/availableSlot';
 
 @Component({
@@ -33,6 +34,7 @@ export class ConsultaProfissionalComponent {
 
   editAppointment: FormGroup = new FormGroup({});
   submitted = false;
+  chosenDate: Date = new Date;
 
   minDate: string;
 
@@ -176,21 +178,25 @@ export class ConsultaProfissionalComponent {
   }
 
   getAvaiableSlots() {
-    this.agendaService.getSlots().pipe(
-      takeUntil(this.unsubscribe$)
-    ).subscribe({
-      next: (availableSlots: any) => {
-        this.availableSlots = availableSlots;
-      },
-      error: (error) => {
-        console.log(error);
-        if (error.error.errors) {
-          this.errorMessages = error.error.errors;
-        } else {
-          this.errorMessages.push(error.error);
+    if (this.appointment?.idService)
+    {
+      this.agendaService.getSlots(new Availability(this.chosenDate, null, null, null, this.appointment?.idService, null, "", null)).pipe(
+        takeUntil(this.unsubscribe$)
+      ).subscribe({
+        next: (availableSlots: any) => {
+          this.availableSlots = availableSlots;
+          console.log(availableSlots);
+        },
+        error: (error) => {
+          console.log(error);
+          if (error.error.errors) {
+            this.errorMessages = error.error.errors;
+          } else {
+            this.errorMessages.push(error.error);
+          }
         }
-      }
-    }); 
+      }); 
+    }
   }
 
   getProfessionalNameById(): string {
@@ -305,7 +311,12 @@ export class ConsultaProfissionalComponent {
 
   initializeForm() {
     this.editAppointment = this.formBuilder.group({
-      dataNascimento: [this.minDate, [Validators.required]],
+      dataConsulta: [this.minDate, [Validators.required]],
     });
+  }
+
+  changeDate() {
+    this.chosenDate = new Date((document.getElementById('edit-data-consulta') as HTMLInputElement).value);
+    this.getAvaiableSlots();
   }
 }

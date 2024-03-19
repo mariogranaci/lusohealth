@@ -29,6 +29,9 @@
   <button class="btn-top" (click)="resetDropdowns()">Limpar</button>
 
   <h2>Agendamentos Anteriores</h2>
+  <div *ngIf="displayedAppointments.length === 0">
+    <p class="noAppointments">Não existem nenhumas consultas com estes filtros.</p>
+  </div>
   <div *ngFor="let appointment of displayedAppointments">
     <div class="appointment">
       <div id="info">
@@ -43,7 +46,7 @@
           <div class="type-appointment">{{ getAppointmentType(appointment.type) }}</div>
         </div>
       </div>
-      <button class="btn">Ver Detalhes</button>
+      <button class="btn" [routerLink]="['/patient-appointment']" [queryParams]="{ appointment: appointment.id }">Ver Detalhes</button>
     </div>
   </div>
   <div class="more-container" *ngIf="appointmentsFiltered.length > displayedAppointments.length">

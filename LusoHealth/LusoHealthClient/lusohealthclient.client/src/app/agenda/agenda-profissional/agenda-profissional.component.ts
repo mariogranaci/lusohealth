@@ -206,10 +206,12 @@ export class AgendaProfissionalComponent {
     let dateTime: Date = new Date(dateTimeString);
 
     let hours: number = dateTime.getHours();
+    let formattedHours: string = hours < 10 ? '0' + hours : hours.toString();
 
     let min: number = dateTime.getMinutes();
+    let formattedMinutes: string = min < 10 ? '0' + min : min.toString();
 
-    return hours + ":" + min;
+    return formattedHours + ":" + formattedMinutes;
   }
 
   convertToDate(dateTimeString: Date | null): string {

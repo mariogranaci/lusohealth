@@ -12,7 +12,7 @@ namespace LusoHealthClient.Server.DTOs.Services
 		public string? State { get; set; }
 		public int? Duration { get; set; }
 		public string? IdPatient { get; set; }
-		public string? IdProfesional { get; set; }
+		public string? IdProfessional { get; set; }
 		public int? IdService { get; set; }
 	
 	}

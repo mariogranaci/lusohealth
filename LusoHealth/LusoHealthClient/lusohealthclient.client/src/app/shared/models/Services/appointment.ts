@@ -1,4 +1,5 @@
-export class Appointment {  
+export class Appointment {
+    id: string | null;
     timestamp: Date | null;
     location: string | null;   
     type: string | null;
@@ -8,9 +9,10 @@ export class Appointment {
     idPatient: string | null;
     idProfessional: string | null;
     idService: number | null;
+    
 
   constructor(timestamp: Date | null, location: string | null, type: string | null, description: string | null,
-    state: string | null, duration: number | null, idPatient: string | null, idProfessional: string | null,
+    state: string | null, duration: number | null, idPatient: string | null, id: string | null, idProfessional: string | null,
     idService: number | null) {
     this.timestamp = timestamp;
     this.location = location;
@@ -21,5 +23,6 @@ export class Appointment {
     this.idPatient = idPatient;
     this.idProfessional = idProfessional;
     this.idService = idService;
+    this.id = id;
   }
 }

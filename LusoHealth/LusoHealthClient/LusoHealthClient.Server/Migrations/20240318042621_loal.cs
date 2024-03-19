@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace LusoHealthClient.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class lusohealth : Migration
+    public partial class loal : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -69,7 +69,7 @@ namespace LusoHealthClient.Server.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Start = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    SlotDuation = table.Column<int>(type: "int", nullable: false),
+                    SlotDuration = table.Column<int>(type: "int", nullable: false),
                     IdService = table.Column<int>(type: "int", nullable: false),
                     AppointmentType = table.Column<int>(type: "int", nullable: false),
                     IsAvailable = table.Column<bool>(type: "bit", nullable: false)

@@ -6,7 +6,8 @@
         Pending,
 		Scheduled,
 		InProgress,
-		Done
+		Done,
+		Canceled
 	}
 
 }

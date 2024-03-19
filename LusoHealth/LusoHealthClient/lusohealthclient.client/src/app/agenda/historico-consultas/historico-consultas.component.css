@@ -86,7 +86,7 @@ main {
   box-shadow: 0 12px 6px -4px rgba(0, 0, 0, 0.21);
 }
 
-.type-appointmnt {
+.type-appointment {
   margin-right: 40px;
   align-self: center;
   font-size: 18px;
@@ -193,4 +193,13 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.noAppointments {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 40px;
+  color: grey;
+  height: 350px;
 }

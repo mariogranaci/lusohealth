@@ -30,8 +30,9 @@ namespace TestLusoHealth
 			testUser = fixture.TestUser;
 		}
 
-		[Fact]
+		//Testes Cancelar e Rejeitar Consulta
 
+		[Fact]
 		public async Task TestCancelAppointment_ReturnsBadRequest_WhenAppointmentDontExist()
 		{
 			
@@ -90,9 +91,7 @@ namespace TestLusoHealth
 
 			var appointmentDto = new AppointmentDto
 			{
-				/*Id = 1, 
-				Timestamp = DateTime.Now, 		  
-				State = "Pending"*/ 
+				
 			};
 
 			var result = await controller.CancelAppointment(appointmentDto);
@@ -139,9 +138,112 @@ namespace TestLusoHealth
 		}
 
 
+		//Testes Aceitar Consulta
+
+		[Fact]
+		public async Task TestScheduleAppointment_ReturnsBadRequest_WhenAppointmentDontExist()
+		{
+
+			var mockUserManager = new Mock<UserManager<User>>(new Mock<IUserStore<User>>().Object,
+			   new Mock<IOptions<IdentityOptions>>().Object,
+			   new Mock<IPasswordHasher<User>>().Object,
+			   new IUserValidator<User>[0],
+			   new IPasswordValidator<User>[0],
+			   new Mock<ILookupNormalizer>().Object,
+			   new Mock<IdentityErrorDescriber>().Object,
+			   new Mock<IServiceProvider>().Object,
+			   new Mock<ILogger<UserManager<User>>>().Object);
 
 
+			var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
+										new Claim(ClaimTypes.NameIdentifier, "professionaltest@mail.com"),
+								   }, "TestAuthentication"));
 
+			mockUserManager.Setup(u => u.FindByIdAsync(It.IsAny<string>()))
+				.ReturnsAsync((string userId) => null);
+
+			var controller = new AppointmentController(_context, mockUserManager.Object);
+			controller.ControllerContext = new ControllerContext();
+			controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
+
+			var result = await controller.UpdateAppointmentState(null);
+
+			Assert.IsType<BadRequestObjectResult>(result.Result);
+		}
+
+		[Fact]
+		public async Task TestScheduleAppointment_ReturnsNotFound_WhenAppointmentDontExist()
+		{
+
+			var mockUserManager = new Mock<UserManager<User>>(new Mock<IUserStore<User>>().Object,
+			   new Mock<IOptions<IdentityOptions>>().Object,
+			   new Mock<IPasswordHasher<User>>().Object,
+			   new IUserValidator<User>[0],
+			   new IPasswordValidator<User>[0],
+			   new Mock<ILookupNormalizer>().Object,
+			   new Mock<IdentityErrorDescriber>().Object,
+			   new Mock<IServiceProvider>().Object,
+			   new Mock<ILogger<UserManager<User>>>().Object);
+
+
+			var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
+										new Claim(ClaimTypes.NameIdentifier, "professionaltest@mail.com"),
+								   }, "TestAuthentication"));
+
+			mockUserManager.Setup(u => u.FindByIdAsync(It.IsAny<string>()))
+				.ReturnsAsync((string userId) => null);
+
+			var controller = new AppointmentController(_context, mockUserManager.Object);
+			controller.ControllerContext = new ControllerContext();
+			controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
+
+			var appointmentDto = new AppointmentDto
+			{
+				
+			};
+
+			var result = await controller.UpdateAppointmentState(appointmentDto);
+
+			Assert.IsType<NotFoundObjectResult>(result.Result);
+		}
+
+		[Fact]
+		public async Task TestScheduleAppointment_ReturnsUpdateModel_WhenAppointmentExist()
+		{
+
+			var mockUserManager = new Mock<UserManager<User>>(new Mock<IUserStore<User>>().Object,
+			   new Mock<IOptions<IdentityOptions>>().Object,
+			   new Mock<IPasswordHasher<User>>().Object,
+			   new IUserValidator<User>[0],
+			   new IPasswordValidator<User>[0],
+			   new Mock<ILookupNormalizer>().Object,
+			   new Mock<IdentityErrorDescriber>().Object,
+			   new Mock<IServiceProvider>().Object,
+			   new Mock<ILogger<UserManager<User>>>().Object);
+
+
+			var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
+										new Claim(ClaimTypes.NameIdentifier, "professionaltest@mail.com"),
+								   }, "TestAuthentication"));
+
+			mockUserManager.Setup(u => u.FindByIdAsync(It.IsAny<string>()))
+				.ReturnsAsync((string userId) => null);
+
+			var controller = new AppointmentController(_context, mockUserManager.Object);
+			controller.ControllerContext = new ControllerContext();
+			controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
+
+			var appointmentDto = new AppointmentDto
+			{
+				Id = 1,
+				Timestamp = DateTime.Now,
+				State = "Pending"
+			};
+
+			var result = await controller.UpdateAppointmentState(appointmentDto);
+
+			Assert.IsType<ActionResult<AppointmentDto>>(result);
+		}
 	}
 }
 

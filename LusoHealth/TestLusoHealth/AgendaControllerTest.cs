@@ -28,6 +28,8 @@ namespace TestLusoHealth
 			testUser = fixture.TestUser;
 		}
 
+		//teste Consultas agendadas
+
 		[Fact]
 		public async Task TestGetNextAppointments_ReturnsNotFound_WhenUserDontExist()
 		{
@@ -92,6 +94,8 @@ namespace TestLusoHealth
 
 		}
 
+
+		// Teste Histórico de consultas
 
 		[Fact]
 		public async Task TestGetPreviousAppointments_ReturnsNotFound_WhenUserDontExist()

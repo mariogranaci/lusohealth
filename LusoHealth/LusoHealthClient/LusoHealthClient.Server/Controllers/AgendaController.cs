@@ -207,16 +207,25 @@ namespace LusoHealthClient.Server.Controllers
             var user = await _userManager.FindByIdAsync(userIdClaim);
             if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
 
+            if (availabilityDto.StartDate == null || availabilityDto.EndDate == null || availabilityDto.StartTime == null || 
+                availabilityDto.EndTime == null || availabilityDto.ServiceId == null || availabilityDto.SlotDuration == null || availabilityDto.Type == null)
+            {
+                return BadRequest("Por favor preencha todos os campos.");
+            }
+
             try
             {
-                /*var slots = await _context.AvailableSlots
-    .Where(s => s.IdService == availabilityDto.ServiceId
-                && s.Start >= intervalStart // Slot starts after or at the interval start time
-                && s.Start < intervalEnd // Slot starts before the interval end time
-                && s.IsAvailable) // Assuming you're also interested in filtering by availability
-    .ToListAsync();*/
+                var slots = await _context.AvailableSlots
+                .Where(s => s.IdService == availabilityDto.ServiceId
+                && s.Start.Date >= availabilityDto.StartDate
+                && s.Start.Date <= availabilityDto.EndDate
+                && s.Start.TimeOfDay >= availabilityDto.StartTime.Value.TimeOfDay
+                && s.Start.AddMinutes(s.SlotDuration).TimeOfDay <= availabilityDto.EndTime.Value.TimeOfDay) 
+                .ToListAsync();
 
-                var totalDuration = (availabilityDto.EndDate - availabilityDto.StartDate).TotalMinutes;
+                if (slots != null && slots.Any()) { return BadRequest("Já existem slots para o período selecionado."); }
+
+                var totalDuration = (availabilityDto.EndDate - availabilityDto.StartDate).Value.TotalMinutes;
 
                 var numberOfSlots = (int)(totalDuration / availabilityDto.SlotDuration);
 
@@ -224,13 +233,13 @@ namespace LusoHealthClient.Server.Controllers
 
                 for (int i = 0; i < numberOfSlots; i++)
                 {
-                    var slotStartTime = availabilityDto.StartDate.AddMinutes(i * availabilityDto.SlotDuration);
+                    var slotStartTime = availabilityDto.StartDate.Value.AddMinutes(i * availabilityDto.SlotDuration.Value);
 
-                    var slot = new AvailableSlot
+                    AvailableSlot slot = new AvailableSlot
                     {
                         Start = slotStartTime,
-                        SlotDuation = availabilityDto.SlotDuration,
-                        IdService = availabilityDto.ServiceId,
+                        SlotDuration = availabilityDto.SlotDuration.Value,
+                        IdService = availabilityDto.ServiceId.Value,
                         AppointmentType = (AppointmentType)Enum.Parse(typeof(AppointmentType), availabilityDto.Type, true),
                         IsAvailable = true,
                     };
@@ -238,7 +247,7 @@ namespace LusoHealthClient.Server.Controllers
                     newSlots.Add(slot);
                 }
 
-                await _context.AvailableSlots.AddRangeAsync(slots);
+                await _context.AvailableSlots.AddRangeAsync(newSlots);
                 await _context.SaveChangesAsync();
 
                 return Ok("Slots adicionados com sucesso.");

@@ -9,7 +9,7 @@ namespace LusoHealthClient.Server.Models.Appointments
         [Key]
         public int Id { get; set; }
         public DateTime Start { get; set; }
-        public int SlotDuation { get; set; }
+        public int SlotDuration { get; set; }
         [ForeignKey("Service")]
         public int IdService { get; set; }
         public AppointmentType AppointmentType { get; set; }

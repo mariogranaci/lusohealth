@@ -39,7 +39,7 @@ namespace LusoHealthClient.Server.Migrations
                     b.Property<bool>("IsAvailable")
                         .HasColumnType("bit");
 
-                    b.Property<int>("SlotDuation")
+                    b.Property<int>("SlotDuration")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Start")

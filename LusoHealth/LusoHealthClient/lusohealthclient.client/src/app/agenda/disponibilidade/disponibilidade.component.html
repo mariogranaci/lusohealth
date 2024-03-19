@@ -1,6 +1,104 @@
 <main>
   <h1>Consultas e Disponibilidade</h1>
+
   <full-calendar [options]="calendarOptions"></full-calendar>
+
+  <button id="action-btn" (click)="openPopup()"><img class="action-btn-img" src="assets/images/Agenda/add.png" /> </button>
+
+  <div style="display: flex;" class="overlay" id="overlay" (click)="closePopup()">
+    <a class="close-button" (click)="closePopup()">
+      <img src="assets/images/login/close.png" alt="Close button" class="close-image">
+    </a>
+
+    <form [formGroup]="addSlotsForm" id="add-slots-container" class="overlay-container" autocomplete="off" (click)="stopPropagation($event)">
+
+      <h2>Adicionar Disponibilidade</h2>
+
+      <div class="form-row">
+        <div class="input-box">
+          <label for="start-date">Data de Início</label>
+          <input type="date" formControlName="startDate" id="start-date" name="startDate" required [class.is-invalid]="submittedAddSlots && addSlotsForm.get('startDate')?.errors">
+        </div>
+
+        <div>
+          Até
+        </div>
+
+        <div class="input-box">
+          <label for="end-date">Data de Fim</label>
+          <input type="date" formControlName="endDate" id="end-date" name="endDate" required [class.is-invalid]="submittedAddSlots && addSlotsForm.get('endDate')?.errors">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="input-box">
+          <label for="start-time">Hora de Início</label>
+          <input type="time" formControlName="startTime" id="start-time" name="startTime" required [class.is-invalid]="submittedAddSlots && addSlotsForm.get('startTime')?.errors">
+        </div>
+
+        <div>
+          Até
+        </div>
+
+        <div class="input-box">
+          <label for="end-time">Hora de Fim</label>
+          <input type="time" formControlName="endTime" id="end-time" name="endTime" required [class.is-invalid]="submittedAddSlots && addSlotsForm.get('endTime')?.errors">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="input-box">
+          <label for="type-select">Tipo de Consulta</label>
+          <div class="select-dropdown" id="type-select-div" [class.is-invalid]="submittedAddSlots && addSlotsForm.get('selectType')?.errors">
+            <select formControlName="selectType" id="type-select" required>
+              <option value="0" select>Presencial</option>
+              <option value="1" select>Online</option>
+              <option value="2" select>Domicílio</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="input-box">
+          <label for="duration-select">Duração das Consultas</label>
+          <div class="select-dropdown" id="duration-select-div" [class.is-invalid]="submittedAddSlots && addSlotsForm.get('selectDuration')?.errors">
+            <select formControlName="selectDuration" id="duration-select" required>
+              <option value="10" select>10 min</option>
+              <option value="20" select>20 min</option>
+              <option value="30" select>30 min</option>
+              <option value="40" select>40 min</option>
+              <option value="50" select>50 min</option>
+              <option value="60" select>60 min</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="input-box">
+          <label for="slot-speciality-select">Selecionar Especialidade</label>
+          <div class="select-dropdown" id="speciality-select-div" [class.is-invalid]="submittedAddSlots && addSlotsForm.get('selectSpeciality')?.errors">
+            <select formControlName="selectSpeciality" id="slot-speciality-select" required>
+              <option value="" disabled hidden>Selecione uma especialidade</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row" id="form-row-buttons">
+
+        <button type="reset" class="btn btn-red" (click)="closePopup()">Cancelar</button>
+
+        <button type="submit" class="btn btn-blue">Adicionar</button>
+
+      </div>
+
+    </form>
+
+  </div>
+  <div *ngIf="errorMessages.length > 0">
+    <app-validation-messages [errorMessages]="errorMessages"></app-validation-messages>
+  </div>
+
 </main>
 
 <!--<form [formGroup]="editSpecialityForm" id="edit-speciality-container" class="overlay-container" autocomplete="off" (ngSubmit)="editSpeciality()" (click)="stopPropagation($event)">

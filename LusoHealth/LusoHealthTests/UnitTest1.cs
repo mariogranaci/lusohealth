@@ -4,34 +4,40 @@ using LusoHealthClient.Server.Models.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using LusoHealthClient.Server.Models.Users;
+using Moq;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Xunit;
 
 namespace LusoHealthTests
 {
 	public class UnitTest1
 	{
 		[Fact]
-		public async Task Test1Async()
+		public async Task Test1()
 		{
 			// Configuração
-			var mockUserManager = new Mock<UserManager>(); // Configure o UserManager mock conforme necessário
-			var mockContext = new Mock<ApplicationDbContext>(); // Substitua YourDbContext pelo nome do seu DbContext
-			var user = new User { Id = "testUserId" }; // Crie um usuário de teste
+			var user = new User { Id = "3" };
 			var appointments = new List<Appointment>
-		{
-			new Appointment { Timestamp = DateTime.UtcNow.AddHours(1), State = AppointmentState.Scheduled, IdPatient = "testUserId" },
-			new Appointment { Timestamp = DateTime.UtcNow.AddHours(-1), State = AppointmentState.Scheduled, IdPatient = "testUserId" }, // Passado
-            new Appointment { Timestamp = DateTime.UtcNow.AddHours(2), State = AppointmentState.Done, IdPatient = "testUserId" } // Cancelado
-        };
+			{
+				new Appointment { Timestamp = DateTime.UtcNow.AddHours(1), State = AppointmentState.Scheduled, IdPatient = "3" },
+				new Appointment { Timestamp = DateTime.UtcNow.AddHours(-1), State = AppointmentState.Scheduled, IdPatient = "3" },
+				new Appointment { Timestamp = DateTime.UtcNow.AddHours(2), State = AppointmentState.Done, IdPatient = "3" } // Cancelado
+            };
 
-			// Mock do DbSet
 			var mockSet = new Mock<DbSet<Appointment>>();
-			// Configure o mockSet com os appointments
+			mockSet.As<IQueryable<Appointment>>().Setup(m => m.Provider).Returns(appointments.AsQueryable().Provider);
+			mockSet.As<IQueryable<Appointment>>().Setup(m => m.Expression).Returns(appointments.AsQueryable().Expression);
+			mockSet.As<IQueryable<Appointment>>().Setup(m => m.ElementType).Returns(appointments.AsQueryable().ElementType);
+			mockSet.As<IQueryable<Appointment>>().Setup(m => m.GetEnumerator()).Returns(appointments.GetEnumerator());
 
-			// Mock do UserManager para retornar o usuário de teste
-			// Mock do Context para retornar o mockSet quando Appointment for acessado
+			var mockContext = new Mock<ApplicationDbContext>();
+			mockContext.Setup(c => c.Appointments).Returns(mockSet.Object);
+
+			var mockUserManager = new Mock<UserManager<User>>(MockBehavior.Strict);
 
 			var controller = new AgendaController(mockContext.Object, mockUserManager.Object);
-			// Simule a autenticação do usuário aqui, se necessário
 
 			// Ação
 			var result = await controller.getNextAppointments();
@@ -44,7 +50,5 @@ namespace LusoHealthTests
 			Assert.Single(returnedAppointments); // Verifica se apenas um appointment válido é retornado
 			Assert.Equal(DateTime.UtcNow.AddHours(1), returnedAppointments[0].Timestamp); // Verifica se o appointment retornado é o futuro e agendado
 		}
-	}
-
 	}
 }

@@ -9,6 +9,7 @@ import { AgendaPacienteComponent } from './agenda-paciente/agenda-paciente.compo
 import { HistoricoConsultasComponent } from './historico-consultas/historico-consultas.component';
 import { AgendaProfissionalComponent } from './agenda-profissional/agenda-profissional.component';
 import { FullCalendarModule } from '@fullcalendar/angular';
+import { AgendaComponent } from './agenda/agenda.component';
 
 
 
@@ -17,7 +18,8 @@ import { FullCalendarModule } from '@fullcalendar/angular';
     DisponibilidadeComponent,
     AgendaPacienteComponent,
     HistoricoConsultasComponent,
-    AgendaProfissionalComponent
+    AgendaProfissionalComponent,
+    AgendaComponent
   ],
   imports: [
     CommonModule,

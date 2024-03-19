@@ -63,7 +63,7 @@ namespace LusoHealthClient.Server.Controllers
             {
                 return NotFound("Consulta não encontrada.");
             }
-
+                
             try
             {
                 appointment.State = AppointmentState.Canceled;

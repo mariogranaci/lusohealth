@@ -54,7 +54,7 @@ namespace TestLusoHealth
 			controller.ControllerContext = new ControllerContext();
 			controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
 
-			var result =  await controller.getNextAppointments();
+			var result =  await controller.GetNextAppointments();
 
 			Assert.IsType<NotFoundObjectResult>(result.Result);
 		}
@@ -86,7 +86,7 @@ namespace TestLusoHealth
 			controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
 
 
-			var result = await controller.getNextAppointments();
+			var result = await controller.GetNextAppointments();
 
 			Assert.IsType<ActionResult<List<Appointment>>>(result);
 

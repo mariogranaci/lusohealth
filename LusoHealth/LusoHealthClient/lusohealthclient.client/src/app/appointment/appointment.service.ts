@@ -5,6 +5,7 @@ import { Appointment } from '../shared/models/services/appointment';
 import { environment } from '../../environments/environment.development';
 import { User } from '../shared/models/authentication/user';
 import { jwtDecode } from 'jwt-decode';
+import { AvailableSlot } from '../shared/models/services/availableSlot';
 
 @Injectable({
   providedIn: 'root'
@@ -55,5 +56,10 @@ export class AppointmentService {
   scheduleAppointment(model: Appointment | undefined) {
     const headers = this.getHeaders();
     return this.http.patch<Appointment>(`${environment.appUrl}/api/appointment/schedule-appointment`, model, { headers });
+  }
+
+  changeAppointment(model: AvailableSlot | undefined) {
+    const headers = this.getHeaders();
+    return this.http.patch(`${environment.appUrl}/api/appointment/change-appointment`, model, { headers });
   }
 }

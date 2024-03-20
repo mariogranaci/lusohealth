@@ -103,17 +103,17 @@ export class DisponibilidadeComponent {
     }*/
 
     let start = new Date();
-    start.setHours(23, 0, 0, 0);
+    start.setHours(8, 0, 0, 0);
 
     let end = new Date();
-    end.setHours(1, 0, 0, 0);
+    end.setHours(12, 0, 0, 0);
 
     let availability = new Availability(
       new Date('2024-03-21'),   // startDate
       new Date('2024-03-22'),   // endDate
       start, // startTime
       end, // endTime
-      3,    // serviceId
+      2,    // serviceId
       30,     // slotDuration
       'Online', // type
       null       // id

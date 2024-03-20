@@ -77,7 +77,6 @@ export class AgendaService {
 
   deleteAvailability(availability: Availability) {
     const headers = this.getHeaders();
-    console.log("Oi");
     return this.http.delete<any>(`${environment.appUrl}/api/agenda/delete-availability`, {
       headers: headers,
       body: availability

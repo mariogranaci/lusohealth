@@ -184,7 +184,7 @@ namespace LusoHealthClient.Server.Controllers
 		}
 
         [HttpPost("get-slots")]
-        public async Task<ActionResult<List<AvailableSlot>>> GetSlots(AvailabilityDto slot)
+        public async Task<ActionResult<List<AvailableSlot>>> GetSlotsByDate(AvailabilityDto slot)
         {
             try
             {
@@ -199,6 +199,29 @@ namespace LusoHealthClient.Server.Controllers
                 return BadRequest("Não foi possível encontrar os slots. Tente novamente.");
             }
         }
+
+        [HttpGet("get-slots")]
+        public async Task<ActionResult<List<AvailableSlot>>> GetSlots()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
+
+            var user = await _userManager.FindByIdAsync(userIdClaim);
+            if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
+
+            try
+            {
+                var slots = await _context.AvailableSlots
+                    .Where(s => s.Service.IdProfessional == user.Id)
+                    .ToListAsync();
+                return slots;
+            }
+            catch (Exception)
+            {
+                return BadRequest("Não foi possível encontrar os slots. Tente novamente.");
+            }
+        }
+
 
         [HttpPost("add-availability")]
         public async Task<ActionResult> AddAvailability(AvailabilityDto availabilityDto)
@@ -299,7 +322,8 @@ namespace LusoHealthClient.Server.Controllers
             try
             {
                 var slots = await _context.AvailableSlots
-                .Where(s => s.IdService == availabilityDto.ServiceId
+                .Include(s => s.Service)
+                .Where(s => s.Service.IdProfessional == user.Id
                 && s.Start.Date >= availabilityDto.StartDate
                 && s.Start.Date <= availabilityDto.EndDate)
                 .ToListAsync();

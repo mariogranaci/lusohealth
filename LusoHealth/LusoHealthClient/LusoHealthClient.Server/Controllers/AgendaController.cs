@@ -184,7 +184,7 @@ namespace LusoHealthClient.Server.Controllers
 		}
 
         [HttpPost("get-slots")]
-        public async Task<ActionResult<List<AvailableSlot>>> GetSlots(AvailabilityDto slot)
+        public async Task<ActionResult<List<AvailableSlot>>> GetSlotsByDate(AvailabilityDto slot)
         {
             try
             {
@@ -200,61 +200,8 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-    //    [HttpPost("add-slots")]
-    //    public async Task<ActionResult> AddSlots(AvailabilityDto availabilityDto)
-    //    {
-    //        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-    //        if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
-
-    //        var user = await _userManager.FindByIdAsync(userIdClaim);
-    //        if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
-
-    //        try
-    //        {
-    //            /*var slots = await _context.AvailableSlots
-    //.Where(s => s.IdService == availabilityDto.ServiceId
-    //            && s.Start >= intervalStart // Slot starts after or at the interval start time
-    //            && s.Start < intervalEnd // Slot starts before the interval end time
-    //            && s.IsAvailable) // Assuming you're also interested in filtering by availability
-    //.ToListAsync();*/
-
-    //            var totalDuration = (availabilityDto.EndDate - availabilityDto.StartDate).TotalMinutes;
-
-    //            var numberOfSlots = (int)(totalDuration / availabilityDto.SlotDuration);
-
-    //            var newSlots = new List<AvailableSlot>();
-
-    //            for (int i = 0; i < numberOfSlots; i++)
-    //            {
-    //                var slotStartTime = availabilityDto.StartDate.AddMinutes(i * availabilityDto.SlotDuration);
-
-    //                var slot = new AvailableSlot
-    //                {
-    //                    Start = slotStartTime,
-    //                    SlotDuation = availabilityDto.SlotDuration,
-    //                    IdService = availabilityDto.ServiceId,
-    //                    AppointmentType = (AppointmentType)Enum.Parse(typeof(AppointmentType), availabilityDto.Type, true),
-    //                    IsAvailable = true,
-    //                };
-
-    //                newSlots.Add(slot);
-    //            }
-
-    //            await _context.AvailableSlots.AddRangeAsync(slots);
-    //            await _context.SaveChangesAsync();
-
-    //            return Ok("Slots adicionados com sucesso.");
-
-    //        }
-    //        catch (Exception)
-    //        {
-    //            return BadRequest("Não foi possível adicionar os slots. Tente novamente.");
-    //        }
-    //    }
-
-
-        [HttpDelete("delete-slots")]
-        public async Task<ActionResult> DeleteSlots([FromBody] AvailabilityDto availabilityDto)
+        [HttpGet("get-slots")]
+        public async Task<ActionResult<List<AvailableSlot>>> GetSlots()
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
@@ -264,14 +211,130 @@ namespace LusoHealthClient.Server.Controllers
 
             try
             {
-                var slots = await _context.AvailableSlots.Where(s => s.IdService == availabilityDto.ServiceId).ToListAsync();
+                var slots = await _context.AvailableSlots
+                    .Where(s => s.Service.IdProfessional == user.Id)
+                    .ToListAsync();
+                return slots;
+            }
+            catch (Exception)
+            {
+                return BadRequest("Não foi possível encontrar os slots. Tente novamente.");
+            }
+        }
 
-                if (slots == null) { return NotFound("Não foi possível encontrar os slots"); }
 
+        [HttpPost("add-availability")]
+        public async Task<ActionResult> AddAvailability(AvailabilityDto availabilityDto)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
+
+            var user = await _userManager.FindByIdAsync(userIdClaim);
+            if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
+
+            if (availabilityDto.StartDate == null || availabilityDto.EndDate == null || availabilityDto.StartTime == null || 
+                availabilityDto.EndTime == null || availabilityDto.ServiceId == null || availabilityDto.SlotDuration == null || availabilityDto.Type == null)
+            {
+                return BadRequest("Por favor preencha todos os campos.");
+            }
+
+            if(availabilityDto.StartDate > availabilityDto.EndDate)
+            {
+                return BadRequest("A data de início não pode ser superior à data de fim.");
+            }
+
+            if (availabilityDto.StartTime > availabilityDto.EndTime)
+            {
+                return BadRequest("A hora de início não pode ser superior à hora de fim.");
+            }
+
+            try
+            {
+                var slots = await _context.AvailableSlots
+                .Where(s => s.IdService == availabilityDto.ServiceId
+                && s.Start.Date >= availabilityDto.StartDate
+                && s.Start.Date <= availabilityDto.EndDate
+                && s.Start.TimeOfDay >= availabilityDto.StartTime.Value.TimeOfDay
+                && s.Start.AddMinutes(s.SlotDuration).TimeOfDay <= availabilityDto.EndTime.Value.TimeOfDay) 
+                .ToListAsync();
+
+                if (slots != null && slots.Any()) { return BadRequest("Já existem slots para o período selecionado."); }
+
+                var totalDays = (availabilityDto.EndDate - availabilityDto.StartDate).Value.TotalDays + 1;
+
+                var totalDuration = (availabilityDto.EndTime - availabilityDto.StartTime).Value.TotalMinutes;
+
+                var numberOfSlots = (int)(totalDuration / availabilityDto.SlotDuration);
+
+                var newSlots = new List<AvailableSlot>();
+
+                for(int i = 0; i < totalDays; i++)
+                {
+                    var slotStartTime = availabilityDto.StartDate.Value.AddDays(i).Add(availabilityDto.StartTime.Value.TimeOfDay);
+
+                    for (int j = 0; j < numberOfSlots; j++)
+                    {
+                        var slot = new AvailableSlot
+                        {
+                            Start = slotStartTime.AddMinutes(j * availabilityDto.SlotDuration.Value),
+                            SlotDuration = availabilityDto.SlotDuration.Value,
+                            IdService = availabilityDto.ServiceId.Value,
+                            AppointmentType = (AppointmentType)Enum.Parse(typeof(AppointmentType), availabilityDto.Type, true),
+                            IsAvailable = true,
+                        };
+
+                        newSlots.Add(slot);
+                    }
+                }
+
+                await _context.AvailableSlots.AddRangeAsync(newSlots);
+                await _context.SaveChangesAsync();
+
+                return Ok(new { message = "Slots adicionados com sucesso."});
+
+            }
+            catch (Exception)
+            {
+            return BadRequest("Não foi possível adicionar os slots. Tente novamente.");
+            }
+        }
+
+
+        [HttpDelete("delete-availability")]
+        public async Task<ActionResult> DeleteSlots([FromBody] AvailabilityDto availabilityDto)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
+
+            var user = await _userManager.FindByIdAsync(userIdClaim);
+            if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
+
+            if (availabilityDto.StartDate == null || availabilityDto.EndDate == null )
+            {
+                return BadRequest("Por favor deixe-se de brincadeiras.");
+            }
+
+            if (availabilityDto.StartDate > availabilityDto.EndDate)
+            {
+                return BadRequest("A data de início não pode ser superior à data de fim.");
+            }
+
+            try
+            {
+                var slots = await _context.AvailableSlots
+                .Include(s => s.Service)
+                .Where(s => s.Service.IdProfessional == user.Id
+                && s.Start.Date >= availabilityDto.StartDate
+                && s.Start.Date <= availabilityDto.EndDate)
+                .ToListAsync();
+
+                if (slots == null || slots.Count == 0) { return BadRequest("Não existem slots para o período selecionado."); }
+
+                //delete slots from db
                 _context.AvailableSlots.RemoveRange(slots);
                 await _context.SaveChangesAsync();
 
-                return Ok("Slots removidos com sucesso.");
+                return Ok(new { message = "Disponibilidades removidas com sucesso." });
 
             }
             catch (Exception)
@@ -279,6 +342,5 @@ namespace LusoHealthClient.Server.Controllers
                 return BadRequest("Não foi possível remover os slots. Tente novamente.");
             }
         }
-
     }
 }

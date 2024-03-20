@@ -6,8 +6,8 @@ import { environment } from '../../environments/environment.development';
 import { User } from '../shared/models/authentication/user';
 import { jwtDecode } from 'jwt-decode';
 import { Specialty } from '../shared/models/profile/specialty';
-import { AvailableSlot } from '../shared/models/services/availableSlot';
 import { Availability } from '../shared/models/services/availability';
+import { AvailableSlot } from '../shared/models/services/availableSlot';
 
 @Injectable({
   providedIn: 'root'
@@ -65,8 +65,21 @@ export class AgendaService {
     return this.http.get<Specialty[]>(`${environment.appUrl}/api/agenda/get-specialties`, { headers });
   }
 
+  addAvailability(availability: Availability) {
+    const headers = this.getHeaders();
+    return this.http.post<any>(`${environment.appUrl}/api/agenda/add-availability`, availability, { headers });
+  }
+  
   getSlots(slot: Availability) {
     const headers = this.getHeaders();
     return this.http.post<AvailableSlot[]>(`${environment.appUrl}/api/agenda/get-slots`, slot, { headers });
+  }
+
+  deleteAvailability(availability: Availability) {
+    const headers = this.getHeaders();
+    return this.http.delete<any>(`${environment.appUrl}/api/agenda/delete-availability`, {
+      headers: headers,
+      body: availability
+    });
   }
 }

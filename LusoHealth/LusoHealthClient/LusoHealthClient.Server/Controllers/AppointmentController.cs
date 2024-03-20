@@ -106,7 +106,7 @@ namespace LusoHealthClient.Server.Controllers
         }
 
         [HttpPatch("change-appointment")]
-        public async Task<ActionResult> ChangeAppointment(AvailableSlotDto model)
+        public async Task<ActionResult<AvailableSlot>> ChangeAppointment(AvailableSlotDto model)
         {
             if (model == null) return BadRequest("Consulta não encontrada.");
             
@@ -130,7 +130,7 @@ namespace LusoHealthClient.Server.Controllers
 
                 _context.AvailableSlots.UpdateRange(slots);
                 await _context.SaveChangesAsync();
-                return Ok(new JsonResult(new { title = "Consulta Alterada", message = "A sua consulta foi alterada com sucesso." }));
+                return newSlot;
             }
             catch (Exception)
             {

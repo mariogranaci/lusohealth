@@ -97,4 +97,9 @@
     </div>
   </form>
 </div>
-
+<div *ngIf="errorMessages.length > 0">
+  <app-validation-messages [errorMessages]="errorMessages"></app-validation-messages>
+</div>
+<div *ngIf="responseText">
+  <pop-up-success [message]=responseText></pop-up-success>
+</div>

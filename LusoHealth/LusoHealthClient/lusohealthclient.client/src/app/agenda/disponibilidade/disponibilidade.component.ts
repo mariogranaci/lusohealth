@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CalendarOptions, EventInput, EventSourceInput } from '@fullcalendar/core'; // useful for typechecking
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
@@ -8,6 +8,7 @@ import { AuthenticationService } from '../../authentication/authentication.servi
 import { User } from '../../shared/models/authentication/user';
 import { ProfileService } from '../../profile/profile.service';
 import { Router } from '@angular/router';
+import { AgendaService } from '../agenda.service';
 
 @Component({
   selector: 'app-disponibilidade',
@@ -36,7 +37,7 @@ export class DisponibilidadeComponent {
   }
 
   constructor(private authenticationService: AuthenticationService,
-    private profileService: ProfileService,
+    private profileService: ProfileService, private agendaService: AgendaService,
     private formBuilder: FormBuilder, private router: Router) {
     this.authenticationService.user$.pipe(take(1)).subscribe({
       next: (user: User | null) => {
@@ -54,11 +55,11 @@ export class DisponibilidadeComponent {
         }
       }
     });
-    this.initializeForm();
+    
   }
 
   ngOnInit(): void {
-
+    this.initializeForm();
   }
 
   ngOnDestroy(): void {
@@ -69,11 +70,13 @@ export class DisponibilidadeComponent {
   initializeForm() {
 
     this.addSlotsForm = this.formBuilder.group({
-      /*selectSpeciality: ['', [Validators.required]],
-      price: ['', [Validators.required, Validators.min(1), Validators.max(1000)]],
-      presencial: ['', [Validators.required]],
-      online: ['', [Validators.required]],
-      domicilio: ['', [Validators.required]]*/
+      selectDuration: ['10', [Validators.required]],
+      startDate: ['', [Validators.required]],
+      endDate: ['', [Validators.required]],
+      startTime: ['', [Validators.required]],
+      endTime: ['', [Validators.required]],
+      selectType: ['Presencial', [Validators.required]],
+      selectSpeciality: ['', [Validators.required]],
     });
   }
 
@@ -86,6 +89,35 @@ export class DisponibilidadeComponent {
     let calendarApi = selectInfo.view.calendar;
     console.log('select', selectInfo);
     /*calendarApi.unselect(); // Limpar seleção anterior*/
+  }
+
+  addAvailability() {
+    this.submittedAddSlots = true;
+    this.errorMessages = [];
+
+    if (this.addSlotsForm.invalid) {
+      return;
+    }
+
+    const availability = {
+      duration: this.addSlotsForm.controls.selectDuration.value,
+      startDate: this.addSlotsForm.controls.startDate.value,
+      endDate: this.addSlotsForm.controls.endDate.value,
+      startTime: this.addSlotsForm.controls.startTime.value,
+      endTime: this.addSlotsForm.controls.endTime.value,
+      type: this.addSlotsForm.controls.selectType.value,
+      speciality: this.addSlotsForm.controls.selectSpeciality.value
+    };
+
+    this.agendaService.addAvailability(availability).pipe(take(1)).subscribe({
+      next: () => {
+        this.closePopup();
+        this.addSlotsForm.reset();
+      },
+      error: (error) => {
+        this.errorMessages.push(error);
+      }
+    });
   }
 
   openPopup() {

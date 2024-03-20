@@ -198,8 +198,8 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpPost("add-slots")]
-        public async Task<ActionResult> AddSlots(AvailabilityDto availabilityDto)
+        [HttpPost("add-availability")]
+        public async Task<ActionResult> AddAvailability(AvailabilityDto availabilityDto)
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }

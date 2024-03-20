@@ -9,6 +9,7 @@ import { User } from '../../shared/models/authentication/user';
 import { ProfileService } from '../../profile/profile.service';
 import { Router } from '@angular/router';
 import { AgendaService } from '../agenda.service';
+import { Availability } from '../../shared/models/services/availability';
 
 @Component({
   selector: 'app-disponibilidade',
@@ -21,6 +22,7 @@ export class DisponibilidadeComponent {
   errorMessages: string[] = [];
   addSlotsForm: FormGroup = new FormGroup({});
   submittedAddSlots = false;
+  submittedDeleteSlots = false;
 
   calendarOptions: CalendarOptions = {
     plugins: [interactionPlugin, dayGridPlugin],
@@ -55,11 +57,12 @@ export class DisponibilidadeComponent {
         }
       }
     });
-    
+
   }
 
   ngOnInit(): void {
     this.initializeForm();
+    this.addAvailability();
   }
 
   ngOnDestroy(): void {
@@ -95,29 +98,85 @@ export class DisponibilidadeComponent {
     this.submittedAddSlots = true;
     this.errorMessages = [];
 
-    if (this.addSlotsForm.invalid) {
+    /*if (this.addSlotsForm.invalid) {
       return;
-    }
+    }*/
 
-    const availability = {
-      duration: this.addSlotsForm.controls.selectDuration.value,
-      startDate: this.addSlotsForm.controls.startDate.value,
-      endDate: this.addSlotsForm.controls.endDate.value,
-      startTime: this.addSlotsForm.controls.startTime.value,
-      endTime: this.addSlotsForm.controls.endTime.value,
-      type: this.addSlotsForm.controls.selectType.value,
-      speciality: this.addSlotsForm.controls.selectSpeciality.value
-    };
+    let start = new Date();
+    start.setHours(23, 0, 0, 0);
 
-    this.agendaService.addAvailability(availability).pipe(take(1)).subscribe({
+    let end = new Date();
+    end.setHours(1, 0, 0, 0);
+
+    let availability = new Availability(
+      new Date('2024-03-21'),   // startDate
+      new Date('2024-03-22'),   // endDate
+      start, // startTime
+      end, // endTime
+      3,    // serviceId
+      30,     // slotDuration
+      'Online', // type
+      null       // id
+    );
+
+    /*endDate: this.addSlotsForm.controls.endDate.value,
+    startTime: this.addSlotsForm.controls.startTime.value,
+    endTime: this.addSlotsForm.controls.endTime.value,
+    type: this.addSlotsForm.controls.selectType.value,
+    speciality: this.addSlotsForm.controls.selectSpeciality.value*/
+    console.log(availability);
+    this.agendaService.addAvailability(availability).subscribe({
       next: () => {
+        this.submittedAddSlots = false;
         this.closePopup();
-        this.addSlotsForm.reset();
+        //this.addSlotsForm.reset();
       },
       error: (error) => {
-        this.errorMessages.push(error);
+        if (error.error.errors) {
+          this.errorMessages = error.error.errors;
+        } else {
+          this.errorMessages.push(error.error);
+        }
+        this.submittedAddSlots = false;
       }
     });
+  }
+
+  deleteAvailability() {
+    this.submittedDeleteSlots = true;
+    this.errorMessages = [];
+
+    /*if (this.addSlotsForm.invalid) {
+      return;
+    }*/
+
+    let availability = new Availability(
+      new Date('2024-03-21'),   // startDate
+      new Date('2024-03-22'),   // endDate
+      null, // startTime
+      null, // endTime
+      null,    // serviceId
+      null,     // slotDuration
+      null, // type
+      null       // id
+    );
+
+    this.agendaService.deleteAvailability(availability).subscribe({
+      next: () => {
+        this.submittedDeleteSlots = false;
+        this.closePopup();
+        //this.addSlotsForm.reset();
+      },
+      error: (error) => {
+        if (error.error.errors) {
+          this.errorMessages = error.error.errors;
+        } else {
+          this.errorMessages.push(error.error);
+        }
+        this.submittedDeleteSlots = false;
+      }
+    });
+
   }
 
   openPopup() {

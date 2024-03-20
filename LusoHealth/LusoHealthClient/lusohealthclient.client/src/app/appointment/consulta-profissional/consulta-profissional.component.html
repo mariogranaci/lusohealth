@@ -1,0 +1,100 @@
+<div class="title" *ngIf="appointment?.state === 'Canceled'">
+  <h1>Consulta cancelada</h1>
+</div>
+
+<div class="title">
+  <h1 *ngIf="service?.specialty && appointment?.state !== 'Canceled'">Consulta de {{ service?.specialty}}</h1>
+</div>
+
+<main>
+  <div class="appointments">
+    <div class="appointment">
+      <div id="info">
+        <div id="title-data-under">
+          <h3>Consulta {{appointment?.type}} </h3>
+          <div class="text-appointment">Data e Hora: {{convertToDate()}} às {{convertToHours()}}</div>
+          <div class="text-appointment" *ngIf="appointment?.location && appointment?.type !== 'Online'">Localização: {{appointment?.location}} </div>
+        </div>
+      </div>
+    </div>
+    <div class="appointment">
+      <div id="info">
+        <div id="title-data-under">
+          <h3>Consulta para: </h3>
+          <div class="text-appointment">{{patient?.firstName}} {{patient?.lastName}}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="appointment">
+      <div id="info">
+        <div id="title-data">
+          <h3>Informações do Paciente </h3>
+          <figure>
+            <img class="image" alt="Imagem de Perfil" src="/assets/images/Perfil/profileImage.jpg" />
+          </figure>
+          <h4>Nome: </h4>
+          <div class="text-appointment">{{patient?.firstName}} {{patient?.lastName}}</div>
+        </div>
+        <div id="title-data-under">
+          <h4>Género: </h4>
+          <div class="text-appointment"> {{patient?.genero === 'F' ? 'Feminino' : 'Masculino'}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="right-panel">
+    <div class="buttons" *ngIf="appointment?.state !== 'Canceled'">
+      <button class="btn1" (click)="openPopup('edit')">Alterar Consulta</button>
+      <button class="btn1" (click)="changeAppointmentScheduled()" *ngIf="appointment?.state !== 'Scheduled'">Aceitar Consulta</button>
+      <button class="btn1" (click)="openPopup('remove')">Cancelar Consulta</button>
+    </div>
+    <div *ngIf="(appointment?.type === 'Presential' || appointment?.type === 'Home') && appointment?.state !== 'Canceled'" id="map"></div>
+    <button *ngIf="appointment?.type === 'Online' && appointment?.state !== 'Canceled'" class="btn1">Aceder ao chat</button>
+  </section>
+
+</main>
+
+
+
+<div class="overlay" id="overlay" (click)="closePopup()">
+  <div id="remove-appointment-container" class="overlay-container" autocomplete="off" (click)="stopPropagation($event)">
+
+    <h2>Tem a certeza que deseja cancelar a consulta?</h2>
+    <div class="form-buttons-row">
+      <button type="reset" (click)="closePopup()" class="btn btn-blue">Cancelar</button>
+      <button type="submit" (click)="cancelAppointment()" class="btn btn-red">Remover</button>
+    </div>
+  </div>
+
+  <form [formGroup]="editAppointment" id="edit-appointment-container" class="overlay-container" autocomplete="off" (click)="stopPropagation($event)">
+
+    <h2>Editar Data da consulta</h2>
+
+    <div class="speciality-form-box">
+      <label for="edit-data-consulta">Data da consulta:</label>
+      <input type="date" id="edit-data-consulta" name="dataConsulta" formControlName="dataConsulta" [min]="minDate" (input)="changeDate()" />
+      <span class="text-danger" *ngIf="submitted && editAppointment.get('dataConsulta')?.hasError('required')">
+        Introduza uma data da consulta
+      </span>
+      <span class="text-danger" *ngIf="submitted && editAppointment.get('dataConsulta')?.hasError('error')">
+        Introduza uma data válida
+      </span>
+    </div>
+    <div class="speciality-form-box">
+      <div id="dropdown">
+        <select id="slots">
+          <option disabled hidden selected>Sem slot</option>
+          <option>Qualquer</option>
+          <option *ngFor="let slot of availableSlots" value="{{slot.id}}">{{ slot.start | date:'shortTime':'':'pt-PT'}}</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-buttons-row">
+      <button type="reset" (click)="closePopup()" class="btn btn-red">Cancelar</button>
+      <button type="submit" class="btn btn-blue">Editar</button>
+    </div>
+  </form>
+</div>
+

@@ -39,7 +39,7 @@
           <div class="type-appointment">{{ getAppointmentType(appointment.type + "") }}</div>
         </div>
       </div>
-      <button class="btn">Ver Detalhes</button>
+      <button class="btn" [routerLink]="['/patient-appointment']" [queryParams]="{ appointment: appointment.id }">Ver Detalhes</button>
     </div>
   </div>
   <div class="more-container" *ngIf="appointmentsFiltered.length > displayedAppointments.length">

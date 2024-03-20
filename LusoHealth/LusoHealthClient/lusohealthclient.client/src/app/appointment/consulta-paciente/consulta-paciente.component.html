@@ -1,0 +1,62 @@
+<div class="title" *ngIf="appointment?.state === 'Canceled'">
+  <h1>Consulta cancelada</h1>
+</div>
+
+<div class="title">
+  <h1 *ngIf="service?.specialty && appointment?.state !== 'Canceled'">Consulta de {{ service?.specialty}}</h1>
+</div>
+
+<main>
+  <div class="appointments">
+    <div class="appointment">
+      <div id="info">
+        <div id="title-data-under">
+          <h3>Consulta {{appointment?.type}} </h3>
+          <div class="text-appointment">Data e Hora: {{convertToDate()}} às {{convertToHours()}}</div>
+          <div class="text-appointment" *ngIf="appointment?.location && appointment?.type !== 'Online'">Localização: {{appointment?.location}} </div>
+        </div>
+      </div>
+    </div>
+    <div class="appointment">
+      <div id="info">
+        <div id="title-data-under">
+          <h3>Consulta para: </h3>
+          <div class="text-appointment">{{patient?.firstName}} {{patient?.lastName}}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="appointment">
+      <div id="info">
+        <div id="title-data">
+          <h3>Informações do Profissional </h3>
+          <h4>Nome: </h4>
+          <div class="text-appointment">{{professional?.professionalInfo?.firstName}} {{professional?.professionalInfo?.lastName}}</div>
+        </div>
+        <div id="title-data-under">
+          <h4>Tipo: </h4>
+          <div class="text-appointment">{{professional?.professionalType}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="right-panel" *ngIf="appointment?.state !== 'Canceled'">
+    <button class="btn1" (click)="openPopup('remove')">Cancelar Consulta</button>
+    <div *ngIf="appointment?.type === 'Presential' || appointment?.type === 'Home'" id="map"></div>
+    <button *ngIf="appointment?.type === 'Online'" class="btn1">Aceder ao chat</button>
+  </section>
+
+</main>
+
+<div class="overlay" id="overlay" (click)="closePopup()">
+  <div id="remove-appointment-container" class="overlay-container" autocomplete="off" (click)="stopPropagation($event)">
+
+    <h2>Tem a certeza que deseja cancelar a consulta?</h2>
+    <div class="form-buttons-row">
+      <button type="reset" (click)="closePopup()" class="btn btn-blue">Cancelar</button>
+      <button type="submit" (click)="cancelAppointment()" class="btn btn-red">Remover</button>
+    </div>
+  </div>
+</div>
+

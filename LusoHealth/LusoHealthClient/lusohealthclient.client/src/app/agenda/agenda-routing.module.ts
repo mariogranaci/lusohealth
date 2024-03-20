@@ -7,11 +7,12 @@ import { HistoricoConsultasComponent } from './historico-consultas/historico-con
 import { AgendaProfissionalComponent } from './agenda-profissional/agenda-profissional.component';
 
 
+
 const routes: Routes = [
   { path: 'availability', component: DisponibilidadeComponent },
   { path: 'patient-agenda', component: AgendaPacienteComponent },
   { path: 'historico-consultas', component: HistoricoConsultasComponent },
-  { path: 'professional-agenda', component: AgendaProfissionalComponent }
+  { path: 'professional-agenda', component: AgendaProfissionalComponent },
 ]
 
 @NgModule({

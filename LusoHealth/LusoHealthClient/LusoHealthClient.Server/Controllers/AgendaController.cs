@@ -1,6 +1,7 @@
 ﻿using LusoHealthClient.Server.Data;
 using LusoHealthClient.Server.DTOs.Agenda;
 using LusoHealthClient.Server.DTOs.Profile;
+using LusoHealthClient.Server.DTOs.Services;
 using LusoHealthClient.Server.Models.Appointments;
 using LusoHealthClient.Server.Models.Professionals;
 using LusoHealthClient.Server.Models.Services;
@@ -14,28 +15,28 @@ using System.Security.Claims;
 
 namespace LusoHealthClient.Server.Controllers
 {
-    //[Authorize]
-    [Route("api/[controller]")]
-    [ApiController]
-    public class AgendaController : ControllerBase
-    {
-        private readonly ApplicationDbContext _context;
-        private readonly UserManager<User> _userManager;
+	[Authorize]
+	[Route("api/[controller]")]
+	[ApiController]
+	public class AgendaController : ControllerBase
+	{
+		private readonly ApplicationDbContext _context;
+		private readonly UserManager<User> _userManager;
 
-        public AgendaController(ApplicationDbContext context, UserManager<User> userManager)
-        {
-            _context = context;
-            _userManager = userManager;
-        }
+		public AgendaController(ApplicationDbContext context, UserManager<User> userManager)
+		{
+			_context = context;
+			_userManager = userManager;
+		}
 
-        [HttpGet("get-previous-appointments")]
-        public async Task<ActionResult<List<Appointment>>> GetPreviousAppointments()
-        {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
+		[HttpGet("get-previous-appointments")]
+		public async Task<ActionResult<List<Appointment>>> GetPreviousAppointments()
+		{
+			var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+			if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
 
-            var user = await _userManager.FindByIdAsync(userIdClaim);
-            if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
+			var user = await _userManager.FindByIdAsync(userIdClaim);
+			if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
 
             try
             {
@@ -167,29 +168,30 @@ namespace LusoHealthClient.Server.Controllers
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
 
-            var user = await _userManager.FindByIdAsync(userIdClaim);
-            if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
+			var user = await _userManager.FindByIdAsync(userIdClaim);
+			if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
 
-            try
-            {
-                var specialties = _context.Specialties.ToList();
-                if (specialties == null) { return NotFound("Não foi possível encontrar as especialidades"); }
-                return specialties;
-            }
-            catch (Exception)
-            {
-                return BadRequest("Não foi possível encontrar as especialidades. Tente novamente.");
-            }
-        }
+			try
+			{
+				var specialties = _context.Specialties.ToList();
+				if (specialties == null) { return NotFound("Não foi possível encontrar as especialidades"); }
+				return specialties;
+			}
+			catch (Exception)
+			{
+				return BadRequest("Não foi possível encontrar as especialidades. Tente novamente.");
+			}
+		}
 
-        [HttpGet("get-slots")]
-        public async Task<ActionResult<List<AvailableSlot>>> GetSlots()
+        [HttpPost("get-slots")]
+        public async Task<ActionResult<List<AvailableSlot>>> GetSlots(AvailabilityDto slot)
         {
             try
             {
-                var slots = await _context.AvailableSlots.Where(s => s.IdService == 1).ToListAsync();
+                var slots = await _context.AvailableSlots
+                                          .Where(s => s.IdService == slot.ServiceId && s.Start.Date == slot.StartDate)
+                                          .ToListAsync();
 
-                if (slots == null) { return NotFound("Não foi possível encontrar os slots"); }
                 return slots;
             }
             catch (Exception)
@@ -255,9 +257,9 @@ namespace LusoHealthClient.Server.Controllers
             }
             catch (Exception)
             {
-                return BadRequest("Não foi possível adicionar os slots. Tente novamente.");
+            return BadRequest("Não foi possível adicionar os slots. Tente novamente.");
             }
-        }
+            }
 
 
         [HttpDelete("delete-slots")]

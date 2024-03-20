@@ -32,6 +32,7 @@ export class ConsultaProfissionalComponent {
   patient: UserProfile | undefined;
 
   availableSlots: AvailableSlot[] | undefined;
+  updatedSlot: AvailableSlot | undefined;
 
   editAppointment: FormGroup = new FormGroup({});
   submitted = false;
@@ -129,9 +130,8 @@ export class ConsultaProfissionalComponent {
       this.appointmentService.changeAppointment(slot).pipe(
         takeUntil(this.unsubscribe$)
       ).subscribe({
-        next: (response: any) => {
-          console.log(response);
-          this.responseText = 'A sua consulta foi alterada com successo';
+        next: (slot: any) => {
+          this.updatedSlot = slot;
           this.closePopup();
           this.getAppointmentInfo().then(() => {
             this.getServiceInfo();

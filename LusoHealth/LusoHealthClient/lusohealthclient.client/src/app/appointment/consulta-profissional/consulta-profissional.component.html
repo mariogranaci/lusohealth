@@ -68,7 +68,7 @@
     </div>
   </div>
 
-  <form [formGroup]="editAppointment" id="edit-appointment-container" class="overlay-container" autocomplete="off" (click)="stopPropagation($event)">
+  <form [formGroup]="editAppointment" id="edit-appointment-container" class="overlay-container" autocomplete="off" (click)="stopPropagation($event)" (ngSubmit)="changeAppointment()">
 
     <h2>Editar Data da consulta</h2>
 
@@ -84,9 +84,9 @@
     </div>
     <div class="speciality-form-box">
       <div id="dropdown">
-        <select id="slots">
+        <select id="slots" formControlName="slots">
           <option disabled hidden selected>Sem slot</option>
-          <option>Qualquer</option>
+          <option value="0">Qualquer</option>
           <option *ngFor="let slot of availableSlots" value="{{slot.id}}">{{ slot.start | date:'shortTime':'':'pt-PT'}}</option>
         </select>
       </div>

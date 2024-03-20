@@ -117,6 +117,29 @@ export class ConsultaProfissionalComponent {
     });
   }
 
+  changeAppointment() {
+    console.log(this.editAppointment);
+    const slotId = this.editAppointment.value.slotId;
+    //let slot = new AvailableSlot(undefined, );
+
+    //this.appointmentService.changeAppointment().pipe(
+    //  takeUntil(this.unsubscribe$)
+    //).subscribe({
+    //  next: (appointment: any) => {
+    //    console.log("Appointment changed successfully:", appointment);
+    //    this.appointment = appointment;
+    //  },
+    //  error: (error) => {
+    //    console.error("Error changing appointment:", error);
+    //    if (error.error.errors) {
+    //      this.errorMessages = error.error.errors;
+    //    } else {
+    //      this.errorMessages.push(error.error);
+    //    }
+    //  }
+    //});
+  }
+
 
   getServiceInfo() {
     if (this.appointment && this.appointment.idService != null) {
@@ -314,6 +337,7 @@ export class ConsultaProfissionalComponent {
   initializeForm() {
     this.editAppointment = this.formBuilder.group({
       dataConsulta: [this.minDate, [Validators.required]],
+      slots: ['Qualquer', [Validators.required]]
     });
   }
 

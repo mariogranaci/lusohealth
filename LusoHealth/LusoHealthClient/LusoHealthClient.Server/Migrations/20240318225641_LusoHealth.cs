@@ -63,23 +63,6 @@ namespace LusoHealthClient.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AvailableSlots",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Start = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    SlotDuration = table.Column<int>(type: "int", nullable: false),
-                    IdService = table.Column<int>(type: "int", nullable: false),
-                    AppointmentType = table.Column<int>(type: "int", nullable: false),
-                    IsAvailable = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AvailableSlots", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ProfessionalTypes",
                 columns: table => new
                 {
@@ -423,6 +406,35 @@ namespace LusoHealthClient.Server.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "AvailableSlots",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Start = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    SlotDuration = table.Column<int>(type: "int", nullable: false),
+                    IdService = table.Column<int>(type: "int", nullable: false),
+                    AppointmentType = table.Column<int>(type: "int", nullable: false),
+                    IsAvailable = table.Column<bool>(type: "bit", nullable: false),
+                    AppointmentId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AvailableSlots", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AvailableSlots_Appointment_AppointmentId",
+                        column: x => x.AppointmentId,
+                        principalTable: "Appointment",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_AvailableSlots_Services_IdService",
+                        column: x => x.IdService,
+                        principalTable: "Services",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "ProfessionalTypes",
                 columns: new[] { "Id", "Name" },
@@ -669,6 +681,16 @@ namespace LusoHealthClient.Server.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AvailableSlots_AppointmentId",
+                table: "AvailableSlots",
+                column: "AppointmentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AvailableSlots_IdService",
+                table: "AvailableSlots",
+                column: "IdService");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Certificates_IdProfessional",
                 table: "Certificates",
                 column: "IdProfessional");
@@ -718,9 +740,6 @@ namespace LusoHealthClient.Server.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Appointment");
-
-            migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
             migrationBuilder.DropTable(
@@ -752,6 +771,9 @@ namespace LusoHealthClient.Server.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Appointment");
 
             migrationBuilder.DropTable(
                 name: "Patients");

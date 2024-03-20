@@ -30,6 +30,9 @@ namespace LusoHealthClient.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("AppointmentId")
+                        .HasColumnType("int");
+
                     b.Property<int>("AppointmentType")
                         .HasColumnType("int");
 
@@ -46,6 +49,10 @@ namespace LusoHealthClient.Server.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AppointmentId");
+
+                    b.HasIndex("IdService");
 
                     b.ToTable("AvailableSlots");
                 });
@@ -1796,6 +1803,23 @@ namespace LusoHealthClient.Server.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("LusoHealthClient.Server.Models.Appointments.AvailableSlot", b =>
+                {
+                    b.HasOne("LusoHealthClient.Server.Models.Services.Appointment", "Appointment")
+                        .WithMany()
+                        .HasForeignKey("AppointmentId");
+
+                    b.HasOne("LusoHealthClient.Server.Models.Professionals.Service", "Service")
+                        .WithMany()
+                        .HasForeignKey("IdService")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Appointment");
+
+                    b.Navigation("Service");
                 });
 
             modelBuilder.Entity("LusoHealthClient.Server.Models.FeedbackAndReports.Review", b =>

@@ -148,8 +148,6 @@ export class AgendaProfissionalComponent {
     });
   }
 
-
-
   getAppointmentType(type: string | null ): string {
     /*console.log(type);*/
     if (type) {

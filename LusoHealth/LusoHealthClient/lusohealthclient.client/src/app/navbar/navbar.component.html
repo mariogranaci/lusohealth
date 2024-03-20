@@ -17,15 +17,19 @@
         </li>
       </ul>
     </li>
-    <li routerLink="" class="sub-menu-parent">
-      <a class="nav-link" routerLinkActive="active">
+    <li *ngIf="(authenticationService.user$ | async) as user" class="sub-menu-parent">
+      <a [routerLink]="['/professional-agenda']" *ngIf="userRole === 'Professional'" class="nav-link" routerLinkActive="active">
+        <img class="menu-icons" src="assets/images/NavBar/agenda-icon.png" alt="Ícone Agenda" />
+        <div id="agenda-text" class="nav-text"> Agenda </div>
+      </a>
+      <a [routerLink]="['/patient-agenda']" *ngIf="userRole === 'Patient'" class="nav-link" routerLinkActive="active">
         <img class="menu-icons" src="assets/images/NavBar/agenda-icon.png" alt="Ícone Agenda" />
         <div id="agenda-text" class="nav-text"> Agenda </div>
       </a>
       <ul class="sub-menu">
         <li class="dropdown-element">
           <img src="assets/images/NavBar/paper.png" />
-          <a routerLink="" class="nav-link" routerLinkActive="active">Histórico</a>
+          <a [routerLink]="['/historico-consultas']" class="nav-link" routerLinkActive="active">Histórico</a>
         </li>
       </ul>
     </li>

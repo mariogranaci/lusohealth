@@ -144,6 +144,7 @@ namespace TestLusoHealth
 
 			Appointment appointment1 = new Appointment
 			{
+				Id= 1,
 				Timestamp = dataAtual.AddDays(diasAleatoriosFuturos),
 				Type = AppointmentType.Online,
 				State = AppointmentState.Scheduled,
@@ -157,6 +158,7 @@ namespace TestLusoHealth
 
 			DbContext.Appointment.Add(new Appointment
 			{
+				Id= 2,
 				Timestamp = dataAtual.AddDays(-diasAleatorios),
 				Type = AppointmentType.Online,
 				State = AppointmentState.Scheduled,
@@ -169,6 +171,7 @@ namespace TestLusoHealth
 			DbContext.AvailableSlots.Add(new AvailableSlot { Id = 1 , Start = DateTime.Now , SlotDuration = 10 , IdService = service1.Id,
 				AppointmentType =  AppointmentType.Online , IsAvailable = true ,AppointmentId = appointment1.Id });
 
+			
 			DbContext.SaveChanges();
 
 		}

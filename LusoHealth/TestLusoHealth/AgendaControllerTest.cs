@@ -33,7 +33,7 @@ namespace TestLusoHealth
 			testUser = fixture.TestUser;
 		}
 
-		//teste Consultas agendadas
+		//Testes Consultas agendadas
 
 		[Fact]
 		public async Task TestGetNextAppointments_ReturnsNotFound_WhenUserDontExist()
@@ -100,7 +100,7 @@ namespace TestLusoHealth
 		}
 
 
-		// Teste Histórico de consultas
+		//Testes Histórico de consultas
 
 		[Fact]
 		public async Task TestGetPreviousAppointments_ReturnsNotFound_WhenUserDontExist()
@@ -169,6 +169,8 @@ namespace TestLusoHealth
 		}
 
 
+		// Testes Adicionar Disponibilidade
+
 		[Fact]
 		public async Task TestAddAvailability_ReturnsBadRequest_WhenAppointmentIsNull()
 		{
@@ -197,11 +199,7 @@ namespace TestLusoHealth
 
 			var availabilityDto = new AvailabilityDto
 			{
-				/*StartDate = DateTime.Now.Date,
-				EndDate = DateTime.Now.Date.AddDays(1),
-				StartTime = DateTime.Now.TimeOfDay,
-				EndTime = DateTime.Now.TimeOfDay.Add(new TimeSpan(1, 0, 0)), // Adicionando 1 hora
-																			 // Defina ServiceId, SlotDuration e Type*/ 
+				 
 			};
 
 			var result = await controller.AddAvailability(availabilityDto);
@@ -419,7 +417,7 @@ namespace TestLusoHealth
 				Type = "Online"
 			};
 
-			var result = await controller.De(availabilityDto);
+			var result = await controller.DeleteSlots(availabilityDto);
 
 			Assert.IsType<OkObjectResult>(result);
 		}

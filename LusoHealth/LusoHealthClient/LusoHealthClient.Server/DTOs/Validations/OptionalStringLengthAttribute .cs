@@ -9,14 +9,16 @@ namespace LusoHealthClient.Server.DTOs.Validations
         public int MinLength { get; set; }
         public int MaxLength { get; set; }
 
+#pragma warning disable CS8765 // A nulidade do tipo de parâmetro não corresponde ao membro substituído (possivelmente devido a atributos de nulidade).
         public override bool IsValid(object value)
+#pragma warning restore CS8765 // A nulidade do tipo de parâmetro não corresponde ao membro substituído (possivelmente devido a atributos de nulidade).
         {
             if (value.ToString().IsNullOrEmpty())
             {
                 return true;  // Skip validation if the value is not provided
             }
 
-            string stringValue = value.ToString();
+            string stringValue = value + "";
 
             // Check the string length
             int length = stringValue.Length;

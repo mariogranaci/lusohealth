@@ -810,8 +810,3 @@ input[type="radio"] {
 .is-invalid {
   border: 2px solid #cc0000 !important;
 }
-/*
-app-validation-messages {
-    position: fixed;
-}
-*/

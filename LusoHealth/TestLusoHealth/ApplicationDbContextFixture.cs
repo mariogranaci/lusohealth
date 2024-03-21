@@ -1,4 +1,5 @@
 ﻿using LusoHealthClient.Server.Data;
+using LusoHealthClient.Server.Models.Appointments;
 using LusoHealthClient.Server.Models.Professionals;
 using LusoHealthClient.Server.Models.Services;
 using LusoHealthClient.Server.Models.Users;
@@ -141,9 +142,18 @@ namespace TestLusoHealth
 			int diasAleatorios = random.Next(0, 366);
 			int diasAleatoriosFuturos = random.Next(150, 366);
 
-			DbContext.Appointment.Add(new Appointment { Timestamp = dataAtual.AddDays(diasAleatoriosFuturos), Type = AppointmentType.Online,
-				State = AppointmentState.Scheduled, Duration = 1, IdProfesional = user2.Id,
-				IdPatient = user1.Id, IdService = service1.Id});
+			Appointment appointment1 = new Appointment
+			{
+				Timestamp = dataAtual.AddDays(diasAleatoriosFuturos),
+				Type = AppointmentType.Online,
+				State = AppointmentState.Scheduled,
+				Duration = 1,
+				IdProfesional = user2.Id,
+				IdPatient = user1.Id,
+				IdService = service1.Id
+			};
+
+			DbContext.Appointment.Add(appointment1);
 
 			DbContext.Appointment.Add(new Appointment
 			{
@@ -155,6 +165,9 @@ namespace TestLusoHealth
 				IdPatient = user1.Id,
 				IdService = service1.Id
 			});
+
+			DbContext.AvailableSlots.Add(new AvailableSlot { Id = 1 , Start = DateTime.Now , SlotDuration = 10 , IdService = service1.Id,
+				AppointmentType =  AppointmentType.Online , IsAvailable = true ,AppointmentId = appointment1.Id });
 
 			DbContext.SaveChanges();
 

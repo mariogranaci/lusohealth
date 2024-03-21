@@ -11,6 +11,11 @@ using LusoHealthClient.Server.Models.Users;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using System.Collections.Generic;
+using LusoHealthClient.Server.DTOs.Agenda;
+using LusoHealthClient.Server.DTOs.Appointments;
+using Microsoft.AspNetCore.Http.HttpResults;
+using LusoHealthClient.Server.Models.Professionals;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 
 namespace TestLusoHealth
@@ -164,36 +169,259 @@ namespace TestLusoHealth
 		}
 
 
-
-
-		/*[Fact]
-        public void GetUserTest_IsInRole()
+		[Fact]
+		public async Task TestAddAvailability_ReturnsBadRequest_WhenAppointmentIsNull()
 		{
-			// Arranjo
-			var user = new GameUser { *//* inicialize seu GameUser aqui *//* };
-			var claims = new List<Claim> {
-				new Claim(ClaimTypes.Name, user.Name),
-				new Claim(ClaimTypes.Role, "RoleEspecifica"), // Adicione a role específica aqui
-                // Adicione outras claims necessárias
-            };
-			var identity = new ClaimsIdentity(claims, "TestAuthType");
-			var claimsPrincipal = new ClaimsPrincipal(identity);
 
-			var controller = new GameController(); // Substitua GameController pelo nome real do seu controlador
-			controller.ControllerContext = new ControllerContext
+			var mockUserManager = new Mock<UserManager<User>>(new Mock<IUserStore<User>>().Object,
+			   new Mock<IOptions<IdentityOptions>>().Object,
+			   new Mock<IPasswordHasher<User>>().Object,
+			   new IUserValidator<User>[0],
+			   new IPasswordValidator<User>[0],
+			   new Mock<ILookupNormalizer>().Object,
+			   new Mock<IdentityErrorDescriber>().Object,
+			   new Mock<IServiceProvider>().Object,
+			   new Mock<ILogger<UserManager<User>>>().Object);
+
+
+			var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
+										new Claim(ClaimTypes.NameIdentifier, "professionaltest@mail.com"),
+								   }, "TestAuthentication"));
+
+			mockUserManager.Setup(u => u.FindByIdAsync(It.IsAny<string>()))
+				.ReturnsAsync((string userId) => testUser);
+
+			var controller = new AgendaController(_context, mockUserManager.Object);
+			controller.ControllerContext = new ControllerContext();
+			controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
+
+			var availabilityDto = new AvailabilityDto
 			{
-				HttpContext = new DefaultHttpContext { User = claimsPrincipal }
+				/*StartDate = DateTime.Now.Date,
+				EndDate = DateTime.Now.Date.AddDays(1),
+				StartTime = DateTime.Now.TimeOfDay,
+				EndTime = DateTime.Now.TimeOfDay.Add(new TimeSpan(1, 0, 0)), // Adicionando 1 hora
+																			 // Defina ServiceId, SlotDuration e Type*/ 
 			};
 
-			// Ação
-			var result = controller.SomeAction(); // SomeAction é a ação que você quer testar
+			var result = await controller.AddAvailability(availabilityDto);
 
-			// Assertiva
-			Assert.NotNull(result);
-			// Verifique se a lógica que depende de User.IsInRole("RoleEspecifica") funciona como esperado
-			// Por exemplo, se SomeAction retorna algo diferente baseado em User.IsInRole, você pode verificar isso aqui
-		}*/
+			Assert.IsType<BadRequestObjectResult>(result);
+		}
 
 
+		[Fact]
+		public async Task TestAddAvailability_ReturnsBadRequest_WhenStartDateBiggerEndDate()
+		{
+
+			var mockUserManager = new Mock<UserManager<User>>(new Mock<IUserStore<User>>().Object,
+			   new Mock<IOptions<IdentityOptions>>().Object,
+			   new Mock<IPasswordHasher<User>>().Object,
+			   new IUserValidator<User>[0],
+			   new IPasswordValidator<User>[0],
+			   new Mock<ILookupNormalizer>().Object,
+			   new Mock<IdentityErrorDescriber>().Object,
+			   new Mock<IServiceProvider>().Object,
+			   new Mock<ILogger<UserManager<User>>>().Object);
+
+
+			var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
+										new Claim(ClaimTypes.NameIdentifier, "professionaltest@mail.com"),
+								   }, "TestAuthentication"));
+
+			mockUserManager.Setup(u => u.FindByIdAsync(It.IsAny<string>()))
+				.ReturnsAsync((string userId) => testUser);
+
+			var controller = new AgendaController(_context, mockUserManager.Object);
+			controller.ControllerContext = new ControllerContext();
+			controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
+
+			var availabilityDto = new AvailabilityDto
+			{
+				StartDate = DateTime.Now.Date,
+				EndDate = DateTime.Now.Date.AddDays(- 1),
+				StartTime = DateTime.Now,
+				EndTime = DateTime.Now.Date.AddDays(-1),
+				ServiceId = 1,
+				SlotDuration = 10,
+				Type = "Online"
+			};
+
+			var result = await controller.AddAvailability(availabilityDto);
+
+			Assert.IsType<BadRequestObjectResult>(result);
+		}
+
+
+		[Fact]
+		public async Task TestAddAvailability_ReturnsBadRequest_WhenStartTimeBiggerEndTime()
+		{
+
+			var mockUserManager = new Mock<UserManager<User>>(new Mock<IUserStore<User>>().Object,
+			   new Mock<IOptions<IdentityOptions>>().Object,
+			   new Mock<IPasswordHasher<User>>().Object,
+			   new IUserValidator<User>[0],
+			   new IPasswordValidator<User>[0],
+			   new Mock<ILookupNormalizer>().Object,
+			   new Mock<IdentityErrorDescriber>().Object,
+			   new Mock<IServiceProvider>().Object,
+			   new Mock<ILogger<UserManager<User>>>().Object);
+
+
+			var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
+										new Claim(ClaimTypes.NameIdentifier, "professionaltest@mail.com"),
+								   }, "TestAuthentication"));
+
+			mockUserManager.Setup(u => u.FindByIdAsync(It.IsAny<string>()))
+				.ReturnsAsync((string userId) => testUser);
+
+			var controller = new AgendaController(_context, mockUserManager.Object);
+			controller.ControllerContext = new ControllerContext();
+			controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
+
+			var availabilityDto = new AvailabilityDto
+			{
+				StartDate = DateTime.Now.Date,
+				EndDate = DateTime.Now.Date.AddDays(+1),
+				StartTime = DateTime.Now,
+				EndTime = DateTime.Now.Date.AddDays(-1),
+				ServiceId = 1,
+				SlotDuration = 10,
+				Type = "Online"
+			};
+
+			var result = await controller.AddAvailability(availabilityDto);
+
+			Assert.IsType<BadRequestObjectResult>(result);
+		}
+
+
+		[Fact]
+		public async Task TestAddAvailability_ReturnsOK_WhenAvailabilityExists()
+		{
+
+			var mockUserManager = new Mock<UserManager<User>>(new Mock<IUserStore<User>>().Object,
+			   new Mock<IOptions<IdentityOptions>>().Object,
+			   new Mock<IPasswordHasher<User>>().Object,
+			   new IUserValidator<User>[0],
+			   new IPasswordValidator<User>[0],
+			   new Mock<ILookupNormalizer>().Object,
+			   new Mock<IdentityErrorDescriber>().Object,
+			   new Mock<IServiceProvider>().Object,
+			   new Mock<ILogger<UserManager<User>>>().Object);
+
+
+			var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
+										new Claim(ClaimTypes.NameIdentifier, "professionaltest@mail.com"),
+								   }, "TestAuthentication"));
+
+			mockUserManager.Setup(u => u.FindByIdAsync(It.IsAny<string>()))
+				.ReturnsAsync((string userId) => testUser);
+
+			var controller = new AgendaController(_context, mockUserManager.Object);
+			controller.ControllerContext = new ControllerContext();
+			controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
+
+			var availabilityDto = new AvailabilityDto
+			{
+				StartDate = DateTime.Now.Date,
+				EndDate = DateTime.Now.Date.AddDays(+1),
+				StartTime = DateTime.Now,
+				EndTime = DateTime.Now.Date.AddDays(+1),
+				ServiceId = 1,
+				SlotDuration = 10,
+				Type = "Online"
+			};
+
+			var result = await controller.AddAvailability(availabilityDto);
+
+			Assert.IsType<OkObjectResult>(result);
+		}
+
+
+		[Fact]
+		public async Task TestDeleteAvailability_ReturnsBadRequest_WhenStartDateBiggerEndDate()
+		{
+
+			var mockUserManager = new Mock<UserManager<User>>(new Mock<IUserStore<User>>().Object,
+			   new Mock<IOptions<IdentityOptions>>().Object,
+			   new Mock<IPasswordHasher<User>>().Object,
+			   new IUserValidator<User>[0],
+			   new IPasswordValidator<User>[0],
+			   new Mock<ILookupNormalizer>().Object,
+			   new Mock<IdentityErrorDescriber>().Object,
+			   new Mock<IServiceProvider>().Object,
+			   new Mock<ILogger<UserManager<User>>>().Object);
+
+
+			var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
+										new Claim(ClaimTypes.NameIdentifier, "professionaltest@mail.com"),
+								   }, "TestAuthentication"));
+
+			mockUserManager.Setup(u => u.FindByIdAsync(It.IsAny<string>()))
+				.ReturnsAsync((string userId) => testUser);
+
+			var controller = new AgendaController(_context, mockUserManager.Object);
+			controller.ControllerContext = new ControllerContext();
+			controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
+
+			var availabilityDto = new AvailabilityDto
+			{
+				StartDate = DateTime.Now.Date,
+				EndDate = DateTime.Now.Date.AddDays(-1),
+				StartTime = DateTime.Now,
+				EndTime = DateTime.Now.Date.AddDays(-1),
+				ServiceId = 1,
+				SlotDuration = 10,
+				Type = "Online"
+			};
+
+			var result = await controller.DeleteSlots(availabilityDto);
+
+			Assert.IsType<BadRequestObjectResult>(result);
+		}
+
+
+		[Fact]
+		public async Task TestDeleteAvailability_ReturnsOK_WhenAvailabilityExists()
+		{
+
+			var mockUserManager = new Mock<UserManager<User>>(new Mock<IUserStore<User>>().Object,
+			   new Mock<IOptions<IdentityOptions>>().Object,
+			   new Mock<IPasswordHasher<User>>().Object,
+			   new IUserValidator<User>[0],
+			   new IPasswordValidator<User>[0],
+			   new Mock<ILookupNormalizer>().Object,
+			   new Mock<IdentityErrorDescriber>().Object,
+			   new Mock<IServiceProvider>().Object,
+			   new Mock<ILogger<UserManager<User>>>().Object);
+
+
+			var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
+										new Claim(ClaimTypes.NameIdentifier, "professionaltest@mail.com"),
+								   }, "TestAuthentication"));
+
+			mockUserManager.Setup(u => u.FindByIdAsync(It.IsAny<string>()))
+				.ReturnsAsync((string userId) => testUser);
+
+			var controller = new AgendaController(_context, mockUserManager.Object);
+			controller.ControllerContext = new ControllerContext();
+			controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
+
+			var availabilityDto = new AvailabilityDto
+			{
+				StartDate = DateTime.Now.Date,
+				EndDate = DateTime.Now.Date.AddDays(+1),
+				StartTime = DateTime.Now,
+				EndTime = DateTime.Now.Date.AddDays(+1),
+				ServiceId = 1,
+				SlotDuration = 10,
+				Type = "Online"
+			};
+
+			var result = await controller.De(availabilityDto);
+
+			Assert.IsType<OkObjectResult>(result);
+		}
 	}
 }

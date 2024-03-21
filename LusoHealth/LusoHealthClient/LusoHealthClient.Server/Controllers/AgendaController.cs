@@ -311,7 +311,7 @@ namespace LusoHealthClient.Server.Controllers
 
             if (availabilityDto.StartDate == null || availabilityDto.EndDate == null )
             {
-                return BadRequest("Por favor deixe-se de brincadeiras.");
+                return BadRequest("Algo correu mal. Tente novamente.");
             }
 
             if (availabilityDto.StartDate > availabilityDto.EndDate)

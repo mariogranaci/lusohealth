@@ -1,5 +1,7 @@
 ﻿using LusoHealthClient.Server.Controllers;
 using LusoHealthClient.Server.Data;
+using LusoHealthClient.Server.DTOs.Agenda;
+using LusoHealthClient.Server.DTOs.Appointments;
 using LusoHealthClient.Server.DTOs.Services;
 using LusoHealthClient.Server.Models.Users;
 using Microsoft.AspNetCore.Http;
@@ -166,7 +168,7 @@ namespace TestLusoHealth
 			controller.ControllerContext = new ControllerContext();
 			controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
 
-			var result = await controller.UpdateAppointmentState(null);
+			var result = await controller.AcceptAppointment(null);
 
 			Assert.IsType<BadRequestObjectResult>(result.Result);
 		}
@@ -202,7 +204,7 @@ namespace TestLusoHealth
 				
 			};
 
-			var result = await controller.UpdateAppointmentState(appointmentDto);
+			var result = await controller.AcceptAppointment(appointmentDto);
 
 			Assert.IsType<NotFoundObjectResult>(result.Result);
 		}
@@ -240,10 +242,11 @@ namespace TestLusoHealth
 				State = "Pending"
 			};
 
-			var result = await controller.UpdateAppointmentState(appointmentDto);
+			var result = await controller.AcceptAppointment(appointmentDto);
 
 			Assert.IsType<ActionResult<AppointmentDto>>(result);
 		}
+		
 	}
 }
 

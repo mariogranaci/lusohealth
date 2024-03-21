@@ -57,6 +57,10 @@ form {
   height: 50px;
 }
 
+.hide-event {
+  display: none;
+}
+
 
 
 
@@ -103,7 +107,7 @@ form {
   border-radius: 5px;
   background-color: #ECEEF0;
   padding: 20px 20px;
-  /*display: none;*/
+  display: none;
 }
 
   .overlay-container > h2 {

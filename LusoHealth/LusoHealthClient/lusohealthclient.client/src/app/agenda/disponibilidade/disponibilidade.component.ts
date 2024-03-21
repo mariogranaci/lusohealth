@@ -2,14 +2,16 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CalendarOptions, EventInput, EventSourceInput } from '@fullcalendar/core'; // useful for typechecking
 import dayGridPlugin from '@fullcalendar/daygrid';
-import interactionPlugin from '@fullcalendar/interaction';
-import { Subject, take } from 'rxjs';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
+import { Subject, take, takeUntil } from 'rxjs';
 import { AuthenticationService } from '../../authentication/authentication.service';
 import { User } from '../../shared/models/authentication/user';
 import { ProfileService } from '../../profile/profile.service';
 import { Router } from '@angular/router';
 import { AgendaService } from '../agenda.service';
 import { Availability } from '../../shared/models/services/availability';
+import { Professional } from '../../shared/models/profile/professional';
 
 @Component({
   selector: 'app-disponibilidade',
@@ -23,19 +25,24 @@ export class DisponibilidadeComponent {
   addSlotsForm: FormGroup = new FormGroup({});
   submittedAddSlots = false;
   submittedDeleteSlots = false;
+  selectedDates: any;
+  isSelecting: boolean = false;
+  services: any;
 
   calendarOptions: CalendarOptions = {
-    plugins: [interactionPlugin, dayGridPlugin],
+    plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
     initialView: 'dayGridMonth',
+    headerToolbar: {
+      left: 'prev,next today',
+      center: 'title',
+      right: 'dayGridMonth,timeGridDay'
+    },
     locale: 'pt',
     selectable: true,
     select: this.handleDateSelect.bind(this),
-    events: this.currentEvents, // Eventos vinculados diretamente aqui
     dateClick: this.dateClick.bind(this),
-    //events: [{ start: '2024-03-10', end: '2024-03-10', rendering: 'background', backgroundColor: '#ff9f89' },
-    //         { start: '2024-03-15', end: '2024-03-15', rendering: 'background', backgroundColor: '#ff9f89' },
-    //         { start: '2024-03-20', end: '2024-03-20', rendering: 'background', backgroundColor: '#ff9f89' }]
-
+    events: [],
+    eventDidMount: this.hideEventsInMonthView.bind(this),
   }
 
   constructor(private authenticationService: AuthenticationService,
@@ -57,17 +64,23 @@ export class DisponibilidadeComponent {
         }
       }
     });
-
   }
 
   ngOnInit(): void {
     this.initializeForm();
-    this.addAvailability();
+    this.getSlots();
+    this.geSpecialties();
   }
 
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+  }
+
+  hideEventsInMonthView(arg: { view: { type: string; }; el: { style: { display: string; }; }; }) {
+    if (arg.view.type === 'dayGridMonth') {
+      arg.el.style.display = 'none';
+    }
   }
 
   initializeForm() {
@@ -78,31 +91,90 @@ export class DisponibilidadeComponent {
       endDate: ['', [Validators.required]],
       startTime: ['', [Validators.required]],
       endTime: ['', [Validators.required]],
-      selectType: ['Presencial', [Validators.required]],
+      selectType: ['0', [Validators.required]],
       selectSpeciality: ['', [Validators.required]],
     });
   }
 
-  dateClick(info: any) {
-    console.log('click', info);
-    //info.dayEl.style.backgroundColor = '#dd4144';
+  dateClick(arg: DateClickArg): void { // Apply the type to 'arg'
+    this.isSelecting = true;
+    let calendarApi = arg.view.calendar;
+    calendarApi.changeView('timeGridDay', arg.dateStr);
+
+    setTimeout(() => {
+      this.isSelecting = false;
+    }, 300);
   }
 
   handleDateSelect(selectInfo: any) {
-    let calendarApi = selectInfo.view.calendar;
-    console.log('select', selectInfo);
-    /*calendarApi.unselect(); // Limpar seleção anterior*/
+    setTimeout(() => {
+      if (!this.isSelecting) {
+        let calendarApi = selectInfo.view.calendar;
+        this.selectedDates = selectInfo;
+        console.log(this.selectedDates);
+        this.openPopup('remove');
+        calendarApi.unselect();
+      }
+      else {
+        return;
+      }
+    }, 200);
+  }
+
+  geSpecialties(): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      this.profileService.getProfessionalInfo().pipe(takeUntil(this.unsubscribe$)).subscribe(
+        (userData: Professional) => {
+          this.services = userData.services;
+          console.log(this.services);
+          resolve();
+        },
+        error => {
+          if (error.error.errors) {
+            this.errorMessages = error.error.errors;
+          } else {
+            this.errorMessages.push(error.error);
+          }
+          reject(error);
+        }
+      );
+    });
+  }
+
+  getSlots() {
+
+    var slots;
+
+    this.agendaService.getAllSlots().pipe().subscribe({
+      next: (response: any) => {
+        this.submittedAddSlots = false;
+
+        this.calendarOptions.events = response;
+        console.log(this.calendarOptions.events);
+
+        //this.addSlotsForm.reset();
+      },
+      error: (error) => {
+        if (error.error.errors) {
+          this.errorMessages = error.error.errors;
+        } else {
+          this.errorMessages.push(error.error);
+        }
+        this.submittedAddSlots = false;
+      }
+    });
   }
 
   addAvailability() {
     this.submittedAddSlots = true;
     this.errorMessages = [];
 
-    /*if (this.addSlotsForm.invalid) {
+    if (this.addSlotsForm.invalid) {
+      this.submittedAddSlots = false;
       return;
-    }*/
+    }
 
-    let start = new Date();
+    /*let start = new Date();
     start.setHours(8, 0, 0, 0);
 
     let end = new Date();
@@ -117,8 +189,30 @@ export class DisponibilidadeComponent {
       30,     // slotDuration
       'Online', // type
       null       // id
-    );
+    );*/
 
+    const form = this.addSlotsForm.value;
+    
+    let start = new Date();
+    const [startHours, startMinutes] = form.startTime.split(':');
+    start.setHours(startHours, startMinutes, 0, 0);
+
+    let end = new Date();
+    const [endHours, endMinutes] = form.endTime.split(':');
+    end.setHours(endHours, endMinutes, 0, 0);
+
+    let availability = new Availability(
+      form.startDate,   // startDate
+      form.endDate,   // endDate
+      start, // startTime
+      end, // endTime
+      form.selectSpeciality,    // serviceId
+      form.selectDuration,     // slotDuration
+      this.getType(form.selectType), // type
+      null       // id
+    );
+    console.log(availability);
+    
     /*endDate: this.addSlotsForm.controls.endDate.value,
     startTime: this.addSlotsForm.controls.startTime.value,
     endTime: this.addSlotsForm.controls.endTime.value,
@@ -129,7 +223,8 @@ export class DisponibilidadeComponent {
       next: () => {
         this.submittedAddSlots = false;
         this.closePopup();
-        //this.addSlotsForm.reset();
+        this.getSlots();
+        this.addSlotsForm.reset();
       },
       error: (error) => {
         if (error.error.errors) {
@@ -142,6 +237,17 @@ export class DisponibilidadeComponent {
     });
   }
 
+  private getType(type: string) {
+    switch (type) {
+      case "0":
+        return "Presential";
+      case "1":
+        return "Online";
+      default:
+        return "Home";
+    }
+  }
+
   deleteAvailability() {
     this.submittedDeleteSlots = true;
     this.errorMessages = [];
@@ -151,8 +257,8 @@ export class DisponibilidadeComponent {
     }*/
 
     let availability = new Availability(
-      new Date('2024-03-21'),   // startDate
-      new Date('2024-03-22'),   // endDate
+      this.selectedDates.start,   // startDate
+      this.selectedDates.end,   // endDate
       null, // startTime
       null, // endTime
       null,    // serviceId
@@ -165,6 +271,7 @@ export class DisponibilidadeComponent {
       next: () => {
         this.submittedDeleteSlots = false;
         this.closePopup();
+        this.getSlots();
         //this.addSlotsForm.reset();
       },
       error: (error) => {
@@ -176,21 +283,32 @@ export class DisponibilidadeComponent {
         this.submittedDeleteSlots = false;
       }
     });
-
+    this.selectedDates = null;
   }
 
-  openPopup() {
+  openPopup(option: string) {
     const overlay = document.getElementById('overlay');
-    const add = document.getElementById('add-speciality-container');
+    const add = document.getElementById('add-slots-container');
+    const remove = document.getElementById('confirm-review-container');
 
     if (add) {
       add.style.display = "none";
     }
+    if (remove) {
+      remove.style.display = "none";
+    }
 
     if (overlay) {
       overlay.style.display = 'flex';
-      if (add) {
-        add.style.display = "block";
+      if (option == "add") {
+        if (add) {
+          add.style.display = "block";
+        }
+      }
+      if (option == "remove") {
+        if (remove) {
+          remove.style.display = "block";
+        }
       }
     }
   }

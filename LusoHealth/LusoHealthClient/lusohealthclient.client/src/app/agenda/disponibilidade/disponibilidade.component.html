@@ -3,9 +3,9 @@
 
   <full-calendar [options]="calendarOptions"></full-calendar>
 
-  <button id="action-btn" (click)="openPopup()"><img class="action-btn-img" src="assets/images/Agenda/add.png" /> </button>
+  <button id="action-btn" (click)="openPopup('add')"><img class="action-btn-img" src="assets/images/Agenda/add.png" /> </button>
 
-  <div style="display: flex;" class="overlay" id="overlay" (click)="closePopup()">
+  <div class="overlay" id="overlay" (click)="closePopup()">
     <a class="close-button" (click)="closePopup()">
       <img src="assets/images/login/close.png" alt="Close button" class="close-image">
     </a>
@@ -77,8 +77,9 @@
         <div class="input-box">
           <label for="slot-speciality-select">Selecionar Especialidade</label>
           <div class="select-dropdown" id="speciality-select-div" [class.is-invalid]="submittedAddSlots && addSlotsForm.get('selectSpeciality')?.errors">
-            <select formControlName="selectSpeciality" id="slot-speciality-select" required>
+            <select formControlName="selectSpeciality" id="slot-speciality-select" *ngIf="(services && (services.length > 0))" required>
               <option value="" disabled hidden>Selecione uma especialidade</option>
+              <option *ngFor="let service of services" value="{{ service.serviceId }}">{{ service.specialty }}</option>
             </select>
           </div>
         </div>
@@ -88,11 +89,19 @@
 
         <button type="reset" class="btn btn-red" (click)="closePopup()">Cancelar</button>
 
-        <button type="button" class="btn btn-blue" (click)="deleteAvailability()">Adicionar</button>
+        <button type="button" class="btn btn-blue" (click)="addAvailability()">Adicionar</button>
 
       </div>
 
     </form>
+
+    <div id="confirm-review-container" class="overlay-container" (click)="stopPropagation($event)">
+      <h2>Tem a certeza que deseja apagar esta disponibilidade?</h2>
+      <div class="form-row" id="form-row-buttons">
+        <button type="button" class="btn btn-red" (click)="closePopup()">Cancelar</button>
+        <button type="button" class="btn btn-blue" (click)="deleteAvailability()">&nbsp;Remover&nbsp;</button>
+      </div>
+    </div>
 
   </div>
   <div *ngIf="errorMessages.length > 0">

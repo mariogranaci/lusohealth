@@ -8,6 +8,7 @@ import { jwtDecode } from 'jwt-decode';
 import { Specialty } from '../shared/models/profile/specialty';
 import { Availability } from '../shared/models/services/availability';
 import { AvailableSlot } from '../shared/models/services/availableSlot';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -82,4 +83,10 @@ export class AgendaService {
       body: availability
     });
   }
+
+  getAllSlots(): Observable<any> {
+    const headers = this.getHeaders();
+    return this.http.get<any>(`${environment.appUrl}/api/agenda/get-all-slots`, { headers });
+  }
+
 }

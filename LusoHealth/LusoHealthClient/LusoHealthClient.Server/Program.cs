@@ -145,6 +145,9 @@ try
     {
         //await contextSeedService.InitializeProductionAsync();
         await contextSeedService.InitializeContextAsync();
+    } else
+    {
+        await contextSeedService.InitializeContextAsync();
     }
 
 } catch (Exception ex)

@@ -142,17 +142,13 @@ export class DisponibilidadeComponent {
   }
 
   getSlots() {
-
-    var slots;
-
     this.agendaService.getAllSlots().pipe().subscribe({
       next: (response: any) => {
         this.submittedAddSlots = false;
 
         this.calendarOptions.events = response;
         console.log(this.calendarOptions.events);
-
-        //this.addSlotsForm.reset();
+        
       },
       error: (error) => {
         if (error.error.errors) {
@@ -174,23 +170,6 @@ export class DisponibilidadeComponent {
       return;
     }
 
-    /*let start = new Date();
-    start.setHours(8, 0, 0, 0);
-
-    let end = new Date();
-    end.setHours(12, 0, 0, 0);
-
-    let availability = new Availability(
-      new Date('2024-03-21'),   // startDate
-      new Date('2024-03-22'),   // endDate
-      start, // startTime
-      end, // endTime
-      2,    // serviceId
-      30,     // slotDuration
-      'Online', // type
-      null       // id
-    );*/
-
     const form = this.addSlotsForm.value;
     
     let start = new Date();
@@ -211,13 +190,7 @@ export class DisponibilidadeComponent {
       this.getType(form.selectType), // type
       null       // id
     );
-    console.log(availability);
-    
-    /*endDate: this.addSlotsForm.controls.endDate.value,
-    startTime: this.addSlotsForm.controls.startTime.value,
-    endTime: this.addSlotsForm.controls.endTime.value,
-    type: this.addSlotsForm.controls.selectType.value,
-    speciality: this.addSlotsForm.controls.selectSpeciality.value*/
+
     console.log(availability);
     this.agendaService.addAvailability(availability).subscribe({
       next: () => {

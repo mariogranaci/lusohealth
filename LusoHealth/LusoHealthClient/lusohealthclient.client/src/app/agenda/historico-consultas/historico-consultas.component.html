@@ -7,14 +7,14 @@
     <div class="dropdown">
       <select id="category" (change)="filterSpecialties();filterProfessionalsCategory()">
         <option value="Qualquer" disabled hidden selected>Tipo de Profissional</option>
-        <option>Qualquer</option>
+        <option value="Qualquer">Qualquer</option>
         <option *ngFor="let professionalType of professionalTypes" value="{{ professionalType.name }}">{{ professionalType.name }}</option>
       </select>
     </div>
     <div class="dropdown" (change)="filterProfessionalsCategory()">
       <select id="specialty">
         <option value="Qualquer" disabled hidden selected>Especialidade</option>
-        <option>Qualquer</option>
+        <option value="Qualquer" >Qualquer</option>
         <option *ngFor="let specialty of specialtiesFiltered" value="{{specialty.name}}">{{ specialty.name }}</option>
       </select>
     </div>

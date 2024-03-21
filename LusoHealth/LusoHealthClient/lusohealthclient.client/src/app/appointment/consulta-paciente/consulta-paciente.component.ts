@@ -44,7 +44,7 @@ export class ConsultaPacienteComponent {
       this.getServiceInfo();
       this.getProfessional();
       this.getUser();
-    });
+    }); 
   }
 
   ngOnDestroy(): void {
@@ -251,4 +251,14 @@ export class ConsultaPacienteComponent {
     event.stopPropagation();
   }
 
+  appointmentHasPassed(): boolean {
+    if (!this.appointment || !this.appointment.timestamp) {
+      return false;
+    }
+
+    const appointmentTime = new Date(this.appointment.timestamp).getTime();
+    const currentTime = new Date().getTime();
+
+    return appointmentTime < currentTime;
+  }
 }

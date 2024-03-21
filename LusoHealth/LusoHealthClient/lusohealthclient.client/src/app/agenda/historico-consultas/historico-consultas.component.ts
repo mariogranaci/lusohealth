@@ -132,6 +132,7 @@ export class HistoricoConsultasComponent {
 
     this.specialtiesFiltered = [];
 
+    this.appointmentsFiltered = this.appointments;
     this.updateDisplayedAppointments();
   }
 

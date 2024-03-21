@@ -143,7 +143,8 @@ try
         await contextSeedService.InitializeContextAsync();
     } else if (app.Environment.IsProduction())
     {
-        await contextSeedService.InitializeProductionAsync();
+        //await contextSeedService.InitializeProductionAsync();
+        await contextSeedService.InitializeContextAsync();
     }
 
 } catch (Exception ex)

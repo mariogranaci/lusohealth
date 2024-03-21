@@ -6,7 +6,9 @@ namespace LusoHealthClient.Server.DTOs.Validations
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter, AllowMultiple = false)]
     public class AgeOver18ValidationAttribute : ValidationAttribute
     {
+#pragma warning disable CS8765 // A nulidade do tipo de parâmetro não corresponde ao membro substituído (possivelmente devido a atributos de nulidade).
         public override bool IsValid(object value)
+#pragma warning restore CS8765 // A nulidade do tipo de parâmetro não corresponde ao membro substituído (possivelmente devido a atributos de nulidade).
         {
             if (value == null)
             {

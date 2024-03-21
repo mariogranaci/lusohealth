@@ -440,17 +440,17 @@ namespace LusoHealthClient.Server.Services
 
 					for (int i = 0; i < 5; i++)
                     {
-                        AvailableSlot slot = new AvailableSlot { IdService = service.Id, Start = new DateTime(2024, 5, 15, 9, i * 10, 0), SlotDuation = 10, AppointmentType = AppointmentType.Presential, IsAvailable = true };
+                        AvailableSlot slot = new AvailableSlot { IdService = service.Id, Start = new DateTime(2024, 5, 15, 9, i * 10, 0), SlotDuration = 10, AppointmentType = AppointmentType.Presential, IsAvailable = true };
                         availableSlots.Add(slot);
                     }
                     for (int i = 0; i < 5; i++)
                     {
-                        AvailableSlot slot = new AvailableSlot { IdService = service.Id, Start = new DateTime(2024, 5, 15, 10, i * 10, 0), SlotDuation = 10, AppointmentType = AppointmentType.Online, IsAvailable = true };
+                        AvailableSlot slot = new AvailableSlot { IdService = service.Id, Start = new DateTime(2024, 5, 15, 10, i * 10, 0), SlotDuration = 10, AppointmentType = AppointmentType.Online, IsAvailable = true };
                         availableSlots.Add(slot);
                     }
                     for (int i = 0; i < 5; i++)
                     {
-                        AvailableSlot slot = new AvailableSlot { IdService = service.Id, Start = new DateTime(2024, 5, 15, 11 + i, 0, 0), SlotDuation = 10, AppointmentType = AppointmentType.Home, IsAvailable = true };
+                        AvailableSlot slot = new AvailableSlot { IdService = service.Id, Start = new DateTime(2024, 5, 15, 11 + i, 0, 0), SlotDuration = 10, AppointmentType = AppointmentType.Home, IsAvailable = true };
                         availableSlots.Add(slot);
                     }
 

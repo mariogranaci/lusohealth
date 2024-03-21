@@ -17,7 +17,7 @@ import { FullCalendarModule } from '@fullcalendar/angular';
     DisponibilidadeComponent,
     AgendaPacienteComponent,
     HistoricoConsultasComponent,
-    AgendaProfissionalComponent
+    AgendaProfissionalComponent,
   ],
   imports: [
     CommonModule,

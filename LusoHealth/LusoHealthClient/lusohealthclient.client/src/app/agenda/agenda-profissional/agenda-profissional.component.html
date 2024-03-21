@@ -24,7 +24,7 @@
               </div>
               <div class="hours"><b>{{ convertToHours(appointment.timestamp) }}</b></div>
             </div>
-            <button class="btn">Ver Detalhes</button>
+            <button class="btn" [routerLink]="['/professional-appointment']" [queryParams]="{ appointment: appointment.id }">Ver Detalhes</button>
           </div>
         </div>
 
@@ -45,15 +45,15 @@
               <div id="title-data">
                 <h3>Consulta de {{ findSpecialtyByServiceId(appointment.idService) }}</h3>
                 <div class="text-appointment">{{ convertToDate(appointment.timestamp) }}</div>
-                <div class="text-appointment">{{getPatientNamePendingById(appointment.idPatient)}}</div>
+                <div class="text-appointment">{{ getPatientNamePendingById(appointment.idPatient)}}</div>
                 <div class="text-appointment">{{ getAppointmentType(appointment.type + "") }}</div>
               </div>
               <div class="hours"><b>{{ convertToHours(appointment.timestamp) }}</b></div>
             </div>
             <div class="buttons">
-              <button class="btn">Detalhes</button>
-              <button class="icon-btn"><img class="icon" src="/assets/images/Agenda/checked.png" /></button>
-              <button class="icon-btn"><img class="icon" src="/assets/images/Agenda/cancel.png" /></button>
+              <button class="btn" [routerLink]="['/professional-appointment']" [queryParams]="{ appointment: appointment.id }">Detalhes</button>
+              <button (click)="changeAppointmentScheduled(appointment)" class="icon-btn"><img class="icon" src="/assets/images/Agenda/checked.png" /></button>
+              <button (click)="cancelAppointment(appointment)" class="icon-btn"><img class="icon" src="/assets/images/Agenda/cancel.png" /></button>
             </div>
           </div>
         </div>

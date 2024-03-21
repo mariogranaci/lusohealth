@@ -13,6 +13,7 @@ using System.Security.Claims;
 
 using ServicesDto = LusoHealthClient.Server.DTOs.Services.ServicesDto;
 using ServiceProfileDto = LusoHealthClient.Server.DTOs.Profile.ServiceDto;
+using LusoHealthClient.Server.DTOs.Appointments;
 
 namespace LusoHealthClient.Server.Controllers
 {

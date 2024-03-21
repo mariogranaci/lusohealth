@@ -7,6 +7,7 @@ import { Specialty } from '../../shared/models/profile/specialty';
 import { ProfessionalType } from '../../shared/models/authentication/professionalType';
 import { Subject, take, takeUntil } from 'rxjs';
 import { Professional } from '../../shared/models/profile/professional';
+import { AppointmentService } from '../../appointment/appointment.service';
 
 
 @Component({
@@ -34,7 +35,7 @@ export class AgendaProfissionalComponent {
   displayedAppointments: Appointment[] = [];
   initialAppointmentCount = 3;
 
-  constructor(public servicesService: ServicesService,public agendaService: AgendaService) {}
+  constructor(private servicesService: ServicesService, private agendaService: AgendaService, private appointmentService: AppointmentService) { }
 
   ngOnInit() {
     this.getServices().then(() => {
@@ -48,6 +49,56 @@ export class AgendaProfissionalComponent {
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+  }
+
+  changeAppointmentScheduled(appointment: Appointment) {
+    const appontmentDto = new Appointment(appointment.timestamp, appointment.location, null, null, null, appointment.duration, appointment.idPatient, appointment.id, appointment.idProfessional, appointment.idService);
+    this.appointmentService.scheduleAppointment(appontmentDto).pipe(
+      takeUntil(this.unsubscribe$)
+    ).subscribe({
+      next: (response: any) => {
+        console.log("Appointment scheduled successfully:", response);
+        this.getServices().then(() => {
+          this.getProfessionalTypes();
+          this.getSpecialties();
+          this.getNextAppointments();
+          this.getPendingAppointments();
+        });
+      },
+      error: (error) => {
+        console.error("Error scheduling appointment:", error);
+        if (error.error.errors) {
+          this.errorMessages = error.error.errors;
+        } else {
+          this.errorMessages.push(error.error);
+        }
+      }
+    });
+  }
+
+  cancelAppointment(appointment: Appointment) {
+    const appontmentDto = new Appointment(appointment.timestamp, appointment.location, null, null, null, appointment.duration, appointment.idPatient, appointment.id, appointment.idProfessional, appointment.idService);
+    this.appointmentService.scheduleAppointment(appontmentDto).pipe(
+      takeUntil(this.unsubscribe$)
+    ).subscribe({
+      next: (response: any) => {
+        console.log("Appointment canceled successfully:", response);
+        this.getServices().then(() => {
+          this.getProfessionalTypes();
+          this.getSpecialties();
+          this.getNextAppointments();
+          this.getPendingAppointments();
+        });
+      },
+      error: (error) => {
+        console.error("Error scheduling appointment:", error);
+        if (error.error.errors) {
+          this.errorMessages = error.error.errors;
+        } else {
+          this.errorMessages.push(error.error);
+        }
+      }
+    });
   }
 
   getProfessionalTypes() {
@@ -147,8 +198,6 @@ export class AgendaProfissionalComponent {
       });
     });
   }
-
-
 
   getAppointmentType(type: string | null ): string {
     /*console.log(type);*/

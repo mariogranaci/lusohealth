@@ -22,6 +22,7 @@ export class ConsultaProfissionalComponent {
 
   private unsubscribe$ = new Subject<void>();
   errorMessages: string[] = [];
+  responseText: string = "";
 
   service: Service | undefined;
 
@@ -31,6 +32,7 @@ export class ConsultaProfissionalComponent {
   patient: UserProfile | undefined;
 
   availableSlots: AvailableSlot[] | undefined;
+  updatedSlot: AvailableSlot | undefined;
 
   editAppointment: FormGroup = new FormGroup({});
   submitted = false;
@@ -118,26 +120,35 @@ export class ConsultaProfissionalComponent {
   }
 
   changeAppointment() {
-    console.log(this.editAppointment);
-    const slotId = this.editAppointment.value.slotId;
-    //let slot = new AvailableSlot(undefined, );
+    this.errorMessages = [];
+    this.responseText = "";
 
-    //this.appointmentService.changeAppointment().pipe(
-    //  takeUntil(this.unsubscribe$)
-    //).subscribe({
-    //  next: (appointment: any) => {
-    //    console.log("Appointment changed successfully:", appointment);
-    //    this.appointment = appointment;
-    //  },
-    //  error: (error) => {
-    //    console.error("Error changing appointment:", error);
-    //    if (error.error.errors) {
-    //      this.errorMessages = error.error.errors;
-    //    } else {
-    //      this.errorMessages.push(error.error);
-    //    }
-    //  }
-    //});
+
+    if (this.editAppointment.valid) {
+      const slotId = this.editAppointment.get('slots')?.value;
+      let slot = new AvailableSlot(undefined, slotId, undefined, undefined, undefined, undefined, this.appointmentId);
+      this.appointmentService.changeAppointment(slot).pipe(
+        takeUntil(this.unsubscribe$)
+      ).subscribe({
+        next: (slot: any) => {
+          this.updatedSlot = slot;
+          this.closePopup();
+          this.getAppointmentInfo().then(() => {
+            this.getServiceInfo();
+            this.getProfessional();
+            this.getUser();
+          });
+        },
+        error: (error) => {
+          if (error.error.errors) {
+            this.errorMessages = error.error.errors;
+          } else {
+            this.errorMessages.push(error.error);
+          }
+        }
+      });
+    }
+    
   }
 
 
@@ -337,7 +348,7 @@ export class ConsultaProfissionalComponent {
   initializeForm() {
     this.editAppointment = this.formBuilder.group({
       dataConsulta: [this.minDate, [Validators.required]],
-      slots: ['Qualquer', [Validators.required]]
+      slots: [0, [Validators.required]]
     });
   }
 

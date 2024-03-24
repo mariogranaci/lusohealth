@@ -107,4 +107,9 @@ export class ServicesService {
     return this.http.delete<any>(`${environment.appUrl}/api/payment/cancel-appointment/${appointmentId}`, { headers });
   }
 
+  getAvailableSlots(serviceId: number, date: Date): Observable<any> {
+    const headers = this.getHeaders();
+    return this.http.post<any>(`${environment.appUrl}/api/home/get-available-slots`, { serviceId: serviceId, date: date }, { headers });
+  }
+  
 }

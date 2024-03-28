@@ -10,6 +10,7 @@ import { PopUpSuccessComponent } from './components/pop-up-success/pop-up-succes
 
 
 
+
 @NgModule({
   declarations: [
     NotFoundComponent,
@@ -21,7 +22,7 @@ import { PopUpSuccessComponent } from './components/pop-up-success/pop-up-succes
     CommonModule,
     HttpClientModule,
     ReactiveFormsModule,
-    RouterModule
+    RouterModule    
   ],
   exports: [
     HttpClientModule,

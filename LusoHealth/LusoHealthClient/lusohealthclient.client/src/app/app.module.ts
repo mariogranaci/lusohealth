@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { FormsModule } from '@angular/forms';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { FooterComponent } from './footer/footer.component';
 
 
 
@@ -14,8 +15,8 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 @NgModule({
   declarations: [
     AppComponent,
-    NavbarComponent
-  
+    NavbarComponent,
+    FooterComponent,
   ],
   imports: [
     BrowserModule, HttpClientModule,

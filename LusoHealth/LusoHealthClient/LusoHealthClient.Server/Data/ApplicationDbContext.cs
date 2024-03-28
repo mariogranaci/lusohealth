@@ -11,7 +11,7 @@ namespace LusoHealthClient.Server.Data
 {
 	public class ApplicationDbContext : IdentityDbContext<User>
 	{
-		public DbSet<User> Users { get; set; }
+		public new DbSet<User> Users { get; set; }
 		public DbSet<ProfessionalType> ProfessionalTypes { get; set; }
 		public DbSet<Specialty> Specialties { get; set; }
 		public DbSet<Patient> Patients { get; set; }

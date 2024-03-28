@@ -74,7 +74,7 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
     options.InvalidModelStateResponseFactory = actionContext =>
     {
         var errors = actionContext.ModelState
-            .Where(e => e.Value.Errors.Count > 0)
+            .Where(e => e.Value?.Errors.Count > 0)
             .SelectMany(kvp => kvp.Value.Errors.Select(error => new
             {
                 Message = error.ErrorMessage,
@@ -116,11 +116,11 @@ app.UseStaticFiles();
 app.UseCors("AllowAllOrigins");
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+//if (app.Environment.IsDevelopment())
+//{
+app.UseSwagger();
+app.UseSwaggerUI();
+//}
 
 app.UseHttpsRedirection();
 
@@ -136,8 +136,20 @@ using var scope = app.Services.CreateScope();
 try
 {
     var contextSeedService = scope.ServiceProvider.GetService<ContextSeedService>();
-    await contextSeedService.InitializeContextAsync();
-} catch (Exception ex)
+    if (app.Environment.IsDevelopment())
+    {
+        Console.WriteLine("\n\n\n\n\n\n\n\n\nDEVELOPMENT\n\n\n\n\n\n\n\n\n\n");
+        Console.WriteLine(builder.Configuration.GetConnectionString("DefaultConnection"));
+        await contextSeedService.InitializeContextAsync();
+    }
+    else if (app.Environment.IsProduction())
+    {
+        await contextSeedService.InitializeProductionAsync();
+        //await contextSeedService.InitializeContextAsync();
+    }
+
+}
+catch (Exception ex)
 {
     var logger = scope.ServiceProvider.GetService<ILogger<Program>>();
     logger.LogError(ex, "An error occurred while seeding the database.");

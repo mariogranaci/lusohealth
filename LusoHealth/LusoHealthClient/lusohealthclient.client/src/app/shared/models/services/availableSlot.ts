@@ -1,5 +1,5 @@
 export class AvailableSlot {
-  appointmentType: number | undefined;
+  appointmentType: string | undefined;
   id: number | undefined;
   idService: number | undefined;
   isAvailable: boolean | undefined;
@@ -7,7 +7,7 @@ export class AvailableSlot {
   start: Date | undefined;
   appointmentId: number | undefined;
 
-  constructor(appointmentType: number | undefined, id: number | undefined,
+  constructor(appointmentType: string | undefined, id: number | undefined,
     idService: number | undefined, isAvailable: boolean | undefined, slotDuration: number | undefined, start: Date | undefined, appointmentId: number | undefined) {
     this.appointmentType = appointmentType;
     this.id = id;

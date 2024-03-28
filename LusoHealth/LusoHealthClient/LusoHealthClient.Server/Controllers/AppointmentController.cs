@@ -137,5 +137,33 @@ namespace LusoHealthClient.Server.Controllers
                 return BadRequest("Ocorreu um erro ao atualizar a consulta.");
             }
         }
+
+        [HttpGet("get-available-slots/{serviceId}")]
+        public async Task<ActionResult<List<AvailableSlotDto>>> GetAvailableSlots(int serviceId)
+        {
+            var slots = await _context.AvailableSlots.Where(x => x.IdService == serviceId).ToListAsync();
+
+            if (slots == null) return BadRequest("Não foi possível encontrar os slots disponíveis.");
+
+            List<AvailableSlotDto> availableSlots = new List<AvailableSlotDto>();
+
+            foreach (var slot in slots)
+            {
+                AvailableSlotDto availableSlot = new AvailableSlotDto
+                {
+                    Id = slot.Id,
+                    Start = slot.Start,
+                    SlotDuration = slot.SlotDuration,
+                    IdService = slot.IdService,
+                    AppointmentType = slot.AppointmentType.ToString(),
+                    IsAvailable = slot.IsAvailable,
+                    AppointmentId = slot.AppointmentId
+                };
+
+                availableSlots.Add(availableSlot);
+            }
+
+            return availableSlots;
+        }
     }
 }

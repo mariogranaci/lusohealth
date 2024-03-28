@@ -24,7 +24,8 @@ export class MarcarConsultaComponent {
   errorMessages: string[] = [];
   availableSlots: AvailableSlot[] = [];
   displayedAvailabity: boolean = false;
-  selectedDate: string = "";
+  selectedDate: Date = new Date();
+  selectedOption: string = "";
   slots:  AvailableSlot[] = [];
 
   constructor(private authenticationService: AuthenticationService,
@@ -41,7 +42,6 @@ export class MarcarConsultaComponent {
 
 
   ngOnInit(): void {
-
     this.getServiceId().then(() => {
       this.getServiceInfo();
     });
@@ -117,22 +117,40 @@ export class MarcarConsultaComponent {
   }
 
   handleDateChange(selectedDate: Date): void {
-    let year = selectedDate.getFullYear();
-    let month = ('0' + (selectedDate.getMonth() + 1)).slice(-2);
-    let day = ('0' + selectedDate.getDate()).slice(-2);
-
-    this.selectedDate = `${year}-${month}-${day}`;
+    this.selectedDate = selectedDate;      ;
 
     this.getAvailability();
   }
 
+  onOptionSelectionChange(selectedOption: any) {
+    if (selectedOption !== null && selectedOption !== undefined) {
+      this.selectedOption = selectedOption.target.value;
+    }
+
+    console.log("here", this.selectedOption);
+    this.getAvailability();
+  }
 
   getAvailability() {
     this.service.getAvailableSlots(parseInt(this.serviceId)).subscribe(
       response => {
         console.log("Sucess!", this.selectedDate);
+        this.slots = response.filter((s: any) => {
+          const slotDate = new Date(s.start);
 
-        this.slots = response.filter((s: any) => (s.start as string).includes(this.selectedDate) === true).map((s: any) => ({
+          if (s.appointmentType === this.selectedOption || !this.selectedOption) {
+            if (slotDate.toDateString() === this.selectedDate.toDateString()) {
+              const slotTime = slotDate.getTime();
+              const selectedTime = this.selectedDate.getTime();
+              return slotTime > selectedTime;
+
+            } else {
+              return false;
+            }
+          } else {
+              return false
+          }
+        }).map((s: any) => ({
           appointmentType: s.appointmentType,
           id: s.id,
           idService: s.idService,

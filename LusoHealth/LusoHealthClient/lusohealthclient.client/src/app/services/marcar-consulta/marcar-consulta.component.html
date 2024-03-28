@@ -6,11 +6,11 @@
   </div>
 
   <div class="select-dropdown">
-    <select>
-      <option value="Option 1">Tipo de Consulta</option>
-      <option value="Option 2">Presencial</option>
-      <option value="Option 3">Online</option>
-      <option value="Option 4">Domicílio</option>
+    <select [(ngModel)]="selectedOption" (change)="onOptionSelectionChange($event)">
+      <option value="">Tipo de Consulta</option>
+      <option value="Presential">Presencial</option>
+      <option value="Online">Online</option>
+      <option value="Home">Domicílio</option>
     </select>
   </div>
 

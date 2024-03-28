@@ -337,6 +337,7 @@ namespace TestLusoHealth
 		}
 
 
+		//Testes de Delete 
 		[Fact]
 		public async Task TestDeleteAvailability_ReturnsBadRequest_WhenStartDateBiggerEndDate()
 		{

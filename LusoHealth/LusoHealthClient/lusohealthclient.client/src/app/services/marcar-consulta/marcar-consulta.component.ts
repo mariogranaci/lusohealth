@@ -7,6 +7,7 @@ import { Subject, take, takeUntil } from 'rxjs';
 import { ServicesService } from '../services.service';
 import { MakeAppointment } from '../../shared/models/services/makeAppointment';
 import { Appointment } from '../../shared/models/services/appointment';
+import { AvailableSlot } from '../../shared/models/services/availableSlot';
 
 @Component({
   selector: 'app-marcar-consulta',
@@ -23,6 +24,8 @@ export class MarcarConsultaComponent {
   errorMessages: string[] = [];
   availableSlots: AvailableSlot[] = [];
   displayedAvailabity: boolean = false;
+  selectedDate: string = "";
+  slots:  AvailableSlot[] = [];
 
   constructor(private authenticationService: AuthenticationService,
     private router: Router,
@@ -113,63 +116,88 @@ export class MarcarConsultaComponent {
     }
   }
 
-  toggleCalendar() {
-    this.checked = !this.checked;
+  handleDateChange(selectedDate: Date): void {
+    let year = selectedDate.getFullYear();
+    let month = ('0' + (selectedDate.getMonth() + 1)).slice(-2);
+    let day = ('0' + selectedDate.getDate()).slice(-2);
 
-    if (this.checked && !this.displayedAvailabity) {
-      this.getAvailability();
-    }
+    this.selectedDate = `${year}-${month}-${day}`;
+
+    this.getAvailability();
   }
+
 
   getAvailability() {
-    /*this.service.getAvailableSlots(parseInt(this.serviceId), )
+    this.service.getAvailableSlots(parseInt(this.serviceId)).subscribe(
+      response => {
+        console.log("Sucess!", this.selectedDate);
 
-    const parentDiv = document.getElementById('available-slot');
+        this.slots = response.filter((s: any) => (s.start as string).includes(this.selectedDate) === true).map((s: any) => ({
+          appointmentType: s.appointmentType,
+          id: s.id,
+          idService: s.idService,
+          isAvailable: s.isAvailable,
+          slotDuration: s.slotDuration,
+          start: s.start
+        }));
 
-    for (const slot of slots) {
-      const container = document.createElement('div');
-      container.classList.add('box-slot');
-
-      const leftDiv = document.createElement('div');
-      leftDiv.classList.add('left');
-      const timeDiv = document.createElement('div');
-      timeDiv.classList.add('hours-slots');
-
-      const timeText = document.createElement('b');
-      timeText.textContent = '${slot.time}';
-      timeDiv.appendChild(timeText);
-      leftDiv.appendChild(timeDiv);
-
-      const dateDiv = document.createElement('div');
-      dateDiv.classList.add('data-slots');
-      dateDiv.textContent = '${slot.date}';
-      leftDiv.appendChild(dateDiv);
-
-      container.appendChild(leftDiv);
-
-      const rightDiv = document.createElement('div');
-      rightDiv.classList.add('right');
-
-      const typeDiv = document.createElement('div');
-      typeDiv.classList.add('type-appointment');
-      typeDiv.textContent = '&{slot.type_of_apointment}';
-      rightDiv.appendChild(typeDiv);
-
-      const button = document.createElement('button');
-      button.classList.add('btn-edit');
-      button.textContent = 'Marcar';
-      rightDiv.appendChild(button);
-
-      container.appendChild(rightDiv);
-
-      if (parentDiv) {
-        parentDiv.appendChild(container);
-      } else {
-        console.error(`Div não foi encontrada`);
+        console.log(this.slots,typeof this.slots.length);
+      },
+      error => {
+        console.error('Erro: ', error);
       }
+    );
+  
+  }
+
+  convertToDate(dateTimeString: Date | undefined): string {
+    if (!dateTimeString) {
+      return "";
     }
 
-    this.displayedAvailabity = true;
-  }*/
+    const monthsInPortuguese: string[] = [
+      "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+      "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+    ];
+
+    let dateTime: Date = new Date(dateTimeString);
+
+    let day: number = dateTime.getDate();
+    let month: number = dateTime.getMonth();
+    let year: number = dateTime.getFullYear();
+
+    let formattedDate: string = `${day} ${monthsInPortuguese[month]} ${year}`;
+
+    return formattedDate;
   }
+
+  convertToHours(dateTimeString: Date | undefined): string {
+    if (!dateTimeString) {
+      return "";
+    }
+
+    let dateTime: Date = new Date(dateTimeString);
+
+    let hours: number = dateTime.getHours();
+    let formattedHours: string = hours < 10 ? '0' + hours : hours.toString();
+
+    let min: number = dateTime.getMinutes();
+    let formattedMinutes: string = min < 10 ? '0' + min : min.toString();
+
+    return formattedHours + ":" + formattedMinutes;
+  }
+
+  getAppointmentType(type: string | undefined): string {
+    switch (type) {
+      case "Presential":
+        return 'Presencial';
+      case "Online":
+        return 'Online';
+      case "Home":
+        return 'Domiciliária';
+      default:
+        return '';
+    }
+  }
+
 }

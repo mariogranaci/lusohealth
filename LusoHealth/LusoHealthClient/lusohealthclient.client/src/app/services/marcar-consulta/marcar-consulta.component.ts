@@ -7,7 +7,7 @@ import { Subject, take, takeUntil } from 'rxjs';
 import { ServicesService } from '../services.service';
 import { MakeAppointment } from '../../shared/models/services/makeAppointment';
 import { Appointment } from '../../shared/models/services/appointment';
-
+import { AvailableSlot } from '../../shared/models/services/availableSlot';
 
 @Component({
   selector: 'app-marcar-consulta',
@@ -22,6 +22,11 @@ export class MarcarConsultaComponent {
   categoria: string = "";
   especialidade: string = "";
   errorMessages: string[] = [];
+  availableSlots: AvailableSlot[] = [];
+  displayedAvailabity: boolean = false;
+  selectedDate: Date = new Date();
+  selectedOption: string = "";
+  slots:  AvailableSlot[] = [];
 
   constructor(private authenticationService: AuthenticationService,
     private router: Router,
@@ -34,10 +39,9 @@ export class MarcarConsultaComponent {
     this.unsubscribe$.complete();
   }
 
-  
+
 
   ngOnInit(): void {
-
     this.getServiceId().then(() => {
       this.getServiceInfo();
     });
@@ -83,7 +87,6 @@ export class MarcarConsultaComponent {
   }
 
   marcarClick() {
-
     if (this.serviceInfo) {
       const newAppointment = new Appointment(null, null, null, null, null, 1, null, null, null, parseInt(this.serviceId));
 
@@ -101,7 +104,7 @@ export class MarcarConsultaComponent {
     else {
       this.errorMessages.push("Algo correu mal.");
     }
-     
+
   }
 
   private payment(appointmentId: number) {
@@ -113,7 +116,106 @@ export class MarcarConsultaComponent {
     }
   }
 
-  toggleCalendar() {
-    this.checked = !this.checked;
+  handleDateChange(selectedDate: Date): void {
+    this.selectedDate = selectedDate;      ;
+
+    this.getAvailability();
   }
+
+  onOptionSelectionChange(selectedOption: any) {
+    if (selectedOption !== null && selectedOption !== undefined) {
+      this.selectedOption = selectedOption.target.value;
+    }
+
+    console.log("here", this.selectedOption);
+    this.getAvailability();
+  }
+
+  getAvailability() {
+    this.service.getAvailableSlots(parseInt(this.serviceId)).subscribe(
+      response => {
+        console.log("Sucess!", this.selectedDate);
+        this.slots = response.filter((s: any) => {
+          const slotDate = new Date(s.start);
+
+          if (s.appointmentType === this.selectedOption || !this.selectedOption) {
+            if (slotDate.toDateString() === this.selectedDate.toDateString()) {
+              const slotTime = slotDate.getTime();
+              const selectedTime = this.selectedDate.getTime();
+              return slotTime > selectedTime;
+
+            } else {
+              return false;
+            }
+          } else {
+              return false
+          }
+        }).map((s: any) => ({
+          appointmentType: s.appointmentType,
+          id: s.id,
+          idService: s.idService,
+          isAvailable: s.isAvailable,
+          slotDuration: s.slotDuration,
+          start: s.start
+        }));
+
+        console.log(this.slots,typeof this.slots.length);
+      },
+      error => {
+        console.error('Erro: ', error);
+      }
+    );
+  
+  }
+
+  convertToDate(dateTimeString: Date | undefined): string {
+    if (!dateTimeString) {
+      return "";
+    }
+
+    const monthsInPortuguese: string[] = [
+      "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+      "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+    ];
+
+    let dateTime: Date = new Date(dateTimeString);
+
+    let day: number = dateTime.getDate();
+    let month: number = dateTime.getMonth();
+    let year: number = dateTime.getFullYear();
+
+    let formattedDate: string = `${day} ${monthsInPortuguese[month]} ${year}`;
+
+    return formattedDate;
+  }
+
+  convertToHours(dateTimeString: Date | undefined): string {
+    if (!dateTimeString) {
+      return "";
+    }
+
+    let dateTime: Date = new Date(dateTimeString);
+
+    let hours: number = dateTime.getHours();
+    let formattedHours: string = hours < 10 ? '0' + hours : hours.toString();
+
+    let min: number = dateTime.getMinutes();
+    let formattedMinutes: string = min < 10 ? '0' + min : min.toString();
+
+    return formattedHours + ":" + formattedMinutes;
+  }
+
+  getAppointmentType(type: string | undefined): string {
+    switch (type) {
+      case "Presential":
+        return 'Presencial';
+      case "Online":
+        return 'Online';
+      case "Home":
+        return 'Domiciliária';
+      default:
+        return '';
+    }
+  }
+
 }

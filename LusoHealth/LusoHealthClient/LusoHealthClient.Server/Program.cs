@@ -31,7 +31,7 @@ builder.Services.AddScoped<ContextSeedService>();
 
 builder.Services.AddIdentityCore<User>(options =>
 {
-    //configurações email
+    //configuraï¿½ï¿½es email
     options.Password.RequiredLength = 8;
     options.Password.RequireDigit = true;
     options.Password.RequireLowercase = true;
@@ -46,9 +46,9 @@ builder.Services.AddIdentityCore<User>(options =>
     .AddEntityFrameworkStores<ApplicationDbContext>() //usar o nosso context
     .AddSignInManager<SignInManager<User>>() //usar o SignInManager
     .AddUserManager<UserManager<User>>() //usar o UserManager
-    .AddDefaultTokenProviders(); //Usado para criar os tokens de confirmação de email
+    .AddDefaultTokenProviders(); //Usado para criar os tokens de confirmaï¿½ï¿½o de email
 
-//Permite fazer a autenticação usando os JWT
+//Permite fazer a autenticaï¿½ï¿½o usando os JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -58,7 +58,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuerSigningKey = true,
             //o issuer signing key baseada na JWT:Key
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"])),
-            //o issuer é o link do projeto api 
+            //o issuer ï¿½ o link do projeto api 
             ValidIssuer = builder.Configuration["JWT:Issuer"],
             ValidateIssuer = true,
             ValidateAudience = false,
@@ -118,8 +118,8 @@ app.UseCors("AllowAllOrigins");
 // Configure the HTTP request pipeline.
 //if (app.Environment.IsDevelopment())
 //{
-    app.UseSwagger();
-    app.UseSwaggerUI();
+app.UseSwagger();
+app.UseSwaggerUI();
 //}
 
 app.UseHttpsRedirection();
@@ -141,7 +141,8 @@ try
         Console.WriteLine("\n\n\n\n\n\n\n\n\nDEVELOPMENT\n\n\n\n\n\n\n\n\n\n");
         Console.WriteLine(builder.Configuration.GetConnectionString("DefaultConnection"));
         await contextSeedService.InitializeContextAsync();
-    } else if (app.Environment.IsProduction())
+    }
+    else if (app.Environment.IsProduction())
     {
         //await contextSeedService.InitializeProductionAsync();
         await contextSeedService.InitializeContextAsync();
@@ -150,7 +151,8 @@ try
         await contextSeedService.InitializeContextAsync();
     }
 
-} catch (Exception ex)
+}
+catch (Exception ex)
 {
     var logger = scope.ServiceProvider.GetService<ILogger<Program>>();
     logger.LogError(ex, "An error occurred while seeding the database.");

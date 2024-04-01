@@ -217,14 +217,23 @@ namespace LusoHealthClient.Server.Controllers
 
             try
             {
-                user.FirstName = model.FirstName.Trim();
-                user.LastName = model.LastName.Trim();
-                user.Email = model.Email.ToLower().Trim();
-                user.NormalizedEmail = model.Email.ToLower().Trim();
-                user.PhoneNumber = model.Telemovel.Trim().IsNullOrEmpty() ? null : model.Telemovel.Trim();
-                user.Nif = model.Nif.Trim();
-                user.Gender = model.Genero != null ? (char)model.Genero : user.Gender;
-
+                if (user.Provider == "google")
+                {
+                    user.FirstName = model.FirstName.Trim();
+                    user.LastName = model.LastName.Trim();
+                    user.PhoneNumber = model.Telemovel.IsNullOrEmpty() ? null : model.Telemovel.Trim();
+                    user.Nif = model.Nif.Trim();
+                    user.Gender = model.Genero != null ? (char)model.Genero : user.Gender;
+                } else
+                {
+                    user.FirstName = model.FirstName.Trim();
+                    user.LastName = model.LastName.Trim();
+                    user.Email = model.Email.ToLower().Trim();
+                    user.NormalizedEmail = model.Email.ToLower().Trim();
+                    user.PhoneNumber = model.Telemovel.IsNullOrEmpty() ? null : model.Telemovel.Trim();
+                    user.Nif = model.Nif.Trim();
+                    user.Gender = model.Genero != null ? (char)model.Genero : user.Gender;
+                }
 
                 var result = await _userManager.UpdateAsync(user);
 

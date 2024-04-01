@@ -176,6 +176,11 @@ export class EditPerfilComponent implements OnInit {
             nif: userData.nif,
             genero: userData.genero
           });
+        if (this.provider) {
+          this.perfilForm.get('email')?.disable();
+        } else {
+          this.perfilForm.get('email')?.enable();
+        }
       },
       error => {
         if (error.error.errors) {

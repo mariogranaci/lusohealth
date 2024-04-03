@@ -6,11 +6,12 @@ import { RouterModule } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
 import { AboutUsComponent } from './about-us/about-us.component';
+import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
 
 
 
 @NgModule({
-  declarations: [HomePageComponent, AboutUsComponent],
+  declarations: [HomePageComponent, AboutUsComponent, PrivacyPolicyComponent],
   imports: [
     CommonModule,
     HomeRoutingModule,

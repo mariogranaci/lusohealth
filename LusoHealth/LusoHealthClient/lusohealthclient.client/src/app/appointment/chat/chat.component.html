@@ -1,1 +1,115 @@
-<p>chat works!</p>
+<main>
+
+  <div class="row">
+    <section class="top-left" *ngIf="appointment?.state !== 'Done' && appointment?.state !== 'Canceled'">
+      <button class="btn btn-blue" (click)="goBack()">Voltar</button>
+    </section>
+
+    <div class="title">
+      <h1>Chat</h1>
+    </div>
+  </div>
+
+  <section class="sect">
+
+    <div class="left">
+
+      <div id="title-data" *ngIf="!isSenderPatient">
+        <figure>
+          <img class="image" alt="Imagem de Perfil" src="/assets/images/Perfil/profileImage.jpg" />
+        </figure>
+        <div class="text-appointment-name">{{professional?.professionalInfo?.firstName}} {{professional?.professionalInfo?.lastName}}</div>
+        <div class="text-appointment">Categoria: {{professional?.professionalType}}</div>
+        <div class="text-appointment">Especialidade: {{service?.specialty}}</div>
+      </div>
+
+      <div id="title-data" *ngIf="isSenderPatient">
+        <figure>
+          <img class="image" alt="Imagem de Perfil" src="/assets/images/Perfil/profileImage.jpg" />
+        </figure>
+        <div class="text-appointment-name">{{patient?.firstName}} {{patient?.lastName}}</div>
+        <div class="text-appointment">Género:  {{patient?.genero === 'F' ? 'Feminino' : 'Masculino'}}</div>
+      </div>
+
+
+      <section *ngIf="!chatEnabled">
+        <button class="btn btn-blue" (click)="startChat()">Iniciar Conversa</button>
+      </section>
+
+      <section *ngIf="appointment?.state !== 'Done' && appointment?.state !== 'Canceled' && chatEnabled && !isSenderPatient">
+        <button class="btn btn-red" (click)="openPopup('remove')">Terminar Conversa</button>
+      </section>
+
+      <section *ngIf="isSenderPatient">
+        <button class="btn btn-blue" [routerLink]="['/professional-profile']" [queryParams]="{ id: appointment?.idProfessional }">Ver Perfil</button>
+      </section>
+    </div>
+
+    <div class="right">
+
+      <div class="chat">
+
+        <!--JAIME TENS QUE POR O IS SENDER PARA TODOS IGUAL OU SEJA [class.sender]="isSender-->
+        <!--E TENS QUE CRIAR NO TYPESCRIPT UMA FORMA DE DAR ASSIGN AO isSender -->
+        <!--O USER PARA PASSAR A CLASS COMO DEVE SER, MESMA COISA COM O NOME DA OUTRA PESSOA-->
+
+        <div class="container" [class.sender]="!isSender">
+          <p *ngIf="isSenderPatient" class="name">{{patient?.firstName}} {{patient?.lastName}}</p>
+          <p *ngIf="!isSenderPatient" class="name">{{professional?.professionalInfo?.firstName}} {{professional?.professionalInfo?.lastName}}</p>
+          <p class="text">Hello. How are you today? asdfasdfadfsasdfasdfasdfasdfasdfasdfasdf</p>
+          <span class="time">11:00</span>
+        </div>
+
+        <div class="container" [class.sender]="isSender">
+          <p *ngIf="isSenderPatient" class="name">{{patient?.firstName}} {{patient?.lastName}}</p>
+          <p *ngIf="!isSenderPatient" class="name">{{professional?.professionalInfo?.firstName}} {{professional?.professionalInfo?.lastName}}</p>
+          <p class="text">Hey! I'm fine. Thanks for asking!</p>
+          <span class="time">11:01</span>
+        </div>
+
+        <div class="container" [class.sender]="!isSender">
+          <p *ngIf="isSenderPatient" class="name">{{patient?.firstName}} {{patient?.lastName}}</p>
+          <p *ngIf="!isSenderPatient" class="name">{{professional?.professionalInfo?.firstName}} {{professional?.professionalInfo?.lastName}}</p>
+          <p class="text">Sweet! So, what do you wanna do today?</p>
+          <span class="time">11:02</span>
+        </div>
+
+        <div class="container" [class.sender]="isSender">
+          <p *ngIf="isSenderPatient" class="name">{{patient?.firstName}} {{patient?.lastName}}</p>
+          <p *ngIf="!isSenderPatient" class="name">{{professional?.professionalInfo?.firstName}} {{professional?.professionalInfo?.lastName}}</p>
+          <p class="text">Nah, I dunno. Play soccer.. or learn more coding perhaps?</p>
+          <span class="time">11:05</span>
+        </div>
+        <div class="container" [class.sender]="isSender">
+          <p *ngIf="isSenderPatient" class="name">{{patient?.firstName}} {{patient?.lastName}}</p>
+          <p *ngIf="!isSenderPatient" class="name">{{professional?.professionalInfo?.firstName}} {{professional?.professionalInfo?.lastName}}</p>
+          <p class="text">?</p>
+          <span class="time">11:05</span>
+        </div>
+      </div>
+
+      <div id="messageDiv">
+        <figure class="message-icon-left">
+          <img src="assets/images/Chat/image-icon.png" alt="Ícone de pesquisa de filtros">
+        </figure>
+        <input class="messageBar" type="text" placeholder="Escreva uma mensagem">
+        <figure class="message-icon-right">
+          <img src="assets/images/Chat/send-icon.png" alt="Ícone de pesquisa de filtros">
+        </figure>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div class="overlay" id="overlay" (click)="closePopup()">
+  <div id="remove-appointment-container" class="overlay-container" autocomplete="off" (click)="stopPropagation($event)">
+
+    <h2>Tem a certeza que deseja terminar a conversa?</h2>
+    <div class="form-buttons-row">
+      <button type="reset" (click)="closePopup()" class="btn btn-blue">Cancelar</button>
+      <button type="submit" (click)="endChat()" class="btn btn-red">Terminar</button>
+    </div>
+  </div>
+</div>
+

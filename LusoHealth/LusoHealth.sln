@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LusoHealthClient.Server", "
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "lusohealthclient.client", "LusoHealthClient\lusohealthclient.client\lusohealthclient.client.esproj", "{3EAB7482-29C8-4BBA-89AC-83B05AE8343D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestLusoHealth", "TestLusoHealth\TestLusoHealth.csproj", "{61EDA741-5156-49B1-9C06-348FAD511412}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +25,10 @@ Global
 		{3EAB7482-29C8-4BBA-89AC-83B05AE8343D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3EAB7482-29C8-4BBA-89AC-83B05AE8343D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3EAB7482-29C8-4BBA-89AC-83B05AE8343D}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{61EDA741-5156-49B1-9C06-348FAD511412}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61EDA741-5156-49B1-9C06-348FAD511412}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61EDA741-5156-49B1-9C06-348FAD511412}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61EDA741-5156-49B1-9C06-348FAD511412}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

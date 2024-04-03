@@ -1,0 +1,25 @@
+main {
+  min-height: calc(100vh - 65px);
+  margin-bottom: 50px;
+}
+
+.text{
+    font-size:19px;
+    margin: 20px 40px;
+}
+
+h1,h3{
+    /*text-align:center;*/
+    margin : 25px 0;
+}
+
+ul {
+  list-style-type: disc;
+  margin-left: 20px;
+  margin-bottom: 15px;
+}
+
+p{
+    margin-bottom:15px;
+}
+

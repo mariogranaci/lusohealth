@@ -7,11 +7,12 @@ import { SharedModule } from '../shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
 import { AboutUsComponent } from './about-us/about-us.component';
 import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
+import { TermsAndConditionsComponent } from './terms-and-conditions/terms-and-conditions.component';
 
 
 
 @NgModule({
-  declarations: [HomePageComponent, AboutUsComponent, PrivacyPolicyComponent],
+  declarations: [HomePageComponent, AboutUsComponent, PrivacyPolicyComponent, TermsAndConditionsComponent],
   imports: [
     CommonModule,
     HomeRoutingModule,

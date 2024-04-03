@@ -198,5 +198,43 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
+        [HttpPost("refund-appointment/{appointmentId}")]
+        public async Task<ActionResult> RefundAppointment(int appointmentId)
+        {
+            try
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(userId)) return BadRequest("Não foi possível encontrar o utilizador.");
+
+                var user = await _userManager.FindByIdAsync(userId);
+                if (user == null) return NotFound("Não foi possível encontrar o utilizador.");
+
+                var appointment = await _context.Appointment.FirstOrDefaultAsync(a => a.Id == appointmentId);
+                if (appointment == null) return NotFound("Consulta não encontrada.");
+
+                var userIdOfAppointment = appointment.IdPatient;
+
+                if (userIdOfAppointment != userId) 
+                    return Unauthorized("Não tem permissões para reembolsar esta consulta.");
+
+                var paymentIntentId = appointment.PaymentIntentId;
+                if (string.IsNullOrEmpty(paymentIntentId)) return BadRequest("Não foi possível encontrar o pagamento associado a esta consulta.");
+
+                var service = new RefundService();
+                var refundOptions = new RefundCreateOptions
+                {
+                    PaymentIntent = paymentIntentId,
+                };
+
+                var refund = await service.CreateAsync(refundOptions);
+
+                return Ok(new { message = "Reembolso efetuado com sucesso." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Erro ao reembolsar consulta: {ex.Message}");
+            }
+        }
+
     }
 }

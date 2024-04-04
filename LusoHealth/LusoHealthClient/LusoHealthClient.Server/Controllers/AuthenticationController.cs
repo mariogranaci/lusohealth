@@ -94,7 +94,8 @@ namespace LusoHealthClient.Server.Controllers
                 LockoutEnabled = false,
                 AccessFailedCount = 0,
                 UserName = model.Nif.Trim() + '_' + DateTime.Now.Millisecond,
-                BirthDate = model.DataNascimento
+                BirthDate = model.DataNascimento,
+                DateCreated = DateTime.Now
             };
 
             var result = await _userManager.CreateAsync(userToAdd, model.Password);

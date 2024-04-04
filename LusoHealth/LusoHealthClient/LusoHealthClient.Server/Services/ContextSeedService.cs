@@ -63,6 +63,7 @@ namespace LusoHealthClient.Server.Services
 					AccessFailedCount = 0,
 					UserName = "123456798_" + DateTime.Now.Millisecond,
 					BirthDate = new DateTime(1990, 1, 1),
+					DateCreated = DateTime.Now
 				};
 				await _userManager.CreateAsync(admin, "Pass1234");
 				await _userManager.AddToRoleAsync(admin, SD.AdminRole);
@@ -92,7 +93,8 @@ namespace LusoHealthClient.Server.Services
 					AccessFailedCount = 0,
 					UserName = "123456798_" + DateTime.Now.Millisecond,
 					BirthDate = new DateTime(1990, 1, 1),
-				};
+                    DateCreated = DateTime.Now
+                };
 				await _userManager.CreateAsync(manager, "Pass1234");
 				await _userManager.AddToRoleAsync(manager, SD.ManagerRole);
 				await _userManager.AddClaimsAsync(manager,
@@ -142,7 +144,8 @@ namespace LusoHealthClient.Server.Services
 					AccessFailedCount = 0,
 					UserName = "123456798_" + DateTime.Now.Millisecond,
 					BirthDate = new DateTime(1990, 1, 1),
-				};
+                    DateCreated = DateTime.Now
+                };
 				await _userManager.CreateAsync(admin, "Pass1234");
 				await _userManager.AddToRoleAsync(admin, SD.AdminRole);
 				await _userManager.AddClaimsAsync(admin,
@@ -171,7 +174,8 @@ namespace LusoHealthClient.Server.Services
 					AccessFailedCount = 0,
 					UserName = "123456798_" + DateTime.Now.Millisecond,
 					BirthDate = new DateTime(1990, 1, 1),
-				};
+                    DateCreated = DateTime.Now
+                };
 				await _userManager.CreateAsync(manager, "Pass1234");
 				await _userManager.AddToRoleAsync(manager, SD.ManagerRole);
 				await _userManager.AddClaimsAsync(manager,
@@ -208,6 +212,7 @@ namespace LusoHealthClient.Server.Services
 						AccessFailedCount = 0,
 						UserName = ("12345678" + i) + '_' + DateTime.Now.Millisecond,
 						BirthDate = DateTime.Now.AddYears(-18 - random.Next(1, 15)),
+						DateCreated = DateTime.Now.AddYears(- random.Next(0, 5))
 					};
 					users.Add(patientUser);
 				}
@@ -237,7 +242,8 @@ namespace LusoHealthClient.Server.Services
 						AccessFailedCount = 0,
 						UserName = ("12345678" + i) + '_' + DateTime.Now.Millisecond,
 						BirthDate = DateTime.Now.AddYears(-18 - random.Next(1, 15)),
-					};
+                        DateCreated = DateTime.Now.AddYears(-random.Next(0, 5))
+                    };
 					users.Add(professionalUser);
 				}
 

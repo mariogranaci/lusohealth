@@ -44,7 +44,8 @@
   <section class="right-panel" *ngIf="appointment?.state !== 'Canceled'">
     <button class="btn1" (click)="openPopup('remove')">Cancelar Consulta</button>
     <div *ngIf="appointment?.type === 'Presential' || appointment?.type === 'Home'" id="map"></div>
-    <button *ngIf="appointment?.type === 'Online'" class="btn1">Aceder ao chat</button>
+    <button *ngIf="appointment?.type === 'Online'"
+            [routerLink]="['/chat']" [queryParams]="{ appointment: appointment?.id }" class="btn1">Aceder ao chat</button>
   </section>
 
 </main>

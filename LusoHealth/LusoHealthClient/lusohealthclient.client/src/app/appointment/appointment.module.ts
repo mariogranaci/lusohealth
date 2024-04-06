@@ -9,13 +9,15 @@ import { HttpClientModule } from '@angular/common/http';
 import { LOCALE_ID } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt-PT';
+import { ChatComponent } from './chat/chat.component';
 
 registerLocaleData(localePt);
 
 @NgModule({
   declarations: [
     ConsultaPacienteComponent,
-    ConsultaProfissionalComponent
+    ConsultaProfissionalComponent,
+    ChatComponent
   ],
   imports: [
     CommonModule,

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { ModerationService } from '../moderation.service';
+import { reportModel } from '../../shared/models/administration/reportModel';
 
 @Component({
   selector: 'app-reports',
@@ -13,15 +14,12 @@ export class ReportsComponent {
   errorMessages: string[] = [];
   responseText: string = "";
 
-  reports: Report[] = [];
-  displayedReports: Report[] = [];
-
-  initialReportCount = 3;
+  reports: reportModel[] = [];
 
   constructor(public moderationService: ModerationService) { }
 
   ngOnInit() {
-    this.getReports();
+    this.loadMoreReports();
   }
 
   ngOnDestroy(): void {
@@ -29,26 +27,49 @@ export class ReportsComponent {
     this.unsubscribe$.complete();
   }
 
-  getReports() {
-    this.moderationService.getReports().pipe(
-      takeUntil(this.unsubscribe$)
-    ).subscribe({
-      next: (reports: Report[]) => {
-        this.reports = reports;
-        this.updateDisplayedReports();
+  loadMoreReports() {
+    const offset = this.reports.length; 
+    const limit = 3; 
+
+    this.moderationService.getReports(offset, limit).subscribe({
+      next: (newReports: reportModel[]) => {
+        this.reports = this.reports.concat(newReports);
       },
       error: (error) => {
-        console.log(error);
-        if (error.error.errors) {
-          this.errorMessages = error.error.errors;
-        } else {
-          this.errorMessages.push(error.error);
-        }
+        console.error(error);
       }
     });
   }
 
-  cancelReport(report: Report) {
+  loadMoreReportsCanceled() {
+    const offset = this.reports.length;
+    const limit = 3;
+
+    this.moderationService.getReports(offset, limit).subscribe({
+      next: (newReports: reportModel[]) => {
+        this.reports = this.reports.concat(newReports);
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    });
+  }
+
+  loadMoreReportsConcluded() {
+    const offset = this.reports.length;
+    const limit = 3;
+
+    this.moderationService.getReports(offset, limit).subscribe({
+      next: (newReports: reportModel[]) => {
+        this.reports = this.reports.concat(newReports);
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    });
+  }
+
+  cancelReport(report: reportModel) {
     this.moderationService.cancelReport(report).pipe(
       takeUntil(this.unsubscribe$)
     ).subscribe({
@@ -66,7 +87,7 @@ export class ReportsComponent {
     });
   }
 
-  suspendAccount(report: Report) {
+  suspendAccount(report: reportModel) {
     this.moderationService.suspendAccountProfessional(report).pipe(
       takeUntil(this.unsubscribe$)
     ).subscribe({
@@ -84,7 +105,7 @@ export class ReportsComponent {
     });
   }
 
-  blockAccount(report: Report) {
+  blockAccount(report: reportModel) {
     this.moderationService.blockAccountProfessional(report).pipe(
       takeUntil(this.unsubscribe$)
     ).subscribe({
@@ -102,12 +123,79 @@ export class ReportsComponent {
     });
   }
 
-  loadMoreAppointments() {
-    this.initialReportCount += 3;
-    this.updateDisplayedReports();
+  convertToHours(dateTimeString: Date | null): string {
+    if (!dateTimeString) {
+      return "";
+    }
+
+    let dateTime: Date = new Date(dateTimeString);
+
+    let hours: number = dateTime.getHours();
+    let formattedHours: string = hours < 10 ? '0' + hours : hours.toString();
+
+    let min: number = dateTime.getMinutes();
+    let formattedMinutes: string = min < 10 ? '0' + min : min.toString();
+
+    return formattedHours + ":" + formattedMinutes;
+  }
+
+
+  convertToDate(dateTimeString: Date | null): string {
+    if (!dateTimeString) {
+      return ""; 
+    }
+
+    const monthsInPortuguese: string[] = [
+      "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+      "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+    ];
+
+    let dateTime: Date = new Date(dateTimeString);
+
+    let day: number = dateTime.getDate();
+    let month: number = dateTime.getMonth();
+    let year: number = dateTime.getFullYear();
+
+    let formattedDate: string = `${day} ${monthsInPortuguese[month]} ${year}`;
+
+    return formattedDate;
+  }
+
+  openPopup(opcao: string) {
+    const overlay = document.getElementById('overlay');
+    const options = document.getElementById('options');
+
+    if (options) {
+      options.style.display = "none";
+    }
+
+    if (overlay) {
+      overlay.style.display = 'flex';
+      if (opcao == "options") {
+        if (options) {
+          options.style.display = "block";
+        }
+      }
+    }
+  }
+
+  closePopup() {
+    const overlay = document.getElementById('overlay');
+    const options = document.getElementById('options');
+
+    if (overlay) {
+      overlay.style.display = 'none';
+      if (options) {
+        options.style.display = "none";
+      }
+    }
+  }
+
+  stopPropagation(event: Event) {
+    event.stopPropagation();
   }
 
   updateDisplayedReports() {
-    this.displayedReports = this.reports.slice(0, this.initialReportCount);
+    this.loadMoreReports();
   }
 }

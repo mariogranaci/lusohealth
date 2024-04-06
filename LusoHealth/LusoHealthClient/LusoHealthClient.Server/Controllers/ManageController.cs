@@ -1,10 +1,8 @@
 ﻿using LusoHealthClient.Server.Data;
 using LusoHealthClient.Server.DTOs.Administration;
-using LusoHealthClient.Server.DTOs.Services;
 using LusoHealthClient.Server.Models.FeedbackAndReports;
 using LusoHealthClient.Server.Models.Users;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,18 +16,16 @@ namespace LusoHealthClient.Server.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<User> _userManager;
-        private readonly ILogger<ProfileController> _logger;
 
-        public ManageController(ApplicationDbContext context, UserManager<User> userManager, ILogger<ProfileController> logger)
+        public ManageController(ApplicationDbContext context, UserManager<User> userManager)
         {
             _context = context;
             _userManager = userManager;
-            _logger = logger;
         }
 
         [Authorize]
-        [HttpGet("get-reports")]
-        public async Task<ActionResult<List<ReportDto>>> GetAllReports()
+        [HttpGet("get-reports/{offset}/{limit}")]
+        public async Task<ActionResult<List<ReportDto>>> GetMoreReports(int offset, int limit)
         {
             try
             {
@@ -43,20 +39,91 @@ namespace LusoHealthClient.Server.Controllers
                        Description = r.Description,
                        State = r.State
                    })
+                   .Skip(offset) 
+                   .Take(limit) 
                    .ToListAsync();
 
                 if (reports == null || reports.Count == 0)
                 {
-                    return BadRequest("Não foi possível encontrar nenhum relatório.");
+                    return NotFound("No more reports available.");
                 }
 
                 return reports;
             }
             catch (Exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Erro ao obter reports.");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error retrieving reports.");
             }
         }
+
+        [Authorize]
+        [HttpGet("get-reports-canceled/{offset}/{limit}")]
+        public async Task<ActionResult<List<ReportDto>>> GetAllReportsCanceled(int offset, int limit)
+        {
+            try
+            {
+                var reports = await _context.Report
+                   .Where(r => r.State == ReportState.Concluded)
+                   .Select(r => new ReportDto
+                   {
+                       Id = r.Id,
+                       Timestamp = r.Timestamp,
+                       IdPatient = r.IdPatient,
+                       IdProfesional = r.IdProfesional,
+                       Description = r.Description,
+                       State = r.State
+                   })
+                   .Skip(offset)
+                   .Take(limit)
+                   .ToListAsync();
+
+                if (reports == null || reports.Count == 0)
+                {
+                    return BadRequest("Não foi possível encontrar nenhum relatório cancelado.");
+                }
+
+                return reports;
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Erro ao obter relatórios cancelados.");
+            }
+        }
+
+        [Authorize]
+        [HttpGet("get-reports-concluded/{offset}/{limit}")]
+        public async Task<ActionResult<List<ReportDto>>> GetAllReportsConcluded(int offset, int limit)
+        {
+            try
+            {
+                var reports = await _context.Report
+                   .Where(r => r.State == ReportState.Concluded)
+                   .Select(r => new ReportDto
+                   {
+                       Id = r.Id,
+                       Timestamp = r.Timestamp,
+                       IdPatient = r.IdPatient,
+                       IdProfesional = r.IdProfesional,
+                       Description = r.Description,
+                       State = r.State
+                   })
+                   .Skip(offset)
+                   .Take(limit)
+                   .ToListAsync();
+
+                if (reports == null || reports.Count == 0)
+                {
+                    return BadRequest("Não foi possível encontrar nenhum relatório cancelado.");
+                }
+
+                return reports;
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Erro ao obter relatórios cancelados.");
+            }
+        }
+
 
         [HttpPatch("cancel-report")]
         public async Task<ActionResult> ConcludeReport(ReportDto model)

@@ -380,6 +380,8 @@ namespace LusoHealthClient.Server.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     IdPatient = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     IdService = table.Column<int>(type: "int", nullable: false),
+                    Timestamp = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    State = table.Column<int>(type: "int", nullable: true),
                     Stars = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ProfessionalUserID = table.Column<string>(type: "nvarchar(450)", nullable: true)

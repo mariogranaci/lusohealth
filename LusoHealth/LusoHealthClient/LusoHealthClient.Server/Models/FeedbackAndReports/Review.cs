@@ -13,6 +13,8 @@ namespace LusoHealthClient.Server.Models.FeedbackAndReports
         public string IdPatient { get; set; }
         [ForeignKey("Service")] 
         public int IdService { get; set; }
+        public DateTime Timestamp { get; set; }
+        public ReviewState? State { get; set; }
         public int Stars { get; set; }
         public string Description { get; set; }
         #region Navigation Properties

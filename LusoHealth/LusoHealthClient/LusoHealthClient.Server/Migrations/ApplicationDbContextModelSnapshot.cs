@@ -113,6 +113,12 @@ namespace LusoHealthClient.Server.Migrations
                     b.Property<int>("Stars")
                         .HasColumnType("int");
 
+                    b.Property<int?>("State")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("Id");
 
                     b.HasIndex("IdPatient");

@@ -27,7 +27,7 @@
              [routerLink]="['/professional-profile']" [queryParams]="{ id: report?.idProfesional }" />
         <div class="report-details">
           <div class="report-info">
-            <div class="report-title">Burla #{{ '000' + report.id | slice: -3 }}</div>
+            <div class="report-title">Report #{{ '000' + report.id | slice: -3 }}</div>
             <div class="report-title" *ngIf="report?.state?.toString() == '1'">RESOLVIDA</div>
             <div class="report-title" *ngIf="report?.state?.toString() == '2'">REMOVIDA</div>
             <div class="report-date-time">

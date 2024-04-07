@@ -5,6 +5,7 @@ import { environment } from '../../environments/environment.development';
 import { reportModel } from '../shared/models/administration/reportModel';
 import { jwtDecode } from 'jwt-decode';
 import { User } from '../shared/models/authentication/user';
+import { Review } from '../shared/models/administration/review';
 
 @Injectable({
   providedIn: 'root'
@@ -77,13 +78,38 @@ export class ModerationService {
     return this.http.patch<reportModel>(`${environment.appUrl}/api/manage/block-account-professional`, report, { headers });
   }
 
-  suspendAccountPatient(report: reportModel) {
+  suspendAccountPatient(review: Review) {
     const headers = this.getHeaders();
-    return this.http.patch<reportModel>(`${environment.appUrl}/api/manage/suspend-account-patient`, report, { headers });
+    return this.http.patch<Review>(`${environment.appUrl}/api/manage/suspend-account-patient`, review, { headers });
   }
 
-  blockAccountPatient(report: reportModel) {
+  blockAccountPatient(review: Review) {
     const headers = this.getHeaders();
-    return this.http.patch<reportModel>(`${environment.appUrl}/api/manage/block-account-patient`, report, { headers });
+    return this.http.patch<Review>(`${environment.appUrl}/api/manage/block-account-patient`, review, { headers });
+  }
+
+  getReviews(offset: number, limit: number) {
+    const headers = this.getHeaders();
+    return this.http.get<Review[]>(`${environment.appUrl}/api/manage/get-reviews/${offset}/${limit}`, { headers });
+  }
+
+  getReviewsReported(offset: number, limit: number) {
+    const headers = this.getHeaders();
+    return this.http.get<Review[]>(`${environment.appUrl}/api/manage/get-reviews-reported/${offset}/${limit}`, { headers });
+  }
+
+  getReviewsDeleted(offset: number, limit: number) {
+    const headers = this.getHeaders();
+    return this.http.get<Review[]>(`${environment.appUrl}/api/manage/get-reviews-deleted/${offset}/${limit}`, { headers });
+  }
+
+  getReviewsNormal(offset: number, limit: number) {
+    const headers = this.getHeaders();
+    return this.http.get<Review[]>(`${environment.appUrl}/api/manage/get-reviews-normal/${offset}/${limit}`, { headers });
+  }
+
+  deleteReview(review: Review) {
+    const headers = this.getHeaders();
+    return this.http.patch<Review>(`${environment.appUrl}/api/manage/delete-review`, review, { headers });
   }
 }

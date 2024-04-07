@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LusoHealthClient.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240321064932_LusoHealth")]
+    [Migration("20240407171246_LusoHealth")]
     partial class LusoHealth
     {
         /// <inheritdoc />
@@ -115,6 +115,12 @@ namespace LusoHealthClient.Server.Migrations
 
                     b.Property<int>("Stars")
                         .HasColumnType("int");
+
+                    b.Property<int?>("State")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 

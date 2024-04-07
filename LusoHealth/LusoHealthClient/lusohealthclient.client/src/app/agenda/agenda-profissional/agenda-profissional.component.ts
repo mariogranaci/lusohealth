@@ -35,7 +35,8 @@ export class AgendaProfissionalComponent {
   displayedAppointments: Appointment[] = [];
   initialAppointmentCount = 3;
 
-  constructor(private servicesService: ServicesService, private agendaService: AgendaService, private appointmentService: AppointmentService) { }
+  constructor(private servicesService: ServicesService, private agendaService: AgendaService,
+    private appointmentService: AppointmentService) { }
 
   ngOnInit() {
     this.getServices().then(() => {
@@ -89,7 +90,7 @@ export class AgendaProfissionalComponent {
           this.getNextAppointments();
           this.getPendingAppointments();
         });
-
+        this.refundAppointment(response.id);
       },
       error: (error) => {
         console.error("Error scheduling appointment:", error);
@@ -102,7 +103,20 @@ export class AgendaProfissionalComponent {
     });
   }
 
-
+  refundAppointment(appointmentId: number) {
+    this.servicesService.refundPayment(appointmentId).subscribe({
+      next: (response: any) => {
+        console.log(response);
+      },
+      error: (error) => {
+        if (error.error.errors) {
+          this.errorMessages = error.error.errors;
+        } else {
+          this.errorMessages.push(error.error);
+        }
+      }
+    });
+  }
 
   getProfessionalTypes() {
     this.servicesService.getProfessionalTypes().pipe(

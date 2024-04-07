@@ -13,7 +13,7 @@ using Stripe.Checkout;
 
 namespace LusoHealthClient.Server.Controllers
 {
-    [Authorize(Roles="Patient")]
+    [Authorize(Roles = "Patient,Professional")]
     [Route("api/[controller]")]
     [ApiController]
     public class PaymentController : ControllerBase
@@ -188,6 +188,21 @@ namespace LusoHealthClient.Server.Controllers
                     return Unauthorized("Não tem permissões para cancelar esta consulta.");
 
                 _context.Appointment.Remove(appointment);
+
+                // find the slot of the appointment and set it to available and set the appointmentid to null
+                var slot = await _context.AvailableSlots.FirstOrDefaultAsync(s => s.AppointmentId == appointmentId);
+
+                if (slot != null && slot.AppointmentId == appointmentId)
+                {
+                    slot.IsAvailable = true;
+                    slot.AppointmentId = null;
+                    _context.AvailableSlots.Update(slot);
+                }
+                else
+                {
+                    return BadRequest("Erro ao cancelar consulta: não foi possível encontrar o slot da consulta.");
+                }
+
                 await _context.SaveChangesAsync();
 
                 return Ok(new { message = "Consulta cancelada com sucesso." });
@@ -198,8 +213,8 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpPost("refund-appointment/{appointmentId}")]
-        public async Task<ActionResult> RefundAppointment(int appointmentId)
+        [HttpPost("refund-appointment")]
+        public async Task<ActionResult> RefundAppointment(RefundRequestDto dto)
         {
             try
             {
@@ -209,13 +224,8 @@ namespace LusoHealthClient.Server.Controllers
                 var user = await _userManager.FindByIdAsync(userId);
                 if (user == null) return NotFound("Não foi possível encontrar o utilizador.");
 
-                var appointment = await _context.Appointment.FirstOrDefaultAsync(a => a.Id == appointmentId);
+                var appointment = await _context.Appointment.FirstOrDefaultAsync(a => a.Id == dto.AppointmentId);
                 if (appointment == null) return NotFound("Consulta não encontrada.");
-
-                var userIdOfAppointment = appointment.IdPatient;
-
-                if (userIdOfAppointment != userId) 
-                    return Unauthorized("Não tem permissões para reembolsar esta consulta.");
 
                 var paymentIntentId = appointment.PaymentIntentId;
                 if (string.IsNullOrEmpty(paymentIntentId)) return BadRequest("Não foi possível encontrar o pagamento associado a esta consulta.");
@@ -230,9 +240,9 @@ namespace LusoHealthClient.Server.Controllers
 
                 return Ok(new { message = "Reembolso efetuado com sucesso." });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Erro ao reembolsar consulta: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Erro ao reembolsar consulta, contacte o apoio ao cliente.");
             }
         }
 

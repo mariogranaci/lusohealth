@@ -18,106 +18,126 @@ using LusoHealthClient.Server.DTOs.Appointments;
 namespace LusoHealthClient.Server.Controllers
 {
     [Route("api/[controller]")]
-	[ApiController]
-	public class HomeController : ControllerBase
-	{
-		private readonly ApplicationDbContext _context;
-		private readonly UserManager<User> _userManager;
-		private readonly ILogger<ProfileController> _logger;
+    [ApiController]
+    public class HomeController : ControllerBase
+    {
+        private readonly ApplicationDbContext _context;
+        private readonly UserManager<User> _userManager;
+        private readonly ILogger<ProfileController> _logger;
 
-		public HomeController(ApplicationDbContext context, UserManager<User> userManager, ILogger<ProfileController> logger)
-		{
-			_context = context;
-			_userManager = userManager;
-			_logger = logger;
-		}
+        public HomeController(ApplicationDbContext context, UserManager<User> userManager, ILogger<ProfileController> logger)
+        {
+            _context = context;
+            _userManager = userManager;
+            _logger = logger;
+        }
 
-		[Authorize]
-		[HttpGet("get-service-info/{id}")]
-		public async Task<ActionResult<MakeAppointmentDto>> GetServiceInfo(int id)
-		{
-			var info = await _context.Services
-				.Include(s => s.Specialty)
-				.ThenInclude(o => o.ProfessionalType)
-				.Include(p => p.Professional)
-				.ThenInclude(u => u.User)
-				.FirstOrDefaultAsync(x => x.Id == id);
+        [Authorize]
+        [HttpGet("get-service-info/{id}")]
+        public async Task<ActionResult<MakeAppointmentDto>> GetServiceInfo(int id)
+        {
+            var info = await _context.Services
+                .Include(s => s.Specialty)
+                .ThenInclude(o => o.ProfessionalType)
+                .Include(p => p.Professional)
+                .ThenInclude(u => u.User)
+                .FirstOrDefaultAsync(x => x.Id == id);
 
-			if(info == null)
-			{
-				return BadRequest("Não foi possível encontrar a informação do serviço.");
-			}
+            if (info == null)
+            {
+                return BadRequest("Não foi possível encontrar a informação do serviço.");
+            }
 
-			MakeAppointmentDto makeAppointmentDto = new MakeAppointmentDto
-			{
-				ServiceId = info.Id,
-				SpecialtyId = info.IdSpecialty,
-				Specialty = info.Specialty.Name,
-				ProfessionalName = info.Professional.User.FirstName + " " + info.Professional.User.LastName,
-				Category = info.Specialty.ProfessionalType.Name,
-				Online = info.Online,
-				Presential = info.Presential,
+            MakeAppointmentDto makeAppointmentDto = new MakeAppointmentDto
+            {
+                ServiceId = info.Id,
+                SpecialtyId = info.IdSpecialty,
+                Specialty = info.Specialty.Name,
+                ProfessionalName = info.Professional.User.FirstName + " " + info.Professional.User.LastName,
+                Category = info.Specialty.ProfessionalType.Name,
+                Online = info.Online,
+                Presential = info.Presential,
                 PricePerHour = info.PricePerHour,
-				Home = info.Home,
-			};
+                Home = info.Home,
+            };
 
-			return makeAppointmentDto;
-		}
+            return makeAppointmentDto;
+        }
 
 
 
-		[HttpPost("add-appointment")]
-		public async Task<ActionResult> AddAppointment(AppointmentDto appointmentDto)
-		{
-			try
-			{
-				var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-				if (string.IsNullOrEmpty(userId)) return BadRequest("Não foi possível encontrar o utilizador.");
-				
-				var user = await _userManager.FindByIdAsync(userId);
-				if (user == null) return NotFound("Não foi possível encontrar o utilizador.");
-
-				var info = await _context.Services
-				.FirstOrDefaultAsync(x => x.Id == appointmentDto.IdService);
-
-                if(info == null) return BadRequest("Não foi possível encontrar a informação do serviço.");
-
-                if(appointmentDto.Timestamp < DateTime.Now) return BadRequest("Não é possível marcar uma consulta para uma data passada.");
-
-                if (!appointmentDto.Timestamp.HasValue)
+        [HttpPost("add-appointment")]
+        public async Task<ActionResult> AddAppointment(AppointmentDto appointmentDto)
+        {
+            using (var transaction = _context.Database.BeginTransaction())
+            {
+                try
                 {
-                    return BadRequest("Algo correu mal.");
-                }
+                    var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                    if (string.IsNullOrEmpty(userId)) return BadRequest("Não foi possível encontrar o utilizador.");
 
-                if (!Enum.TryParse(appointmentDto.Type, out AppointmentType appointmentType))
+                    var user = await _userManager.FindByIdAsync(userId);
+                    if (user == null) return NotFound("Não foi possível encontrar o utilizador.");
+
+                    var info = await _context.Services
+                    .FirstOrDefaultAsync(x => x.Id == appointmentDto.IdService);
+
+                    if (info == null) return BadRequest("Não foi possível encontrar a informação do serviço.");
+
+                    if (appointmentDto.Timestamp < DateTime.Now) return BadRequest("Não é possível marcar uma consulta para uma data passada.");
+
+                    if (!appointmentDto.Timestamp.HasValue)
+                    {
+                        return BadRequest("Algo correu mal.");
+                    }
+
+                    var slot = await _context.AvailableSlots.FirstOrDefaultAsync(x => x.IdService == appointmentDto.IdService && x.Start == appointmentDto.Timestamp);
+
+                    if (slot == null) return BadRequest("Não foi possível encontrar o slot.");
+
+                    if (!Enum.TryParse(appointmentDto.Type, out AppointmentType appointmentType))
+                    {
+                        throw new ArgumentException("Algo correu mal.");
+                    }
+
+                    var appointmentInfo = new Appointment
+                    {
+                        Timestamp = appointmentDto.Timestamp.Value,
+                        Location = appointmentDto.Location,
+                        Type = appointmentType,
+                        Description = appointmentDto.Description,
+                        State = AppointmentState.PaymentPending,
+                        Duration = appointmentDto.Duration,
+                        IdPatient = user.Id,
+                        IdProfesional = info.IdProfessional,
+                        IdService = info.Id,
+                    };
+
+                    _context.Appointment.Add(appointmentInfo);
+                    await _context.SaveChangesAsync();
+
+                    // update the slot to be avaliable=false and add the appointment id to the slot
+                    slot.IsAvailable = false;
+                    slot.AppointmentId = appointmentInfo.Id;
+
+                    _context.AvailableSlots.Update(slot);
+
+                    await _context.SaveChangesAsync();
+
+                    // Commit the transaction if all operations succeed
+                    transaction.Commit();
+
+                    return Ok(new { message = "A consulta foi marcada com sucesso.", appointmentId = appointmentInfo.Id });
+                }
+                catch (Exception)
                 {
-                    throw new ArgumentException("Algo correu mal.");
+                    transaction.Rollback();
+
+                    return StatusCode(StatusCodes.Status500InternalServerError, "Erro ao marcar consulta.");
                 }
+            }
+        }
 
-                var appointmentInfo = new Appointment
-				{
-					Timestamp = appointmentDto.Timestamp.Value,
-					Location = appointmentDto.Location,
-                    Type = appointmentType,
-                    Description = appointmentDto.Description,
-					State = AppointmentState.PaymentPending,
-					Duration = appointmentDto.Duration,	
-					IdPatient = user.Id,
-					IdProfesional = info.IdProfessional,
-					IdService = info.Id,
-				};
-
-				_context.Appointment.Add(appointmentInfo);
-				await _context.SaveChangesAsync();
-
-				return Ok(new { message = "A consulta foi marcada com sucesso.", appointmentId = appointmentInfo.Id });
-			}
-			catch (Exception)
-			{
-				return StatusCode(StatusCodes.Status500InternalServerError, "Erro ao marcar consulta.");
-			}
-		}
-       
 
         [HttpGet("get-professional-types")]
         public async Task<ActionResult<List<ProfessionalType>>> GetProfessionalTypes()
@@ -163,12 +183,12 @@ namespace LusoHealthClient.Server.Controllers
                     .Where(r => r.Service.IdProfessional == professional.UserID)
                     .ToListAsync();
                 var reviews = GetReviewDtos(reviewsFromDB);
-             
+
                 var professionalDto = new ProfessionalDto
                 {
-                    ProfessionalInfo = new UserProfileDto {FirstName = user.FirstName, LastName = user.LastName },
+                    ProfessionalInfo = new UserProfileDto { FirstName = user.FirstName, LastName = user.LastName },
                     Services = services,
-                    Certificates = null, 
+                    Certificates = null,
                     Reviews = reviews,
                     Location = professional.Location,
                     Description = professional.Description,
@@ -183,7 +203,7 @@ namespace LusoHealthClient.Server.Controllers
 
         [HttpGet("get-specialties")]
         public Task<ActionResult<List<Specialty>>> GetSpecialties()
-        {          
+        {
             try
             {
                 var specialties = _context.Specialties.OrderByDescending(a => a.Name).ToList();
@@ -258,7 +278,7 @@ namespace LusoHealthClient.Server.Controllers
 
                 var professionalDto = new ProfessionalDto
                 {
-                    ProfessionalInfo = new UserProfileDto {Id = user.Id, FirstName = user.FirstName, LastName = user.LastName, Picture = user.ProfilePicPath },
+                    ProfessionalInfo = new UserProfileDto { Id = user.Id, FirstName = user.FirstName, LastName = user.LastName, Picture = user.ProfilePicPath },
                     Services = services,
                     Certificates = null,
                     Reviews = reviews,
@@ -352,7 +372,7 @@ namespace LusoHealthClient.Server.Controllers
             {
                 ProfessionalInfo = new UserProfileDto { FirstName = user.FirstName, LastName = user.LastName },
                 Services = services,
-                Certificates = null, 
+                Certificates = null,
                 Reviews = reviews,
                 Location = professional.Location,
                 Description = professional.Description,

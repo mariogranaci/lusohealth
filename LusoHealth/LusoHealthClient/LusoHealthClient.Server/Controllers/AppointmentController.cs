@@ -68,6 +68,20 @@ namespace LusoHealthClient.Server.Controllers
                 model.State = "Canceled";
 
                 _context.Appointment.Update(appointment);
+
+                var slot = await _context.AvailableSlots.FirstOrDefaultAsync(s => s.AppointmentId == appointment.Id);
+
+                if (slot != null && slot.AppointmentId == appointment.Id)
+                {
+                    slot.IsAvailable = true;
+                    slot.AppointmentId = null;
+                    _context.AvailableSlots.Update(slot);
+                }
+                else
+                {
+                    return BadRequest("Erro ao cancelar consulta: não foi possível encontrar o slot da consulta.");
+                }
+
                 await _context.SaveChangesAsync();
 
                 return model;

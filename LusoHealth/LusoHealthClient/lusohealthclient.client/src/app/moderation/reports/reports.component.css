@@ -1,15 +1,38 @@
-main {
+main
+{
+  position: relative;
   padding: 0 7%;
-  margin: 50px 0 10px 0;
   min-width: 1150px;
   max-width: 1800px;
-  padding-bottom: 30px;
+  height: calc(100vh - 65px);
+}
+
+.row {
   display: flex;
-  justify-content: space-between;
+  flex-direction: row;
+}
+
+.title {
+  margin: 25px auto;
+  font-size: 20px;
+  text-align: center
+}
+
+.top-left {
+  position: absolute;
+  left: 25px;
+  top: 15px;
 }
 
 .reports-container {
-  margin: 20px;
+  width: 800px;
+  margin: 0 auto;
+}
+
+.report-item {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 50px;
 }
 
 .report-header {
@@ -18,47 +41,53 @@ main {
   margin-bottom: 20px;
 }
 
-.report-item {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
 .report-details {
   display: flex;
   align-items: center;
+  flex-direction: column;
+  margin-bottom: 10px;
   width: 100%;
 }
 
-.report-indicator {
-  height: 20px;
-  width: 20px;
-  border-radius: 50%;
-  margin-right: 10px;
+.report-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 20px;
 }
 
-.report-info {
-  flex-grow: 1;
+.report-profile-image {
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  margin-right: 15px;
 }
 
 .report-title {
   font-weight: bold;
-  margin-bottom: 5px;
+}
+
+.report-content {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .report-description {
-  margin-bottom: 5px;
+  max-width: 100%;
+  word-break: break-word;
+  hyphens: auto;
 }
 
 .report-date-time {
-  text-align: right;
-  margin-right: 20px;
+  margin-right: 8px;
 }
 
 .options-icon {
   cursor: pointer;
-  width: 20px;
-  height: 20px;
+  width: 25px;
+  height: 25px;
 }
 
 .btn {
@@ -70,7 +99,7 @@ main {
   color: #fff;
   font-size: 1.3rem;
   border-radius: 30px;
-  padding: 10px 95px;
+  padding: 10px 55px;
   font-weight: 500;
   background-color: #1875E7;
   cursor: pointer;
@@ -90,13 +119,29 @@ main {
     cursor: pointer;
   }
 
+.btn-blue {
+  background-color: #1875e7;
+}
+
+  .btn-blue:hover {
+    background-color: #1b69c8;
+  }
+
+.btn-red {
+  background-color: #d42a2a;
+}
+
+  .btn-red:hover {
+    background-color: #c31414;
+  }
+
 .arrow {
   width: 30px;
 }
 
 .more-container {
   text-align: center;
-  margin: 30px auto;
+  padding-bottom: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -164,8 +209,67 @@ main {
 }
 
 .form-buttons-row {
-  margin-top: 30px;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
 }
 
+
+.no-btn {
+  background-color: #ECEEF0;
+  border: none;
+  font-size: 20px;
+  margin: 20px 0;
+}
+
+
+/*----------------------------------*/
+
+.dropdown,
+.dropdown * {
+  position: relative;
+}
+
+.dropdown {
+  width:fit-content;
+  position: relative;
+  background-color: #fff;
+  border-radius: 10px;
+  margin-bottom: 35px;
+}
+
+  .dropdown select {
+    font-size: 1.1rem;
+    font-weight: normal;
+    max-width: 400px;
+    padding: 8px 24px 8px 10px;
+    border: none;
+    background-color: transparent;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    user-select: none;
+  }
+
+    .dropdown select option {
+      height: fit-content;
+    }
+
+    .dropdown select:active, .dropdown select:focus {
+      outline: none;
+      box-shadow: none;
+    }
+
+  .dropdown:after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 8px;
+    width: 0;
+    height: 0;
+    margin-top: -2px;
+    border-top: 5px solid #aaa;
+    border-right: 5px solid transparent;
+    border-left: 5px solid transparent;
+  }

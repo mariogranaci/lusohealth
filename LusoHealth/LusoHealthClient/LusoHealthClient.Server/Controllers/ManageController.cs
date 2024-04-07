@@ -63,7 +63,7 @@ namespace LusoHealthClient.Server.Controllers
             try
             {
                 var reports = await _context.Report
-                   .Where(r => r.State == ReportState.Concluded)
+                   .Where(r => r.State == ReportState.Canceled)
                    .Select(r => new ReportDto
                    {
                        Id = r.Id,
@@ -124,6 +124,40 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
+        [Authorize]
+        [HttpGet("get-reports-pending/{offset}/{limit}")]
+        public async Task<ActionResult<List<ReportDto>>> GetAllReportsPending(int offset, int limit)
+        {
+            try
+            {
+                var reports = await _context.Report
+                   .Where(r => r.State == ReportState.Pending)
+                   .Select(r => new ReportDto
+                   {
+                       Id = r.Id,
+                       Timestamp = r.Timestamp,
+                       IdPatient = r.IdPatient,
+                       IdProfesional = r.IdProfesional,
+                       Description = r.Description,
+                       State = r.State
+                   })
+                   .Skip(offset)
+                   .Take(limit)
+                   .ToListAsync();
+
+                if (reports == null || reports.Count == 0)
+                {
+                    return BadRequest("Não foi possível encontrar nenhum relatório cancelado.");
+                }
+
+                return reports;
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Erro ao obter relatórios cancelados.");
+            }
+        }
+
 
         [HttpPatch("cancel-report")]
         public async Task<ActionResult> ConcludeReport(ReportDto model)
@@ -137,7 +171,7 @@ namespace LusoHealthClient.Server.Controllers
 
             try 
             {
-                report.State = ReportState.Cancel;
+                report.State = ReportState.Canceled;
                 _context.Report.Update(report);
                 await _context.SaveChangesAsync();
 

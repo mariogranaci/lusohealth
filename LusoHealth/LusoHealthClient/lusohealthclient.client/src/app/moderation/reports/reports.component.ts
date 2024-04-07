@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { ModerationService } from '../moderation.service';
 import { reportModel } from '../../shared/models/administration/reportModel';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-reports',
@@ -16,7 +17,18 @@ export class ReportsComponent {
 
   reports: reportModel[] = [];
 
-  constructor(public moderationService: ModerationService) { }
+  private offsetGeneral: number = 0;
+  private offsetConcluded: number = 0;
+  private offsetCanceled: number = 0;
+  private offsetPending: number = 0;
+
+  limit: number = 5;
+
+  hide = false;
+
+  currentReport: any;
+
+  constructor(public moderationService: ModerationService, private location: Location) { }
 
   ngOnInit() {
     this.loadMoreReports();
@@ -28,42 +40,56 @@ export class ReportsComponent {
   }
 
   loadMoreReports() {
-    const offset = this.reports.length; 
-    const limit = 3; 
-
-    this.moderationService.getReports(offset, limit).subscribe({
+    this.moderationService.getReports(this.offsetGeneral, this.limit).subscribe({
       next: (newReports: reportModel[]) => {
         this.reports = this.reports.concat(newReports);
+        this.offsetGeneral += newReports.length;
+        if (newReports.length < this.limit) { this.hide = true; }
       },
       error: (error) => {
-        console.error(error);
-      }
-    });
-  }
-
-  loadMoreReportsCanceled() {
-    const offset = this.reports.length;
-    const limit = 3;
-
-    this.moderationService.getReports(offset, limit).subscribe({
-      next: (newReports: reportModel[]) => {
-        this.reports = this.reports.concat(newReports);
-      },
-      error: (error) => {
+        this.hide = true;
         console.error(error);
       }
     });
   }
 
   loadMoreReportsConcluded() {
-    const offset = this.reports.length;
-    const limit = 3;
-
-    this.moderationService.getReports(offset, limit).subscribe({
+    this.moderationService.getReportsConcluded(this.offsetConcluded, this.limit).subscribe({
       next: (newReports: reportModel[]) => {
         this.reports = this.reports.concat(newReports);
+        this.offsetConcluded += newReports.length;
+        if (newReports.length < this.limit) { this.hide = true; }
       },
       error: (error) => {
+        this.hide = true;
+        console.error(error);
+      }
+    });
+  }
+
+  loadMoreReportsCanceled() {
+    this.moderationService.getReportsCanceled(this.offsetCanceled, this.limit).subscribe({
+      next: (newReports: reportModel[]) => {
+        this.reports = this.reports.concat(newReports);
+        this.offsetCanceled += newReports.length;
+        if (newReports.length < this.limit) { this.hide = true; }
+      },
+      error: (error) => {
+        this.hide = true;
+        console.error(error);
+      }
+    });
+  }
+
+  loadMoreReportsPending() {
+    this.moderationService.getReportsPending(this.offsetCanceled, this.limit).subscribe({
+      next: (newReports: reportModel[]) => {
+        this.reports = this.reports.concat(newReports);
+        this.offsetPending += newReports.length;
+        if (newReports.length < this.limit) { this.hide = true; }
+      },
+      error: (error) => {
+        this.hide = true;
         console.error(error);
       }
     });
@@ -123,6 +149,60 @@ export class ReportsComponent {
     });
   }
 
+  updateDisplayedReports() {
+    const value = document.getElementById("state") as HTMLSelectElement | null;
+
+    this.reports = [];
+    this.hide = false;
+
+    if (value)
+    {
+      switch (value.value) {
+        case '0':
+          this.offsetGeneral = 0;
+          this.loadMoreReports();
+          break;
+        case '1':
+          this.offsetConcluded = 0;
+          this.loadMoreReportsConcluded();
+          break;
+        case '2':
+          this.offsetCanceled = 0;
+          this.loadMoreReportsCanceled();
+          break;
+        case '3':
+          this.offsetCanceled = 0;
+          this.loadMoreReportsPending();
+          break;
+        default:
+          break;
+      }
+    }
+  }
+
+  addDisplayedReports() {
+    const value = document.getElementById("state") as HTMLSelectElement | null;
+
+    if (value) {
+      switch (value.value) {
+        case '0':
+          this.loadMoreReports();
+          break;
+        case '1':
+          this.loadMoreReportsConcluded();
+          break;
+        case '2':
+          this.loadMoreReportsCanceled();
+          break;
+        case '3':
+          this.loadMoreReportsPending();
+          break;
+        default:
+          break;
+      }
+    }
+  }
+
   convertToHours(dateTimeString: Date | null): string {
     if (!dateTimeString) {
       return "";
@@ -161,9 +241,11 @@ export class ReportsComponent {
     return formattedDate;
   }
 
-  openPopup(opcao: string) {
+  openPopup(report: reportModel) {
     const overlay = document.getElementById('overlay');
     const options = document.getElementById('options');
+
+    this.currentReport = report;
 
     if (options) {
       options.style.display = "none";
@@ -171,10 +253,8 @@ export class ReportsComponent {
 
     if (overlay) {
       overlay.style.display = 'flex';
-      if (opcao == "options") {
-        if (options) {
-          options.style.display = "block";
-        }
+      if (options) {
+        options.style.display = "block";
       }
     }
   }
@@ -195,7 +275,7 @@ export class ReportsComponent {
     event.stopPropagation();
   }
 
-  updateDisplayedReports() {
-    this.loadMoreReports();
+  goBack() {
+    this.location.back();
   }
 }

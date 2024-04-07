@@ -57,6 +57,11 @@ export class ModerationService {
     return this.http.get<reportModel[]>(`${environment.appUrl}/api/manage/get-reports-canceled/${offset}/${limit}`, { headers });
   }
 
+  getReportsPending(offset: number, limit: number) {
+    const headers = this.getHeaders();
+    return this.http.get<reportModel[]>(`${environment.appUrl}/api/manage/get-reports-pending/${offset}/${limit}`, { headers });
+  }
+
   cancelReport(report: reportModel) {
     const headers = this.getHeaders();
     return this.http.patch<reportModel>(`${environment.appUrl}/api/manage/cancel-report`, report, { headers });

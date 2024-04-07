@@ -80,16 +80,26 @@ namespace LusoHealthClient.Server.Controllers
 				var info = await _context.Services
 				.FirstOrDefaultAsync(x => x.Id == appointmentDto.IdService);
 
+                if(info == null) return BadRequest("Não foi possível encontrar a informação do serviço.");
 
+                if(appointmentDto.Timestamp < DateTime.Now) return BadRequest("Não é possível marcar uma consulta para uma data passada.");
 
-				var appointmentInfo = new Appointment
+                if (!appointmentDto.Timestamp.HasValue)
+                {
+                    return BadRequest("Algo correu mal.");
+                }
+
+                if (!Enum.TryParse(appointmentDto.Type, out AppointmentType appointmentType))
+                {
+                    throw new ArgumentException("Algo correu mal.");
+                }
+
+                var appointmentInfo = new Appointment
 				{
-                    //corrigir -------------------------------------------------------------------------------------------------
-					Timestamp = DateTime.Now,
-                    //-----------------------------------------------------------------------------------------------------------
+					Timestamp = appointmentDto.Timestamp.Value,
 					Location = appointmentDto.Location,
-					Type = AppointmentType.Presential,
-					Description = appointmentDto.Description,
+                    Type = appointmentType,
+                    Description = appointmentDto.Description,
 					State = AppointmentState.PaymentPending,
 					Duration = appointmentDto.Duration,	
 					IdPatient = user.Id,
@@ -102,12 +112,11 @@ namespace LusoHealthClient.Server.Controllers
 
 				return Ok(new { message = "A consulta foi marcada com sucesso.", appointmentId = appointmentInfo.Id });
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
-				return StatusCode(StatusCodes.Status500InternalServerError, $"Erro ao marcar consulta: {ex.Message}");
+				return StatusCode(StatusCodes.Status500InternalServerError, "Erro ao marcar consulta.");
 			}
 		}
-	
        
 
         [HttpGet("get-professional-types")]

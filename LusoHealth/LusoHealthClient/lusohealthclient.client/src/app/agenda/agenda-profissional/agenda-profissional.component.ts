@@ -78,7 +78,7 @@ export class AgendaProfissionalComponent {
 
   cancelAppointment(appointment: Appointment) {
     const appontmentDto = new Appointment(appointment.timestamp, appointment.location, null, null, null, appointment.duration, appointment.idPatient, appointment.id, appointment.idProfessional, appointment.idService);
-    this.appointmentService.scheduleAppointment(appontmentDto).pipe(
+    this.appointmentService.cancelAppointment(appontmentDto).pipe(
       takeUntil(this.unsubscribe$)
     ).subscribe({
       next: (response: any) => {
@@ -89,6 +89,7 @@ export class AgendaProfissionalComponent {
           this.getNextAppointments();
           this.getPendingAppointments();
         });
+
       },
       error: (error) => {
         console.error("Error scheduling appointment:", error);
@@ -100,6 +101,8 @@ export class AgendaProfissionalComponent {
       }
     });
   }
+
+
 
   getProfessionalTypes() {
     this.servicesService.getProfessionalTypes().pipe(

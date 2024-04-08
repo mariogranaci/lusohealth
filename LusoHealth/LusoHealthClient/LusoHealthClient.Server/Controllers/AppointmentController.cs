@@ -99,6 +99,60 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
+        [HttpPatch("finish-appointment")]
+        public async Task<ActionResult<AppointmentDto>> FinishAppointment(AppointmentDto model)
+        {
+            if (model == null) return BadRequest("Não foi possível acabar a consulta.");
+            var appointment = await _context.Appointment.FindAsync(model.Id);
+
+            if (appointment == null)
+            {
+                return NotFound("Consulta não encontrada.");
+            }
+
+            try
+            {
+                appointment.State = AppointmentState.Done;
+                model.State = "Done";
+
+                _context.Appointment.Update(appointment);
+                await _context.SaveChangesAsync();
+
+                return model;
+            }
+            catch (Exception)
+            {
+                return BadRequest("Ocorreu um erro ao atualizar o estado da consulta.");
+            }
+        }
+
+        [HttpPatch("begin-appointment")]
+        public async Task<ActionResult<AppointmentDto>> BeginAppointment(AppointmentDto model)
+        {
+            if (model == null) return BadRequest("Não foi possível começar a consulta.");
+            var appointment = await _context.Appointment.FindAsync(model.Id);
+
+            if (appointment == null)
+            {
+                return NotFound("Consulta não encontrada.");
+            }
+
+            try
+            {
+                appointment.State = AppointmentState.InProgress;
+                model.State = "InProgress";
+
+                _context.Appointment.Update(appointment);
+                await _context.SaveChangesAsync();
+
+                return model;
+            }
+            catch (Exception)
+            {
+                return BadRequest("Ocorreu um erro ao atualizar o estado da consulta.");
+            }
+        }
+
         [HttpPatch("schedule-appointment")]
         public async Task<ActionResult<AppointmentDto>> AcceptAppointment(AppointmentDto model)
         {

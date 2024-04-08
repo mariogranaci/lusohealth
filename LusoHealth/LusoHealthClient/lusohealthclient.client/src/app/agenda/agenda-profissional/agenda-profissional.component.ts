@@ -51,6 +51,7 @@ export class AgendaProfissionalComponent {
     this.unsubscribe$.complete();
   }
 
+  // Altera o estado de um agendamento para "agendado"
   changeAppointmentScheduled(appointment: Appointment) {
     const appontmentDto = new Appointment(appointment.timestamp, appointment.location, null, null, null, appointment.duration, appointment.idPatient, appointment.id, appointment.idProfessional, appointment.idService);
     this.appointmentService.scheduleAppointment(appontmentDto).pipe(
@@ -76,6 +77,7 @@ export class AgendaProfissionalComponent {
     });
   }
 
+  // Cancela um agendamento
   cancelAppointment(appointment: Appointment) {
     const appontmentDto = new Appointment(appointment.timestamp, appointment.location, null, null, null, appointment.duration, appointment.idPatient, appointment.id, appointment.idProfessional, appointment.idService);
     this.appointmentService.scheduleAppointment(appontmentDto).pipe(
@@ -101,6 +103,7 @@ export class AgendaProfissionalComponent {
     });
   }
 
+  // Obtém os tipos de profissionais
   getProfessionalTypes() {
     this.servicesService.getProfessionalTypes().pipe(
       takeUntil(this.unsubscribe$)
@@ -119,6 +122,7 @@ export class AgendaProfissionalComponent {
     });
   }
 
+  // Obtém os próximos agendamentos
   getNextAppointments() {
     this.agendaService.getNextAppointments().pipe(
       takeUntil(this.unsubscribe$)

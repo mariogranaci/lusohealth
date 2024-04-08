@@ -5,7 +5,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LusoHealthClient.Server.Models.Services
 {
-    public class Appointment
+	/// <summary>
+	/// Representa um agendamento de serviço, como uma consulta ou exame médico.
+	/// </summary>
+	public class Appointment
     {
         [Key]
         public int? Id { get; set; }

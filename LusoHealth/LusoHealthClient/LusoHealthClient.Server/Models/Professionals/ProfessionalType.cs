@@ -2,7 +2,10 @@
 
 namespace LusoHealthClient.Server.Models.Professionals
 {
-    public class ProfessionalType
+	/// <summary>
+	/// Representa o tipo de profissional de saúde.
+	/// </summary>
+	public class ProfessionalType
     {
         [Key]
         public int Id { get; set; }

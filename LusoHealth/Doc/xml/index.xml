@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygenindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="index.xsd" version="1.10.0" xml:lang="en-US">
+  <compound refid="class_luso_health_client_1_1_server_1_1_s_d" kind="class"><name>LusoHealthClient::Server::SD</name>
+    <member refid="class_luso_health_client_1_1_server_1_1_s_d_1a1adb56ed8d7768871d5e14f6e78120c6" kind="variable"><name>AdminRole</name></member>
+    <member refid="class_luso_health_client_1_1_server_1_1_s_d_1a7408a1599df4c8664ec6eba39ef612ce" kind="variable"><name>ManagerRole</name></member>
+    <member refid="class_luso_health_client_1_1_server_1_1_s_d_1a0974b9b7e1deaac20ed7649e4215d40c" kind="variable"><name>PatientRole</name></member>
+    <member refid="class_luso_health_client_1_1_server_1_1_s_d_1aa8d32f6fc9d20654c7c35816d89a9910" kind="variable"><name>ProfessionalRole</name></member>
+  </compound>
+  <compound refid="namespace_luso_health_client" kind="namespace"><name>LusoHealthClient</name>
+  </compound>
+  <compound refid="namespace_luso_health_client_1_1_server" kind="namespace"><name>LusoHealthClient::Server</name>
+  </compound>
+  <compound refid="namespace_luso_health_client_1_1_server_1_1_data" kind="namespace"><name>LusoHealthClient::Server::Data</name>
+  </compound>
+  <compound refid="namespace_luso_health_client_1_1_server_1_1_models_1_1_users" kind="namespace"><name>LusoHealthClient::Server::Models::Users</name>
+  </compound>
+  <compound refid="namespace_luso_health_client_1_1_server_1_1_services" kind="namespace"><name>LusoHealthClient::Server::Services</name>
+  </compound>
+  <compound refid="namespace_microsoft_1_1_asp_net_core_1_1_authentication_1_1_jwt_bearer" kind="namespace"><name>Microsoft::AspNetCore::Authentication::JwtBearer</name>
+  </compound>
+  <compound refid="namespace_microsoft_1_1_asp_net_core_1_1_builder" kind="namespace"><name>Microsoft::AspNetCore::Builder</name>
+  </compound>
+  <compound refid="namespace_microsoft_1_1_asp_net_core_1_1_identity" kind="namespace"><name>Microsoft::AspNetCore::Identity</name>
+  </compound>
+  <compound refid="namespace_microsoft_1_1_asp_net_core_1_1_mvc" kind="namespace"><name>Microsoft::AspNetCore::Mvc</name>
+  </compound>
+  <compound refid="namespace_microsoft_1_1_entity_framework_core" kind="namespace"><name>Microsoft::EntityFrameworkCore</name>
+  </compound>
+  <compound refid="namespace_microsoft_1_1_extensions_1_1_configuration" kind="namespace"><name>Microsoft::Extensions::Configuration</name>
+  </compound>
+  <compound refid="namespace_microsoft_1_1_extensions_1_1_dependency_injection" kind="namespace"><name>Microsoft::Extensions::DependencyInjection</name>
+  </compound>
+  <compound refid="namespace_microsoft_1_1_extensions_1_1_hosting" kind="namespace"><name>Microsoft::Extensions::Hosting</name>
+  </compound>
+  <compound refid="namespace_microsoft_1_1_identity_model_1_1_tokens" kind="namespace"><name>Microsoft::IdentityModel::Tokens</name>
+  </compound>
+  <compound refid="namespace_stripe" kind="namespace"><name>Stripe</name>
+  </compound>
+  <compound refid="namespace_system_1_1_text" kind="namespace"><name>System::Text</name>
+  </compound>
+  <compound refid="namespacevar" kind="namespace"><name>var</name>
+  </compound>
+  <compound refid="_program_8cs" kind="file"><name>Program.cs</name>
+    <member refid="_program_8cs_1a2a950ac7d24bd0a6c3e05dce814f814e" kind="typedef"><name>scope</name></member>
+    <member refid="_program_8cs_1a2f78352277081c620fd4cf92a5ce15e5" kind="variable"><name>builder</name></member>
+    <member refid="_program_8cs_1ad9ab59fa7eaeaa2325dee94ee97eb875" kind="variable"><name>ApiKey</name></member>
+    <member refid="_program_8cs_1a7b225fcb720e4d5ed2bbf60e28a25e6d" kind="variable"><name>app</name></member>
+    <member refid="_program_8cs_1abe4cc9788f52e49485473dc699537388" kind="variable"><name>try</name></member>
+    <member refid="_program_8cs_1abc3694a0e15618f2499e5a540264f833" kind="function"><name>AddControllers</name></member>
+    <member refid="_program_8cs_1a0d7859f9cad50e8e9fdf015100780e07" kind="function"><name>AddEndpointsApiExplorer</name></member>
+    <member refid="_program_8cs_1ae0ce43c019a5621d731d0c622c793644" kind="function"><name>AddSwaggerGen</name></member>
+    <member refid="_program_8cs_1ad1938732b6cafb4e4c80b00bd38b1e86" kind="function"><name>AddDbContext&lt; ApplicationDbContext &gt;</name></member>
+    <member refid="_program_8cs_1a0fda3c9fd0e6fb3a4170615cd00d1afa" kind="function"><name>AddScoped&lt; JWTService &gt;</name></member>
+    <member refid="_program_8cs_1a6d2ccb2ebcaa091ffb6756a853969797" kind="function"><name>AddScoped&lt; EmailService &gt;</name></member>
+    <member refid="_program_8cs_1a38968a46261b3fb7f71eb835aad4560e" kind="function"><name>AddScoped&lt; ContextSeedService &gt;</name></member>
+    <member refid="_program_8cs_1ab72448ee5a3f1f60960ff01b0455f027" kind="function"><name>AddIdentityCore&lt; User &gt;</name></member>
+    <member refid="_program_8cs_1a7b2bc4c41ab1f801b53d7330af1fdf7e" kind="function"><name>AddAuthentication</name></member>
+    <member refid="_program_8cs_1a369534c442027ea086749e8ccefcb590" kind="function"><name>AddCors</name></member>
+    <member refid="_program_8cs_1aeff113d5b3e543465fbbdfef7f8671f6" kind="function"><name>Configure&lt; ApiBehaviorOptions &gt;</name></member>
+    <member refid="_program_8cs_1aee38f8384e80d0b3f415c5019d2aec9f" kind="function"><name>AddCors</name></member>
+    <member refid="_program_8cs_1a253e070474958302a4f6c44ea1c960ca" kind="function"><name>AddAuthorization</name></member>
+    <member refid="_program_8cs_1ad5943c17341260006d5d051e36aa94c9" kind="function"><name>UseDefaultFiles</name></member>
+    <member refid="_program_8cs_1a906a3ce545279a7a73941f1d7b64d7cf" kind="function"><name>UseStaticFiles</name></member>
+    <member refid="_program_8cs_1aa5090fdb46c526cdd3ab0cfd3914702f" kind="function"><name>UseCors</name></member>
+    <member refid="_program_8cs_1a9a5cfe7fee09f478241b98af703affea" kind="function"><name>UseSwagger</name></member>
+    <member refid="_program_8cs_1a968f30949d31f6febdcf7f3fe40bfa42" kind="function"><name>UseSwaggerUI</name></member>
+    <member refid="_program_8cs_1aa4d447fc3129a3aa301d736b8bd04ae9" kind="function"><name>UseHttpsRedirection</name></member>
+    <member refid="_program_8cs_1a6435d8beeff4999dc0b0c6d60a86a4e2" kind="function"><name>UseAuthentication</name></member>
+    <member refid="_program_8cs_1af6f72d752b2e73aa0292f74bd13237ab" kind="function"><name>UseAuthorization</name></member>
+    <member refid="_program_8cs_1a9e2ee3170aa6279b68eefd1651f7d96c" kind="function"><name>MapControllers</name></member>
+    <member refid="_program_8cs_1a1fef6263a8172c82cef5a4e2f7a2bb43" kind="function"><name>MapFallbackToFile</name></member>
+    <member refid="_program_8cs_1a79a944c7f0e25196ca3c5a8638b919b9" kind="function"><name>if</name></member>
+    <member refid="_program_8cs_1a2c1da1322c6e3730abc8757c2a866afd" kind="function"><name>if</name></member>
+    <member refid="_program_8cs_1ab43e01d035a27754dae62444a59b3cab" kind="function"><name>catch</name></member>
+    <member refid="_program_8cs_1aaa3dbf02e269c3ef7e8546d290c6b3dd" kind="function"><name>Run</name></member>
+  </compound>
+  <compound refid="_s_d_8cs" kind="file"><name>SD.cs</name>
+  </compound>
+</doxygenindex>

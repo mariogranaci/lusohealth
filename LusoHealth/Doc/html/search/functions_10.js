@@ -1,0 +1,19 @@
+var searchData=
+[
+  ['up_0',['Up',['../class_luso_health_client_1_1_server_1_1_migrations_1_1lusohealth.html#a374fcaf230ac84a54f7ae8d225ffe510',1,'LusoHealthClient::Server::Migrations::lusohealth']]],
+  ['updatedescription_1',['UpdateDescription',['../class_luso_health_client_1_1_server_1_1_controllers_1_1_profile_controller.html#ac30f6ac95475c342a46d446033e3f2da',1,'LusoHealthClient::Server::Controllers::ProfileController']]],
+  ['updatepassword_2',['UpdatePassword',['../class_luso_health_client_1_1_server_1_1_controllers_1_1_profile_controller.html#a1898b5828be0f671ead15e7047530523',1,'LusoHealthClient::Server::Controllers::ProfileController']]],
+  ['updatepicture_3',['UpdatePicture',['../class_luso_health_client_1_1_server_1_1_controllers_1_1_profile_controller.html#a261657e388bc4dd3f0317e7301968558',1,'LusoHealthClient::Server::Controllers::ProfileController']]],
+  ['updaterelative_4',['UpdateRelative',['../class_luso_health_client_1_1_server_1_1_controllers_1_1_profile_controller.html#aedd1757c9a10d3a91bbef3d670343ac2',1,'LusoHealthClient::Server::Controllers::ProfileController']]],
+  ['updateservice_5',['UpdateService',['../class_luso_health_client_1_1_server_1_1_controllers_1_1_profile_controller.html#acde285bf5171a1136bdbf38b64a70510',1,'LusoHealthClient::Server::Controllers::ProfileController']]],
+  ['updateuserinfo_6',['UpdateUserInfo',['../class_luso_health_client_1_1_server_1_1_controllers_1_1_profile_controller.html#a7d7e1c6096c6e1856e881ba40c7837a6',1,'LusoHealthClient::Server::Controllers::ProfileController']]],
+  ['uploadpdf_7',['UploadPdf',['../class_luso_health_client_1_1_server_1_1_controllers_1_1_profile_controller.html#a58f8a86a6d3aba1462435a187f2a0fc6',1,'LusoHealthClient::Server::Controllers::ProfileController']]],
+  ['useauthentication_8',['UseAuthentication',['../_program_8cs.html#a6435d8beeff4999dc0b0c6d60a86a4e2',1,'Program.cs']]],
+  ['useauthorization_9',['UseAuthorization',['../_program_8cs.html#af6f72d752b2e73aa0292f74bd13237ab',1,'Program.cs']]],
+  ['usecors_10',['UseCors',['../_program_8cs.html#aa5090fdb46c526cdd3ab0cfd3914702f',1,'Program.cs']]],
+  ['usedefaultfiles_11',['UseDefaultFiles',['../_program_8cs.html#ad5943c17341260006d5d051e36aa94c9',1,'Program.cs']]],
+  ['usehttpsredirection_12',['UseHttpsRedirection',['../_program_8cs.html#aa4d447fc3129a3aa301d736b8bd04ae9',1,'Program.cs']]],
+  ['usestaticfiles_13',['UseStaticFiles',['../_program_8cs.html#a906a3ce545279a7a73941f1d7b64d7cf',1,'Program.cs']]],
+  ['useswagger_14',['UseSwagger',['../_program_8cs.html#a9a5cfe7fee09f478241b98af703affea',1,'Program.cs']]],
+  ['useswaggerui_15',['UseSwaggerUI',['../_program_8cs.html#a968f30949d31f6febdcf7f3fe40bfa42',1,'Program.cs']]]
+];

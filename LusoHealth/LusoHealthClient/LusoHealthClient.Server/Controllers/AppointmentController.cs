@@ -14,7 +14,11 @@ namespace LusoHealthClient.Server.Controllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class AppointmentController : ControllerBase
+
+	/// <summary>
+	/// Controller responsável pela gestão de consultas (appointments).
+	/// </summary>
+	public class AppointmentController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<User> _userManager;
@@ -25,8 +29,12 @@ namespace LusoHealthClient.Server.Controllers
             _userManager = userManager;
         }
 
-
-        [HttpGet("get-appointment-info/{id}")]
+		/// <summary>
+		/// Obtém as informações de uma consulta pelo ID.
+		/// </summary>
+		/// <param name="id">ID da consulta.</param>
+		/// <returns>As informações da consulta.</returns>
+		[HttpGet("get-appointment-info/{id}")]
         public async Task<ActionResult<AppointmentDto>> GetAppointment(int id)
         {
             var info = await _context.Appointment.FirstOrDefaultAsync(x => x.Id == id);
@@ -50,8 +58,12 @@ namespace LusoHealthClient.Server.Controllers
             return appointmentDto;
         }
 
-
-        [HttpPatch("cancel-appointment")]
+		/// <summary>
+		/// Cancela uma consulta.
+		/// </summary>
+		/// <param name="model">As informações da consulta a ser cancelada.</param>
+		/// <returns>A consulta cancelada.</returns>
+		[HttpPatch("cancel-appointment")]
         public async Task<ActionResult<AppointmentDto>> CancelAppointment(AppointmentDto model)
         {
             if (model == null) return BadRequest("Não foi possível cancelar a consulta.");
@@ -78,7 +90,12 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpPatch("schedule-appointment")]
+		/// <summary>
+		/// Atualiza o estado de uma consulta para agendada.
+		/// </summary>
+		/// <param name="model">As informações da consulta a ser agendada.</param>
+		/// <returns>A consulta agendada.</returns>
+		[HttpPatch("schedule-appointment")]
         public async Task<ActionResult<AppointmentDto>> AcceptAppointment(AppointmentDto model)
         {
             if (model == null) return BadRequest("Não foi possível atualizar o estado da consulta.");
@@ -105,7 +122,12 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpPatch("change-appointment")]
+		/// <summary>
+		/// Altera a consulta para um novo slot de horário.
+		/// </summary>
+		/// <param name="model">As informações da consulta e do novo slot de horário.</param>
+		/// <returns>O novo slot de horário.</returns>
+		[HttpPatch("change-appointment")]
         public async Task<ActionResult<AvailableSlot>> ChangeAppointment(AvailableSlotDto model)
         {
             if (model == null) return BadRequest("Consulta não encontrada.");

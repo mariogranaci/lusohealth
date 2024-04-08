@@ -4,7 +4,10 @@ using LusoHealthClient.Server.Models.Users;
 
 namespace LusoHealthClient.Server.Models.Professionals
 {
-    public class Service
+	/// <summary>
+	/// Representa um serviço oferecido por um profissional de saúde.
+	/// </summary>
+	public class Service
     {
         [Key]
         public int Id { get; set; }

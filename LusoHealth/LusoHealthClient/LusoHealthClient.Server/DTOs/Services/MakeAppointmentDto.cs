@@ -1,5 +1,8 @@
 ﻿namespace LusoHealthClient.Server.DTOs.Services
 {
+	/// <summary>
+	///(DTO) para fazer um agendamento.
+	/// </summary>
 	public class MakeAppointmentDto
 	{
 		public int? ServiceId { get; set; }

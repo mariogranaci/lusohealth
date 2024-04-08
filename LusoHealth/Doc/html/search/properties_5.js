@@ -1,0 +1,5 @@
+var searchData=
+[
+  ['familyaggregate_0',['FamilyAggregate',['../class_luso_health_client_1_1_server_1_1_models_1_1_users_1_1_patient.html#a41db13f7ea1deea51118823e910aaf67',1,'LusoHealthClient::Server::Models::Users::Patient']]],
+  ['firstname_1',['FirstName',['../class_luso_health_client_1_1_server_1_1_d_t_os_1_1_authentication_1_1_register_dto.html#ac5fa2b337944c05aa7211d1340d6c80b',1,'LusoHealthClient.Server.DTOs.Authentication.RegisterDto.FirstName'],['../class_luso_health_client_1_1_server_1_1_d_t_os_1_1_authentication_1_1_register_with_google_dto.html#a1afc67164e8f15a06b471efdd52b75eb',1,'LusoHealthClient.Server.DTOs.Authentication.RegisterWithGoogleDto.FirstName'],['../class_luso_health_client_1_1_server_1_1_d_t_os_1_1_profile_1_1_user_profile_dto.html#ae0f2b8bf5373a9a07f925f0186ae3ec0',1,'LusoHealthClient.Server.DTOs.Profile.UserProfileDto.FirstName'],['../class_luso_health_client_1_1_server_1_1_models_1_1_users_1_1_user.html#a1f379bf76604313eea1600d80848839f',1,'LusoHealthClient.Server.Models.Users.User.FirstName']]]
+];

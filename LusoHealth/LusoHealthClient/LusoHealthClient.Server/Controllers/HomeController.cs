@@ -17,7 +17,10 @@ using LusoHealthClient.Server.DTOs.Appointments;
 
 namespace LusoHealthClient.Server.Controllers
 {
-    [Route("api/[controller]")]
+	/// <summary>
+	/// Controlador responsável por lidar com a lógica relacionada à página inicial e aos serviços oferecidos.
+	/// </summary>
+	[Route("api/[controller]")]
 	[ApiController]
 	public class HomeController : ControllerBase
 	{
@@ -25,6 +28,12 @@ namespace LusoHealthClient.Server.Controllers
 		private readonly UserManager<User> _userManager;
 		private readonly ILogger<ProfileController> _logger;
 
+		/// <summary>
+		/// Construtor da classe HomeController.
+		/// </summary>
+		/// <param name="context">Contexto da base de dados.</param>
+		/// <param name="userManager">O usermanager dos utilizadores.</param>
+		/// <param name="logger">O logger para registrar informações de log.</param>
 		public HomeController(ApplicationDbContext context, UserManager<User> userManager, ILogger<ProfileController> logger)
 		{
 			_context = context;
@@ -32,6 +41,9 @@ namespace LusoHealthClient.Server.Controllers
 			_logger = logger;
 		}
 
+		/// <summary>
+		/// Método para obter informações sobre um serviço específico.
+		/// </summary>
 		[Authorize]
 		[HttpGet("get-service-info/{id}")]
 		public async Task<ActionResult<MakeAppointmentDto>> GetServiceInfo(int id)
@@ -65,7 +77,9 @@ namespace LusoHealthClient.Server.Controllers
 		}
 
 
-
+		/// <summary>
+		/// Método para adicionar uma nova consulta.
+		/// </summary>
 		[HttpPost("add-appointment")]
 		public async Task<ActionResult> AddAppointment(AppointmentDto appointmentDto)
 		{
@@ -107,10 +121,12 @@ namespace LusoHealthClient.Server.Controllers
 				return StatusCode(StatusCodes.Status500InternalServerError, $"Erro ao marcar consulta: {ex.Message}");
 			}
 		}
-	
-       
 
-        [HttpGet("get-professional-types")]
+
+		/// <summary>
+		/// Método para obter os tipos de profissionais.
+		/// </summary>
+		[HttpGet("get-professional-types")]
         public async Task<ActionResult<List<ProfessionalType>>> GetProfessionalTypes()
         {
             try
@@ -125,7 +141,10 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpGet("get-professionals")]
+		/// <summary>
+		/// Método para obter informações sobre os profissionais disponíveis.
+		/// </summary>
+		[HttpGet("get-professionals")]
         public async Task<ActionResult<List<ProfessionalDto>>> GetProfessionals()
         {
             var professionals = await _context.Professionals
@@ -172,7 +191,10 @@ namespace LusoHealthClient.Server.Controllers
             return professionalsDtoList;
         }
 
-        [HttpGet("get-specialties")]
+		/// <summary>
+		/// Método para obter as especialidades disponíveis.
+		/// </summary>
+		[HttpGet("get-specialties")]
         public Task<ActionResult<List<Specialty>>> GetSpecialties()
         {          
             try
@@ -187,7 +209,10 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpGet("get-services")]
+		/// <summary>
+		/// Método para obter os serviços disponíveis.
+		/// </summary>
+		[HttpGet("get-services")]
         public async Task<List<ServicesDto>> GetServices()
         {
             var servicesFromDB = await _context.Services.Include(s => s.Specialty).Include(d => d.Professional).ThenInclude(a => a.ProfessionalType).ToListAsync();
@@ -196,7 +221,10 @@ namespace LusoHealthClient.Server.Controllers
             return services;
         }
 
-        [HttpPost("get-professionals-on-location")]
+		/// <summary>
+		/// Método para obter profissionais com base na localização fornecida.
+		/// </summary>
+		[HttpPost("get-professionals-on-location")]
         public async Task<ActionResult<List<ProfessionalDto>>> GetProfessionalsOnLocation(BoundsDto locationDto)
         {
             double latNE = locationDto.LatitudeNorthEast;

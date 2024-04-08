@@ -1,0 +1,24 @@
+var searchData=
+[
+  ['acceptappointment_0',['AcceptAppointment',['../class_luso_health_client_1_1_server_1_1_controllers_1_1_appointment_controller.html#aff4a7a42571fb812a6e2018a7c42907c',1,'LusoHealthClient::Server::Controllers::AppointmentController']]],
+  ['addappointment_1',['AddAppointment',['../class_luso_health_client_1_1_server_1_1_controllers_1_1_home_controller.html#af24d5bff189fc90567cf6a835ffb9f31',1,'LusoHealthClient::Server::Controllers::HomeController']]],
+  ['addavailability_2',['AddAvailability',['../class_luso_health_client_1_1_server_1_1_controllers_1_1_agenda_controller.html#afa043ff3208a45731d3e2669ee968d2f',1,'LusoHealthClient::Server::Controllers::AgendaController']]],
+  ['addrelative_3',['AddRelative',['../class_luso_health_client_1_1_server_1_1_controllers_1_1_profile_controller.html#a5c565353ada00708579820f57d8a6bea',1,'LusoHealthClient::Server::Controllers::ProfileController']]],
+  ['addreport_4',['AddReport',['../class_luso_health_client_1_1_server_1_1_controllers_1_1_profile_controller.html#af7debda5adb95100882053de9a13485f',1,'LusoHealthClient::Server::Controllers::ProfileController']]],
+  ['addreview_5',['AddReview',['../class_luso_health_client_1_1_server_1_1_controllers_1_1_profile_controller.html#a4ef529e84c706524fa1673e567793aa6',1,'LusoHealthClient::Server::Controllers::ProfileController']]],
+  ['addreviewdto_6',['AddReviewDto',['../class_luso_health_client_1_1_server_1_1_d_t_os_1_1_profile_1_1_add_review_dto.html',1,'LusoHealthClient::Server::DTOs::Profile']]],
+  ['addservice_7',['AddService',['../class_luso_health_client_1_1_server_1_1_controllers_1_1_profile_controller.html#ab50381c4adaa09141e7f425e70b3e7bd',1,'LusoHealthClient::Server::Controllers::ProfileController']]],
+  ['agendacontroller_8',['AgendaController',['../class_luso_health_client_1_1_server_1_1_controllers_1_1_agenda_controller.html',1,'LusoHealthClient.Server.Controllers.AgendaController'],['../class_luso_health_client_1_1_server_1_1_controllers_1_1_agenda_controller.html#ae949fc9ef65acaca706c35c0e600a113',1,'LusoHealthClient.Server.Controllers.AgendaController.AgendaController()']]],
+  ['ageover18validationattribute_9',['AgeOver18ValidationAttribute',['../class_luso_health_client_1_1_server_1_1_d_t_os_1_1_validations_1_1_age_over18_validation_attribute.html',1,'LusoHealthClient::Server::DTOs::Validations']]],
+  ['applicationdbcontext_10',['ApplicationDbContext',['../class_luso_health_client_1_1_server_1_1_data_1_1_application_db_context.html',1,'LusoHealthClient::Server::Data']]],
+  ['applicationdbcontextmodelsnapshot_11',['ApplicationDbContextModelSnapshot',['../class_luso_health_client_1_1_server_1_1_migrations_1_1_application_db_context_model_snapshot.html',1,'LusoHealthClient::Server::Migrations']]],
+  ['appointment_12',['Appointment',['../class_luso_health_client_1_1_server_1_1_models_1_1_services_1_1_appointment.html',1,'LusoHealthClient::Server::Models::Services']]],
+  ['appointmentcontroller_13',['AppointmentController',['../class_luso_health_client_1_1_server_1_1_controllers_1_1_appointment_controller.html',1,'LusoHealthClient::Server::Controllers']]],
+  ['appointmentdto_14',['AppointmentDto',['../class_luso_health_client_1_1_server_1_1_d_t_os_1_1_appointments_1_1_appointment_dto.html',1,'LusoHealthClient::Server::DTOs::Appointments']]],
+  ['appointmentstate_15',['AppointmentState',['../namespace_luso_health_client_1_1_server_1_1_models_1_1_services.html#a90e732e1a4aee1247b0f4ae26cf26933',1,'LusoHealthClient::Server::Models::Services']]],
+  ['appointmenttype_16',['AppointmentType',['../namespace_luso_health_client_1_1_server_1_1_models_1_1_services.html#a3cd8102f0e80ef82b4b1a1a9177b1783',1,'LusoHealthClient::Server::Models::Services']]],
+  ['authenticationcontroller_17',['AuthenticationController',['../class_luso_health_client_1_1_server_1_1_controllers_1_1_authentication_controller.html',1,'LusoHealthClient::Server::Controllers']]],
+  ['availabilitydto_18',['AvailabilityDto',['../class_luso_health_client_1_1_server_1_1_d_t_os_1_1_agenda_1_1_availability_dto.html',1,'LusoHealthClient::Server::DTOs::Agenda']]],
+  ['availableslot_19',['AvailableSlot',['../namespace_available_slot.html',1,'']]],
+  ['availableslotdto_20',['AvailableSlotDto',['../class_luso_health_client_1_1_server_1_1_d_t_os_1_1_appointments_1_1_available_slot_dto.html',1,'LusoHealthClient::Server::DTOs::Appointments']]]
+];

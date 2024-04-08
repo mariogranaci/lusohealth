@@ -1,6 +1,9 @@
 ﻿namespace LusoHealthClient.Server.DTOs.Services
 {
-    public class BoundsDto
+	/// <summary>
+	///(DTO) que representa os limites geográficos de uma área.
+	/// </summary>
+	public class BoundsDto
     {
         public double LatitudeNorthEast { get; set; }
         public double LongitudeNorthEast { get; set; }

@@ -17,6 +17,7 @@ export class AgendaService {
 
   constructor(private http: HttpClient, private router: Router) { }
 
+  // Método para obter o JWT do usuário
   getJWT() {
     const key = localStorage.getItem(environment.userKey);
     if (key) {
@@ -27,6 +28,7 @@ export class AgendaService {
     }
   }
 
+  // Método para decodificar o token JWT
   getDecodedToken() {
     const jwt = this.getJWT();
     if (jwt != null) {
@@ -35,6 +37,7 @@ export class AgendaService {
     }
   }
 
+  // Método para obter os cabeçalhos HTTP com o token JWT
   getHeaders() {
     const jwt = this.getJWT();
 
@@ -46,36 +49,43 @@ export class AgendaService {
     return headers;
   }
 
+  // Método para obter os agendamentos anteriores
   getPreviousAppointments() {
     const headers = this.getHeaders();
     return this.http.get<Appointment[]>(`${environment.appUrl}/api/agenda/get-previous-appointments`, { headers });
   }
 
+  // Método para obter os próximos agendamentos
   getNextAppointments() {
     const headers = this.getHeaders();
     return this.http.get<Appointment[]>(`${environment.appUrl}/api/agenda/get-next-appointments`, { headers });
   }
 
+  // Método para obter os agendamentos pendentes
   getPendingAppointments() {
     const headers = this.getHeaders();
     return this.http.get<Appointment[]>(`${environment.appUrl}/api/agenda/get-pending-appointments`, { headers });
   }
 
+  // Método para obter as especialidades
   getSpecialties() {
     const headers = this.getHeaders();
     return this.http.get<Specialty[]>(`${environment.appUrl}/api/agenda/get-specialties`, { headers });
   }
 
+  // Método para adicionar disponibilidade
   addAvailability(availability: Availability) {
     const headers = this.getHeaders();
     return this.http.post<any>(`${environment.appUrl}/api/agenda/add-availability`, availability, { headers });
   }
-  
+
+  // Método para obter os slots disponíveis
   getSlots(slot: Availability) {
     const headers = this.getHeaders();
     return this.http.post<AvailableSlot[]>(`${environment.appUrl}/api/agenda/get-slots`, slot, { headers });
   }
 
+  // Método para excluir disponibilidade
   deleteAvailability(availability: Availability) {
     const headers = this.getHeaders();
     return this.http.delete<any>(`${environment.appUrl}/api/agenda/delete-availability`, {
@@ -84,6 +94,7 @@ export class AgendaService {
     });
   }
 
+  // Método para obter todos os slots
   getAllSlots(): Observable<any> {
     const headers = this.getHeaders();
     return this.http.get<any>(`${environment.appUrl}/api/agenda/get-all-slots`, { headers });

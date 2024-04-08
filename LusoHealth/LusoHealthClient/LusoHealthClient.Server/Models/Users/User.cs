@@ -3,7 +3,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace LusoHealthClient.Server.Models.Users
 {
-    public class User : IdentityUser
+	/// <summary>
+	/// Representa um utilizador no sistema.
+	/// </summary>
+    
+
+	public class User : IdentityUser
     {
         [Required]
         public string FirstName { get; set; }

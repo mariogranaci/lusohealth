@@ -17,7 +17,11 @@ namespace LusoHealthClient.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthenticationController : ControllerBase
+
+	/// <summary>
+	/// Controlador para autenticação de utilizadores.
+	/// </summary>
+	public class AuthenticationController : ControllerBase
     {
         private readonly JWTService _jwtService;
         private readonly SignInManager<User> _signInManager;
@@ -41,7 +45,10 @@ namespace LusoHealthClient.Server.Controllers
             _context = context;
         }
 
-        [Authorize]
+		/// <summary>
+		/// Método para atualizar o token de um utilizador.
+		/// </summary>
+		[Authorize]
         [HttpGet("refresh-user-token")]
         public async Task<ActionResult<UserDto>> RefreshUserToken()
         {
@@ -49,7 +56,10 @@ namespace LusoHealthClient.Server.Controllers
             return await CreateApplicationUserDto(user);
         }
 
-        [HttpPost("login")]
+		/// <summary>
+		/// Método para fazer login de um utilizador.
+		/// </summary>
+		[HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
@@ -62,7 +72,10 @@ namespace LusoHealthClient.Server.Controllers
             return await CreateApplicationUserDto(user);
         }
 
-        [HttpPost("register")]
+		/// <summary>
+		/// Método para registar um novo utilizador.
+		/// </summary>
+		[HttpPost("register")]
         public async Task<ActionResult<UserDto>> Register(RegisterDto model)
         {
             if (await CheckEmailExistsAsync(model.Email))
@@ -141,7 +154,10 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpPost("login-with-google")]
+		/// <summary>
+		/// Método para fazer login com Google.
+		/// </summary>
+		[HttpPost("login-with-google")]
         public async Task<ActionResult<UserDto>> LoginWithGoogle(LoginWithGoogleDto model)
         {
             if (model.Provider.Equals("google"))
@@ -170,7 +186,10 @@ namespace LusoHealthClient.Server.Controllers
             return await CreateApplicationUserDto(user);
         }
 
-        [HttpPost("register-with-google")]
+		/// <summary>
+		/// Método para registar com Google.
+		/// </summary>
+		[HttpPost("register-with-google")]
         public async Task<ActionResult<UserDto>> RegisterWithGoogle(RegisterWithGoogleDto model)
         {
             if (model.Provider.Equals("google"))
@@ -256,7 +275,10 @@ namespace LusoHealthClient.Server.Controllers
             return await CreateApplicationUserDto(userToAdd);
         }
 
-        [HttpPut("confirm-email")]
+		/// <summary>
+		/// Método para confirmar o email do utilizador.
+		/// </summary>
+		[HttpPut("confirm-email")]
         public async Task<ActionResult> ConfirmEmail(ConfirmEmailDto model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
@@ -279,7 +301,10 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpPost("resend-email-confirmation-link/{email}")]
+		/// <summary>
+		/// Método para reenviar o link de confirmação de email.
+		/// </summary>
+		[HttpPost("resend-email-confirmation-link/{email}")]
         public async Task<ActionResult> ResendEmailConfirmationLink(string email)
         {
             if (string.IsNullOrEmpty(email)) return BadRequest("Email inválido");
@@ -303,7 +328,10 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpPost("forgot-password")]
+		/// <summary>
+		/// Método para redefinir a password.
+		/// </summary>
+		[HttpPost("forgot-password")]
         public async Task<ActionResult> ForgotPassword(EmailDto model)
         {
             var email = model.Email;
@@ -328,7 +356,10 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpPut("reset-password")]
+		/// <summary>
+		/// Método para redefinir a password do utilizador.
+		/// </summary>
+		[HttpPut("reset-password")]
         public async Task<ActionResult> ResetPassword(ResetPasswordDto model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
@@ -353,7 +384,10 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpGet("get-professional-types")]
+		/// <summary>
+		/// Método para obter tipos de profissionais.
+		/// </summary>
+		[HttpGet("get-professional-types")]
         public async Task<ActionResult<List<ProfessionalType>>> GetProfessionalTypes()
         {
             try

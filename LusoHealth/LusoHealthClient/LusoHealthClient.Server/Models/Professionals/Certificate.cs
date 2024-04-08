@@ -4,7 +4,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LusoHealthClient.Server.Models.Professionals
 {
-    public class Certificate
+	/// <summary>
+	/// Representa um certificado atribuído a um profissional.
+	/// </summary>
+	public class Certificate
     {
         [Key]
         public int Id { get; set; }

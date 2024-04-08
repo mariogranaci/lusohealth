@@ -9,6 +9,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LusoHealthClient.Server.Data
 {
+	/// <summary>
+	/// Classe que representa o contexto do banco de dados da aplicação.
+	/// Herda de IdentityDbContext para fornecer funcionalidades de autenticação.
+	/// </summary>
 	public class ApplicationDbContext : IdentityDbContext<User>
 	{
 		public new DbSet<User> Users { get; set; }

@@ -32,6 +32,7 @@ export class AgendaPacienteComponent {
 
   constructor(public servicesService: ServicesService, public agendaService: AgendaService) {}
 
+  /// Método chamado quando o componente é inicializado
   ngOnInit() {
     this.getServices().then(() => {
       this.getProfessionalTypes();
@@ -40,11 +41,13 @@ export class AgendaPacienteComponent {
     }); 
   }
 
+  /// Método chamado quando o componente é destruído
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
 
+  /// Obtém os tipos de profissionais
   getProfessionalTypes() {
     this.servicesService.getProfessionalTypes().pipe(
       takeUntil(this.unsubscribe$)
@@ -63,6 +66,7 @@ export class AgendaPacienteComponent {
     });
   }
 
+  /// Obtém os próximos agendamentos
   getNextAppointments() {
     this.agendaService.getNextAppointments().pipe(
       takeUntil(this.unsubscribe$)
@@ -83,6 +87,7 @@ export class AgendaPacienteComponent {
     });
   }
 
+  /// Obtém as especialidades
   getSpecialties() {
     this.agendaService.getSpecialties().pipe(
       takeUntil(this.unsubscribe$)
@@ -102,6 +107,7 @@ export class AgendaPacienteComponent {
     });
   }
 
+  /// Obtém os serviços
   getServices(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       this.servicesService.getServices().pipe(
@@ -124,6 +130,7 @@ export class AgendaPacienteComponent {
     });
   }
 
+  /// Reseta os dropdowns
   resetDropdowns() {
     const categoryDropdown = document.getElementById("category") as HTMLSelectElement;
     const specialtyDropdown = document.getElementById("specialty") as HTMLSelectElement;
@@ -136,6 +143,7 @@ export class AgendaPacienteComponent {
     this.updateDisplayedAppointments();
   }
 
+  /// Filtra as especialidades
   filterSpecialties(): void {
 
     const selectedCategory = document.getElementById("category") as HTMLSelectElement;
@@ -152,6 +160,7 @@ export class AgendaPacienteComponent {
     }
   }
 
+  /// Filtra os profissionais por categoria
   filterProfessionalsCategory(): void {
 
     this.appointmentsFiltered = this.appointments;
@@ -199,6 +208,7 @@ export class AgendaPacienteComponent {
     this.updateDisplayedAppointments();
   }
 
+  /// Obtém o tipo de agendamento
   getAppointmentType(type: string | null): string {
     switch (type) {
       case "0":
@@ -212,6 +222,7 @@ export class AgendaPacienteComponent {
     }
   }
 
+  /// Encontra a especialidade pelo ID do serviço
   findSpecialtyByServiceId(serviceId: number | null): String | null {
     const service = this.services.find(s => s.serviceId === serviceId);
     if (service) {
@@ -220,18 +231,21 @@ export class AgendaPacienteComponent {
     return null;
   }
 
+  /// Obtém o nome do profissional pelo ID do serviço
   getProfessionalNameById(serviceId: number | null): string {
     const professional = this.services.find(s => s.professional.services.find(p => p.serviceId === serviceId))?.professional;
 
     return professional?.professionalInfo.firstName + " " + professional?.professionalInfo.lastName;
   }
 
+  /// Obtém o profissional pelo ID do serviço
   getProfessionalById(serviceId: number | null): Professional | undefined {
     const professional = this.services.find(s => s.professional.services.find(p => p.serviceId === serviceId))?.professional;
 
     return professional;
   }
 
+  /// Converte para horas
   convertToHours(dateTimeString: Date | null): string {
     if (!dateTimeString) {
       return ""; // Or any other default value you prefer
@@ -248,10 +262,10 @@ export class AgendaPacienteComponent {
     return formattedHours + ":" + formattedMinutes;
   }
 
-
+  /// Converte para data
   convertToDate(dateTimeString: Date | null): string {
     if (!dateTimeString) {
-      return ""; // Or any other default value you prefer
+      return ""; 
     }
 
     const monthsInPortuguese: string[] = [
@@ -259,25 +273,27 @@ export class AgendaPacienteComponent {
       "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
     ];
 
-    // Create a new Date object from the input string
+   
     let dateTime: Date = new Date(dateTimeString);
 
-    // Extract day, month, and year
+    
     let day: number = dateTime.getDate();
     let month: number = dateTime.getMonth();
     let year: number = dateTime.getFullYear();
 
-    // Format the date in the desired format
+    
     let formattedDate: string = `${day} ${monthsInPortuguese[month]} ${year}`;
 
     return formattedDate;
   }
 
+  /// Carrega mais agendamentos
   loadMoreAppointments() {
     this.initialAppointmentCount += 3;
     this.updateDisplayedAppointments();
   }
 
+  /// Atualiza os agendamentos exibidos
   updateDisplayedAppointments() {
     this.displayedAppointments = this.appointmentsFiltered.slice(0, this.initialAppointmentCount);
   }

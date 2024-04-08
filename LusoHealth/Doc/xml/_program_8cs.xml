@@ -1,0 +1,668 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="en-US">
+  <compounddef id="_program_8cs" kind="file" language="C#">
+    <compoundname>Program.cs</compoundname>
+    <innernamespace refid="namespace_microsoft_1_1_extensions_1_1_dependency_injection">Microsoft::Extensions::DependencyInjection</innernamespace>
+    <innernamespace refid="namespace_microsoft_1_1_asp_net_core_1_1_builder">Microsoft::AspNetCore::Builder</innernamespace>
+    <innernamespace refid="namespace_microsoft_1_1_extensions_1_1_hosting">Microsoft::Extensions::Hosting</innernamespace>
+    <innernamespace refid="namespace_microsoft_1_1_entity_framework_core">Microsoft::EntityFrameworkCore</innernamespace>
+    <innernamespace refid="namespace_microsoft_1_1_extensions_1_1_configuration">Microsoft::Extensions::Configuration</innernamespace>
+    <innernamespace refid="namespace_microsoft_1_1_asp_net_core_1_1_identity">Microsoft::AspNetCore::Identity</innernamespace>
+    <innernamespace refid="namespace_microsoft_1_1_asp_net_core_1_1_authentication_1_1_jwt_bearer">Microsoft::AspNetCore::Authentication::JwtBearer</innernamespace>
+    <innernamespace refid="namespace_microsoft_1_1_identity_model_1_1_tokens">Microsoft::IdentityModel::Tokens</innernamespace>
+    <innernamespace refid="namespace_system_1_1_text">System::Text</innernamespace>
+    <innernamespace refid="namespace_microsoft_1_1_asp_net_core_1_1_mvc">Microsoft::AspNetCore::Mvc</innernamespace>
+    <innernamespace refid="namespace_luso_health_client_1_1_server_1_1_services">LusoHealthClient::Server::Services</innernamespace>
+    <innernamespace refid="namespace_luso_health_client_1_1_server_1_1_data">LusoHealthClient::Server::Data</innernamespace>
+    <innernamespace refid="namespace_luso_health_client_1_1_server_1_1_models_1_1_users">LusoHealthClient::Server::Models::Users</innernamespace>
+    <innernamespace refid="namespace_stripe">Stripe</innernamespace>
+    <innernamespace refid="namespacevar">var</innernamespace>
+    <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="_program_8cs_1a2a950ac7d24bd0a6c3e05dce814f814e" prot="public" static="no">
+        <type>app.Services.CreateScope()</type>
+        <definition>using scope =  app.Services.CreateScope()</definition>
+        <argsstring></argsstring>
+        <name>scope</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Program.cs" line="135" column="1" bodyfile="Program.cs" bodystart="135" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="var">
+      <memberdef kind="variable" id="_program_8cs_1a2f78352277081c620fd4cf92a5ce15e5" prot="public" static="no" mutable="no">
+        <type>var</type>
+        <definition>var builder</definition>
+        <argsstring></argsstring>
+        <name>builder</name>
+        <initializer>= WebApplication.CreateBuilder(args)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Program.cs" line="16" column="5" bodyfile="Program.cs" bodystart="16" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="_program_8cs_1ad9ab59fa7eaeaa2325dee94ee97eb875" prot="public" static="no" mutable="no">
+        <type>StripeConfiguration.</type>
+        <definition>StripeConfiguration. ApiKey</definition>
+        <argsstring></argsstring>
+        <name>ApiKey</name>
+        <initializer>= builder.Configuration[&quot;StripeSettings:PrivateKey&quot;]</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Program.cs" line="68" column="20" bodyfile="Program.cs" bodystart="68" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="_program_8cs_1a7b225fcb720e4d5ed2bbf60e28a25e6d" prot="public" static="no" mutable="no">
+        <type>var</type>
+        <definition>var app</definition>
+        <argsstring></argsstring>
+        <name>app</name>
+        <initializer>= builder.Build()</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Program.cs" line="111" column="5" bodyfile="Program.cs" bodystart="111" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="_program_8cs_1abe4cc9788f52e49485473dc699537388" prot="public" static="no" mutable="no">
+        <type></type>
+        <definition>try</definition>
+        <argsstring></argsstring>
+        <name>try</name>
+        <initializer>{
+    var contextSeedService = scope.ServiceProvider.GetService&lt;ContextSeedService&gt;()</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Program.cs" line="136" column="1" bodyfile="Program.cs" bodystart="137" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="_program_8cs_1abc3694a0e15618f2499e5a540264f833" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>builder.Services.</type>
+        <definition>builder.Services. AddControllers</definition>
+        <argsstring>()</argsstring>
+        <name>AddControllers</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Program.cs" line="18" column="16" declfile="Program.cs" declline="18" declcolumn="16"/>
+      </memberdef>
+      <memberdef kind="function" id="_program_8cs_1a0d7859f9cad50e8e9fdf015100780e07" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>builder.Services.</type>
+        <definition>builder.Services. AddEndpointsApiExplorer</definition>
+        <argsstring>()</argsstring>
+        <name>AddEndpointsApiExplorer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Program.cs" line="20" column="16" declfile="Program.cs" declline="20" declcolumn="16"/>
+      </memberdef>
+      <memberdef kind="function" id="_program_8cs_1ae0ce43c019a5621d731d0c622c793644" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>builder.Services.</type>
+        <definition>builder.Services. AddSwaggerGen</definition>
+        <argsstring>()</argsstring>
+        <name>AddSwaggerGen</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Program.cs" line="21" column="16" declfile="Program.cs" declline="21" declcolumn="16"/>
+      </memberdef>
+      <memberdef kind="function" id="_program_8cs_1ad1938732b6cafb4e4c80b00bd38b1e86" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>builder.Services.</type>
+        <definition>builder.Services. AddDbContext&lt; ApplicationDbContext &gt;</definition>
+        <argsstring>(options=&gt; { options.UseSqlServer(builder.Configuration.GetConnectionString(&quot;DefaultConnection&quot;));})</argsstring>
+        <name>AddDbContext&lt; ApplicationDbContext &gt;</name>
+        <param>
+          <type>options</type>
+        </param>
+        <param>
+          <type>{ options.UseSqlServer(builder.Configuration.GetConnectionString(&quot;DefaultConnection&quot;));}</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Program.cs" line="23" column="8" declfile="Program.cs" declline="23" declcolumn="8"/>
+      </memberdef>
+      <memberdef kind="function" id="_program_8cs_1a0fda3c9fd0e6fb3a4170615cd00d1afa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>builder.Services.</type>
+        <definition>builder.Services. AddScoped&lt; JWTService &gt;</definition>
+        <argsstring>()</argsstring>
+        <name>AddScoped&lt; JWTService &gt;</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Program.cs" line="28" column="8" declfile="Program.cs" declline="28" declcolumn="8"/>
+      </memberdef>
+      <memberdef kind="function" id="_program_8cs_1a6d2ccb2ebcaa091ffb6756a853969797" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>builder.Services.</type>
+        <definition>builder.Services. AddScoped&lt; EmailService &gt;</definition>
+        <argsstring>()</argsstring>
+        <name>AddScoped&lt; EmailService &gt;</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Program.cs" line="29" column="8" declfile="Program.cs" declline="29" declcolumn="8"/>
+      </memberdef>
+      <memberdef kind="function" id="_program_8cs_1a38968a46261b3fb7f71eb835aad4560e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>builder.Services.</type>
+        <definition>builder.Services. AddScoped&lt; ContextSeedService &gt;</definition>
+        <argsstring>()</argsstring>
+        <name>AddScoped&lt; ContextSeedService &gt;</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Program.cs" line="30" column="8" declfile="Program.cs" declline="30" declcolumn="8"/>
+      </memberdef>
+      <memberdef kind="function" id="_program_8cs_1ab72448ee5a3f1f60960ff01b0455f027" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>builder.Services.</type>
+        <definition>builder.Services. AddIdentityCore&lt; User &gt;</definition>
+        <argsstring>(options=&gt; { options.Password.RequiredLength=8;options.Password.RequireDigit=true;options.Password.RequireLowercase=true;options.Password.RequireUppercase=true;options.Password.RequireNonAlphanumeric=false;options.SignIn.RequireConfirmedEmail=true;}) .AddRoles&lt; IdentityRole &gt;() .AddRoleManager&lt; RoleManager&lt; IdentityRole &gt; &gt;() .AddEntityFrameworkStores&lt; ApplicationDbContext &gt;() .AddSignInManager&lt; SignInManager&lt; User &gt; &gt;() .AddUserManager&lt; UserManager&lt; User &gt; &gt;() .AddDefaultTokenProviders()</argsstring>
+        <name>AddIdentityCore&lt; User &gt;</name>
+        <param>
+          <type>options</type>
+        </param>
+        <param>
+          <type>{ options.Password.RequiredLength=8;options.Password.RequireDigit=true;options.Password.RequireLowercase=true;options.Password.RequireUppercase=true;options.Password.RequireNonAlphanumeric=false;options.SignIn.RequireConfirmedEmail=true;}</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Program.cs" line="32" column="8" declfile="Program.cs" declline="32" declcolumn="8"/>
+      </memberdef>
+      <memberdef kind="function" id="_program_8cs_1a7b2bc4c41ab1f801b53d7330af1fdf7e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>builder.Services.</type>
+        <definition>builder.Services. AddAuthentication</definition>
+        <argsstring>(JwtBearerDefaults.AuthenticationScheme) .AddJwtBearer(options</argsstring>
+        <name>AddAuthentication</name>
+        <param>
+          <type>JwtBearerDefaults.</type>
+          <declname>AuthenticationScheme</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Program.cs" line="52" column="16" declfile="Program.cs" declline="52" declcolumn="16"/>
+      </memberdef>
+      <memberdef kind="function" id="_program_8cs_1a369534c442027ea086749e8ccefcb590" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>builder.Services.</type>
+        <definition>builder.Services. AddCors</definition>
+        <argsstring>()</argsstring>
+        <name>AddCors</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Program.cs" line="70" column="16" declfile="Program.cs" declline="70" declcolumn="16"/>
+      </memberdef>
+      <memberdef kind="function" id="_program_8cs_1aeff113d5b3e543465fbbdfef7f8671f6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>builder.Services.</type>
+        <definition>builder.Services. Configure&lt; ApiBehaviorOptions &gt;</definition>
+        <argsstring>(options=&gt; { options.InvalidModelStateResponseFactory=actionContext=&gt; { var errors=actionContext.ModelState .Where(e=&gt; e.Value?.Errors.Count &gt; 0) .SelectMany(kvp=&gt; kvp.Value.Errors.Select(error=&gt; new { Message=error.ErrorMessage, Field=kvp.Key })) .ToArray();var toReturn=new { Errors=errors };return new BadRequestObjectResult(toReturn);};})</argsstring>
+        <name>Configure&lt; ApiBehaviorOptions &gt;</name>
+        <param>
+          <type>options</type>
+        </param>
+        <param>
+          <type>{ options.InvalidModelStateResponseFactory=actionContext=&gt; { var errors=actionContext.ModelState .Where(e=&gt; e.Value?.Errors.Count &gt; 0) .SelectMany(kvp=&gt; kvp.Value.Errors.Select(error=&gt; new { Message=error.ErrorMessage, Field=kvp.Key })) .ToArray();var toReturn=new { Errors=errors };return new BadRequestObjectResult(toReturn);};}</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Program.cs" line="72" column="8" declfile="Program.cs" declline="72" declcolumn="8"/>
+      </memberdef>
+      <memberdef kind="function" id="_program_8cs_1aee38f8384e80d0b3f415c5019d2aec9f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>builder.Services.</type>
+        <definition>builder.Services. AddCors</definition>
+        <argsstring>(options=&gt; { options.AddPolicy(&quot;AllowAllOrigins&quot;, builder=&gt; builder.AllowAnyOrigin() .AllowAnyMethod() .AllowAnyHeader());})</argsstring>
+        <name>AddCors</name>
+        <param>
+          <type>options</type>
+        </param>
+        <param>
+          <type>{ options.AddPolicy(&quot;AllowAllOrigins&quot;, builder=&gt; builder.AllowAnyOrigin() .AllowAnyMethod() .AllowAnyHeader());}</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Program.cs" line="95" column="16" declfile="Program.cs" declline="95" declcolumn="16"/>
+      </memberdef>
+      <memberdef kind="function" id="_program_8cs_1a253e070474958302a4f6c44ea1c960ca" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>builder.Services.</type>
+        <definition>builder.Services. AddAuthorization</definition>
+        <argsstring>(options=&gt; { options.AddPolicy(&quot;AdminPolicy&quot;, policy=&gt; policy.RequireRole(&quot;Admin&quot;));options.AddPolicy(&quot;ManagerPolicy&quot;, policy=&gt; policy.RequireRole(&quot;Manager&quot;));options.AddPolicy(&quot;PatientPolicy&quot;, policy=&gt; policy.RequireRole(&quot;Patient&quot;));options.AddPolicy(&quot;ProfessionalPolicy&quot;, policy=&gt; policy.RequireRole(&quot;Professional&quot;));})</argsstring>
+        <name>AddAuthorization</name>
+        <param>
+          <type>options</type>
+        </param>
+        <param>
+          <type>{ options.AddPolicy(&quot;AdminPolicy&quot;, policy=&gt; policy.RequireRole(&quot;Admin&quot;));options.AddPolicy(&quot;ManagerPolicy&quot;, policy=&gt; policy.RequireRole(&quot;Manager&quot;));options.AddPolicy(&quot;PatientPolicy&quot;, policy=&gt; policy.RequireRole(&quot;Patient&quot;));options.AddPolicy(&quot;ProfessionalPolicy&quot;, policy=&gt; policy.RequireRole(&quot;Professional&quot;));}</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Program.cs" line="103" column="16" declfile="Program.cs" declline="103" declcolumn="16"/>
+      </memberdef>
+      <memberdef kind="function" id="_program_8cs_1ad5943c17341260006d5d051e36aa94c9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>app.</type>
+        <definition>app. UseDefaultFiles</definition>
+        <argsstring>()</argsstring>
+        <name>UseDefaultFiles</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Program.cs" line="113" column="4" declfile="Program.cs" declline="113" declcolumn="4"/>
+      </memberdef>
+      <memberdef kind="function" id="_program_8cs_1a906a3ce545279a7a73941f1d7b64d7cf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>app.</type>
+        <definition>app. UseStaticFiles</definition>
+        <argsstring>()</argsstring>
+        <name>UseStaticFiles</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Program.cs" line="114" column="4" declfile="Program.cs" declline="114" declcolumn="4"/>
+      </memberdef>
+      <memberdef kind="function" id="_program_8cs_1aa5090fdb46c526cdd3ab0cfd3914702f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>app.</type>
+        <definition>app. UseCors</definition>
+        <argsstring>(&quot;AllowAllOrigins&quot;)</argsstring>
+        <name>UseCors</name>
+        <param>
+          <type>&quot;AllowAllOrigins&quot;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Program.cs" line="116" column="4" declfile="Program.cs" declline="116" declcolumn="4"/>
+      </memberdef>
+      <memberdef kind="function" id="_program_8cs_1a9a5cfe7fee09f478241b98af703affea" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>app.</type>
+        <definition>app. UseSwagger</definition>
+        <argsstring>()</argsstring>
+        <name>UseSwagger</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Program.cs" line="121" column="4" declfile="Program.cs" declline="121" declcolumn="4"/>
+      </memberdef>
+      <memberdef kind="function" id="_program_8cs_1a968f30949d31f6febdcf7f3fe40bfa42" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>app.</type>
+        <definition>app. UseSwaggerUI</definition>
+        <argsstring>()</argsstring>
+        <name>UseSwaggerUI</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Program.cs" line="122" column="4" declfile="Program.cs" declline="122" declcolumn="4"/>
+      </memberdef>
+      <memberdef kind="function" id="_program_8cs_1aa4d447fc3129a3aa301d736b8bd04ae9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>app.</type>
+        <definition>app. UseHttpsRedirection</definition>
+        <argsstring>()</argsstring>
+        <name>UseHttpsRedirection</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Program.cs" line="125" column="4" declfile="Program.cs" declline="125" declcolumn="4"/>
+      </memberdef>
+      <memberdef kind="function" id="_program_8cs_1a6435d8beeff4999dc0b0c6d60a86a4e2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>app.</type>
+        <definition>app. UseAuthentication</definition>
+        <argsstring>()</argsstring>
+        <name>UseAuthentication</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Program.cs" line="127" column="4" declfile="Program.cs" declline="127" declcolumn="4"/>
+      </memberdef>
+      <memberdef kind="function" id="_program_8cs_1af6f72d752b2e73aa0292f74bd13237ab" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>app.</type>
+        <definition>app. UseAuthorization</definition>
+        <argsstring>()</argsstring>
+        <name>UseAuthorization</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Program.cs" line="128" column="4" declfile="Program.cs" declline="128" declcolumn="4"/>
+      </memberdef>
+      <memberdef kind="function" id="_program_8cs_1a9e2ee3170aa6279b68eefd1651f7d96c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>app.</type>
+        <definition>app. MapControllers</definition>
+        <argsstring>()</argsstring>
+        <name>MapControllers</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Program.cs" line="130" column="4" declfile="Program.cs" declline="130" declcolumn="4"/>
+      </memberdef>
+      <memberdef kind="function" id="_program_8cs_1a1fef6263a8172c82cef5a4e2f7a2bb43" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>app.</type>
+        <definition>app. MapFallbackToFile</definition>
+        <argsstring>(&quot;/index.html&quot;)</argsstring>
+        <name>MapFallbackToFile</name>
+        <param>
+          <type>&quot;/index.html&quot;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Program.cs" line="132" column="4" declfile="Program.cs" declline="132" declcolumn="4"/>
+      </memberdef>
+      <memberdef kind="function" id="_program_8cs_1a79a944c7f0e25196ca3c5a8638b919b9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>if</definition>
+        <argsstring>(app.Environment.IsDevelopment())</argsstring>
+        <name>if</name>
+        <param>
+          <type>app.Environment.</type>
+          <declname>IsDevelopment</declname>
+          <array>()</array>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Program.cs" line="139" column="5" bodyfile="Program.cs" bodystart="139" bodyend="144"/>
+      </memberdef>
+      <memberdef kind="function" id="_program_8cs_1a2c1da1322c6e3730abc8757c2a866afd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>else</type>
+        <definition>else if</definition>
+        <argsstring>(app.Environment.IsProduction())</argsstring>
+        <name>if</name>
+        <param>
+          <type>app.Environment.</type>
+          <declname>IsProduction</declname>
+          <array>()</array>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Program.cs" line="145" column="10" bodyfile="Program.cs" bodystart="145" bodyend="149"/>
+      </memberdef>
+      <memberdef kind="function" id="_program_8cs_1ab43e01d035a27754dae62444a59b3cab" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>catch</definition>
+        <argsstring>(Exception ex)</argsstring>
+        <name>catch</name>
+        <param>
+          <type>Exception</type>
+          <declname>ex</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Program.cs" line="152" column="1" bodyfile="Program.cs" bodystart="152" bodyend="156"/>
+      </memberdef>
+      <memberdef kind="function" id="_program_8cs_1aaa3dbf02e269c3ef7e8546d290c6b3dd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>app.</type>
+        <definition>app. Run</definition>
+        <argsstring>()</argsstring>
+        <name>Run</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Program.cs" line="159" column="4" declfile="Program.cs" declline="159" declcolumn="4"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="keyword">using<sp/></highlight><highlight class="normal">Microsoft.Extensions.DependencyInjection;</highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal">Microsoft.AspNetCore.Builder;</highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal">Microsoft.Extensions.Hosting;</highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal">Microsoft.EntityFrameworkCore;</highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal">Microsoft.Extensions.Configuration;</highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal">Microsoft.AspNetCore.Identity;</highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal">Microsoft.AspNetCore.Authentication.JwtBearer;</highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal">Microsoft.IdentityModel.Tokens;</highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal">System.Text;</highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal">Microsoft.AspNetCore.Mvc;</highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal">LusoHealthClient.Server.Services;</highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal">LusoHealthClient.Server.Data;</highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal">LusoHealthClient.Server.Models.Users;</highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal">Stripe;</highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight></codeline>
+<codeline lineno="16"><highlight class="normal">var<sp/>builder<sp/>=<sp/>WebApplication.CreateBuilder(args);</highlight></codeline>
+<codeline lineno="17"><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal">builder.Services.AddControllers();</highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Learn<sp/>more<sp/>about<sp/>configuring<sp/>Swagger/OpenAPI<sp/>at<sp/>https://aka.ms/aspnetcore/swashbuckle</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal">builder.Services.AddEndpointsApiExplorer();</highlight></codeline>
+<codeline lineno="21"><highlight class="normal">builder.Services.AddSwaggerGen();</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight></codeline>
+<codeline lineno="23"><highlight class="normal">builder.Services.AddDbContext&lt;ApplicationDbContext&gt;(options<sp/>=&gt;</highlight></codeline>
+<codeline lineno="24"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><sp/><sp/><sp/><sp/>options.UseSqlServer(builder.Configuration.GetConnectionString(</highlight><highlight class="stringliteral">&quot;DefaultConnection&quot;</highlight><highlight class="normal">));</highlight></codeline>
+<codeline lineno="26"><highlight class="normal">});</highlight></codeline>
+<codeline lineno="27"><highlight class="normal"></highlight></codeline>
+<codeline lineno="28"><highlight class="normal">builder.Services.AddScoped&lt;JWTService&gt;();</highlight></codeline>
+<codeline lineno="29"><highlight class="normal">builder.Services.AddScoped&lt;EmailService&gt;();</highlight></codeline>
+<codeline lineno="30"><highlight class="normal">builder.Services.AddScoped&lt;ContextSeedService&gt;();</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal">builder.Services.AddIdentityCore&lt;User&gt;(options<sp/>=&gt;</highlight></codeline>
+<codeline lineno="33"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//configurações<sp/>email</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/><sp/>options.Password.RequiredLength<sp/>=<sp/>8;</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/>options.Password.RequireDigit<sp/>=<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/>options.Password.RequireLowercase<sp/>=<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/>options.Password.RequireUppercase<sp/>=<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/>options.Password.RequireNonAlphanumeric<sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"></highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//para<sp/>confirmar<sp/>email</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/>options.SignIn.RequireConfirmedEmail<sp/>=<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="43"><highlight class="normal">})</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/>.AddRoles&lt;IdentityRole&gt;()<sp/></highlight><highlight class="comment">//para<sp/>adicionar<sp/>roles</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/>.AddRoleManager&lt;RoleManager&lt;IdentityRole&gt;&gt;()<sp/></highlight><highlight class="comment">//usar<sp/>o<sp/>RoleManager</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/>.AddEntityFrameworkStores&lt;ApplicationDbContext&gt;()<sp/></highlight><highlight class="comment">//usar<sp/>o<sp/>nosso<sp/>context</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/>.AddSignInManager&lt;SignInManager&lt;User&gt;&gt;()<sp/></highlight><highlight class="comment">//usar<sp/>o<sp/>SignInManager</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/>.AddUserManager&lt;UserManager&lt;User&gt;&gt;()<sp/></highlight><highlight class="comment">//usar<sp/>o<sp/>UserManager</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/>.AddDefaultTokenProviders();<sp/></highlight><highlight class="comment">//Usado<sp/>para<sp/>criar<sp/>os<sp/>tokens<sp/>de<sp/>confirmação<sp/>de<sp/>email</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="50"><highlight class="normal"></highlight></codeline>
+<codeline lineno="51"><highlight class="normal"></highlight><highlight class="comment">//Permite<sp/>fazer<sp/>a<sp/>autenticação<sp/>usando<sp/>os<sp/>JWT</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="52"><highlight class="normal">builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)</highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/>.AddJwtBearer(options<sp/>=&gt;</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>options.TokenValidationParameters<sp/>=<sp/></highlight><highlight class="keyword">new</highlight><highlight class="normal"><sp/>TokenValidationParameters</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//validar<sp/>o<sp/>token<sp/>baseado<sp/>na<sp/>key<sp/>dada<sp/>no<sp/>development.json<sp/>JWT:Key</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ValidateIssuerSigningKey<sp/>=<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">,</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//o<sp/>issuer<sp/>signing<sp/>key<sp/>baseada<sp/>na<sp/>JWT:Key</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>IssuerSigningKey<sp/>=<sp/></highlight><highlight class="keyword">new</highlight><highlight class="normal"><sp/>SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration[</highlight><highlight class="stringliteral">&quot;JWT:Key&quot;</highlight><highlight class="normal">])),</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//o<sp/>issuer<sp/>é o<sp/>link<sp/>do<sp/>projeto<sp/>api<sp/></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ValidIssuer<sp/>=<sp/>builder.Configuration[</highlight><highlight class="stringliteral">&quot;JWT:Issuer&quot;</highlight><highlight class="normal">],</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ValidateIssuer<sp/>=<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">,</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ValidateAudience<sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">,</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>};</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/>});</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"></highlight></codeline>
+<codeline lineno="68"><highlight class="normal">StripeConfiguration.ApiKey<sp/>=<sp/>builder.Configuration[</highlight><highlight class="stringliteral">&quot;StripeSettings:PrivateKey&quot;</highlight><highlight class="normal">];</highlight></codeline>
+<codeline lineno="69"><highlight class="normal"></highlight></codeline>
+<codeline lineno="70"><highlight class="normal">builder.Services.AddCors();</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"></highlight></codeline>
+<codeline lineno="72"><highlight class="normal">builder.Services.Configure&lt;ApiBehaviorOptions&gt;(options<sp/>=&gt;</highlight></codeline>
+<codeline lineno="73"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"><sp/><sp/><sp/><sp/>options.InvalidModelStateResponseFactory<sp/>=<sp/>actionContext<sp/>=&gt;</highlight></codeline>
+<codeline lineno="75"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>var<sp/>errors<sp/>=<sp/>actionContext.ModelState</highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>.Where(e<sp/>=&gt;<sp/>e.Value?.Errors.Count<sp/>&gt;<sp/>0)</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>.SelectMany(kvp<sp/>=&gt;<sp/>kvp.Value.Errors.Select(error<sp/>=&gt;<sp/></highlight><highlight class="keyword">new</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Message<sp/>=<sp/>error.ErrorMessage,</highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Field<sp/>=<sp/>kvp.Key</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}))</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>.ToArray();</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"></highlight></codeline>
+<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>var<sp/>toReturn<sp/>=<sp/></highlight><highlight class="keyword">new</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="86"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Errors<sp/>=<sp/>errors</highlight></codeline>
+<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>};</highlight></codeline>
+<codeline lineno="89"><highlight class="normal"></highlight></codeline>
+<codeline lineno="90"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">new</highlight><highlight class="normal"><sp/>BadRequestObjectResult(toReturn);</highlight></codeline>
+<codeline lineno="91"><highlight class="normal"><sp/><sp/><sp/><sp/>};</highlight></codeline>
+<codeline lineno="92"><highlight class="normal"></highlight></codeline>
+<codeline lineno="93"><highlight class="normal">});</highlight></codeline>
+<codeline lineno="94"><highlight class="normal"></highlight></codeline>
+<codeline lineno="95"><highlight class="normal">builder.Services.AddCors(options<sp/>=&gt;</highlight></codeline>
+<codeline lineno="96"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="97"><highlight class="normal"><sp/><sp/><sp/><sp/>options.AddPolicy(</highlight><highlight class="stringliteral">&quot;AllowAllOrigins&quot;</highlight><highlight class="normal">,<sp/>builder<sp/>=&gt;</highlight></codeline>
+<codeline lineno="98"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>builder.AllowAnyOrigin()</highlight></codeline>
+<codeline lineno="99"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>.AllowAnyMethod()</highlight></codeline>
+<codeline lineno="100"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>.AllowAnyHeader());</highlight></codeline>
+<codeline lineno="101"><highlight class="normal">});</highlight></codeline>
+<codeline lineno="102"><highlight class="normal"></highlight></codeline>
+<codeline lineno="103"><highlight class="normal">builder.Services.AddAuthorization(options<sp/>=&gt;</highlight></codeline>
+<codeline lineno="104"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="105"><highlight class="normal"><sp/><sp/><sp/><sp/>options.AddPolicy(</highlight><highlight class="stringliteral">&quot;AdminPolicy&quot;</highlight><highlight class="normal">,<sp/>policy<sp/>=&gt;<sp/>policy.RequireRole(</highlight><highlight class="stringliteral">&quot;Admin&quot;</highlight><highlight class="normal">));</highlight></codeline>
+<codeline lineno="106"><highlight class="normal"><sp/><sp/><sp/><sp/>options.AddPolicy(</highlight><highlight class="stringliteral">&quot;ManagerPolicy&quot;</highlight><highlight class="normal">,<sp/>policy<sp/>=&gt;<sp/>policy.RequireRole(</highlight><highlight class="stringliteral">&quot;Manager&quot;</highlight><highlight class="normal">));</highlight></codeline>
+<codeline lineno="107"><highlight class="normal"><sp/><sp/><sp/><sp/>options.AddPolicy(</highlight><highlight class="stringliteral">&quot;PatientPolicy&quot;</highlight><highlight class="normal">,<sp/>policy<sp/>=&gt;<sp/>policy.RequireRole(</highlight><highlight class="stringliteral">&quot;Patient&quot;</highlight><highlight class="normal">));</highlight></codeline>
+<codeline lineno="108"><highlight class="normal"><sp/><sp/><sp/><sp/>options.AddPolicy(</highlight><highlight class="stringliteral">&quot;ProfessionalPolicy&quot;</highlight><highlight class="normal">,<sp/>policy<sp/>=&gt;<sp/>policy.RequireRole(</highlight><highlight class="stringliteral">&quot;Professional&quot;</highlight><highlight class="normal">));</highlight></codeline>
+<codeline lineno="109"><highlight class="normal">});</highlight></codeline>
+<codeline lineno="110"><highlight class="normal"></highlight></codeline>
+<codeline lineno="111"><highlight class="normal">var<sp/>app<sp/>=<sp/>builder.Build();</highlight></codeline>
+<codeline lineno="112"><highlight class="normal"></highlight></codeline>
+<codeline lineno="113"><highlight class="normal">app.UseDefaultFiles();</highlight></codeline>
+<codeline lineno="114"><highlight class="normal">app.UseStaticFiles();</highlight></codeline>
+<codeline lineno="115"><highlight class="normal"></highlight></codeline>
+<codeline lineno="116"><highlight class="normal">app.UseCors(</highlight><highlight class="stringliteral">&quot;AllowAllOrigins&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="117"><highlight class="normal"></highlight></codeline>
+<codeline lineno="118"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Configure<sp/>the<sp/>HTTP<sp/>request<sp/>pipeline.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="119"><highlight class="normal"></highlight><highlight class="comment">//if<sp/>(app.Environment.IsDevelopment())</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="120"><highlight class="normal"></highlight><highlight class="comment">//{</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="121"><highlight class="normal">app.UseSwagger();</highlight></codeline>
+<codeline lineno="122"><highlight class="normal">app.UseSwaggerUI();</highlight></codeline>
+<codeline lineno="123"><highlight class="normal"></highlight><highlight class="comment">//}</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="124"><highlight class="normal"></highlight></codeline>
+<codeline lineno="125"><highlight class="normal">app.UseHttpsRedirection();</highlight></codeline>
+<codeline lineno="126"><highlight class="normal"></highlight></codeline>
+<codeline lineno="127"><highlight class="normal">app.UseAuthentication();</highlight></codeline>
+<codeline lineno="128"><highlight class="normal">app.UseAuthorization();</highlight></codeline>
+<codeline lineno="129"><highlight class="normal"></highlight></codeline>
+<codeline lineno="130"><highlight class="normal">app.MapControllers();</highlight></codeline>
+<codeline lineno="131"><highlight class="normal"></highlight></codeline>
+<codeline lineno="132"><highlight class="normal">app.MapFallbackToFile(</highlight><highlight class="stringliteral">&quot;/index.html&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="133"><highlight class="normal"></highlight></codeline>
+<codeline lineno="134"><highlight class="normal"></highlight><highlight class="preprocessor">#region<sp/>ContextSeed</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="135"><highlight class="normal"></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal">var<sp/>scope<sp/>=<sp/>app.Services.CreateScope();</highlight></codeline>
+<codeline lineno="136"><highlight class="normal"></highlight><highlight class="keywordflow">try</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="137"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="138"><highlight class="normal"><sp/><sp/><sp/><sp/>var<sp/>contextSeedService<sp/>=<sp/>scope.ServiceProvider.GetService&lt;ContextSeedService&gt;();</highlight></codeline>
+<codeline lineno="139"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(app.Environment.IsDevelopment())</highlight></codeline>
+<codeline lineno="140"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="141"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Console.WriteLine(</highlight><highlight class="stringliteral">&quot;\n\n\n\n\n\n\n\n\nDEVELOPMENT\n\n\n\n\n\n\n\n\n\n&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="142"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Console.WriteLine(builder.Configuration.GetConnectionString(</highlight><highlight class="stringliteral">&quot;DefaultConnection&quot;</highlight><highlight class="normal">));</highlight></codeline>
+<codeline lineno="143"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>await<sp/>contextSeedService.InitializeContextAsync();</highlight></codeline>
+<codeline lineno="144"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="145"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(app.Environment.IsProduction())</highlight></codeline>
+<codeline lineno="146"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="147"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>await<sp/>contextSeedService.InitializeProductionAsync();</highlight></codeline>
+<codeline lineno="148"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//await<sp/>contextSeedService.InitializeContextAsync();</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="149"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="150"><highlight class="normal"></highlight></codeline>
+<codeline lineno="151"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="152"><highlight class="normal"></highlight><highlight class="keywordflow">catch</highlight><highlight class="normal"><sp/>(Exception<sp/>ex)</highlight></codeline>
+<codeline lineno="153"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="154"><highlight class="normal"><sp/><sp/><sp/><sp/>var<sp/>logger<sp/>=<sp/>scope.ServiceProvider.GetService&lt;ILogger&lt;Program&gt;&gt;();</highlight></codeline>
+<codeline lineno="155"><highlight class="normal"><sp/><sp/><sp/><sp/>logger.LogError(ex,<sp/></highlight><highlight class="stringliteral">&quot;An<sp/>error<sp/>occurred<sp/>while<sp/>seeding<sp/>the<sp/>database.&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="156"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="157"><highlight class="normal"></highlight><highlight class="preprocessor">#endregion</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="158"><highlight class="normal"></highlight></codeline>
+<codeline lineno="159"><highlight class="normal">app.Run();</highlight></codeline>
+    </programlisting>
+    <location file="Program.cs"/>
+  </compounddef>
+</doxygen>

@@ -1,6 +1,9 @@
 ﻿namespace LusoHealthClient.Server.DTOs.Profile
 {
-    public class CertificateDto
+	/// <summary>
+	///(DTO) para representar um certificado.
+	/// </summary>
+	public class CertificateDto
     {
         public int CertificateId { get; set; }
         public string Name { get; set; }

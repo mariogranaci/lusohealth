@@ -2,7 +2,10 @@
 
 namespace LusoHealthClient.Server.DTOs.Authentication
 {
-    public class ResetPasswordDto
+	/// <summary>
+	///(DTO) para redefinir a senha de um utilizador.
+	/// </summary>
+	public class ResetPasswordDto
     {
         [Required]
         [EmailAddress(ErrorMessage = "Email inválido")]

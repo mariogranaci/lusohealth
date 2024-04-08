@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="en-US">
+  <compounddef id="class_luso_health_client_1_1_server_1_1_s_d" kind="class" language="C#" prot="public">
+    <compoundname>LusoHealthClient::Server::SD</compoundname>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="class_luso_health_client_1_1_server_1_1_s_d_1a1adb56ed8d7768871d5e14f6e78120c6" prot="public" static="yes" mutable="no">
+        <type>const string</type>
+        <definition>const string LusoHealthClient.Server.SD.AdminRole</definition>
+        <argsstring></argsstring>
+        <name>AdminRole</name>
+        <qualifiedname>LusoHealthClient.Server.SD.AdminRole</qualifiedname>
+        <initializer>= &quot;Admin&quot;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="SD.cs" line="6" column="29" bodyfile="SD.cs" bodystart="6" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_luso_health_client_1_1_server_1_1_s_d_1a7408a1599df4c8664ec6eba39ef612ce" prot="public" static="yes" mutable="no">
+        <type>const string</type>
+        <definition>const string LusoHealthClient.Server.SD.ManagerRole</definition>
+        <argsstring></argsstring>
+        <name>ManagerRole</name>
+        <qualifiedname>LusoHealthClient.Server.SD.ManagerRole</qualifiedname>
+        <initializer>= &quot;Manager&quot;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="SD.cs" line="7" column="29" bodyfile="SD.cs" bodystart="7" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_luso_health_client_1_1_server_1_1_s_d_1a0974b9b7e1deaac20ed7649e4215d40c" prot="public" static="yes" mutable="no">
+        <type>const string</type>
+        <definition>const string LusoHealthClient.Server.SD.PatientRole</definition>
+        <argsstring></argsstring>
+        <name>PatientRole</name>
+        <qualifiedname>LusoHealthClient.Server.SD.PatientRole</qualifiedname>
+        <initializer>= &quot;Patient&quot;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="SD.cs" line="8" column="29" bodyfile="SD.cs" bodystart="8" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_luso_health_client_1_1_server_1_1_s_d_1aa8d32f6fc9d20654c7c35816d89a9910" prot="public" static="yes" mutable="no">
+        <type>const string</type>
+        <definition>const string LusoHealthClient.Server.SD.ProfessionalRole</definition>
+        <argsstring></argsstring>
+        <name>ProfessionalRole</name>
+        <qualifiedname>LusoHealthClient.Server.SD.ProfessionalRole</qualifiedname>
+        <initializer>= &quot;Professional&quot;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="SD.cs" line="9" column="29" bodyfile="SD.cs" bodystart="9" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="SD.cs" line="3" column="11" bodyfile="SD.cs" bodystart="4" bodyend="11"/>
+    <listofallmembers>
+      <member refid="class_luso_health_client_1_1_server_1_1_s_d_1a1adb56ed8d7768871d5e14f6e78120c6" prot="public" virt="non-virtual"><scope>LusoHealthClient::Server::SD</scope><name>AdminRole</name></member>
+      <member refid="class_luso_health_client_1_1_server_1_1_s_d_1a7408a1599df4c8664ec6eba39ef612ce" prot="public" virt="non-virtual"><scope>LusoHealthClient::Server::SD</scope><name>ManagerRole</name></member>
+      <member refid="class_luso_health_client_1_1_server_1_1_s_d_1a0974b9b7e1deaac20ed7649e4215d40c" prot="public" virt="non-virtual"><scope>LusoHealthClient::Server::SD</scope><name>PatientRole</name></member>
+      <member refid="class_luso_health_client_1_1_server_1_1_s_d_1aa8d32f6fc9d20654c7c35816d89a9910" prot="public" virt="non-virtual"><scope>LusoHealthClient::Server::SD</scope><name>ProfessionalRole</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

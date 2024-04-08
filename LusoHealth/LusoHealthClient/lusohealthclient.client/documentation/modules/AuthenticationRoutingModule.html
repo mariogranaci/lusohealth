@@ -144,11 +144,13 @@ import { RouterModule, Routes } from &#x27;@angular/router&#x27;;
 import { ConfirmEmailComponent } from &#x27;./confirm-email/confirm-email.component&#x27;;
 import { AlterarPassComponent } from &#x27;./alterar-pass/alterar-pass.component&#x27;;
 import { RegisterWithGoogleComponent } from &#x27;./register-with-google/register-with-google.component&#x27;;
+import { UnlockAccountComponent } from &#x27;./unlock-account/unlock-account.component&#x27;;
 
 const routes: Routes &#x3D; [
   { path: &#x27;register&#x27;, component: RegistoComponent },
   { path: &#x27;login&#x27;, component: LoginComponent },
   { path: &#x27;confirm-email&#x27;, component: ConfirmEmailComponent },
+  { path: &#x27;unlock-account&#x27;, component: UnlockAccountComponent },
   { path: &#x27;reset-password&#x27;, component: AlterarPassComponent },
   { path: &#x27;external-register/:provider&#x27;, component: RegisterWithGoogleComponent }
 ];

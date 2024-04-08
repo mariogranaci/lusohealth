@@ -141,10 +141,12 @@ import { CommonModule } from &#x27;@angular/common&#x27;;
 import { ConsultaProfissionalComponent } from &#x27;./consulta-profissional/consulta-profissional.component&#x27;;
 import { ConsultaPacienteComponent } from &#x27;./consulta-paciente/consulta-paciente.component&#x27;;
 import { RouterModule, Routes } from &#x27;@angular/router&#x27;;
+import { ChatComponent } from &#x27;./chat/chat.component&#x27;;
 
 const routes: Routes &#x3D; [
   { path: &#x27;patient-appointment&#x27;, component: ConsultaPacienteComponent },
-  { path: &#x27;professional-appointment&#x27;, component: ConsultaProfissionalComponent }
+  { path: &#x27;professional-appointment&#x27;, component: ConsultaProfissionalComponent },
+  { path: &#x27;chat&#x27;, component: ChatComponent }
 ]
 
 @NgModule({

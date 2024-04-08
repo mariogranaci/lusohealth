@@ -164,6 +164,9 @@
                                 <a href="#cancelAppointment" >cancelAppointment</a>
                             </li>
                             <li>
+                                <a href="#getAvailableSlots" >getAvailableSlots</a>
+                            </li>
+                            <li>
                                 <a href="#getHeaders" >getHeaders</a>
                             </li>
                             <li>
@@ -192,6 +195,9 @@
                             </li>
                             <li>
                                 <a href="#redirectToCheckout" >redirectToCheckout</a>
+                            </li>
+                            <li>
+                                <a href="#refundPayment" >refundPayment</a>
                             </li>
                             <li>
                                 <a href="#requestStripeSession" >requestStripeSession</a>
@@ -387,6 +393,73 @@
                                     <tbody>
                                         <tr>
                                                 <td>appointmentId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Observable&lt;any&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getAvailableSlots"></a>
+                    <span class="name">
+                        <span ><b>getAvailableSlots</b></span>
+                        <a href="#getAvailableSlots"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getAvailableSlots(serviceId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="110"
+                                    class="link-to-prism">src/app/services/services.service.ts:110</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>serviceId</td>
                                             <td>
                                                             <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
                                             </td>
@@ -905,6 +978,73 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
+                    <a name="refundPayment"></a>
+                    <span class="name">
+                        <span ><b>refundPayment</b></span>
+                        <a href="#refundPayment"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>refundPayment(appointmentId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="115"
+                                    class="link-to-prism">src/app/services/services.service.ts:115</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>appointmentId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Observable&lt;any&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
                     <a name="requestStripeSession"></a>
                     <span class="name">
                         <span ><b>requestStripeSession</b></span>
@@ -1218,6 +1358,16 @@ export class ServicesService {
     return this.http.delete&lt;any&gt;(&#x60;${environment.appUrl}/api/payment/cancel-appointment/${appointmentId}&#x60;, { headers });
   }
 
+  getAvailableSlots(serviceId: number): Observable&lt;any&gt; {
+    const headers &#x3D; this.getHeaders();
+    return this.http.get&lt;any&gt;(&#x60;${environment.appUrl}/api/appointment/get-available-slots/${serviceId}&#x60;, { headers });
+  }
+
+  refundPayment(appointmentId: number): Observable&lt;any&gt; {
+    const headers &#x3D; this.getHeaders();
+    return this.http.post&lt;any&gt;(&#x60;${environment.appUrl}/api/payment/refund-appointment&#x60;, { appointmentId: appointmentId }, { headers });
+  }
+  
 }
 </code></pre>
     </div>

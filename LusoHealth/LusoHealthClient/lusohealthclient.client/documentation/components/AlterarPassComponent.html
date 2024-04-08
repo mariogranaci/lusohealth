@@ -1,0 +1,896 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>lusohealthclient.client documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avaoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+
+               if ($darkModeToggles.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
+            <a href="../" class="navbar-brand">lusohealthclient.client documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Components</li>
+  <li class="breadcrumb-item"
+  >
+  AlterarPassComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/authentication/alterar-pass/alterar-pass.component.ts</code>
+</p>
+
+
+
+
+    <p class="comment">
+        <h3>Implements</h3>
+    </p>
+    <p class="comment">
+                <code>OnInit</code>
+    </p>
+
+
+<section data-compodoc="block-metadata">
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-alterar-pass</code></td>
+            </tr>
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./alterar-pass.component.html</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">styleUrl</td>
+                <td class="col-md-9"><code>./alterar-pass.component.css</code></td>
+            </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#errorMessages" >errorMessages</a>
+                            </li>
+                            <li>
+                                <a href="#model" >model</a>
+                            </li>
+                            <li>
+                                <a href="#resetPasswordForm" >resetPasswordForm</a>
+                            </li>
+                            <li>
+                                <a href="#responseText" >responseText</a>
+                            </li>
+                            <li>
+                                <a href="#submitted" >submitted</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#initializeForm" >initializeForm</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnInit" >ngOnInit</a>
+                            </li>
+                            <li>
+                                <a href="#passwordPatternValidator" >passwordPatternValidator</a>
+                            </li>
+                            <li>
+                                <a href="#resetPassword" >resetPassword</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(authenticationService: <a href="../injectables/AuthenticationService.html" target="_self">AuthenticationService</a>, formBuilder: FormBuilder, router: Router, activateRoute: ActivatedRoute)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="20" class="link-to-prism">src/app/authentication/alterar-pass/alterar-pass.component.ts:20</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>authenticationService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/AuthenticationService.html" target="_self" >AuthenticationService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>formBuilder</td>
+                                                  
+                                                        <td>
+                                                                    <code>FormBuilder</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>router</td>
+                                                  
+                                                        <td>
+                                                                    <code>Router</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>activateRoute</td>
+                                                  
+                                                        <td>
+                                                                    <code>ActivatedRoute</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+
+
+
+
+    <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="initializeForm"></a>
+                    <span class="name">
+                        <span ><b>initializeForm</b></span>
+                        <a href="#initializeForm"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>initializeForm()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="57"
+                                    class="link-to-prism">src/app/authentication/alterar-pass/alterar-pass.component.ts:57</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <span ><b>ngOnInit</b></span>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="35"
+                                    class="link-to-prism">src/app/authentication/alterar-pass/alterar-pass.component.ts:35</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="passwordPatternValidator"></a>
+                    <span class="name">
+                        <span ><b>passwordPatternValidator</b></span>
+                        <a href="#passwordPatternValidator"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>passwordPatternValidator()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="95"
+                                    class="link-to-prism">src/app/authentication/alterar-pass/alterar-pass.component.ts:95</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>ValidatorFn</code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="resetPassword"></a>
+                    <span class="name">
+                        <span ><b>resetPassword</b></span>
+                        <a href="#resetPassword"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>resetPassword()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="66"
+                                    class="link-to-prism">src/app/authentication/alterar-pass/alterar-pass.component.ts:66</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="errorMessages"></a>
+                    <span class="name">
+                        <span ><b>errorMessages</b></span>
+                        <a href="#errorMessages"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>string[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="18" class="link-to-prism">src/app/authentication/alterar-pass/alterar-pass.component.ts:18</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="model"></a>
+                    <span class="name">
+                        <span ><b>model</b></span>
+                        <a href="#model"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/ResetPassword.html" target="_self" >ResetPassword | undefined</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="20" class="link-to-prism">src/app/authentication/alterar-pass/alterar-pass.component.ts:20</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="resetPasswordForm"></a>
+                    <span class="name">
+                        <span ><b>resetPasswordForm</b></span>
+                        <a href="#resetPasswordForm"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>FormGroup</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new FormGroup({})</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="15" class="link-to-prism">src/app/authentication/alterar-pass/alterar-pass.component.ts:15</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="responseText"></a>
+                    <span class="name">
+                        <span ><b>responseText</b></span>
+                        <a href="#responseText"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>string | undefined</code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="19" class="link-to-prism">src/app/authentication/alterar-pass/alterar-pass.component.ts:19</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="submitted"></a>
+                    <span class="name">
+                        <span ><b>submitted</b></span>
+                        <a href="#submitted"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="16" class="link-to-prism">src/app/authentication/alterar-pass/alterar-pass.component.ts:16</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, OnInit } from &#x27;@angular/core&#x27;;
+import { AuthenticationService } from &#x27;../authentication.service&#x27;;
+import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from &#x27;@angular/forms&#x27;;
+import { take } from &#x27;rxjs&#x27;;
+import { User } from &#x27;../../shared/models/authentication/user&#x27;;
+import { ActivatedRoute, Router } from &#x27;@angular/router&#x27;;
+import { ResetPassword } from &#x27;../../shared/models/authentication/resetPassword&#x27;;
+
+@Component({
+  selector: &#x27;app-alterar-pass&#x27;,
+  templateUrl: &#x27;./alterar-pass.component.html&#x27;,
+  styleUrl: &#x27;./alterar-pass.component.css&#x27;
+})
+export class AlterarPassComponent implements OnInit {
+  resetPasswordForm: FormGroup &#x3D; new FormGroup({});
+  submitted &#x3D; false;
+  //loading &#x3D; false;
+  errorMessages: string[] &#x3D; [];
+  responseText: string | undefined;
+  model: ResetPassword | undefined;
+
+  constructor(private authenticationService: AuthenticationService,
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private activateRoute: ActivatedRoute) {
+    this.authenticationService.user$.pipe(take(1)).subscribe({
+      next: (user: User | null) &#x3D;&gt; {
+        if (user) {
+          this.router.navigateByUrl(&#x27;/&#x27;);
+        }
+      }
+    });
+  }
+
+  ngOnInit(): void {
+    this.authenticationService.user$.pipe(take(1)).subscribe({
+      next: (user: User | null) &#x3D;&gt; {
+        if (user) {
+          this.router.navigateByUrl(&#x27;/&#x27;);
+        } else {
+          this.activateRoute.queryParamMap.subscribe({
+            next: (params: any) &#x3D;&gt; {
+              this.model &#x3D; {
+                token: params.get(&#x27;token&#x27;),
+                email: params.get(&#x27;email&#x27;),
+                newPassword: &#x27;&#x27;,
+                confirmarPassword: &#x27;&#x27;
+              };
+            }
+          });
+        }
+      }
+    });
+    this.initializeForm();
+  }
+
+  initializeForm() {
+    this.resetPasswordForm &#x3D; this.formBuilder.group({
+      password: [&#x27;&#x27;, [Validators.required, Validators.minLength(8), Validators.maxLength(50)], [this.passwordPatternValidator()]],
+      confirmarPassword: [&#x27;&#x27;, [Validators.required, Validators.minLength(8), Validators.maxLength(50)], [this.passwordPatternValidator()]],
+    })
+  }
+
+
+
+  resetPassword() {
+    this.submitted &#x3D; true;
+    this.errorMessages &#x3D; [];
+    this.responseText &#x3D; &#x27;&#x27;;
+
+    if (this.model &amp;&amp; this.resetPasswordForm.valid) {
+      this.model.newPassword &#x3D; this.resetPasswordForm.get(&#x27;password&#x27;)?.value;
+      this.model.confirmarPassword &#x3D; this.resetPasswordForm.get(&#x27;confirmarPassword&#x27;)?.value;
+
+      //this.loading &#x3D; true;
+      this.authenticationService.resetPassword(this.model).subscribe({
+        next: (response: any) &#x3D;&gt; {
+          //this.loading &#x3D; false;
+          this.responseText &#x3D; response.value.message;
+        },
+        error: (error) &#x3D;&gt; {
+          console.log(error.error);
+          //this.loading &#x3D; false;
+          if (error.error.errors) {
+            this.errorMessages &#x3D; error.error.errors;
+          } else {
+            this.errorMessages.push(error.error);
+          }
+        }
+      })
+
+    }
+  }
+
+  passwordPatternValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null &#x3D;&gt; {
+      const value: string &#x3D; control.value || &#x27;&#x27;;
+
+      const pattern &#x3D; /^(?&#x3D;.*[a-z])(?&#x3D;.*[A-Z])(?&#x3D;.*\d)/;
+
+      return new Promise(resolve &#x3D;&gt; {
+        setTimeout(() &#x3D;&gt; {
+          resolve(pattern.test(value) ? null : { passwordPattern: true });
+        }, 0);
+      });
+    };
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;h1&gt;Alterar Password&lt;/h1&gt;
+&lt;form [formGroup]&#x3D;&quot;resetPasswordForm&quot; (ngSubmit)&#x3D;&quot;resetPassword()&quot; autocomplete&#x3D;&quot;off&quot; id&#x3D;&quot;password-reset-container&quot; &gt;
+  &lt;img src&#x3D;&quot;assets/images/Recuperation/LusoIcon.png&quot; alt&#x3D;&quot;Image&quot;&gt;
+  &lt;input formControlName&#x3D;&quot;password&quot; type&#x3D;&quot;password&quot; id&#x3D;&quot;password&quot; name&#x3D;&quot;password&quot; placeholder&#x3D;&quot;Password&quot; required [class.is-invalid]&#x3D;&quot;submitted &amp;&amp; resetPasswordForm.get(&#x27;password&#x27;)?.errors&quot;&gt;
+  &lt;span class&#x3D;&quot;text-danger&quot; *ngIf&#x3D;&quot;submitted &amp;&amp; resetPasswordForm.get(&#x27;password&#x27;)?.hasError(&#x27;required&#x27;)&quot;&gt;
+    Introduza uma password
+  &lt;/span&gt;
+  &lt;span class&#x3D;&quot;text-danger&quot; *ngIf&#x3D;&quot;submitted &amp;&amp; (resetPasswordForm.get(&#x27;password&#x27;)?.hasError(&#x27;maxlength&#x27;) ||  resetPasswordForm.get(&#x27;password&#x27;)?.hasError(&#x27;minlength&#x27;))&quot;&gt;
+    A password deve conter entre 8 e 50 caracteres
+  &lt;/span&gt;
+  &lt;span class&#x3D;&quot;text-danger&quot; *ngIf&#x3D;&quot;submitted &amp;&amp; (resetPasswordForm.get(&#x27;password&#x27;)?.hasError(&#x27;passwordPattern&#x27;))&quot;&gt;
+    A password deve conter pelo menos uma letra minúscula, uma letra maiúscula e um dígito.
+  &lt;/span&gt;
+  &lt;input formControlName&#x3D;&quot;confirmarPassword&quot; type&#x3D;&quot;password&quot; id&#x3D;&quot;confirmPassword&quot; name&#x3D;&quot;confirmPassword&quot; placeholder&#x3D;&quot;Confirmar Password&quot; required [class.is-invalid]&#x3D;&quot;submitted &amp;&amp; resetPasswordForm.get(&#x27;confirmarPassword&#x27;)?.errors&quot;&gt;
+  &lt;span class&#x3D;&quot;text-danger&quot; *ngIf&#x3D;&quot;submitted &amp;&amp; resetPasswordForm.get(&#x27;confirmarPassword&#x27;)?.hasError(&#x27;required&#x27;)&quot;&gt;
+    Confirme a password
+  &lt;/span&gt;
+  &lt;span class&#x3D;&quot;text-danger&quot; *ngIf&#x3D;&quot;submitted &amp;&amp; (resetPasswordForm.get(&#x27;confirmarPassword&#x27;)?.hasError(&#x27;maxlength&#x27;) ||  resetPasswordForm.get(&#x27;confirmarPassword&#x27;)?.hasError(&#x27;minlength&#x27;))&quot;&gt;
+    A password deve conter entre 8 e 50 caracteres
+  &lt;/span&gt;
+  &lt;span class&#x3D;&quot;text-danger&quot; *ngIf&#x3D;&quot;submitted &amp;&amp; (resetPasswordForm.get(&#x27;confirmarPassword&#x27;)?.hasError(&#x27;passwordPattern&#x27;))&quot;&gt;
+    A password deve conter pelo menos uma letra minúscula, uma letra maiúscula e um dígito.
+  &lt;/span&gt;
+  &lt;button&gt;Confirmar&lt;/button&gt;
+&lt;/form&gt;
+&lt;div *ngIf&#x3D;&quot;responseText&quot;&gt;
+  &lt;pop-up-success [message]&#x3D;responseText&gt;&lt;/pop-up-success&gt;
+&lt;/div&gt;
+&lt;div *ngIf&#x3D;&quot;errorMessages.length &gt; 0&quot;&gt;
+  &lt;app-validation-messages [errorMessages]&#x3D;&quot;errorMessages&quot;&gt;&lt;/app-validation-messages&gt;
+&lt;/div&gt;
+
+</code></pre>
+    </div>
+
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><h1>Alterar Password</h1><form [formGroup]="resetPasswordForm" (ngSubmit)="resetPassword()" autocomplete="off" id="password-reset-container" >  <img src="assets/images/Recuperation/LusoIcon.png" alt="Image">  <input formControlName="password" type="password" id="password" name="password" placeholder="Password" required [class.is-invalid]="submitted && resetPasswordForm.get(\'password\')?.errors">  <span class="text-danger" *ngIf="submitted && resetPasswordForm.get(\'password\')?.hasError(\'required\')">    Introduza uma password  </span>  <span class="text-danger" *ngIf="submitted && (resetPasswordForm.get(\'password\')?.hasError(\'maxlength\') ||  resetPasswordForm.get(\'password\')?.hasError(\'minlength\'))">    A password deve conter entre 8 e 50 caracteres  </span>  <span class="text-danger" *ngIf="submitted && (resetPasswordForm.get(\'password\')?.hasError(\'passwordPattern\'))">    A password deve conter pelo menos uma letra minúscula, uma letra maiúscula e um dígito.  </span>  <input formControlName="confirmarPassword" type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirmar Password" required [class.is-invalid]="submitted && resetPasswordForm.get(\'confirmarPassword\')?.errors">  <span class="text-danger" *ngIf="submitted && resetPasswordForm.get(\'confirmarPassword\')?.hasError(\'required\')">    Confirme a password  </span>  <span class="text-danger" *ngIf="submitted && (resetPasswordForm.get(\'confirmarPassword\')?.hasError(\'maxlength\') ||  resetPasswordForm.get(\'confirmarPassword\')?.hasError(\'minlength\'))">    A password deve conter entre 8 e 50 caracteres  </span>  <span class="text-danger" *ngIf="submitted && (resetPasswordForm.get(\'confirmarPassword\')?.hasError(\'passwordPattern\'))">    A password deve conter pelo menos uma letra minúscula, uma letra maiúscula e um dígito.  </span>  <button>Confirmar</button></form><div *ngIf="responseText">  <pop-up-success [message]=responseText></pop-up-success></div><div *ngIf="errorMessages.length > 0">  <app-validation-messages [errorMessages]="errorMessages"></app-validation-messages></div></div>'
+    var COMPONENTS = [{'name': 'AboutUsComponent', 'selector': 'app-about-us'},{'name': 'AgendaComponent', 'selector': 'app-agenda'},{'name': 'AgendaPacienteComponent', 'selector': 'app-agenda-paciente'},{'name': 'AgendaProfissionalComponent', 'selector': 'app-agenda-profissional'},{'name': 'AlterarPassComponent', 'selector': 'app-alterar-pass'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'CalendarioComponent', 'selector': 'app-calendario'},{'name': 'ConfirmEmailComponent', 'selector': 'app-confirm-email'},{'name': 'ConsultaPacienteComponent', 'selector': 'app-consulta-paciente'},{'name': 'ConsultaProfissionalComponent', 'selector': 'app-consulta-profissional'},{'name': 'DisponibilidadeComponent', 'selector': 'app-disponibilidade'},{'name': 'EditPerfilComponent', 'selector': 'app-edit-perfil'},{'name': 'FooterAuthenticationComponent', 'selector': 'app-footer-authentication'},{'name': 'FooterComponent', 'selector': 'app-footer'},{'name': 'HistoricoConsultasComponent', 'selector': 'app-historico-consultas'},{'name': 'HomePageComponent', 'selector': 'app-home-page'},{'name': 'LoadingSpinnerComponent', 'selector': 'loading-spinner'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'MapaComponent', 'selector': 'app-mapa'},{'name': 'MarcacoesComponent', 'selector': 'app-marcacoes'},{'name': 'MarcarConsultaComponent', 'selector': 'app-marcar-consulta'},{'name': 'NavbarComponent', 'selector': 'app-navbar'},{'name': 'NotFoundComponent', 'selector': 'app-not-found'},{'name': 'PaymentFailureComponent', 'selector': 'app-payment-failure'},{'name': 'PaymentSuccessComponent', 'selector': 'app-payment-success'},{'name': 'PerfilPacienteComponent', 'selector': 'app-perfil-paciente'},{'name': 'PopUpSuccessComponent', 'selector': 'pop-up-success'},{'name': 'PrivacyPolicyComponent', 'selector': 'app-privacy-policy'},{'name': 'PrivateProfileProfessionalComponent', 'selector': 'app-private-profile-professional'},{'name': 'PublicProfileProfessionalComponent', 'selector': 'app-public-profile-professional'},{'name': 'RecuperarContaComponent', 'selector': 'app-recuperar-conta'},{'name': 'RecuperarPassComponent', 'selector': 'app-recuperar-pass'},{'name': 'RegisterWithGoogleComponent', 'selector': 'app-register-with-google'},{'name': 'RegistoComponent', 'selector': 'app-registo'},{'name': 'TermsAndConditionsComponent', 'selector': 'app-terms-and-conditions'},{'name': 'ValidationMessagesComponent', 'selector': 'app-validation-messages'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'AlterarPassComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'AlterarPassComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

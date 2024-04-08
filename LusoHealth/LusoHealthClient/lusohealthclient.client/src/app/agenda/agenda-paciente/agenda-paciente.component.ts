@@ -8,17 +8,24 @@ import { Appointment } from '../../shared/models/services/appointment';
 import { Service } from '../../shared/models/services/service';
 import { Professional } from '../../shared/models/profile/professional';
 
+/**
+ * Componente Angular responsável por exibir a agenda do paciente.
+ */
 @Component({
   selector: 'app-agenda-paciente',
   templateUrl: './agenda-paciente.component.html',
   styleUrl: './agenda-paciente.component.css'
 })
 export class AgendaPacienteComponent {
+  /** Observable utilizado para cancelar inscrições quando o componente é destruído. */
   private unsubscribe$ = new Subject<void>();
+  /** Lista de mensagens de erro ocorridas durante operações do componente. */
   errorMessages: string[] = [];
 
+  /** Lista de tipos de profissionais disponíveis. */
   professionalTypes: ProfessionalType[] = [];
 
+  /** Lista de especialidades disponíveis. */
   specialties: Specialty[] = [];
   specialtiesFiltered: Specialty[] = [];
 
@@ -32,7 +39,10 @@ export class AgendaPacienteComponent {
 
   constructor(public servicesService: ServicesService, public agendaService: AgendaService) {}
 
-  /// Método chamado quando o componente é inicializado
+  /**
+   * Método chamado quando o componente é inicializado.
+   * Realiza as operações de inicialização, incluindo a obtenção de serviços, tipos de profissionais, especialidades e agendamentos.
+   */
   ngOnInit() {
     this.getServices().then(() => {
       this.getProfessionalTypes();
@@ -41,13 +51,19 @@ export class AgendaPacienteComponent {
     }); 
   }
 
-  /// Método chamado quando o componente é destruído
+  /**
+  * Método chamado quando o componente é destruído.
+  * Executa operações de limpeza, cancelando a inscrição em observables.
+  */
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
 
-  /// Obtém os tipos de profissionais
+  /**
+   * Obtém os tipos de profissionais disponíveis.
+   * Este método consome um serviço para obter a lista de tipos de profissionais e atualiza a propriedade `professionalTypes`.
+   */
   getProfessionalTypes() {
     this.servicesService.getProfessionalTypes().pipe(
       takeUntil(this.unsubscribe$)
@@ -66,7 +82,10 @@ export class AgendaPacienteComponent {
     });
   }
 
-  /// Obtém os próximos agendamentos
+  /**
+  * Obtém os próximos agendamentos.
+  * Este método consome um serviço para obter os próximos agendamentos e atualiza as propriedades `appointments` e `appointmentsFiltered`.
+  */
   getNextAppointments() {
     this.agendaService.getNextAppointments().pipe(
       takeUntil(this.unsubscribe$)
@@ -87,7 +106,10 @@ export class AgendaPacienteComponent {
     });
   }
 
-  /// Obtém as especialidades
+  /**
+   * Obtém as especialidades disponíveis.
+   * Este método consome um serviço para obter a lista de especialidades e atualiza a propriedade `specialties`.
+   */
   getSpecialties() {
     this.agendaService.getSpecialties().pipe(
       takeUntil(this.unsubscribe$)
@@ -107,7 +129,9 @@ export class AgendaPacienteComponent {
     });
   }
 
-  /// Obtém os serviços
+  /**
+   *  Obtém os serviços
+   */ 
   getServices(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       this.servicesService.getServices().pipe(
@@ -208,7 +232,11 @@ export class AgendaPacienteComponent {
     this.updateDisplayedAppointments();
   }
 
-  /// Obtém o tipo de agendamento
+  /**
+   * Obtém o tipo de agendamento
+   * @param {string | null} type tipo de appointment 
+   * @returns tipo de appointment
+   */
   getAppointmentType(type: string | null): string {
     switch (type) {
       case "0":
@@ -262,7 +290,11 @@ export class AgendaPacienteComponent {
     return formattedHours + ":" + formattedMinutes;
   }
 
-  /// Converte para data
+  /**
+   * 
+   * @param dateTimeString 
+   * @returns
+   */
   convertToDate(dateTimeString: Date | null): string {
     if (!dateTimeString) {
       return ""; 

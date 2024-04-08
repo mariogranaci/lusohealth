@@ -1,0 +1,3393 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>lusohealthclient.client documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avaoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+
+               if ($darkModeToggles.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
+            <a href="../" class="navbar-brand">lusohealthclient.client documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Components</li>
+  <li class="breadcrumb-item"
+  >
+  PublicProfileProfessionalComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/profile/public-profile-professional/public-profile-professional.component.ts</code>
+</p>
+
+
+
+
+    <p class="comment">
+        <h3>Implements</h3>
+    </p>
+    <p class="comment">
+                <code>OnInit</code>
+    </p>
+
+
+<section data-compodoc="block-metadata">
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-public-profile-professional</code></td>
+            </tr>
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./public-profile-professional.component.html</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">styleUrl</td>
+                <td class="col-md-9"><code>./public-profile-professional.component.css</code></td>
+            </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#addSpecialityForm" >addSpecialityForm</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#averageStars" >averageStars</a>
+                            </li>
+                            <li>
+                                <a href="#editSpecialityForm" >editSpecialityForm</a>
+                            </li>
+                            <li>
+                                <a href="#errorMessages" >errorMessages</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#isPatient" >isPatient</a>
+                            </li>
+                            <li>
+                                <a href="#pdfList" >pdfList</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#professionalId" >professionalId</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#profileImagePath" >profileImagePath</a>
+                            </li>
+                            <li>
+                                <a href="#radioStar1" >radioStar1</a>
+                            </li>
+                            <li>
+                                <a href="#radioStar2" >radioStar2</a>
+                            </li>
+                            <li>
+                                <a href="#radioStar3" >radioStar3</a>
+                            </li>
+                            <li>
+                                <a href="#radioStar4" >radioStar4</a>
+                            </li>
+                            <li>
+                                <a href="#radioStar5" >radioStar5</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#reviews" >reviews</a>
+                            </li>
+                            <li>
+                                <a href="#selectEditService" >selectEditService</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#selectedSpecialtyReview" >selectedSpecialtyReview</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#specialties" >specialties</a>
+                            </li>
+                            <li>
+                                <a href="#submittedAdd" >submittedAdd</a>
+                            </li>
+                            <li>
+                                <a href="#submittedDescription" >submittedDescription</a>
+                            </li>
+                            <li>
+                                <a href="#submittedEdit" >submittedEdit</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#unsubscribe$" >unsubscribe$</a>
+                            </li>
+                            <li>
+                                <a href="#updateDescriptionForm" >updateDescriptionForm</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#userData" >userData</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#addSpeciality" >addSpeciality</a>
+                            </li>
+                            <li>
+                                <a href="#appointmentTypesToString" >appointmentTypesToString</a>
+                            </li>
+                            <li>
+                                <a href="#changeSpecialtyReview" >changeSpecialtyReview</a>
+                            </li>
+                            <li>
+                                <a href="#checkInput" >checkInput</a>
+                            </li>
+                            <li>
+                                <a href="#closePopup" >closePopup</a>
+                            </li>
+                            <li>
+                                <a href="#deletePdf" >deletePdf</a>
+                            </li>
+                            <li>
+                                <a href="#editSpeciality" >editSpeciality</a>
+                            </li>
+                            <li>
+                                <a href="#errorHideCheckAnimation" >errorHideCheckAnimation</a>
+                            </li>
+                            <li>
+                                <a href="#filterReviews" >filterReviews</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#getAverageStars" >getAverageStars</a>
+                            </li>
+                            <li>
+                                <a href="#getPdfs" >getPdfs</a>
+                            </li>
+                            <li>
+                                <a href="#getProfessionalInfo" >getProfessionalInfo</a>
+                            </li>
+                            <li>
+                                <a href="#hideCheckAnimation" >hideCheckAnimation</a>
+                            </li>
+                            <li>
+                                <a href="#initializeForm" >initializeForm</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnDestroy" >ngOnDestroy</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnInit" >ngOnInit</a>
+                            </li>
+                            <li>
+                                <a href="#onFileSelected" >onFileSelected</a>
+                            </li>
+                            <li>
+                                <a href="#openPdf" >openPdf</a>
+                            </li>
+                            <li>
+                                <a href="#openPopup" >openPopup</a>
+                            </li>
+                            <li>
+                                <a href="#selectReviewEventReceiver" >selectReviewEventReceiver</a>
+                            </li>
+                            <li>
+                                <a href="#setEditFormFields" >setEditFormFields</a>
+                            </li>
+                            <li>
+                                <a href="#setUserFields" >setUserFields</a>
+                            </li>
+                            <li>
+                                <a href="#showCheckAnimation" >showCheckAnimation</a>
+                            </li>
+                            <li>
+                                <a href="#showSpecialtyEdit" >showSpecialtyEdit</a>
+                            </li>
+                            <li>
+                                <a href="#stopPropagation" >stopPropagation</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(authenticationService: <a href="../injectables/AuthenticationService.html" target="_self">AuthenticationService</a>, formBuilder: FormBuilder, profileService: <a href="../injectables/ProfileService.html" target="_self">ProfileService</a>, router: Router, activateRoute: ActivatedRoute)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="44" class="link-to-prism">src/app/profile/public-profile-professional/public-profile-professional.component.ts:44</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>authenticationService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/AuthenticationService.html" target="_self" >AuthenticationService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>formBuilder</td>
+                                                  
+                                                        <td>
+                                                                    <code>FormBuilder</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>profileService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/ProfileService.html" target="_self" >ProfileService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>router</td>
+                                                  
+                                                        <td>
+                                                                    <code>Router</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>activateRoute</td>
+                                                  
+                                                        <td>
+                                                                    <code>ActivatedRoute</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+
+
+
+
+    <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="addSpeciality"></a>
+                    <span class="name">
+                        <span ><b>addSpeciality</b></span>
+                        <a href="#addSpeciality"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>addSpeciality()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="327"
+                                    class="link-to-prism">src/app/profile/public-profile-professional/public-profile-professional.component.ts:327</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="appointmentTypesToString"></a>
+                    <span class="name">
+                        <span ><b>appointmentTypesToString</b></span>
+                        <a href="#appointmentTypesToString"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>appointmentTypesToString(service: <a href="../interfaces/Service.html" target="_self">Service</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="211"
+                                    class="link-to-prism">src/app/profile/public-profile-professional/public-profile-professional.component.ts:211</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>service</td>
+                                            <td>
+                                                            <code><a href="../interfaces/Service.html" target="_self" >Service</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="changeSpecialtyReview"></a>
+                    <span class="name">
+                        <span ><b>changeSpecialtyReview</b></span>
+                        <a href="#changeSpecialtyReview"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>changeSpecialtyReview(value: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="469"
+                                    class="link-to-prism">src/app/profile/public-profile-professional/public-profile-professional.component.ts:469</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>value</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="checkInput"></a>
+                    <span class="name">
+                        <span ><b>checkInput</b></span>
+                        <a href="#checkInput"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>checkInput(value: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="97"
+                                    class="link-to-prism">src/app/profile/public-profile-professional/public-profile-professional.component.ts:97</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>value</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="closePopup"></a>
+                    <span class="name">
+                        <span ><b>closePopup</b></span>
+                        <a href="#closePopup"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>closePopup()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="552"
+                                    class="link-to-prism">src/app/profile/public-profile-professional/public-profile-professional.component.ts:552</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="deletePdf"></a>
+                    <span class="name">
+                        <span ><b>deletePdf</b></span>
+                        <a href="#deletePdf"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>deletePdf(certificateId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="265"
+                                    class="link-to-prism">src/app/profile/public-profile-professional/public-profile-professional.component.ts:265</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>certificateId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="editSpeciality"></a>
+                    <span class="name">
+                        <span ><b>editSpeciality</b></span>
+                        <a href="#editSpeciality"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>editSpeciality()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="381"
+                                    class="link-to-prism">src/app/profile/public-profile-professional/public-profile-professional.component.ts:381</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="errorHideCheckAnimation"></a>
+                    <span class="name">
+                        <span ><b>errorHideCheckAnimation</b></span>
+                        <a href="#errorHideCheckAnimation"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>errorHideCheckAnimation()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="319"
+                                    class="link-to-prism">src/app/profile/public-profile-professional/public-profile-professional.component.ts:319</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="filterReviews"></a>
+                    <span class="name">
+                        <span ><b>filterReviews</b></span>
+                        <a href="#filterReviews"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>filterReviews(serviceId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="490"
+                                    class="link-to-prism">src/app/profile/public-profile-professional/public-profile-professional.component.ts:490</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>serviceId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getAverageStars"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>getAverageStars</b></span>
+                        <a href="#getAverageStars"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getAverageStars()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="512"
+                                    class="link-to-prism">src/app/profile/public-profile-professional/public-profile-professional.component.ts:512</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getPdfs"></a>
+                    <span class="name">
+                        <span ><b>getPdfs</b></span>
+                        <a href="#getPdfs"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getPdfs()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="252"
+                                    class="link-to-prism">src/app/profile/public-profile-professional/public-profile-professional.component.ts:252</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getProfessionalInfo"></a>
+                    <span class="name">
+                        <span ><b>getProfessionalInfo</b></span>
+                        <a href="#getProfessionalInfo"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getProfessionalInfo(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="159"
+                                    class="link-to-prism">src/app/profile/public-profile-professional/public-profile-professional.component.ts:159</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>id</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="hideCheckAnimation"></a>
+                    <span class="name">
+                        <span ><b>hideCheckAnimation</b></span>
+                        <a href="#hideCheckAnimation"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>hideCheckAnimation()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="303"
+                                    class="link-to-prism">src/app/profile/public-profile-professional/public-profile-professional.component.ts:303</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="initializeForm"></a>
+                    <span class="name">
+                        <span ><b>initializeForm</b></span>
+                        <a href="#initializeForm"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>initializeForm()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="139"
+                                    class="link-to-prism">src/app/profile/public-profile-professional/public-profile-professional.component.ts:139</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnDestroy"></a>
+                    <span class="name">
+                        <span ><b>ngOnDestroy</b></span>
+                        <a href="#ngOnDestroy"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnDestroy()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="92"
+                                    class="link-to-prism">src/app/profile/public-profile-professional/public-profile-professional.component.ts:92</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <span ><b>ngOnInit</b></span>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="68"
+                                    class="link-to-prism">src/app/profile/public-profile-professional/public-profile-professional.component.ts:68</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onFileSelected"></a>
+                    <span class="name">
+                        <span ><b>onFileSelected</b></span>
+                        <a href="#onFileSelected"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>onFileSelected(event: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="230"
+                                    class="link-to-prism">src/app/profile/public-profile-professional/public-profile-professional.component.ts:230</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>event</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="openPdf"></a>
+                    <span class="name">
+                        <span ><b>openPdf</b></span>
+                        <a href="#openPdf"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>openPdf(pdfFilename: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="278"
+                                    class="link-to-prism">src/app/profile/public-profile-professional/public-profile-professional.component.ts:278</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>pdfFilename</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="openPopup"></a>
+                    <span class="name">
+                        <span ><b>openPopup</b></span>
+                        <a href="#openPopup"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>openPopup(opcao: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="525"
+                                    class="link-to-prism">src/app/profile/public-profile-professional/public-profile-professional.component.ts:525</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>opcao</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="selectReviewEventReceiver"></a>
+                    <span class="name">
+                        <span ><b>selectReviewEventReceiver</b></span>
+                        <a href="#selectReviewEventReceiver"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>selectReviewEventReceiver(event: Event)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="460"
+                                    class="link-to-prism">src/app/profile/public-profile-professional/public-profile-professional.component.ts:460</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>event</td>
+                                            <td>
+                                                        <code>Event</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="setEditFormFields"></a>
+                    <span class="name">
+                        <span ><b>setEditFormFields</b></span>
+                        <a href="#setEditFormFields"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>setEditFormFields()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="429"
+                                    class="link-to-prism">src/app/profile/public-profile-professional/public-profile-professional.component.ts:429</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="setUserFields"></a>
+                    <span class="name">
+                        <span ><b>setUserFields</b></span>
+                        <a href="#setUserFields"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>setUserFields()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="190"
+                                    class="link-to-prism">src/app/profile/public-profile-professional/public-profile-professional.component.ts:190</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="showCheckAnimation"></a>
+                    <span class="name">
+                        <span ><b>showCheckAnimation</b></span>
+                        <a href="#showCheckAnimation"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>showCheckAnimation()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="295"
+                                    class="link-to-prism">src/app/profile/public-profile-professional/public-profile-professional.component.ts:295</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="showSpecialtyEdit"></a>
+                    <span class="name">
+                        <span ><b>showSpecialtyEdit</b></span>
+                        <a href="#showSpecialtyEdit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>showSpecialtyEdit(service: <a href="../interfaces/Service.html" target="_self">Service</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="420"
+                                    class="link-to-prism">src/app/profile/public-profile-professional/public-profile-professional.component.ts:420</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>service</td>
+                                            <td>
+                                                            <code><a href="../interfaces/Service.html" target="_self" >Service</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="stopPropagation"></a>
+                    <span class="name">
+                        <span ><b>stopPropagation</b></span>
+                        <a href="#stopPropagation"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>stopPropagation(event: Event)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="568"
+                                    class="link-to-prism">src/app/profile/public-profile-professional/public-profile-professional.component.ts:568</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>event</td>
+                                            <td>
+                                                        <code>Event</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="addSpecialityForm"></a>
+                    <span class="name">
+                        <span ><b>addSpecialityForm</b></span>
+                        <a href="#addSpecialityForm"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>FormGroup</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new FormGroup({})</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="22" class="link-to-prism">src/app/profile/public-profile-professional/public-profile-professional.component.ts:22</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="averageStars"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>averageStars</b></span>
+                        <a href="#averageStars"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>0</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="36" class="link-to-prism">src/app/profile/public-profile-professional/public-profile-professional.component.ts:36</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="editSpecialityForm"></a>
+                    <span class="name">
+                        <span ><b>editSpecialityForm</b></span>
+                        <a href="#editSpecialityForm"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>FormGroup</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new FormGroup({})</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="23" class="link-to-prism">src/app/profile/public-profile-professional/public-profile-professional.component.ts:23</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="errorMessages"></a>
+                    <span class="name">
+                        <span ><b>errorMessages</b></span>
+                        <a href="#errorMessages"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>string[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="29" class="link-to-prism">src/app/profile/public-profile-professional/public-profile-professional.component.ts:29</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isPatient"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>isPatient</b></span>
+                        <a href="#isPatient"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="38" class="link-to-prism">src/app/profile/public-profile-professional/public-profile-professional.component.ts:38</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="pdfList"></a>
+                    <span class="name">
+                        <span ><b>pdfList</b></span>
+                        <a href="#pdfList"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/Certificate.html" target="_self" >Certificate[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="37" class="link-to-prism">src/app/profile/public-profile-professional/public-profile-professional.component.ts:37</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="professionalId"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>professionalId</b></span>
+                        <a href="#professionalId"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>string | undefined</code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="39" class="link-to-prism">src/app/profile/public-profile-professional/public-profile-professional.component.ts:39</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="profileImagePath"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>profileImagePath</b></span>
+                        <a href="#profileImagePath"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&quot;/assets/images/Perfil/profileImage.jpg&quot;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="33" class="link-to-prism">src/app/profile/public-profile-professional/public-profile-professional.component.ts:33</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="radioStar1"></a>
+                    <span class="name">
+                        <span ><b>radioStar1</b></span>
+                        <a href="#radioStar1"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="40" class="link-to-prism">src/app/profile/public-profile-professional/public-profile-professional.component.ts:40</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="radioStar2"></a>
+                    <span class="name">
+                        <span ><b>radioStar2</b></span>
+                        <a href="#radioStar2"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="41" class="link-to-prism">src/app/profile/public-profile-professional/public-profile-professional.component.ts:41</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="radioStar3"></a>
+                    <span class="name">
+                        <span ><b>radioStar3</b></span>
+                        <a href="#radioStar3"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="42" class="link-to-prism">src/app/profile/public-profile-professional/public-profile-professional.component.ts:42</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="radioStar4"></a>
+                    <span class="name">
+                        <span ><b>radioStar4</b></span>
+                        <a href="#radioStar4"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="43" class="link-to-prism">src/app/profile/public-profile-professional/public-profile-professional.component.ts:43</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="radioStar5"></a>
+                    <span class="name">
+                        <span ><b>radioStar5</b></span>
+                        <a href="#radioStar5"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="44" class="link-to-prism">src/app/profile/public-profile-professional/public-profile-professional.component.ts:44</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="reviews"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>reviews</b></span>
+                        <a href="#reviews"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/Review.html" target="_self" >Review[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/app/profile/public-profile-professional/public-profile-professional.component.ts:35</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="selectEditService"></a>
+                    <span class="name">
+                        <span ><b>selectEditService</b></span>
+                        <a href="#selectEditService"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>Service | undefined</code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="28" class="link-to-prism">src/app/profile/public-profile-professional/public-profile-professional.component.ts:28</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="selectedSpecialtyReview"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>selectedSpecialtyReview</b></span>
+                        <a href="#selectedSpecialtyReview"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>0</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="34" class="link-to-prism">src/app/profile/public-profile-professional/public-profile-professional.component.ts:34</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="specialties"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>specialties</b></span>
+                        <a href="#specialties"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/Specialty.html" target="_self" >Specialty[] | undefined</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="32" class="link-to-prism">src/app/profile/public-profile-professional/public-profile-professional.component.ts:32</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="submittedAdd"></a>
+                    <span class="name">
+                        <span ><b>submittedAdd</b></span>
+                        <a href="#submittedAdd"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="25" class="link-to-prism">src/app/profile/public-profile-professional/public-profile-professional.component.ts:25</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="submittedDescription"></a>
+                    <span class="name">
+                        <span ><b>submittedDescription</b></span>
+                        <a href="#submittedDescription"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="27" class="link-to-prism">src/app/profile/public-profile-professional/public-profile-professional.component.ts:27</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="submittedEdit"></a>
+                    <span class="name">
+                        <span ><b>submittedEdit</b></span>
+                        <a href="#submittedEdit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="26" class="link-to-prism">src/app/profile/public-profile-professional/public-profile-professional.component.ts:26</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="unsubscribe$"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>unsubscribe$</b></span>
+                        <a href="#unsubscribe$"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new Subject&lt;void&gt;()</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="21" class="link-to-prism">src/app/profile/public-profile-professional/public-profile-professional.component.ts:21</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateDescriptionForm"></a>
+                    <span class="name">
+                        <span ><b>updateDescriptionForm</b></span>
+                        <a href="#updateDescriptionForm"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>FormGroup</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new FormGroup({})</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="24" class="link-to-prism">src/app/profile/public-profile-professional/public-profile-professional.component.ts:24</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="userData"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>userData</b></span>
+                        <a href="#userData"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/Professional.html" target="_self" >Professional | undefined</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="31" class="link-to-prism">src/app/profile/public-profile-professional/public-profile-professional.component.ts:31</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, ElementRef, OnInit, ViewChild } from &#x27;@angular/core&#x27;;
+import { FormBuilder, FormGroup, Validators } from &#x27;@angular/forms&#x27;;
+import { Subject, take, takeUntil } from &#x27;rxjs&#x27;;
+import { Service } from &#x27;../../shared/models/profile/service&#x27;;
+import { Professional } from &#x27;../../shared/models/profile/professional&#x27;;
+import { Specialty } from &#x27;../../shared/models/profile/specialty&#x27;;
+import { Review } from &#x27;../../shared/models/profile/review&#x27;;
+import { Certificate } from &#x27;../../shared/models/profile/certificate&#x27;;
+import { AuthenticationService } from &#x27;../../authentication/authentication.service&#x27;;
+import { ProfileService } from &#x27;../profile.service&#x27;;
+import { ActivatedRoute, Router } from &#x27;@angular/router&#x27;;
+import { User } from &#x27;../../shared/models/authentication/user&#x27;;
+
+@Component({
+  selector: &#x27;app-public-profile-professional&#x27;,
+  templateUrl: &#x27;./public-profile-professional.component.html&#x27;,
+  styleUrl: &#x27;./public-profile-professional.component.css&#x27;
+})
+
+export class PublicProfileProfessionalComponent implements OnInit {
+  private unsubscribe$ &#x3D; new Subject&lt;void&gt;();
+  addSpecialityForm: FormGroup &#x3D; new FormGroup({});
+  editSpecialityForm: FormGroup &#x3D; new FormGroup({});
+  updateDescriptionForm: FormGroup &#x3D; new FormGroup({});
+  submittedAdd &#x3D; false;
+  submittedEdit &#x3D; false;
+  submittedDescription &#x3D; false;
+  selectEditService: Service | undefined;
+  errorMessages: string[] &#x3D; [];
+  /*responseText: string | undefined;*/
+  public userData: Professional | undefined;
+  public specialties: Specialty[] | undefined;
+  public profileImagePath &#x3D; &quot;/assets/images/Perfil/profileImage.jpg&quot;;
+  public selectedSpecialtyReview &#x3D; 0;
+  public reviews: Review[] &#x3D; [];
+  public averageStars &#x3D; 0;
+  pdfList: Certificate[] &#x3D; [];
+  public isPatient &#x3D; false;
+  public professionalId: string | undefined;
+  radioStar1 &#x3D; false;
+  radioStar2 &#x3D; false;
+  radioStar3 &#x3D; false;
+  radioStar4 &#x3D; false;
+  radioStar5 &#x3D; false;
+
+  constructor(private authenticationService: AuthenticationService,
+    private formBuilder: FormBuilder,
+    private profileService: ProfileService,
+    private router: Router,
+    private activateRoute: ActivatedRoute) {
+    this.authenticationService.user$.pipe(take(1)).subscribe({
+      next: (user: User | null) &#x3D;&gt; {
+        if (!user) {
+          this.router.navigateByUrl(&#x27;/&#x27;);
+        }
+        else {
+          const decodedToken &#x3D; this.profileService.getDecodedToken();
+
+          if (decodedToken) {
+            if (decodedToken.role &#x3D;&#x3D;&#x3D; &quot;Patient&quot;) {
+              this.isPatient &#x3D; true;
+            }
+          }
+        }
+      }
+    });
+  }
+  ngOnInit(): void {
+    this.activateRoute.queryParamMap.subscribe({
+      next: (params: any) &#x3D;&gt; {
+        const id &#x3D; params.get(&#x27;id&#x27;);
+
+        if (id) {
+          this.professionalId &#x3D; id;
+
+          this.initializeForm();
+          this.getProfessionalInfo(id).then(() &#x3D;&gt; {
+            this.setUserFields();
+            this.changeSpecialtyReview(&quot;0&quot;);
+            this.getPdfs();
+          });
+
+        }
+        else {
+          this.router.navigateByUrl(&#x27;/error&#x27;);
+        }
+      }
+    });
+  }
+
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
+  checkInput(value: number): void {
+
+
+    switch (value) {
+      case 1:
+        this.radioStar1 &#x3D; true;
+        this.radioStar2 &#x3D; false;
+        this.radioStar3 &#x3D; false;
+        this.radioStar4 &#x3D; false;
+        this.radioStar5 &#x3D; false;
+        break;
+      case 2:
+        this.radioStar1 &#x3D; true;
+        this.radioStar2 &#x3D; true;
+        this.radioStar3 &#x3D; false;
+        this.radioStar4 &#x3D; false;
+        this.radioStar5 &#x3D; false;
+        break;
+      case 3:
+        this.radioStar1 &#x3D; true;
+        this.radioStar2 &#x3D; true;
+        this.radioStar3 &#x3D; true;
+        this.radioStar4 &#x3D; false;
+        this.radioStar5 &#x3D; false;
+        break;
+      case 4:
+        this.radioStar1 &#x3D; true;
+        this.radioStar2 &#x3D; true;
+        this.radioStar3 &#x3D; true;
+        this.radioStar4 &#x3D; true;
+        this.radioStar5 &#x3D; false;
+        break;
+      case 5:
+        this.radioStar1 &#x3D; true;
+        this.radioStar2 &#x3D; true;
+        this.radioStar3 &#x3D; true;
+        this.radioStar4 &#x3D; true;
+        this.radioStar5 &#x3D; true;
+        break;
+    }
+  }
+
+  initializeForm() {
+
+    this.addSpecialityForm &#x3D; this.formBuilder.group({
+      selectSpeciality: [&#x27;Selecione uma especialidade&#x27;, [Validators.required]],
+      rating: [&#x27;&#x27;, [Validators.required]],
+      description: [&#x27;&#x27;, [Validators.maxLength(200)]]
+    });
+
+    this.editSpecialityForm &#x3D; this.formBuilder.group({
+      price: [&#x27;&#x27;, [Validators.required, Validators.min(1), Validators.max(1000)]],
+      presencial: [&#x27;&#x27;, [Validators.required]],
+      online: [&#x27;&#x27;, [Validators.required]],
+      domicilio: [&#x27;&#x27;, [Validators.required]]
+    });
+
+    this.updateDescriptionForm &#x3D; this.formBuilder.group({
+      description: [&#x27;&#x27;, [Validators.maxLength(200)]],
+    });
+  }
+
+  getProfessionalInfo(id: string): Promise&lt;void&gt; {
+    return new Promise&lt;void&gt;((resolve, reject) &#x3D;&gt; {
+      this.profileService.getProfessionalInfoById(id).pipe(takeUntil(this.unsubscribe$)).subscribe(
+        (userData: Professional) &#x3D;&gt; {
+          this.userData &#x3D; userData;
+          console.log(userData);
+          resolve();
+        },
+        error &#x3D;&gt; {
+          reject(error);
+        }
+      );
+    });
+  }
+
+  /*getSpecialties() {
+
+    if (this.professionalId) {
+      this.profileService.getServicesByProfessionalId(this.professionalId).pipe(takeUntil(this.unsubscribe$)).subscribe(
+        (specialties: Specialty[]) &#x3D;&gt; {
+          console.log(specialties);
+          this.specialties &#x3D; specialties;
+        },
+        error &#x3D;&gt; {
+          console.log(error);
+          this.errorMessages.push(&#x27;Erro ao carregar os serviços.&#x27;);
+        }
+      );
+    }
+  }*/
+
+  setUserFields() {
+    const nomeElement &#x3D; document.getElementById(&#x27;nome&#x27;);
+    const emailElement &#x3D; document.getElementById(&#x27;email&#x27;);
+
+    if (nomeElement &amp;&amp; emailElement &amp;&amp; this.userData &amp;&amp; this.userData.professionalInfo) {
+      const { firstName, lastName, email, picture } &#x3D; this.userData.professionalInfo;
+
+      if (firstName &amp;&amp; lastName) {
+        nomeElement.textContent &#x3D; firstName + &#x27; &#x27; + lastName;
+      }
+
+      if (email) {
+        emailElement.textContent &#x3D; email;
+      }
+
+      if (picture) {
+        this.profileImagePath &#x3D; picture;
+      }
+    }
+  }
+
+  appointmentTypesToString(service: Service): string {
+    const types: string[] &#x3D; [];
+
+    if (service.presential) {
+      types.push(&quot;Presencial&quot;);
+    }
+    if (service.online) {
+      types.push(&quot;Online&quot;);
+    }
+    if (service.home) {
+      types.push(&quot;Domicílio&quot;);
+    }
+
+    if (types.length &#x3D;&#x3D; 0)
+      return &quot;Nenhum&quot;;
+
+    return types.join(&quot;, &quot;);
+  }
+
+  onFileSelected(event: any) {
+    const file &#x3D; event.target.files[0];
+
+    // Check if the file is a PDF
+    if (file.type &#x3D;&#x3D;&#x3D; &#x27;application/pdf&#x27; || file.name.toLowerCase().endsWith(&#x27;.pdf&#x27;)) {
+      this.profileService.uploadPdf(file).subscribe(
+        response &#x3D;&gt; {
+          console.log(&#x27;PDF uploaded successfully.&#x27;);
+          this.getPdfs();
+
+          if (response &amp;&amp; response.pdfUrl) {
+            this.openPdf(response.pdfUrl);
+          }
+        },
+        error &#x3D;&gt; {
+          this.errorMessages.push(&#x27;Erro ao dar upload do ficheiro.&#x27;);
+        }
+      );
+    } else {
+      this.errorMessages.push(&#x27;Ficheiro não é um pdf.&#x27;);
+    }
+  }
+  getPdfs() {
+    if (this.professionalId)
+    this.profileService.getPdfsById(this.professionalId).subscribe(
+      pdfs &#x3D;&gt; {
+        this.pdfList &#x3D; pdfs;
+      },
+      error &#x3D;&gt; {
+        console.error(&#x27;Error getting PDFs:&#x27;, error);
+        // Handle error appropriately (e.g., show error message)
+      }
+    );
+  }
+
+  deletePdf(certificateId: number) {
+    this.profileService.deletePdf(certificateId).subscribe(
+      response &#x3D;&gt; {
+        console.log(&#x27;PDF deleted successfully.&#x27;);
+        this.getPdfs(); // Refresh the PDF list after deletion
+      },
+      error &#x3D;&gt; {
+        this.errorMessages.push(&#x27;Erro ao apagar o ficheiro.&#x27;);
+        // Handle error appropriately (e.g., show error message)
+      }
+    );
+  }
+
+  openPdf(pdfFilename: string): void {
+    this.profileService.downloadPdf(pdfFilename).subscribe(
+      (blob: Blob) &#x3D;&gt; {
+        const url &#x3D; window.URL.createObjectURL(blob);
+
+        window.open(url);
+
+        setTimeout(() &#x3D;&gt; {
+          window.URL.revokeObjectURL(url);
+        }, 1000);
+      },
+      error &#x3D;&gt; {
+        console.error(&#x27;Error downloading PDF:&#x27;, error);
+      }
+    );
+  }
+
+  showCheckAnimation() {
+    const checkmark &#x3D; document.querySelector(&#x27;.container-animation&#x27;);
+
+    if (checkmark instanceof HTMLElement) {
+      checkmark.style.display &#x3D; &#x27;flex&#x27;;
+    }
+  }
+
+  hideCheckAnimation() {
+
+    const checkmark &#x3D; document.querySelector(&#x27;.container-animation&#x27;);
+
+    if (checkmark instanceof HTMLElement) {
+      checkmark.style.display &#x3D; &#x27;none&#x27;;
+    }
+
+    const check &#x3D; document.getElementById(&#x27;check&#x27;);
+
+    if (check) {
+      check.click();
+    }
+
+  }
+
+  errorHideCheckAnimation() {
+    const checkmark &#x3D; document.querySelector(&#x27;.container-animation&#x27;);
+
+    if (checkmark instanceof HTMLElement) {
+      checkmark.style.display &#x3D; &#x27;none&#x27;;
+    }
+  }
+
+  addSpeciality() {
+    this.submittedAdd &#x3D; true;
+    this.errorMessages &#x3D; [];
+    /*this.responseText &#x3D; &#x27;&#x27;;*/
+
+    if (this.addSpecialityForm.valid) {
+
+      const form &#x3D; this.addSpecialityForm.value;
+
+      //generate the code fo get the serviceId of the the service from userData.services that has the same specialtyId as form.selectSpeciality
+      var serviceId: number | null &#x3D; null;
+      if (this.userData &amp;&amp; this.userData.services) {
+        this.userData.services.forEach((service) &#x3D;&gt; {
+          if (service.specialtyId &#x3D;&#x3D; form.selectSpeciality) {
+            serviceId &#x3D; service.serviceId;
+          }
+        });
+      }
+
+      if (serviceId) {
+        var newReview &#x3D; {
+          idService: serviceId,
+          idSpecialty: form.selectSpeciality,
+          stars: form.rating,
+          description: form.description,
+        }
+        console.log(newReview);
+        this.profileService.addReview(newReview).subscribe({
+          next: (response: any) &#x3D;&gt; {
+            /*this.responseText &#x3D; response.value.message;*/
+            console.log(newReview);
+            this.submittedAdd &#x3D; false;
+            if (this.professionalId)
+              this.getProfessionalInfo(this.professionalId);
+
+            this.changeSpecialtyReview(this.selectedSpecialtyReview.toString());
+            this.addSpecialityForm.reset();
+            this.closePopup();
+          },
+          error: (error) &#x3D;&gt; {
+            if (error.error.errors) {
+              this.errorMessages &#x3D; error.error.errors;
+            } else {
+              this.errorMessages.push(error.error);
+            }
+          }
+        })
+      }
+      else {
+        this.errorMessages.push(&quot;Algo correu mal!&quot;);
+      }
+    }
+  }
+
+  editSpeciality() {
+    this.submittedEdit &#x3D; true;
+    this.errorMessages &#x3D; [];
+    /*this.responseText &#x3D; &#x27;&#x27;;*/
+
+    if (this.editSpecialityForm.valid) {
+
+      const form &#x3D; this.editSpecialityForm.value;
+
+      if (this.selectEditService) {
+        var specialtyform &#x3D; {
+          serviceId: this.selectEditService.serviceId,
+          specialtyId: this.selectEditService.specialtyId,
+          specialty: this.selectEditService.specialty,
+          pricePerHour: form.price,
+          online: (form.online &#x3D;&#x3D;&#x3D; &quot;S&quot;) ? true : false,
+          presential: (form.presencial &#x3D;&#x3D;&#x3D; &quot;S&quot;) ? true : false,
+          home: (form.domicilio &#x3D;&#x3D;&#x3D; &quot;S&quot;) ? true : false,
+        }
+
+        this.profileService.updateSpecialty(specialtyform).subscribe({
+          next: (response: any) &#x3D;&gt; {
+            /*this.responseText &#x3D; response.value.message;*/
+            this.submittedEdit &#x3D; false;
+            this.editSpecialityForm.reset();
+            this.closePopup();
+          },
+          error: (error) &#x3D;&gt; {
+            if (error.error.errors) {
+              this.errorMessages &#x3D; error.error.errors;
+            } else {
+              this.errorMessages.push(error.error);
+            }
+          }
+        })
+      }
+    }
+  }
+
+  showSpecialtyEdit(service: Service) {
+
+    this.selectEditService &#x3D; service;
+
+    this.openPopup(&#x27;edit&#x27;);
+
+    this.setEditFormFields();
+  }
+
+  setEditFormFields() {
+
+    const nome &#x3D; document.getElementById(&#x27;speciality-name&#x27;);
+
+    if (nome &amp;&amp; this.selectEditService) {
+      nome.textContent &#x3D; this.selectEditService.specialty;
+    }
+
+    if (this.selectEditService) {
+      this.editSpecialityForm.setValue({
+        price: this.selectEditService?.pricePerHour,
+        presencial: (this.selectEditService?.presential &#x3D;&#x3D; true) ? &quot;S&quot; : &quot;N&quot;,
+        online: (this.selectEditService?.online &#x3D;&#x3D; true) ? &quot;S&quot; : &quot;N&quot;,
+        domicilio: (this.selectEditService?.home &#x3D;&#x3D; true) ? &quot;S&quot; : &quot;N&quot;
+      });
+    }
+  }
+
+
+
+
+  /*--------------------------------------------------------------------------------*/
+
+
+
+  /*-------------------------------------- Reviews ---------------------------------*/
+
+
+
+
+
+  selectReviewEventReceiver(event: Event) {
+    const target &#x3D; event.target as HTMLSelectElement;
+    if (target) {
+      const value &#x3D; target.value;
+
+      this.changeSpecialtyReview(value);
+    }
+  }
+
+  changeSpecialtyReview(value: string) {
+
+    const selectedValue &#x3D; parseInt(value);
+
+    if (!isNaN(selectedValue)) {
+
+      this.selectedSpecialtyReview &#x3D; selectedValue;
+
+      this.filterReviews(this.selectedSpecialtyReview);
+
+      /*const reviewSelect &#x3D; document.getElementById(&#x27;select-review&#x27;) as HTMLSelectElement | null;
+
+      if (reviewSelect) {
+        reviewSelect.value &#x3D; String(this.selectedSpecialtyReview);
+      }*/
+
+    } else {
+      this.errorMessages.push(&quot;Erro ao carregar reviews.&quot;);
+    }
+  }
+
+  filterReviews(serviceId: number) {
+
+    if (this.professionalId) {
+      this.profileService.filterReviewsByServiceById(serviceId, this.professionalId).subscribe({
+        next: (reviews: Review[]) &#x3D;&gt; {
+          this.reviews &#x3D; reviews;
+          this.getAverageStars();
+        },
+        error: (error) &#x3D;&gt; {
+          if (error.error.errors) {
+            this.errorMessages &#x3D; error.error.errors;
+          } else {
+            this.errorMessages.push(error.error);
+          }
+        }
+      });
+    }
+    else {
+      this.errorMessages.push(&quot;Erro ao carregar reviews.&quot;);
+    }
+  }
+
+  private getAverageStars() {
+    var sum &#x3D; 0;
+    for (let i &#x3D; 0; i &lt; this.reviews.length; i++) {
+      sum +&#x3D; this.reviews[i].stars;
+    }
+    this.averageStars &#x3D; sum / this.reviews.length;
+  }
+
+  /* ------------------------  Popups  -------------------------*/
+
+
+
+
+  openPopup(opcao: string) {
+    const overlay &#x3D; document.getElementById(&#x27;overlay&#x27;);
+    const add &#x3D; document.getElementById(&#x27;add-speciality-container&#x27;);
+    const edit &#x3D; document.getElementById(&#x27;edit-speciality-container&#x27;);
+
+    if (edit) {
+      edit.style.display &#x3D; &quot;none&quot;;
+    }
+    if (add) {
+      add.style.display &#x3D; &quot;none&quot;;
+    }
+
+    if (overlay) {
+      overlay.style.display &#x3D; &#x27;flex&#x27;;
+      if (opcao &#x3D;&#x3D; &quot;add&quot;) {
+        if (add) {
+          add.style.display &#x3D; &quot;block&quot;;
+        }
+      }
+      else if (opcao &#x3D;&#x3D; &quot;edit&quot;) {
+        if (edit) {
+          edit.style.display &#x3D; &quot;block&quot;;
+        }
+      }
+    }
+  }
+
+  closePopup() {
+    const overlay &#x3D; document.getElementById(&#x27;overlay&#x27;);
+    const add &#x3D; document.getElementById(&#x27;add-speciality-container&#x27;);
+    const edit &#x3D; document.getElementById(&#x27;edit-speciality-container&#x27;);
+
+    if (overlay) {
+      overlay.style.display &#x3D; &#x27;none&#x27;;
+      if (edit) {
+        edit.style.display &#x3D; &quot;none&quot;;
+      }
+      if (add) {
+        add.style.display &#x3D; &quot;none&quot;;
+      }
+    }
+  }
+
+  stopPropagation(event: Event) {
+    event.stopPropagation();
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;main&gt;
+
+  &lt;section class&#x3D;&quot;form-row&quot;&gt;
+
+    &lt;div id&#x3D;&quot;button&quot; *ngIf&#x3D;&quot;(isPatient)&quot;&gt;
+      &lt;button style&#x3D;&quot;display: none;&quot; class&#x3D;&quot;top-right-btn btn-red&quot;&gt;Reportar&lt;/button&gt;
+    &lt;/div&gt;
+
+    &lt;figure&gt;
+      &lt;img class&#x3D;&quot;image&quot; alt&#x3D;&quot;Imagem de Perfil&quot; [src]&#x3D;&quot;profileImagePath&quot; /&gt;
+    &lt;/figure&gt;
+
+    &lt;div class&#x3D;&quot;top-center-row&quot;&gt;
+      &lt;div class&#x3D;&quot;top-center-row-container&quot;&gt;
+        &lt;div class&#x3D;&quot;top-center-row-text&quot; id&#x3D;&quot;nome&quot;&gt;&lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class&#x3D;&quot;top-center-row-container&quot; id&#x3D;&quot;top-center-row-container-right&quot;&gt;
+        &lt;img class&#x3D;&quot;email-img&quot; src&#x3D;&quot;/assets/images/Perfil/open-mail.png&quot; /&gt;
+        &lt;div class&#x3D;&quot;top-center-row-text&quot; id&#x3D;&quot;email&quot;&gt;&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+  &lt;/section&gt;
+
+  &lt;div class&#x3D;&quot;left-align-row&quot;&gt;
+    &lt;h2&gt;Especialidades&lt;/h2&gt;
+  &lt;/div&gt;
+
+  &lt;table&gt;
+    &lt;thead&gt;
+      &lt;tr&gt;
+        &lt;th&gt;Especialidade&lt;/th&gt;
+        &lt;th&gt;Preço por Hora&lt;/th&gt;
+        &lt;th&gt;Tipos de Consultas&lt;/th&gt;
+        &lt;th *ngIf&#x3D;&quot;(isPatient)&quot;&gt;&lt;/th&gt;
+      &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody *ngIf&#x3D;&quot;(userData &amp;&amp; (userData.services.length &gt; 0))&quot;&gt;
+      &lt;tr *ngFor&#x3D;&quot;let service of userData.services&quot;&gt;
+        &lt;td&gt;{{ service.specialty }}&lt;/td&gt;
+        &lt;td&gt;{{ service.pricePerHour | currency:&#x27;EUR&#x27; }}&lt;/td&gt;
+        &lt;td&gt;{{ appointmentTypesToString(service) }}&lt;/td&gt;
+        &lt;td *ngIf&#x3D;&quot;(isPatient)&quot;&gt;
+          &lt;div class&#x3D;&quot;buttons-container&quot;&gt;
+            &lt;button class&#x3D;&quot;btn btn-blue&quot;&gt;Marcar&lt;/button&gt;
+          &lt;/div&gt;
+        &lt;/td&gt;
+      &lt;/tr&gt;
+
+    &lt;/tbody&gt;
+    &lt;tbody *ngIf&#x3D;&quot;!(userData &amp;&amp; (userData.services.length &gt; 0))&quot;&gt;
+      &lt;tr&gt;
+        &lt;td colspan&#x3D;&quot;4&quot; class&#x3D;&quot;specialities-not-found-placeholder&quot;&gt;Não tem especialidades associadas.&lt;/td&gt;
+      &lt;/tr&gt;
+    &lt;/tbody&gt;
+  &lt;/table&gt;
+
+  &lt;div class&#x3D;&quot;left-align-row&quot;&gt;
+    &lt;h2&gt;Descrição&lt;/h2&gt;
+  &lt;/div&gt;
+
+  &lt;div class&#x3D;&quot;description-text&quot;&gt;
+    &lt;p class&#x3D;&quot;pre-wrap-text&quot; *ngIf&#x3D;&quot;(userData &amp;&amp; userData.description &amp;&amp; userData.description.length &gt; 0)&quot;&gt;
+      {{ userData.description }}
+    &lt;/p&gt;
+    &lt;p *ngIf&#x3D;&quot;!(userData &amp;&amp; userData.description  &amp;&amp; userData.description.length &gt; 0)&quot;&gt;
+      Este profissional ainda não tem uma descrição.
+    &lt;/p&gt;
+
+  &lt;/div&gt;
+
+  &lt;!--&lt;form [formGroup]&#x3D;&quot;updateDescriptionForm&quot; id&#x3D;&quot;update-description-form&quot; autocomplete&#x3D;&quot;off&quot; (ngSubmit)&#x3D;&quot;updateDescription()&quot;&gt;
+    &lt;div class&#x3D;&quot;description-container&quot;&gt;
+      &lt;textarea formControlName&#x3D;&quot;description&quot; id&#x3D;&quot;description&quot; name&#x3D;&quot;description&quot; placeholder&#x3D;&quot;Insira a sua descrição...&quot;
+                [class.is-invalid]&#x3D;&quot;submittedDescription &amp;&amp; updateDescriptionForm.get(&#x27;description&#x27;)?.errors&quot;&gt;&lt;/textarea&gt;
+      &lt;div class&#x3D;&quot;container-animation&quot;&gt;
+        &lt;input class&#x3D;&quot;input-check-animation&quot; type&#x3D;&quot;checkbox&quot; id&#x3D;&quot;check&quot;&gt;
+        &lt;label class&#x3D;&quot;label-check-animation&quot; for&#x3D;&quot;check&quot;&gt;
+          &lt;div class&#x3D;&quot;check-icon&quot;&gt;&lt;/div&gt;
+        &lt;/label&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;span class&#x3D;&quot;text-danger&quot; *ngIf&#x3D;&quot;submittedDescription &amp;&amp; updateDescriptionForm.get(&#x27;description&#x27;)?.hasError(&#x27;maxLength&#x27;)&quot;&gt;
+      A descrição deve ter menos de 500 caracteres.
+    &lt;/span&gt;
+    &lt;div class&#x3D;&quot;right-align-row&quot;&gt;
+      &lt;button type&#x3D;&quot;submit&quot; class&#x3D;&quot;btn btn-blue&quot;&gt;Atualizar&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/form&gt;--&gt;
+
+  &lt;div class&#x3D;&quot;left-align-row&quot;&gt;
+    &lt;h2&gt;Certificados&lt;/h2&gt;
+  &lt;/div&gt;
+
+  &lt;div id&#x3D;&quot;certificates-container&quot;&gt;
+    &lt;!--&lt;div id&#x3D;&quot;add-single-container&quot;&gt;
+      &lt;button id&#x3D;&quot;add-button&quot; (click)&#x3D;&quot;fileInput.click()&quot;&gt;
+        &lt;img src&#x3D;&quot;assets/images/profile/add.png&quot; alt&#x3D;&quot;Adicionar Certificado&quot;&gt;
+      &lt;/button&gt;
+      &lt;input #fileInput type&#x3D;&quot;file&quot; style&#x3D;&quot;display: none;&quot; (change)&#x3D;&quot;onFileSelected($event)&quot; accept&#x3D;&quot;.pdf&quot;&gt;
+    &lt;/div&gt;--&gt;
+    &lt;div class&#x3D;&quot;single-container&quot; *ngFor&#x3D;&quot;let pdf of pdfList&quot;&gt;
+      &lt;button type&#x3D;&quot;button&quot; class&#x3D;&quot;pdf-image-btn&quot; (click)&#x3D;&quot;openPdf(pdf.path)&quot;&gt;
+        &lt;img src&#x3D;&quot;assets/images/profile/pdf.png&quot; /&gt;
+      &lt;/button&gt;
+      &lt;div class&#x3D;&quot;pdf-label&quot;&gt;
+        &lt;abbr class&#x3D;&quot;abbr-pdf-label&quot; (click)&#x3D;&quot;openPdf(pdf.path)&quot; title&#x3D;&quot;{{pdf.name}}&quot;&gt;{{pdf.name}}&lt;/abbr&gt;
+      &lt;/div&gt;
+      &lt;!--&lt;div class&#x3D;&quot;align-right-container&quot;&gt;
+        &lt;button class&#x3D;&quot;delete-button&quot; (click)&#x3D;&quot;deletePdf(pdf.certificateId)&quot;&gt;
+          &lt;img src&#x3D;&quot;assets/images/profile/bin.png&quot; alt&#x3D;&quot;Delete&quot;&gt;
+        &lt;/button&gt;
+      &lt;/div&gt;--&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+
+  &lt;div class&#x3D;&quot;display-row&quot;&gt;
+    &lt;h2&gt;Reviews&lt;/h2&gt;
+    &lt;button class&#x3D;&quot;btn btn-blue&quot; id&#x3D;&quot;add-review-btn&quot; (click)&#x3D;&quot;openPopup(&#x27;add&#x27;)&quot; *ngIf&#x3D;&quot;(isPatient &amp;&amp; userData &amp;&amp; userData.services &amp;&amp; (userData.services.length &gt; 0))&quot;&gt;Adicionar Review&lt;/button&gt;
+  &lt;/div&gt;
+
+  &lt;div class&#x3D;&quot;no-review&quot; *ngIf&#x3D;&quot;!(userData &amp;&amp; userData.reviews.length &gt; 0)&quot;&gt;
+    O profissional ainda não tem nenhuma review.
+  &lt;/div&gt;
+
+  &lt;div *ngIf&#x3D;&quot;(userData &amp;&amp; userData.reviews &amp;&amp; userData.reviews.length &gt; 0)&quot;&gt;
+    &lt;div class&#x3D;&quot;review-top-row reviews-info&quot;&gt;
+      &lt;div class&#x3D;&quot;display-row&quot;&gt;
+        &lt;b class&#x3D;&quot;small-right-margin&quot;&gt;Filtrar:&lt;/b&gt;
+        &lt;div class&#x3D;&quot;select-dropdown&quot;&gt;
+          &lt;select id&#x3D;&quot;select-review&quot; (change)&#x3D;&quot;selectReviewEventReceiver($event)&quot; *ngIf&#x3D;&quot;(userData &amp;&amp; userData.services &amp;&amp; (userData.services.length &gt; 0))&quot;&gt;
+            &lt;option value&#x3D;&quot;0&quot;&gt;Tudo&lt;/option&gt;
+            &lt;option *ngFor&#x3D;&quot;let service of userData.services&quot; value&#x3D;&quot;{{ service.specialtyId }}&quot;&gt;{{ service.specialty }}&lt;/option&gt;
+          &lt;/select&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div *ngIf&#x3D;&quot;(reviews &amp;&amp; reviews.length &gt; 0)&quot;&gt;
+      &lt;div class&#x3D;&quot;left-align-row reviews-info&quot;&gt;
+        &lt;b class&#x3D;&quot;small-right-margin&quot;&gt;Classificação média:&lt;/b&gt;
+        &lt;span class&#x3D;&quot;small-right-margin&quot;&gt;{{ averageStars.toFixed(1).replace(&#x27;.&#x27;, &#x27;,&#x27;) }}&lt;/span&gt;
+        &lt;img src&#x3D;&quot;assets/images/profile/star.png&quot; alt&#x3D;&quot;Estrela&quot; class&#x3D;&quot;star&quot;&gt;
+      &lt;/div&gt;
+
+      &lt;div class&#x3D;&quot;review-container&quot; *ngFor&#x3D;&quot;let review of this.reviews&quot;&gt;
+        &lt;hr&gt;
+        &lt;div class&#x3D;&quot;review-top-row&quot;&gt;
+          &lt;div class&#x3D;&quot;left-review-top-row&quot;&gt;
+            &lt;div class&#x3D;&quot;review-image small-right-margin&quot;&gt;
+              &lt;img src&#x3D;&quot;{{ review.patientPicture }}&quot; alt&#x3D;&quot;Imagem de perfil&quot; class&#x3D;&quot;review-image small-right-margin&quot;&gt;
+            &lt;/div&gt;
+            &lt;b class&#x3D;&quot;small-right-margin&quot;&gt;{{ review.patientName }}&lt;/b&gt;
+            &lt;span class&#x3D;&quot;small-right-margin&quot;&gt;{{ review.stars }}&lt;/span&gt;
+            &lt;img src&#x3D;&quot;assets/images/profile/star.png&quot; alt&#x3D;&quot;Estrela&quot; class&#x3D;&quot;star&quot;&gt;
+          &lt;/div&gt;
+          &lt;div class&#x3D;&quot;right-review-top-row&quot;&gt;
+            &lt;b&gt;{{ review.serviceName }}&lt;/b&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class&#x3D;&quot;comment&quot;&gt;{{ review.description }}&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class&#x3D;&quot;no-review&quot; *ngIf&#x3D;&quot;!(reviews &amp;&amp; reviews.length &gt; 0)&quot;&gt;
+      Esta especialidade ainda não tem nenhuma review.
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div class&#x3D;&quot;overlay&quot; id&#x3D;&quot;overlay&quot; (click)&#x3D;&quot;closePopup()&quot;&gt;
+    &lt;a class&#x3D;&quot;close-button&quot; (click)&#x3D;&quot;closePopup()&quot;&gt;
+      &lt;img src&#x3D;&quot;assets/images/login/close.png&quot; alt&#x3D;&quot;Close button&quot; class&#x3D;&quot;close-image&quot;&gt;
+    &lt;/a&gt;
+    &lt;form [formGroup]&#x3D;&quot;addSpecialityForm&quot; (ngSubmit)&#x3D;&quot;addSpeciality()&quot; id&#x3D;&quot;add-speciality-container&quot; class&#x3D;&quot;overlay-container&quot; autocomplete&#x3D;&quot;off&quot; (click)&#x3D;&quot;stopPropagation($event)&quot;&gt;
+
+      &lt;h2&gt;Adicionar Review&lt;/h2&gt;
+
+      &lt;div class&#x3D;&quot;speciality-form-box&quot;&gt;
+        &lt;label for&#x3D;&quot;add-speciality-select&quot;&gt;Selecionar Especialidade&lt;/label&gt;
+        &lt;div class&#x3D;&quot;select-dropdown&quot; id&#x3D;&quot;speciality-select-div&quot; [class.is-invalid]&#x3D;&quot;submittedAdd &amp;&amp; addSpecialityForm.get(&#x27;selectSpeciality&#x27;)?.errors&quot;&gt;
+          &lt;select formControlName&#x3D;&quot;selectSpeciality&quot; id&#x3D;&quot;add-speciality-select&quot; required *ngIf&#x3D;&quot;(userData &amp;&amp; userData.services &amp;&amp; (userData.services.length &gt; 0))&quot;&gt;
+            &lt;option hidden disable&gt;Selecione uma especialidade&lt;/option&gt;
+            &lt;option *ngFor&#x3D;&quot;let service of userData.services&quot; value&#x3D;&quot;{{ service.specialtyId }}&quot;&gt;{{ service.specialty }}&lt;/option&gt;
+          &lt;/select&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;div class&#x3D;&quot;speciality-form-box&quot;&gt;
+        &lt;div class&#x3D;&quot;rating&quot;&gt;
+          &lt;label id&#x3D;&quot;label-star-5&quot; for&#x3D;&quot;star5&quot; [class.starOn]&#x3D;&quot;radioStar5&quot;&gt;
+            &lt;input type&#x3D;&quot;radio&quot; id&#x3D;&quot;star5&quot; formControlName&#x3D;&quot;rating&quot; name&#x3D;&quot;rating&quot; value&#x3D;&quot;5&quot; (change)&#x3D;&quot;checkInput(5)&quot; /&gt;
+          &lt;/label&gt;
+          &lt;label id&#x3D;&quot;label-star-4&quot; for&#x3D;&quot;star4&quot; [class.starOn]&#x3D;&quot;radioStar4&quot;&gt;
+            &lt;input type&#x3D;&quot;radio&quot; id&#x3D;&quot;star4&quot; formControlName&#x3D;&quot;rating&quot; name&#x3D;&quot;rating&quot; value&#x3D;&quot;4&quot; (change)&#x3D;&quot;checkInput(4)&quot; /&gt;
+          &lt;/label&gt;
+          &lt;label id&#x3D;&quot;label-star-3&quot; for&#x3D;&quot;star3&quot; [class.starOn]&#x3D;&quot;radioStar3&quot;&gt;
+            &lt;input type&#x3D;&quot;radio&quot; id&#x3D;&quot;star3&quot; formControlName&#x3D;&quot;rating&quot; name&#x3D;&quot;rating&quot; value&#x3D;&quot;3&quot; (change)&#x3D;&quot;checkInput(3)&quot; /&gt;
+          &lt;/label&gt;
+          &lt;label id&#x3D;&quot;label-star-2&quot; for&#x3D;&quot;star2&quot; [class.starOn]&#x3D;&quot;radioStar2&quot;&gt;
+            &lt;input type&#x3D;&quot;radio&quot; id&#x3D;&quot;star2&quot; formControlName&#x3D;&quot;rating&quot; name&#x3D;&quot;rating&quot; value&#x3D;&quot;2&quot; (change)&#x3D;&quot;checkInput(2)&quot; /&gt;
+          &lt;/label&gt;
+          &lt;label id&#x3D;&quot;label-star-1&quot; for&#x3D;&quot;star1&quot; [class.starOn]&#x3D;&quot;radioStar1&quot;&gt;
+            &lt;input type&#x3D;&quot;radio&quot; id&#x3D;&quot;star1&quot; formControlName&#x3D;&quot;rating&quot; name&#x3D;&quot;rating&quot; value&#x3D;&quot;1&quot; (change)&#x3D;&quot;checkInput(1)&quot; checked&#x3D;&quot;checked&quot;/&gt;
+          &lt;/label&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;div class&#x3D;&quot;speciality-form-box&quot;&gt;
+        &lt;label for&#x3D;&quot;add-price&quot;&gt;Descrição:&lt;/label&gt;
+        &lt;textarea formControlName&#x3D;&quot;description&quot; id&#x3D;&quot;description-review&quot; name&#x3D;&quot;description&quot; placeholder&#x3D;&quot;Insira a sua descrição...&quot;&gt;&lt;/textarea&gt;
+      &lt;/div&gt;
+
+      &lt;div class&#x3D;&quot;form-buttons-row&quot;&gt;
+        &lt;button type&#x3D;&quot;submit&quot; class&#x3D;&quot;btn btn-blue&quot;&gt;Adicionar&lt;/button&gt;
+
+        &lt;button type&#x3D;&quot;reset&quot; class&#x3D;&quot;btn btn-red&quot; (click)&#x3D;&quot;closePopup()&quot;&gt;Cancelar&lt;/button&gt;
+      &lt;/div&gt;
+
+    &lt;/form&gt;
+
+    &lt;form [formGroup]&#x3D;&quot;editSpecialityForm&quot; id&#x3D;&quot;edit-speciality-container&quot; class&#x3D;&quot;overlay-container&quot; autocomplete&#x3D;&quot;off&quot; (ngSubmit)&#x3D;&quot;editSpeciality()&quot; (click)&#x3D;&quot;stopPropagation($event)&quot;&gt;
+
+      &lt;h2&gt;Editar Especialidade&lt;/h2&gt;
+
+      &lt;!--&lt;input type&#x3D;&quot;hidden&quot; formControlName&#x3D;&quot;id&quot; id&#x3D;&quot;id-speciality-form&quot; name&#x3D;&quot;id&quot; value&#x3D;&quot;&quot;&gt;--&gt;
+
+      &lt;div class&#x3D;&quot;speciality-name&quot; id&#x3D;&quot;speciality-name&quot;&gt;
+
+      &lt;/div&gt;
+
+      &lt;div class&#x3D;&quot;speciality-form-box&quot;&gt;
+        &lt;label for&#x3D;&quot;edit-price&quot;&gt;Preço por Hora:&lt;/label&gt;
+        &lt;div class&#x3D;&quot;input-wrapper&quot;&gt;
+          &lt;input formControlName&#x3D;&quot;price&quot; type&#x3D;&quot;number&quot; id&#x3D;&quot;edit-price&quot; name&#x3D;&quot;price&quot; required oninput&#x3D;&quot;this.value &#x3D; this.value.replace(/[^0-9]/g, &#x27;&#x27;);&quot; [class.is-invalid]&#x3D;&quot;submittedEdit &amp;&amp; editSpecialityForm.get(&#x27;price&#x27;)?.errors&quot;&gt;
+          &lt;span class&#x3D;&quot;euro-symbol&quot;&gt;€ &lt;/span&gt;
+        &lt;/div&gt;
+        &lt;span class&#x3D;&quot;text-danger&quot; *ngIf&#x3D;&quot;submittedEdit &amp;&amp; (editSpecialityForm.get(&#x27;price&#x27;)?.hasError(&#x27;required&#x27;) || editSpecialityForm.get(&#x27;price&#x27;)?.hasError(&#x27;min&#x27;) ||  editSpecialityForm.get(&#x27;price&#x27;)?.hasError(&#x27;max&#x27;))&quot;&gt;
+          O preço tem de estar entre 1€ e 1000€
+        &lt;/span&gt;
+      &lt;/div&gt;
+      &lt;div class&#x3D;&quot;speciality-form-box&quot;&gt;
+        &lt;label&gt;Deseja ter consultas Presenciais?&lt;/label&gt;
+        &lt;div class&#x3D;&quot;radio-row&quot;&gt;
+          &lt;label for&#x3D;&quot;edit-presencial-sim&quot; class&#x3D;&quot;radio-label&quot;&gt;&lt;input formControlName&#x3D;&quot;presencial&quot; type&#x3D;&quot;radio&quot; name&#x3D;&quot;presencial&quot; value&#x3D;&quot;S&quot; id&#x3D;&quot;edit-presencial-sim&quot;&gt; Sim&lt;/label&gt;
+          &lt;label for&#x3D;&quot;edit-presencial-nao&quot; class&#x3D;&quot;radio-label&quot;&gt;&lt;input formControlName&#x3D;&quot;presencial&quot; type&#x3D;&quot;radio&quot; name&#x3D;&quot;presencial&quot; value&#x3D;&quot;N&quot; id&#x3D;&quot;edit-presencial-nao&quot;&gt; Não&lt;/label&gt;
+        &lt;/div&gt;
+        &lt;span class&#x3D;&quot;text-danger&quot; *ngIf&#x3D;&quot;submittedEdit &amp;&amp; editSpecialityForm.get(&#x27;presencial&#x27;)?.hasError(&#x27;required&#x27;)&quot;&gt;
+          Escoha uma opção
+        &lt;/span&gt;
+      &lt;/div&gt;
+      &lt;div class&#x3D;&quot;speciality-form-box&quot;&gt;
+        &lt;label&gt;Deseja ter consultas Online?&lt;/label&gt;
+        &lt;div class&#x3D;&quot;radio-row&quot;&gt;
+          &lt;label for&#x3D;&quot;edit-online-sim&quot; class&#x3D;&quot;radio-label&quot;&gt;&lt;input formControlName&#x3D;&quot;online&quot; type&#x3D;&quot;radio&quot; name&#x3D;&quot;online&quot; value&#x3D;&quot;S&quot; id&#x3D;&quot;edit-online-sim&quot;&gt; Sim&lt;/label&gt;
+          &lt;label for&#x3D;&quot;edit-online-nao&quot; class&#x3D;&quot;radio-label&quot;&gt;&lt;input formControlName&#x3D;&quot;online&quot; type&#x3D;&quot;radio&quot; name&#x3D;&quot;online&quot; value&#x3D;&quot;N&quot; id&#x3D;&quot;edit-online-nao&quot;&gt; Não&lt;/label&gt;
+        &lt;/div&gt;
+        &lt;span class&#x3D;&quot;text-danger&quot; *ngIf&#x3D;&quot;submittedEdit &amp;&amp; editSpecialityForm.get(&#x27;online&#x27;)?.hasError(&#x27;required&#x27;)&quot;&gt;
+          Escoha uma opção
+        &lt;/span&gt;
+      &lt;/div&gt;
+      &lt;div class&#x3D;&quot;speciality-form-box&quot;&gt;
+        &lt;label&gt;Deseja ter consultas Domicílio?&lt;/label&gt;
+        &lt;div class&#x3D;&quot;radio-row&quot;&gt;
+          &lt;label for&#x3D;&quot;edit-domicilio-sim&quot; class&#x3D;&quot;radio-label&quot;&gt;&lt;input formControlName&#x3D;&quot;domicilio&quot; type&#x3D;&quot;radio&quot; name&#x3D;&quot;domicilio&quot; value&#x3D;&quot;S&quot; id&#x3D;&quot;edit-domicilio-sim&quot;&gt; Sim&lt;/label&gt;
+          &lt;label for&#x3D;&quot;edit-domicilio-nao&quot; class&#x3D;&quot;radio-label&quot;&gt;&lt;input formControlName&#x3D;&quot;domicilio&quot; type&#x3D;&quot;radio&quot; name&#x3D;&quot;domicilio&quot; value&#x3D;&quot;N&quot; id&#x3D;&quot;edit-domicilio-nao&quot;&gt; Não&lt;/label&gt;
+        &lt;/div&gt;
+        &lt;span class&#x3D;&quot;text-danger&quot; *ngIf&#x3D;&quot;submittedEdit &amp;&amp; editSpecialityForm.get(&#x27;domicilio&#x27;)?.hasError(&#x27;required&#x27;)&quot;&gt;
+          Escoha uma opção
+        &lt;/span&gt;
+      &lt;/div&gt;
+
+      &lt;div class&#x3D;&quot;form-buttons-row&quot;&gt;
+        &lt;button type&#x3D;&quot;submit&quot; class&#x3D;&quot;btn btn-blue&quot;&gt;Adicionar&lt;/button&gt;
+
+        &lt;button type&#x3D;&quot;reset&quot; class&#x3D;&quot;btn btn-red&quot; (click)&#x3D;&quot;closePopup()&quot;&gt;Cancelar&lt;/button&gt;
+      &lt;/div&gt;
+
+    &lt;/form&gt;
+
+  &lt;/div&gt;
+  &lt;div *ngIf&#x3D;&quot;errorMessages.length &gt; 0&quot;&gt;
+    &lt;app-validation-messages [errorMessages]&#x3D;&quot;errorMessages&quot;&gt;&lt;/app-validation-messages&gt;
+  &lt;/div&gt;
+&lt;/main&gt;
+</code></pre>
+    </div>
+
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><main>  <section class="form-row">    <div id="button" *ngIf="(isPatient)">      <button style="display: none;" class="top-right-btn btn-red">Reportar</button>    </div>    <figure>      <img class="image" alt="Imagem de Perfil" [src]="profileImagePath" />    </figure>    <div class="top-center-row">      <div class="top-center-row-container">        <div class="top-center-row-text" id="nome"></div>      </div>      <div class="top-center-row-container" id="top-center-row-container-right">        <img class="email-img" src="/assets/images/Perfil/open-mail.png" />        <div class="top-center-row-text" id="email"></div>      </div>    </div>  </section>  <div class="left-align-row">    <h2>Especialidades</h2>  </div>  <table>    <thead>      <tr>        <th>Especialidade</th>        <th>Preço por Hora</th>        <th>Tipos de Consultas</th>        <th *ngIf="(isPatient)"></th>      </tr>    </thead>    <tbody *ngIf="(userData && (userData.services.length > 0))">      <tr *ngFor="let service of userData.services">        <td>{{ service.specialty }}</td>        <td>{{ service.pricePerHour | currency:\'EUR\' }}</td>        <td>{{ appointmentTypesToString(service) }}</td>        <td *ngIf="(isPatient)">          <div class="buttons-container">            <button class="btn btn-blue">Marcar</button>          </div>        </td>      </tr>    </tbody>    <tbody *ngIf="!(userData && (userData.services.length > 0))">      <tr>        <td colspan="4" class="specialities-not-found-placeholder">Não tem especialidades associadas.</td>      </tr>    </tbody>  </table>  <div class="left-align-row">    <h2>Descrição</h2>  </div>  <div class="description-text">    <p class="pre-wrap-text" *ngIf="(userData && userData.description && userData.description.length > 0)">      {{ userData.description }}    </p>    <p *ngIf="!(userData && userData.description  && userData.description.length > 0)">      Este profissional ainda não tem uma descrição.    </p>  </div>  <!--<form [formGroup]="updateDescriptionForm" id="update-description-form" autocomplete="off" (ngSubmit)="updateDescription()">    <div class="description-container">      <textarea formControlName="description" id="description" name="description" placeholder="Insira a sua descrição..."                [class.is-invalid]="submittedDescription && updateDescriptionForm.get(\'description\')?.errors"></textarea>      <div class="container-animation">        <input class="input-check-animation" type="checkbox" id="check">        <label class="label-check-animation" for="check">          <div class="check-icon"></div>        </label>      </div>    </div>    <span class="text-danger" *ngIf="submittedDescription && updateDescriptionForm.get(\'description\')?.hasError(\'maxLength\')">      A descrição deve ter menos de 500 caracteres.    </span>    <div class="right-align-row">      <button type="submit" class="btn btn-blue">Atualizar</button>    </div>  </form>-->  <div class="left-align-row">    <h2>Certificados</h2>  </div>  <div id="certificates-container">    <!--<div id="add-single-container">      <button id="add-button" (click)="fileInput.click()">        <img src="assets/images/profile/add.png" alt="Adicionar Certificado">      </button>      <input #fileInput type="file" style="display: none;" (change)="onFileSelected($event)" accept=".pdf">    </div>-->    <div class="single-container" *ngFor="let pdf of pdfList">      <button type="button" class="pdf-image-btn" (click)="openPdf(pdf.path)">        <img src="assets/images/profile/pdf.png" />      </button>      <div class="pdf-label">        <abbr class="abbr-pdf-label" (click)="openPdf(pdf.path)" title="{{pdf.name}}">{{pdf.name}}</abbr>      </div>      <!--<div class="align-right-container">        <button class="delete-button" (click)="deletePdf(pdf.certificateId)">          <img src="assets/images/profile/bin.png" alt="Delete">        </button>      </div>-->    </div>  </div>  <div class="display-row">    <h2>Reviews</h2>    <button class="btn btn-blue" id="add-review-btn" (click)="openPopup(\'add\')" *ngIf="(isPatient && userData && userData.services && (userData.services.length > 0))">Adicionar Review</button>  </div>  <div class="no-review" *ngIf="!(userData && userData.reviews.length > 0)">    O profissional ainda não tem nenhuma review.  </div>  <div *ngIf="(userData && userData.reviews && userData.reviews.length > 0)">    <div class="review-top-row reviews-info">      <div class="display-row">        <b class="small-right-margin">Filtrar:</b>        <div class="select-dropdown">          <select id="select-review" (change)="selectReviewEventReceiver($event)" *ngIf="(userData && userData.services && (userData.services.length > 0))">            <option value="0">Tudo</option>            <option *ngFor="let service of userData.services" value="{{ service.specialtyId }}">{{ service.specialty }}</option>          </select>        </div>      </div>    </div>    <div *ngIf="(reviews && reviews.length > 0)">      <div class="left-align-row reviews-info">        <b class="small-right-margin">Classificação média:</b>        <span class="small-right-margin">{{ averageStars.toFixed(1).replace(\'.\', \',\') }}</span>        <img src="assets/images/profile/star.png" alt="Estrela" class="star">      </div>      <div class="review-container" *ngFor="let review of this.reviews">        <hr>        <div class="review-top-row">          <div class="left-review-top-row">            <div class="review-image small-right-margin">              <img src="{{ review.patientPicture }}" alt="Imagem de perfil" class="review-image small-right-margin">            </div>            <b class="small-right-margin">{{ review.patientName }}</b>            <span class="small-right-margin">{{ review.stars }}</span>            <img src="assets/images/profile/star.png" alt="Estrela" class="star">          </div>          <div class="right-review-top-row">            <b>{{ review.serviceName }}</b>          </div>        </div>        <div class="comment">{{ review.description }}</div>      </div>    </div>    <div class="no-review" *ngIf="!(reviews && reviews.length > 0)">      Esta especialidade ainda não tem nenhuma review.    </div>  </div>  <div class="overlay" id="overlay" (click)="closePopup()">    <a class="close-button" (click)="closePopup()">      <img src="assets/images/login/close.png" alt="Close button" class="close-image">    </a>    <form [formGroup]="addSpecialityForm" (ngSubmit)="addSpeciality()" id="add-speciality-container" class="overlay-container" autocomplete="off" (click)="stopPropagation($event)">      <h2>Adicionar Review</h2>      <div class="speciality-form-box">        <label for="add-speciality-select">Selecionar Especialidade</label>        <div class="select-dropdown" id="speciality-select-div" [class.is-invalid]="submittedAdd && addSpecialityForm.get(\'selectSpeciality\')?.errors">          <select formControlName="selectSpeciality" id="add-speciality-select" required *ngIf="(userData && userData.services && (userData.services.length > 0))">            <option hidden disable>Selecione uma especialidade</option>            <option *ngFor="let service of userData.services" value="{{ service.specialtyId }}">{{ service.specialty }}</option>          </select>        </div>      </div>      <div class="speciality-form-box">        <div class="rating">          <label id="label-star-5" for="star5" [class.starOn]="radioStar5">            <input type="radio" id="star5" formControlName="rating" name="rating" value="5" (change)="checkInput(5)" />          </label>          <label id="label-star-4" for="star4" [class.starOn]="radioStar4">            <input type="radio" id="star4" formControlName="rating" name="rating" value="4" (change)="checkInput(4)" />          </label>          <label id="label-star-3" for="star3" [class.starOn]="radioStar3">            <input type="radio" id="star3" formControlName="rating" name="rating" value="3" (change)="checkInput(3)" />          </label>          <label id="label-star-2" for="star2" [class.starOn]="radioStar2">            <input type="radio" id="star2" formControlName="rating" name="rating" value="2" (change)="checkInput(2)" />          </label>          <label id="label-star-1" for="star1" [class.starOn]="radioStar1">            <input type="radio" id="star1" formControlName="rating" name="rating" value="1" (change)="checkInput(1)" checked="checked"/>          </label>        </div>      </div>      <div class="speciality-form-box">        <label for="add-price">Descrição:</label>        <textarea formControlName="description" id="description-review" name="description" placeholder="Insira a sua descrição..."></textarea>      </div>      <div class="form-buttons-row">        <button type="submit" class="btn btn-blue">Adicionar</button>        <button type="reset" class="btn btn-red" (click)="closePopup()">Cancelar</button>      </div>    </form>    <form [formGroup]="editSpecialityForm" id="edit-speciality-container" class="overlay-container" autocomplete="off" (ngSubmit)="editSpeciality()" (click)="stopPropagation($event)">      <h2>Editar Especialidade</h2>      <!--<input type="hidden" formControlName="id" id="id-speciality-form" name="id" value="">-->      <div class="speciality-name" id="speciality-name">      </div>      <div class="speciality-form-box">        <label for="edit-price">Preço por Hora:</label>        <div class="input-wrapper">          <input formControlName="price" type="number" id="edit-price" name="price" required oninput="this.value = this.value.replace(/[^0-9]/g, \'\');" [class.is-invalid]="submittedEdit && editSpecialityForm.get(\'price\')?.errors">          <span class="euro-symbol">€ </span>        </div>        <span class="text-danger" *ngIf="submittedEdit && (editSpecialityForm.get(\'price\')?.hasError(\'required\') || editSpecialityForm.get(\'price\')?.hasError(\'min\') ||  editSpecialityForm.get(\'price\')?.hasError(\'max\'))">          O preço tem de estar entre 1€ e 1000€        </span>      </div>      <div class="speciality-form-box">        <label>Deseja ter consultas Presenciais?</label>        <div class="radio-row">          <label for="edit-presencial-sim" class="radio-label"><input formControlName="presencial" type="radio" name="presencial" value="S" id="edit-presencial-sim"> Sim</label>          <label for="edit-presencial-nao" class="radio-label"><input formControlName="presencial" type="radio" name="presencial" value="N" id="edit-presencial-nao"> Não</label>        </div>        <span class="text-danger" *ngIf="submittedEdit && editSpecialityForm.get(\'presencial\')?.hasError(\'required\')">          Escoha uma opção        </span>      </div>      <div class="speciality-form-box">        <label>Deseja ter consultas Online?</label>        <div class="radio-row">          <label for="edit-online-sim" class="radio-label"><input formControlName="online" type="radio" name="online" value="S" id="edit-online-sim"> Sim</label>          <label for="edit-online-nao" class="radio-label"><input formControlName="online" type="radio" name="online" value="N" id="edit-online-nao"> Não</label>        </div>        <span class="text-danger" *ngIf="submittedEdit && editSpecialityForm.get(\'online\')?.hasError(\'required\')">          Escoha uma opção        </span>      </div>      <div class="speciality-form-box">        <label>Deseja ter consultas Domicílio?</label>        <div class="radio-row">          <label for="edit-domicilio-sim" class="radio-label"><input formControlName="domicilio" type="radio" name="domicilio" value="S" id="edit-domicilio-sim"> Sim</label>          <label for="edit-domicilio-nao" class="radio-label"><input formControlName="domicilio" type="radio" name="domicilio" value="N" id="edit-domicilio-nao"> Não</label>        </div>        <span class="text-danger" *ngIf="submittedEdit && editSpecialityForm.get(\'domicilio\')?.hasError(\'required\')">          Escoha uma opção        </span>      </div>      <div class="form-buttons-row">        <button type="submit" class="btn btn-blue">Adicionar</button>        <button type="reset" class="btn btn-red" (click)="closePopup()">Cancelar</button>      </div>    </form>  </div>  <div *ngIf="errorMessages.length > 0">    <app-validation-messages [errorMessages]="errorMessages"></app-validation-messages>  </div></main></div>'
+    var COMPONENTS = [{'name': 'AboutUsComponent', 'selector': 'app-about-us'},{'name': 'AgendaComponent', 'selector': 'app-agenda'},{'name': 'AgendaPacienteComponent', 'selector': 'app-agenda-paciente'},{'name': 'AgendaProfissionalComponent', 'selector': 'app-agenda-profissional'},{'name': 'AlterarPassComponent', 'selector': 'app-alterar-pass'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'CalendarioComponent', 'selector': 'app-calendario'},{'name': 'ConfirmEmailComponent', 'selector': 'app-confirm-email'},{'name': 'ConsultaPacienteComponent', 'selector': 'app-consulta-paciente'},{'name': 'ConsultaProfissionalComponent', 'selector': 'app-consulta-profissional'},{'name': 'DisponibilidadeComponent', 'selector': 'app-disponibilidade'},{'name': 'EditPerfilComponent', 'selector': 'app-edit-perfil'},{'name': 'FooterAuthenticationComponent', 'selector': 'app-footer-authentication'},{'name': 'FooterComponent', 'selector': 'app-footer'},{'name': 'HistoricoConsultasComponent', 'selector': 'app-historico-consultas'},{'name': 'HomePageComponent', 'selector': 'app-home-page'},{'name': 'LoadingSpinnerComponent', 'selector': 'loading-spinner'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'MapaComponent', 'selector': 'app-mapa'},{'name': 'MarcacoesComponent', 'selector': 'app-marcacoes'},{'name': 'MarcarConsultaComponent', 'selector': 'app-marcar-consulta'},{'name': 'NavbarComponent', 'selector': 'app-navbar'},{'name': 'NotFoundComponent', 'selector': 'app-not-found'},{'name': 'PaymentFailureComponent', 'selector': 'app-payment-failure'},{'name': 'PaymentSuccessComponent', 'selector': 'app-payment-success'},{'name': 'PerfilPacienteComponent', 'selector': 'app-perfil-paciente'},{'name': 'PopUpSuccessComponent', 'selector': 'pop-up-success'},{'name': 'PrivacyPolicyComponent', 'selector': 'app-privacy-policy'},{'name': 'PrivateProfileProfessionalComponent', 'selector': 'app-private-profile-professional'},{'name': 'PublicProfileProfessionalComponent', 'selector': 'app-public-profile-professional'},{'name': 'RecuperarContaComponent', 'selector': 'app-recuperar-conta'},{'name': 'RecuperarPassComponent', 'selector': 'app-recuperar-pass'},{'name': 'RegisterWithGoogleComponent', 'selector': 'app-register-with-google'},{'name': 'RegistoComponent', 'selector': 'app-registo'},{'name': 'TermsAndConditionsComponent', 'selector': 'app-terms-and-conditions'},{'name': 'ValidationMessagesComponent', 'selector': 'app-validation-messages'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'PublicProfileProfessionalComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'PublicProfileProfessionalComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

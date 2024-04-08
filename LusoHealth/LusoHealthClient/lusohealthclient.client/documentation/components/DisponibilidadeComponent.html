@@ -1,0 +1,2024 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>lusohealthclient.client documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avaoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+
+               if ($darkModeToggles.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
+            <a href="../" class="navbar-brand">lusohealthclient.client documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Components</li>
+  <li class="breadcrumb-item"
+  >
+  DisponibilidadeComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/agenda/disponibilidade/disponibilidade.component.ts</code>
+</p>
+
+
+
+
+
+
+<section data-compodoc="block-metadata">
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-disponibilidade</code></td>
+            </tr>
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./disponibilidade.component.html</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">styleUrl</td>
+                <td class="col-md-9"><code>./disponibilidade.component.css</code></td>
+            </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#addSlotsForm" >addSlotsForm</a>
+                            </li>
+                            <li>
+                                <a href="#calendarOptions" >calendarOptions</a>
+                            </li>
+                            <li>
+                                <a href="#currentEvents" >currentEvents</a>
+                            </li>
+                            <li>
+                                <a href="#errorMessages" >errorMessages</a>
+                            </li>
+                            <li>
+                                <a href="#isSelecting" >isSelecting</a>
+                            </li>
+                            <li>
+                                <a href="#selectedDates" >selectedDates</a>
+                            </li>
+                            <li>
+                                <a href="#services" >services</a>
+                            </li>
+                            <li>
+                                <a href="#submittedAddSlots" >submittedAddSlots</a>
+                            </li>
+                            <li>
+                                <a href="#submittedDeleteSlots" >submittedDeleteSlots</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#unsubscribe$" >unsubscribe$</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#addAvailability" >addAvailability</a>
+                            </li>
+                            <li>
+                                <a href="#closePopup" >closePopup</a>
+                            </li>
+                            <li>
+                                <a href="#dateClick" >dateClick</a>
+                            </li>
+                            <li>
+                                <a href="#deleteAvailability" >deleteAvailability</a>
+                            </li>
+                            <li>
+                                <a href="#geSpecialties" >geSpecialties</a>
+                            </li>
+                            <li>
+                                <a href="#getSlots" >getSlots</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#getType" >getType</a>
+                            </li>
+                            <li>
+                                <a href="#handleDateSelect" >handleDateSelect</a>
+                            </li>
+                            <li>
+                                <a href="#hideEventsInMonthView" >hideEventsInMonthView</a>
+                            </li>
+                            <li>
+                                <a href="#initializeForm" >initializeForm</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnDestroy" >ngOnDestroy</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnInit" >ngOnInit</a>
+                            </li>
+                            <li>
+                                <a href="#openPopup" >openPopup</a>
+                            </li>
+                            <li>
+                                <a href="#stopPropagation" >stopPropagation</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(authenticationService: <a href="../injectables/AuthenticationService.html" target="_self">AuthenticationService</a>, profileService: <a href="../injectables/ProfileService.html" target="_self">ProfileService</a>, agendaService: <a href="../injectables/AgendaService.html" target="_self">AgendaService</a>, formBuilder: FormBuilder, router: Router)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="46" class="link-to-prism">src/app/agenda/disponibilidade/disponibilidade.component.ts:46</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>authenticationService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/AuthenticationService.html" target="_self" >AuthenticationService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>profileService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/ProfileService.html" target="_self" >ProfileService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>agendaService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/AgendaService.html" target="_self" >AgendaService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>formBuilder</td>
+                                                  
+                                                        <td>
+                                                                    <code>FormBuilder</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>router</td>
+                                                  
+                                                        <td>
+                                                                    <code>Router</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+
+
+
+
+    <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="addAvailability"></a>
+                    <span class="name">
+                        <span ><b>addAvailability</b></span>
+                        <a href="#addAvailability"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>addAvailability()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="168"
+                                    class="link-to-prism">src/app/agenda/disponibilidade/disponibilidade.component.ts:168</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="closePopup"></a>
+                    <span class="name">
+                        <span ><b>closePopup</b></span>
+                        <a href="#closePopup"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>closePopup()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="316"
+                                    class="link-to-prism">src/app/agenda/disponibilidade/disponibilidade.component.ts:316</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="dateClick"></a>
+                    <span class="name">
+                        <span ><b>dateClick</b></span>
+                        <a href="#dateClick"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>dateClick(arg: DateClickArg)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="99"
+                                    class="link-to-prism">src/app/agenda/disponibilidade/disponibilidade.component.ts:99</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>arg</td>
+                                            <td>
+                                                        <code>DateClickArg</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="deleteAvailability"></a>
+                    <span class="name">
+                        <span ><b>deleteAvailability</b></span>
+                        <a href="#deleteAvailability"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>deleteAvailability()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="251"
+                                    class="link-to-prism">src/app/agenda/disponibilidade/disponibilidade.component.ts:251</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="geSpecialties"></a>
+                    <span class="name">
+                        <span ><b>geSpecialties</b></span>
+                        <a href="#geSpecialties"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>geSpecialties()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="124"
+                                    class="link-to-prism">src/app/agenda/disponibilidade/disponibilidade.component.ts:124</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getSlots"></a>
+                    <span class="name">
+                        <span ><b>getSlots</b></span>
+                        <a href="#getSlots"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getSlots()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="144"
+                                    class="link-to-prism">src/app/agenda/disponibilidade/disponibilidade.component.ts:144</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getType"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>getType</b></span>
+                        <a href="#getType"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getType(type: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="240"
+                                    class="link-to-prism">src/app/agenda/disponibilidade/disponibilidade.component.ts:240</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>type</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>&quot;Presential&quot; | &quot;Online&quot; | &quot;Home&quot;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="handleDateSelect"></a>
+                    <span class="name">
+                        <span ><b>handleDateSelect</b></span>
+                        <a href="#handleDateSelect"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>handleDateSelect(selectInfo: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="109"
+                                    class="link-to-prism">src/app/agenda/disponibilidade/disponibilidade.component.ts:109</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>selectInfo</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="hideEventsInMonthView"></a>
+                    <span class="name">
+                        <span ><b>hideEventsInMonthView</b></span>
+                        <a href="#hideEventsInMonthView"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>hideEventsInMonthView(arg: literal type)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="80"
+                                    class="link-to-prism">src/app/agenda/disponibilidade/disponibilidade.component.ts:80</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>arg</td>
+                                            <td>
+                                                        <code>literal type</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="initializeForm"></a>
+                    <span class="name">
+                        <span ><b>initializeForm</b></span>
+                        <a href="#initializeForm"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>initializeForm()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="86"
+                                    class="link-to-prism">src/app/agenda/disponibilidade/disponibilidade.component.ts:86</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnDestroy"></a>
+                    <span class="name">
+                        <span ><b>ngOnDestroy</b></span>
+                        <a href="#ngOnDestroy"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnDestroy()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="75"
+                                    class="link-to-prism">src/app/agenda/disponibilidade/disponibilidade.component.ts:75</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <span ><b>ngOnInit</b></span>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="69"
+                                    class="link-to-prism">src/app/agenda/disponibilidade/disponibilidade.component.ts:69</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="openPopup"></a>
+                    <span class="name">
+                        <span ><b>openPopup</b></span>
+                        <a href="#openPopup"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>openPopup(option: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="289"
+                                    class="link-to-prism">src/app/agenda/disponibilidade/disponibilidade.component.ts:289</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>option</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="stopPropagation"></a>
+                    <span class="name">
+                        <span ><b>stopPropagation</b></span>
+                        <a href="#stopPropagation"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>stopPropagation(event: Event)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="332"
+                                    class="link-to-prism">src/app/agenda/disponibilidade/disponibilidade.component.ts:332</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>event</td>
+                                            <td>
+                                                        <code>Event</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="addSlotsForm"></a>
+                    <span class="name">
+                        <span ><b>addSlotsForm</b></span>
+                        <a href="#addSlotsForm"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>FormGroup</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new FormGroup({})</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="25" class="link-to-prism">src/app/agenda/disponibilidade/disponibilidade.component.ts:25</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="calendarOptions"></a>
+                    <span class="name">
+                        <span ><b>calendarOptions</b></span>
+                        <a href="#calendarOptions"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>CalendarOptions</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>{
+    plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
+    initialView: &#x27;dayGridMonth&#x27;,
+    headerToolbar: {
+      left: &#x27;prev,next today&#x27;,
+      center: &#x27;title&#x27;,
+      right: &#x27;dayGridMonth,timeGridDay&#x27;
+    },
+    locale: &#x27;pt&#x27;,
+    selectable: true,
+    select: this.handleDateSelect.bind(this),
+    dateClick: this.dateClick.bind(this),
+    events: [],
+    eventDidMount: this.hideEventsInMonthView.bind(this),
+  }</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="32" class="link-to-prism">src/app/agenda/disponibilidade/disponibilidade.component.ts:32</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="currentEvents"></a>
+                    <span class="name">
+                        <span ><b>currentEvents</b></span>
+                        <a href="#currentEvents"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>EventInput[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="23" class="link-to-prism">src/app/agenda/disponibilidade/disponibilidade.component.ts:23</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="errorMessages"></a>
+                    <span class="name">
+                        <span ><b>errorMessages</b></span>
+                        <a href="#errorMessages"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>string[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="24" class="link-to-prism">src/app/agenda/disponibilidade/disponibilidade.component.ts:24</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isSelecting"></a>
+                    <span class="name">
+                        <span ><b>isSelecting</b></span>
+                        <a href="#isSelecting"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="29" class="link-to-prism">src/app/agenda/disponibilidade/disponibilidade.component.ts:29</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="selectedDates"></a>
+                    <span class="name">
+                        <span ><b>selectedDates</b></span>
+                        <a href="#selectedDates"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="28" class="link-to-prism">src/app/agenda/disponibilidade/disponibilidade.component.ts:28</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="services"></a>
+                    <span class="name">
+                        <span ><b>services</b></span>
+                        <a href="#services"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="30" class="link-to-prism">src/app/agenda/disponibilidade/disponibilidade.component.ts:30</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="submittedAddSlots"></a>
+                    <span class="name">
+                        <span ><b>submittedAddSlots</b></span>
+                        <a href="#submittedAddSlots"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="26" class="link-to-prism">src/app/agenda/disponibilidade/disponibilidade.component.ts:26</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="submittedDeleteSlots"></a>
+                    <span class="name">
+                        <span ><b>submittedDeleteSlots</b></span>
+                        <a href="#submittedDeleteSlots"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="27" class="link-to-prism">src/app/agenda/disponibilidade/disponibilidade.component.ts:27</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="unsubscribe$"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>unsubscribe$</b></span>
+                        <a href="#unsubscribe$"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new Subject&lt;void&gt;()</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="22" class="link-to-prism">src/app/agenda/disponibilidade/disponibilidade.component.ts:22</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component } from &#x27;@angular/core&#x27;;
+import { FormBuilder, FormGroup, Validators } from &#x27;@angular/forms&#x27;;
+import { CalendarOptions, EventInput, EventSourceInput } from &#x27;@fullcalendar/core&#x27;; // useful for typechecking
+import dayGridPlugin from &#x27;@fullcalendar/daygrid&#x27;;
+import timeGridPlugin from &#x27;@fullcalendar/timegrid&#x27;;
+import interactionPlugin, { DateClickArg } from &#x27;@fullcalendar/interaction&#x27;;
+import { Subject, take, takeUntil } from &#x27;rxjs&#x27;;
+import { AuthenticationService } from &#x27;../../authentication/authentication.service&#x27;;
+import { User } from &#x27;../../shared/models/authentication/user&#x27;;
+import { ProfileService } from &#x27;../../profile/profile.service&#x27;;
+import { Router } from &#x27;@angular/router&#x27;;
+import { AgendaService } from &#x27;../agenda.service&#x27;;
+import { Availability } from &#x27;../../shared/models/services/availability&#x27;;
+import { Professional } from &#x27;../../shared/models/profile/professional&#x27;;
+
+@Component({
+  selector: &#x27;app-disponibilidade&#x27;,
+  templateUrl: &#x27;./disponibilidade.component.html&#x27;,
+  styleUrl: &#x27;./disponibilidade.component.css&#x27;
+})
+export class DisponibilidadeComponent {
+  private unsubscribe$ &#x3D; new Subject&lt;void&gt;();
+  currentEvents: EventInput[] &#x3D; [];
+  errorMessages: string[] &#x3D; [];
+  addSlotsForm: FormGroup &#x3D; new FormGroup({});
+  submittedAddSlots &#x3D; false;
+  submittedDeleteSlots &#x3D; false;
+  selectedDates: any;
+  isSelecting: boolean &#x3D; false;
+  services: any;
+
+  calendarOptions: CalendarOptions &#x3D; {
+    plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
+    initialView: &#x27;dayGridMonth&#x27;,
+    headerToolbar: {
+      left: &#x27;prev,next today&#x27;,
+      center: &#x27;title&#x27;,
+      right: &#x27;dayGridMonth,timeGridDay&#x27;
+    },
+    locale: &#x27;pt&#x27;,
+    selectable: true,
+    select: this.handleDateSelect.bind(this),
+    dateClick: this.dateClick.bind(this),
+    events: [],
+    eventDidMount: this.hideEventsInMonthView.bind(this),
+  }
+
+  constructor(private authenticationService: AuthenticationService,
+    private profileService: ProfileService, private agendaService: AgendaService,
+    private formBuilder: FormBuilder, private router: Router) {
+    this.authenticationService.user$.pipe(take(1)).subscribe({
+      next: (user: User | null) &#x3D;&gt; {
+        if (!user) {
+          this.router.navigateByUrl(&#x27;/&#x27;);
+        }
+        else {
+          const decodedToken &#x3D; this.profileService.getDecodedToken();
+
+          if (decodedToken) {
+            if (decodedToken.role !&#x3D;&#x3D; &quot;Professional&quot;) {
+              this.router.navigateByUrl(&#x27;/&#x27;);
+            }
+          }
+        }
+      }
+    });
+  }
+
+  ngOnInit(): void {
+    this.initializeForm();
+    this.getSlots();
+    this.geSpecialties();
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
+  hideEventsInMonthView(arg: { view: { type: string; }; el: { style: { display: string; }; }; }) {
+    if (arg.view.type &#x3D;&#x3D;&#x3D; &#x27;dayGridMonth&#x27;) {
+      arg.el.style.display &#x3D; &#x27;none&#x27;;
+    }
+  }
+
+  initializeForm() {
+
+    this.addSlotsForm &#x3D; this.formBuilder.group({
+      selectDuration: [&#x27;10&#x27;, [Validators.required]],
+      startDate: [&#x27;&#x27;, [Validators.required]],
+      endDate: [&#x27;&#x27;, [Validators.required]],
+      startTime: [&#x27;&#x27;, [Validators.required]],
+      endTime: [&#x27;&#x27;, [Validators.required]],
+      selectType: [&#x27;0&#x27;, [Validators.required]],
+      selectSpeciality: [&#x27;&#x27;, [Validators.required]],
+    });
+  }
+
+  dateClick(arg: DateClickArg): void { // Apply the type to &#x27;arg&#x27;
+    this.isSelecting &#x3D; true;
+    let calendarApi &#x3D; arg.view.calendar;
+    calendarApi.changeView(&#x27;timeGridDay&#x27;, arg.dateStr);
+
+    setTimeout(() &#x3D;&gt; {
+      this.isSelecting &#x3D; false;
+    }, 300);
+  }
+
+  handleDateSelect(selectInfo: any) {
+    setTimeout(() &#x3D;&gt; {
+      if (!this.isSelecting) {
+        let calendarApi &#x3D; selectInfo.view.calendar;
+        this.selectedDates &#x3D; selectInfo;
+        console.log(this.selectedDates);
+        this.openPopup(&#x27;remove&#x27;);
+        calendarApi.unselect();
+      }
+      else {
+        return;
+      }
+    }, 200);
+  }
+
+  geSpecialties(): Promise&lt;void&gt; {
+    return new Promise&lt;void&gt;((resolve, reject) &#x3D;&gt; {
+      this.profileService.getProfessionalInfo().pipe(takeUntil(this.unsubscribe$)).subscribe(
+        (userData: Professional) &#x3D;&gt; {
+          this.services &#x3D; userData.services;
+          console.log(this.services);
+          resolve();
+        },
+        error &#x3D;&gt; {
+          if (error.error.errors) {
+            this.errorMessages &#x3D; error.error.errors;
+          } else {
+            this.errorMessages.push(error.error);
+          }
+          reject(error);
+        }
+      );
+    });
+  }
+
+  getSlots() {
+
+    var slots;
+
+    this.agendaService.getAllSlots().pipe().subscribe({
+      next: (response: any) &#x3D;&gt; {
+        this.submittedAddSlots &#x3D; false;
+
+        this.calendarOptions.events &#x3D; response;
+        console.log(this.calendarOptions.events);
+
+        //this.addSlotsForm.reset();
+      },
+      error: (error) &#x3D;&gt; {
+        if (error.error.errors) {
+          this.errorMessages &#x3D; error.error.errors;
+        } else {
+          this.errorMessages.push(error.error);
+        }
+        this.submittedAddSlots &#x3D; false;
+      }
+    });
+  }
+
+  addAvailability() {
+    this.submittedAddSlots &#x3D; true;
+    this.errorMessages &#x3D; [];
+
+    if (this.addSlotsForm.invalid) {
+      this.submittedAddSlots &#x3D; false;
+      return;
+    }
+
+    /*let start &#x3D; new Date();
+    start.setHours(8, 0, 0, 0);
+
+    let end &#x3D; new Date();
+    end.setHours(12, 0, 0, 0);
+
+    let availability &#x3D; new Availability(
+      new Date(&#x27;2024-03-21&#x27;),   // startDate
+      new Date(&#x27;2024-03-22&#x27;),   // endDate
+      start, // startTime
+      end, // endTime
+      2,    // serviceId
+      30,     // slotDuration
+      &#x27;Online&#x27;, // type
+      null       // id
+    );*/
+
+    const form &#x3D; this.addSlotsForm.value;
+    
+    let start &#x3D; new Date();
+    const [startHours, startMinutes] &#x3D; form.startTime.split(&#x27;:&#x27;);
+    start.setHours(startHours, startMinutes, 0, 0);
+
+    let end &#x3D; new Date();
+    const [endHours, endMinutes] &#x3D; form.endTime.split(&#x27;:&#x27;);
+    end.setHours(endHours, endMinutes, 0, 0);
+
+    let availability &#x3D; new Availability(
+      form.startDate,   // startDate
+      form.endDate,   // endDate
+      start, // startTime
+      end, // endTime
+      form.selectSpeciality,    // serviceId
+      form.selectDuration,     // slotDuration
+      this.getType(form.selectType), // type
+      null       // id
+    );
+    console.log(availability);
+    
+    /*endDate: this.addSlotsForm.controls.endDate.value,
+    startTime: this.addSlotsForm.controls.startTime.value,
+    endTime: this.addSlotsForm.controls.endTime.value,
+    type: this.addSlotsForm.controls.selectType.value,
+    speciality: this.addSlotsForm.controls.selectSpeciality.value*/
+    console.log(availability);
+    this.agendaService.addAvailability(availability).subscribe({
+      next: () &#x3D;&gt; {
+        this.submittedAddSlots &#x3D; false;
+        this.closePopup();
+        this.getSlots();
+        this.addSlotsForm.reset();
+      },
+      error: (error) &#x3D;&gt; {
+        if (error.error.errors) {
+          this.errorMessages &#x3D; error.error.errors;
+        } else {
+          this.errorMessages.push(error.error);
+        }
+        this.submittedAddSlots &#x3D; false;
+      }
+    });
+  }
+
+  private getType(type: string) {
+    switch (type) {
+      case &quot;0&quot;:
+        return &quot;Presential&quot;;
+      case &quot;1&quot;:
+        return &quot;Online&quot;;
+      default:
+        return &quot;Home&quot;;
+    }
+  }
+
+  deleteAvailability() {
+    this.submittedDeleteSlots &#x3D; true;
+    this.errorMessages &#x3D; [];
+
+    /*if (this.addSlotsForm.invalid) {
+      return;
+    }*/
+
+    let availability &#x3D; new Availability(
+      this.selectedDates.start,   // startDate
+      this.selectedDates.end,   // endDate
+      null, // startTime
+      null, // endTime
+      null,    // serviceId
+      null,     // slotDuration
+      null, // type
+      null       // id
+    );
+
+    this.agendaService.deleteAvailability(availability).subscribe({
+      next: () &#x3D;&gt; {
+        this.submittedDeleteSlots &#x3D; false;
+        this.closePopup();
+        this.getSlots();
+        //this.addSlotsForm.reset();
+      },
+      error: (error) &#x3D;&gt; {
+        if (error.error.errors) {
+          this.errorMessages &#x3D; error.error.errors;
+        } else {
+          this.errorMessages.push(error.error);
+        }
+        this.submittedDeleteSlots &#x3D; false;
+      }
+    });
+    this.selectedDates &#x3D; null;
+  }
+
+  openPopup(option: string) {
+    const overlay &#x3D; document.getElementById(&#x27;overlay&#x27;);
+    const add &#x3D; document.getElementById(&#x27;add-slots-container&#x27;);
+    const remove &#x3D; document.getElementById(&#x27;confirm-review-container&#x27;);
+
+    if (add) {
+      add.style.display &#x3D; &quot;none&quot;;
+    }
+    if (remove) {
+      remove.style.display &#x3D; &quot;none&quot;;
+    }
+
+    if (overlay) {
+      overlay.style.display &#x3D; &#x27;flex&#x27;;
+      if (option &#x3D;&#x3D; &quot;add&quot;) {
+        if (add) {
+          add.style.display &#x3D; &quot;block&quot;;
+        }
+      }
+      if (option &#x3D;&#x3D; &quot;remove&quot;) {
+        if (remove) {
+          remove.style.display &#x3D; &quot;block&quot;;
+        }
+      }
+    }
+  }
+
+  closePopup() {
+    const overlay &#x3D; document.getElementById(&#x27;overlay&#x27;);
+    const add &#x3D; document.getElementById(&#x27;add-speciality-container&#x27;);
+    const edit &#x3D; document.getElementById(&#x27;edit-speciality-container&#x27;);
+
+    if (overlay) {
+      overlay.style.display &#x3D; &#x27;none&#x27;;
+      if (edit) {
+        edit.style.display &#x3D; &quot;none&quot;;
+      }
+      if (add) {
+        add.style.display &#x3D; &quot;none&quot;;
+      }
+    }
+  }
+
+  stopPropagation(event: Event) {
+    event.stopPropagation();
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;main&gt;
+  &lt;h1&gt;Consultas e Disponibilidade&lt;/h1&gt;
+
+  &lt;full-calendar [options]&#x3D;&quot;calendarOptions&quot;&gt;&lt;/full-calendar&gt;
+
+  &lt;button id&#x3D;&quot;action-btn&quot; (click)&#x3D;&quot;openPopup(&#x27;add&#x27;)&quot;&gt;&lt;img class&#x3D;&quot;action-btn-img&quot; src&#x3D;&quot;assets/images/Agenda/add.png&quot; /&gt; &lt;/button&gt;
+
+  &lt;div class&#x3D;&quot;overlay&quot; id&#x3D;&quot;overlay&quot; (click)&#x3D;&quot;closePopup()&quot;&gt;
+    &lt;a class&#x3D;&quot;close-button&quot; (click)&#x3D;&quot;closePopup()&quot;&gt;
+      &lt;img src&#x3D;&quot;assets/images/login/close.png&quot; alt&#x3D;&quot;Close button&quot; class&#x3D;&quot;close-image&quot;&gt;
+    &lt;/a&gt;
+
+    &lt;form [formGroup]&#x3D;&quot;addSlotsForm&quot; id&#x3D;&quot;add-slots-container&quot; class&#x3D;&quot;overlay-container&quot; autocomplete&#x3D;&quot;off&quot; (click)&#x3D;&quot;stopPropagation($event)&quot;&gt;
+
+      &lt;h2&gt;Adicionar Disponibilidade&lt;/h2&gt;
+
+      &lt;div class&#x3D;&quot;form-row&quot;&gt;
+        &lt;div class&#x3D;&quot;input-box&quot;&gt;
+          &lt;label for&#x3D;&quot;start-date&quot;&gt;Data de Início&lt;/label&gt;
+          &lt;input type&#x3D;&quot;date&quot; formControlName&#x3D;&quot;startDate&quot; id&#x3D;&quot;start-date&quot; name&#x3D;&quot;startDate&quot; required [class.is-invalid]&#x3D;&quot;submittedAddSlots &amp;&amp; addSlotsForm.get(&#x27;startDate&#x27;)?.errors&quot;&gt;
+        &lt;/div&gt;
+
+        &lt;div&gt;
+          Até
+        &lt;/div&gt;
+
+        &lt;div class&#x3D;&quot;input-box&quot;&gt;
+          &lt;label for&#x3D;&quot;end-date&quot;&gt;Data de Fim&lt;/label&gt;
+          &lt;input type&#x3D;&quot;date&quot; formControlName&#x3D;&quot;endDate&quot; id&#x3D;&quot;end-date&quot; name&#x3D;&quot;endDate&quot; required [class.is-invalid]&#x3D;&quot;submittedAddSlots &amp;&amp; addSlotsForm.get(&#x27;endDate&#x27;)?.errors&quot;&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;div class&#x3D;&quot;form-row&quot;&gt;
+        &lt;div class&#x3D;&quot;input-box&quot;&gt;
+          &lt;label for&#x3D;&quot;start-time&quot;&gt;Hora de Início&lt;/label&gt;
+          &lt;input type&#x3D;&quot;time&quot; formControlName&#x3D;&quot;startTime&quot; id&#x3D;&quot;start-time&quot; name&#x3D;&quot;startTime&quot; required [class.is-invalid]&#x3D;&quot;submittedAddSlots &amp;&amp; addSlotsForm.get(&#x27;startTime&#x27;)?.errors&quot;&gt;
+        &lt;/div&gt;
+
+        &lt;div&gt;
+          Até
+        &lt;/div&gt;
+
+        &lt;div class&#x3D;&quot;input-box&quot;&gt;
+          &lt;label for&#x3D;&quot;end-time&quot;&gt;Hora de Fim&lt;/label&gt;
+          &lt;input type&#x3D;&quot;time&quot; formControlName&#x3D;&quot;endTime&quot; id&#x3D;&quot;end-time&quot; name&#x3D;&quot;endTime&quot; required [class.is-invalid]&#x3D;&quot;submittedAddSlots &amp;&amp; addSlotsForm.get(&#x27;endTime&#x27;)?.errors&quot;&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;div class&#x3D;&quot;form-row&quot;&gt;
+        &lt;div class&#x3D;&quot;input-box&quot;&gt;
+          &lt;label for&#x3D;&quot;type-select&quot;&gt;Tipo de Consulta&lt;/label&gt;
+          &lt;div class&#x3D;&quot;select-dropdown&quot; id&#x3D;&quot;type-select-div&quot; [class.is-invalid]&#x3D;&quot;submittedAddSlots &amp;&amp; addSlotsForm.get(&#x27;selectType&#x27;)?.errors&quot;&gt;
+            &lt;select formControlName&#x3D;&quot;selectType&quot; id&#x3D;&quot;type-select&quot; required&gt;
+              &lt;option value&#x3D;&quot;0&quot; select&gt;Presencial&lt;/option&gt;
+              &lt;option value&#x3D;&quot;1&quot; select&gt;Online&lt;/option&gt;
+              &lt;option value&#x3D;&quot;2&quot; select&gt;Domicílio&lt;/option&gt;
+            &lt;/select&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;div class&#x3D;&quot;input-box&quot;&gt;
+          &lt;label for&#x3D;&quot;duration-select&quot;&gt;Duração das Consultas&lt;/label&gt;
+          &lt;div class&#x3D;&quot;select-dropdown&quot; id&#x3D;&quot;duration-select-div&quot; [class.is-invalid]&#x3D;&quot;submittedAddSlots &amp;&amp; addSlotsForm.get(&#x27;selectDuration&#x27;)?.errors&quot;&gt;
+            &lt;select formControlName&#x3D;&quot;selectDuration&quot; id&#x3D;&quot;duration-select&quot; required&gt;
+              &lt;option value&#x3D;&quot;10&quot; &gt;10 min&lt;/option&gt;
+              &lt;option value&#x3D;&quot;20&quot; &gt;20 min&lt;/option&gt;
+              &lt;option value&#x3D;&quot;30&quot; &gt;30 min&lt;/option&gt;
+              &lt;option value&#x3D;&quot;40&quot; &gt;40 min&lt;/option&gt;
+              &lt;option value&#x3D;&quot;50&quot; &gt;50 min&lt;/option&gt;
+              &lt;option value&#x3D;&quot;60&quot; &gt;60 min&lt;/option&gt;
+            &lt;/select&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;div class&#x3D;&quot;form-row&quot;&gt;
+        &lt;div class&#x3D;&quot;input-box&quot;&gt;
+          &lt;label for&#x3D;&quot;slot-speciality-select&quot;&gt;Selecionar Especialidade&lt;/label&gt;
+          &lt;div class&#x3D;&quot;select-dropdown&quot; id&#x3D;&quot;speciality-select-div&quot; [class.is-invalid]&#x3D;&quot;submittedAddSlots &amp;&amp; addSlotsForm.get(&#x27;selectSpeciality&#x27;)?.errors&quot;&gt;
+            &lt;select formControlName&#x3D;&quot;selectSpeciality&quot; id&#x3D;&quot;slot-speciality-select&quot; *ngIf&#x3D;&quot;(services &amp;&amp; (services.length &gt; 0))&quot; required&gt;
+              &lt;option value&#x3D;&quot;&quot; disabled hidden&gt;Selecione uma especialidade&lt;/option&gt;
+              &lt;option *ngFor&#x3D;&quot;let service of services&quot; value&#x3D;&quot;{{ service.serviceId }}&quot;&gt;{{ service.specialty }}&lt;/option&gt;
+            &lt;/select&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;div class&#x3D;&quot;form-row&quot; id&#x3D;&quot;form-row-buttons&quot;&gt;
+
+        &lt;button type&#x3D;&quot;reset&quot; class&#x3D;&quot;btn btn-red&quot; (click)&#x3D;&quot;closePopup()&quot;&gt;Cancelar&lt;/button&gt;
+
+        &lt;button type&#x3D;&quot;button&quot; class&#x3D;&quot;btn btn-blue&quot; (click)&#x3D;&quot;addAvailability()&quot;&gt;Adicionar&lt;/button&gt;
+
+      &lt;/div&gt;
+
+    &lt;/form&gt;
+
+    &lt;div id&#x3D;&quot;confirm-review-container&quot; class&#x3D;&quot;overlay-container&quot; (click)&#x3D;&quot;stopPropagation($event)&quot;&gt;
+      &lt;h2&gt;Tem a certeza que deseja apagar esta disponibilidade?&lt;/h2&gt;
+      &lt;div class&#x3D;&quot;form-row&quot; id&#x3D;&quot;form-row-buttons&quot;&gt;
+        &lt;button type&#x3D;&quot;button&quot; class&#x3D;&quot;btn btn-red&quot; (click)&#x3D;&quot;closePopup()&quot;&gt;Cancelar&lt;/button&gt;
+        &lt;button type&#x3D;&quot;button&quot; class&#x3D;&quot;btn btn-blue&quot; (click)&#x3D;&quot;deleteAvailability()&quot;&gt;&amp;nbsp;Remover&amp;nbsp;&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+  &lt;/div&gt;
+  &lt;div *ngIf&#x3D;&quot;errorMessages.length &gt; 0&quot;&gt;
+    &lt;app-validation-messages [errorMessages]&#x3D;&quot;errorMessages&quot;&gt;&lt;/app-validation-messages&gt;
+  &lt;/div&gt;
+
+&lt;/main&gt;
+
+&lt;!--&lt;form [formGroup]&#x3D;&quot;editSpecialityForm&quot; id&#x3D;&quot;edit-speciality-container&quot; class&#x3D;&quot;overlay-container&quot; autocomplete&#x3D;&quot;off&quot; (ngSubmit)&#x3D;&quot;editSpeciality()&quot; (click)&#x3D;&quot;stopPropagation($event)&quot;&gt;
+
+  &lt;h2&gt;Editar Especialidade&lt;/h2&gt;
+
+  &lt;input type&#x3D;&quot;hidden&quot; formControlName&#x3D;&quot;id&quot; id&#x3D;&quot;id-speciality-form&quot; name&#x3D;&quot;id&quot; value&#x3D;&quot;&quot;&gt;
+
+  &lt;div class&#x3D;&quot;speciality-name&quot; id&#x3D;&quot;speciality-name&quot;&gt;
+
+  &lt;/div&gt;
+
+  &lt;div class&#x3D;&quot;speciality-form-box&quot;&gt;
+    &lt;label for&#x3D;&quot;edit-price&quot;&gt;Preço por Hora:&lt;/label&gt;
+    &lt;div class&#x3D;&quot;input-wrapper&quot;&gt;
+      &lt;input formControlName&#x3D;&quot;price&quot; type&#x3D;&quot;number&quot; id&#x3D;&quot;edit-price&quot; name&#x3D;&quot;price&quot; required oninput&#x3D;&quot;this.value &#x3D; this.value.replace(/[^0-9]/g, &#x27;&#x27;);&quot; [class.is-invalid]&#x3D;&quot;submittedEdit &amp;&amp; editSpecialityForm.get(&#x27;price&#x27;)?.errors&quot;&gt;
+      &lt;span class&#x3D;&quot;euro-symbol&quot;&gt;€ &lt;/span&gt;
+    &lt;/div&gt;
+    &lt;span class&#x3D;&quot;text-danger&quot; *ngIf&#x3D;&quot;submittedEdit &amp;&amp; (editSpecialityForm.get(&#x27;price&#x27;)?.hasError(&#x27;required&#x27;) || editSpecialityForm.get(&#x27;price&#x27;)?.hasError(&#x27;min&#x27;) ||  editSpecialityForm.get(&#x27;price&#x27;)?.hasError(&#x27;max&#x27;))&quot;&gt;
+      O preço tem de estar entre 1€ e 1000€
+    &lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div class&#x3D;&quot;speciality-form-box&quot;&gt;
+    &lt;label&gt;Deseja ter consultas Presenciais?&lt;/label&gt;
+    &lt;div class&#x3D;&quot;radio-row&quot;&gt;
+      &lt;label for&#x3D;&quot;edit-presencial-sim&quot; class&#x3D;&quot;radio-label&quot;&gt;&lt;input formControlName&#x3D;&quot;presencial&quot; type&#x3D;&quot;radio&quot; name&#x3D;&quot;presencial&quot; value&#x3D;&quot;S&quot; id&#x3D;&quot;edit-presencial-sim&quot;&gt; Sim&lt;/label&gt;
+      &lt;label for&#x3D;&quot;edit-presencial-nao&quot; class&#x3D;&quot;radio-label&quot;&gt;&lt;input formControlName&#x3D;&quot;presencial&quot; type&#x3D;&quot;radio&quot; name&#x3D;&quot;presencial&quot; value&#x3D;&quot;N&quot; id&#x3D;&quot;edit-presencial-nao&quot;&gt; Não&lt;/label&gt;
+    &lt;/div&gt;
+    &lt;span class&#x3D;&quot;text-danger&quot; *ngIf&#x3D;&quot;submittedEdit &amp;&amp; editSpecialityForm.get(&#x27;presencial&#x27;)?.hasError(&#x27;required&#x27;)&quot;&gt;
+      Escoha uma opção
+    &lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div class&#x3D;&quot;speciality-form-box&quot;&gt;
+    &lt;label&gt;Deseja ter consultas Online?&lt;/label&gt;
+    &lt;div class&#x3D;&quot;radio-row&quot;&gt;
+      &lt;label for&#x3D;&quot;edit-online-sim&quot; class&#x3D;&quot;radio-label&quot;&gt;&lt;input formControlName&#x3D;&quot;online&quot; type&#x3D;&quot;radio&quot; name&#x3D;&quot;online&quot; value&#x3D;&quot;S&quot; id&#x3D;&quot;edit-online-sim&quot;&gt; Sim&lt;/label&gt;
+      &lt;label for&#x3D;&quot;edit-online-nao&quot; class&#x3D;&quot;radio-label&quot;&gt;&lt;input formControlName&#x3D;&quot;online&quot; type&#x3D;&quot;radio&quot; name&#x3D;&quot;online&quot; value&#x3D;&quot;N&quot; id&#x3D;&quot;edit-online-nao&quot;&gt; Não&lt;/label&gt;
+    &lt;/div&gt;
+    &lt;span class&#x3D;&quot;text-danger&quot; *ngIf&#x3D;&quot;submittedEdit &amp;&amp; editSpecialityForm.get(&#x27;online&#x27;)?.hasError(&#x27;required&#x27;)&quot;&gt;
+      Escoha uma opção
+    &lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div class&#x3D;&quot;speciality-form-box&quot;&gt;
+    &lt;label&gt;Deseja ter consultas Domicílio?&lt;/label&gt;
+    &lt;div class&#x3D;&quot;radio-row&quot;&gt;
+      &lt;label for&#x3D;&quot;edit-domicilio-sim&quot; class&#x3D;&quot;radio-label&quot;&gt;&lt;input formControlName&#x3D;&quot;domicilio&quot; type&#x3D;&quot;radio&quot; name&#x3D;&quot;domicilio&quot; value&#x3D;&quot;S&quot; id&#x3D;&quot;edit-domicilio-sim&quot;&gt; Sim&lt;/label&gt;
+      &lt;label for&#x3D;&quot;edit-domicilio-nao&quot; class&#x3D;&quot;radio-label&quot;&gt;&lt;input formControlName&#x3D;&quot;domicilio&quot; type&#x3D;&quot;radio&quot; name&#x3D;&quot;domicilio&quot; value&#x3D;&quot;N&quot; id&#x3D;&quot;edit-domicilio-nao&quot;&gt; Não&lt;/label&gt;
+    &lt;/div&gt;
+    &lt;span class&#x3D;&quot;text-danger&quot; *ngIf&#x3D;&quot;submittedEdit &amp;&amp; editSpecialityForm.get(&#x27;domicilio&#x27;)?.hasError(&#x27;required&#x27;)&quot;&gt;
+      Escoha uma opção
+    &lt;/span&gt;
+  &lt;/div&gt;
+
+  &lt;div class&#x3D;&quot;form-buttons-row&quot;&gt;
+    &lt;button type&#x3D;&quot;submit&quot; class&#x3D;&quot;btn btn-blue&quot;&gt;Adicionar&lt;/button&gt;
+
+    &lt;button type&#x3D;&quot;reset&quot; class&#x3D;&quot;btn btn-red&quot; (click)&#x3D;&quot;closePopup()&quot;&gt;Cancelar&lt;/button&gt;
+  &lt;/div&gt;
+
+&lt;/form&gt;--&gt;
+</code></pre>
+    </div>
+
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><main>  <h1>Consultas e Disponibilidade</h1>  <full-calendar [options]="calendarOptions"></full-calendar>  <button id="action-btn" (click)="openPopup(\'add\')"><img class="action-btn-img" src="assets/images/Agenda/add.png" /> </button>  <div class="overlay" id="overlay" (click)="closePopup()">    <a class="close-button" (click)="closePopup()">      <img src="assets/images/login/close.png" alt="Close button" class="close-image">    </a>    <form [formGroup]="addSlotsForm" id="add-slots-container" class="overlay-container" autocomplete="off" (click)="stopPropagation($event)">      <h2>Adicionar Disponibilidade</h2>      <div class="form-row">        <div class="input-box">          <label for="start-date">Data de Início</label>          <input type="date" formControlName="startDate" id="start-date" name="startDate" required [class.is-invalid]="submittedAddSlots && addSlotsForm.get(\'startDate\')?.errors">        </div>        <div>          Até        </div>        <div class="input-box">          <label for="end-date">Data de Fim</label>          <input type="date" formControlName="endDate" id="end-date" name="endDate" required [class.is-invalid]="submittedAddSlots && addSlotsForm.get(\'endDate\')?.errors">        </div>      </div>      <div class="form-row">        <div class="input-box">          <label for="start-time">Hora de Início</label>          <input type="time" formControlName="startTime" id="start-time" name="startTime" required [class.is-invalid]="submittedAddSlots && addSlotsForm.get(\'startTime\')?.errors">        </div>        <div>          Até        </div>        <div class="input-box">          <label for="end-time">Hora de Fim</label>          <input type="time" formControlName="endTime" id="end-time" name="endTime" required [class.is-invalid]="submittedAddSlots && addSlotsForm.get(\'endTime\')?.errors">        </div>      </div>      <div class="form-row">        <div class="input-box">          <label for="type-select">Tipo de Consulta</label>          <div class="select-dropdown" id="type-select-div" [class.is-invalid]="submittedAddSlots && addSlotsForm.get(\'selectType\')?.errors">            <select formControlName="selectType" id="type-select" required>              <option value="0" select>Presencial</option>              <option value="1" select>Online</option>              <option value="2" select>Domicílio</option>            </select>          </div>        </div>        <div class="input-box">          <label for="duration-select">Duração das Consultas</label>          <div class="select-dropdown" id="duration-select-div" [class.is-invalid]="submittedAddSlots && addSlotsForm.get(\'selectDuration\')?.errors">            <select formControlName="selectDuration" id="duration-select" required>              <option value="10" >10 min</option>              <option value="20" >20 min</option>              <option value="30" >30 min</option>              <option value="40" >40 min</option>              <option value="50" >50 min</option>              <option value="60" >60 min</option>            </select>          </div>        </div>      </div>      <div class="form-row">        <div class="input-box">          <label for="slot-speciality-select">Selecionar Especialidade</label>          <div class="select-dropdown" id="speciality-select-div" [class.is-invalid]="submittedAddSlots && addSlotsForm.get(\'selectSpeciality\')?.errors">            <select formControlName="selectSpeciality" id="slot-speciality-select" *ngIf="(services && (services.length > 0))" required>              <option value="" disabled hidden>Selecione uma especialidade</option>              <option *ngFor="let service of services" value="{{ service.serviceId }}">{{ service.specialty }}</option>            </select>          </div>        </div>      </div>      <div class="form-row" id="form-row-buttons">        <button type="reset" class="btn btn-red" (click)="closePopup()">Cancelar</button>        <button type="button" class="btn btn-blue" (click)="addAvailability()">Adicionar</button>      </div>    </form>    <div id="confirm-review-container" class="overlay-container" (click)="stopPropagation($event)">      <h2>Tem a certeza que deseja apagar esta disponibilidade?</h2>      <div class="form-row" id="form-row-buttons">        <button type="button" class="btn btn-red" (click)="closePopup()">Cancelar</button>        <button type="button" class="btn btn-blue" (click)="deleteAvailability()">&nbsp;Remover&nbsp;</button>      </div>    </div>  </div>  <div *ngIf="errorMessages.length > 0">    <app-validation-messages [errorMessages]="errorMessages"></app-validation-messages>  </div></main><!--<form [formGroup]="editSpecialityForm" id="edit-speciality-container" class="overlay-container" autocomplete="off" (ngSubmit)="editSpeciality()" (click)="stopPropagation($event)">  <h2>Editar Especialidade</h2>  <input type="hidden" formControlName="id" id="id-speciality-form" name="id" value="">  <div class="speciality-name" id="speciality-name">  </div>  <div class="speciality-form-box">    <label for="edit-price">Preço por Hora:</label>    <div class="input-wrapper">      <input formControlName="price" type="number" id="edit-price" name="price" required oninput="this.value = this.value.replace(/[^0-9]/g, \'\');" [class.is-invalid]="submittedEdit && editSpecialityForm.get(\'price\')?.errors">      <span class="euro-symbol">€ </span>    </div>    <span class="text-danger" *ngIf="submittedEdit && (editSpecialityForm.get(\'price\')?.hasError(\'required\') || editSpecialityForm.get(\'price\')?.hasError(\'min\') ||  editSpecialityForm.get(\'price\')?.hasError(\'max\'))">      O preço tem de estar entre 1€ e 1000€    </span>  </div>  <div class="speciality-form-box">    <label>Deseja ter consultas Presenciais?</label>    <div class="radio-row">      <label for="edit-presencial-sim" class="radio-label"><input formControlName="presencial" type="radio" name="presencial" value="S" id="edit-presencial-sim"> Sim</label>      <label for="edit-presencial-nao" class="radio-label"><input formControlName="presencial" type="radio" name="presencial" value="N" id="edit-presencial-nao"> Não</label>    </div>    <span class="text-danger" *ngIf="submittedEdit && editSpecialityForm.get(\'presencial\')?.hasError(\'required\')">      Escoha uma opção    </span>  </div>  <div class="speciality-form-box">    <label>Deseja ter consultas Online?</label>    <div class="radio-row">      <label for="edit-online-sim" class="radio-label"><input formControlName="online" type="radio" name="online" value="S" id="edit-online-sim"> Sim</label>      <label for="edit-online-nao" class="radio-label"><input formControlName="online" type="radio" name="online" value="N" id="edit-online-nao"> Não</label>    </div>    <span class="text-danger" *ngIf="submittedEdit && editSpecialityForm.get(\'online\')?.hasError(\'required\')">      Escoha uma opção    </span>  </div>  <div class="speciality-form-box">    <label>Deseja ter consultas Domicílio?</label>    <div class="radio-row">      <label for="edit-domicilio-sim" class="radio-label"><input formControlName="domicilio" type="radio" name="domicilio" value="S" id="edit-domicilio-sim"> Sim</label>      <label for="edit-domicilio-nao" class="radio-label"><input formControlName="domicilio" type="radio" name="domicilio" value="N" id="edit-domicilio-nao"> Não</label>    </div>    <span class="text-danger" *ngIf="submittedEdit && editSpecialityForm.get(\'domicilio\')?.hasError(\'required\')">      Escoha uma opção    </span>  </div>  <div class="form-buttons-row">    <button type="submit" class="btn btn-blue">Adicionar</button>    <button type="reset" class="btn btn-red" (click)="closePopup()">Cancelar</button>  </div></form>--></div>'
+    var COMPONENTS = [{'name': 'AboutUsComponent', 'selector': 'app-about-us'},{'name': 'AgendaComponent', 'selector': 'app-agenda'},{'name': 'AgendaPacienteComponent', 'selector': 'app-agenda-paciente'},{'name': 'AgendaProfissionalComponent', 'selector': 'app-agenda-profissional'},{'name': 'AlterarPassComponent', 'selector': 'app-alterar-pass'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'CalendarioComponent', 'selector': 'app-calendario'},{'name': 'ConfirmEmailComponent', 'selector': 'app-confirm-email'},{'name': 'ConsultaPacienteComponent', 'selector': 'app-consulta-paciente'},{'name': 'ConsultaProfissionalComponent', 'selector': 'app-consulta-profissional'},{'name': 'DisponibilidadeComponent', 'selector': 'app-disponibilidade'},{'name': 'EditPerfilComponent', 'selector': 'app-edit-perfil'},{'name': 'FooterAuthenticationComponent', 'selector': 'app-footer-authentication'},{'name': 'FooterComponent', 'selector': 'app-footer'},{'name': 'HistoricoConsultasComponent', 'selector': 'app-historico-consultas'},{'name': 'HomePageComponent', 'selector': 'app-home-page'},{'name': 'LoadingSpinnerComponent', 'selector': 'loading-spinner'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'MapaComponent', 'selector': 'app-mapa'},{'name': 'MarcacoesComponent', 'selector': 'app-marcacoes'},{'name': 'MarcarConsultaComponent', 'selector': 'app-marcar-consulta'},{'name': 'NavbarComponent', 'selector': 'app-navbar'},{'name': 'NotFoundComponent', 'selector': 'app-not-found'},{'name': 'PaymentFailureComponent', 'selector': 'app-payment-failure'},{'name': 'PaymentSuccessComponent', 'selector': 'app-payment-success'},{'name': 'PerfilPacienteComponent', 'selector': 'app-perfil-paciente'},{'name': 'PopUpSuccessComponent', 'selector': 'pop-up-success'},{'name': 'PrivacyPolicyComponent', 'selector': 'app-privacy-policy'},{'name': 'PrivateProfileProfessionalComponent', 'selector': 'app-private-profile-professional'},{'name': 'PublicProfileProfessionalComponent', 'selector': 'app-public-profile-professional'},{'name': 'RecuperarContaComponent', 'selector': 'app-recuperar-conta'},{'name': 'RecuperarPassComponent', 'selector': 'app-recuperar-pass'},{'name': 'RegisterWithGoogleComponent', 'selector': 'app-register-with-google'},{'name': 'RegistoComponent', 'selector': 'app-registo'},{'name': 'TermsAndConditionsComponent', 'selector': 'app-terms-and-conditions'},{'name': 'ValidationMessagesComponent', 'selector': 'app-validation-messages'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'DisponibilidadeComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'DisponibilidadeComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

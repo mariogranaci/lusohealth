@@ -1,0 +1,2601 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>lusohealthclient.client documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avaoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+
+               if ($darkModeToggles.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
+            <a href="../" class="navbar-brand">lusohealthclient.client documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Components</li>
+  <li class="breadcrumb-item"
+  >
+  MapaComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/services/mapa/mapa.component.ts</code>
+</p>
+
+
+
+
+    <p class="comment">
+        <h3>Implements</h3>
+    </p>
+    <p class="comment">
+                <code>OnInit</code>
+    </p>
+
+
+<section data-compodoc="block-metadata">
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-mapa</code></td>
+            </tr>
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./mapa.component.html</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">styleUrl</td>
+                <td class="col-md-9"><code>./mapa.component.css</code></td>
+            </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#center" >center</a>
+                            </li>
+                            <li>
+                                <a href="#concelho" >concelho</a>
+                            </li>
+                            <li>
+                                <a href="#filteredProfessionals" >filteredProfessionals</a>
+                            </li>
+                            <li>
+                                <a href="#map" >map</a>
+                            </li>
+                            <li>
+                                <a href="#mapMoved" >mapMoved</a>
+                            </li>
+                            <li>
+                                <a href="#markers" >markers</a>
+                            </li>
+                            <li>
+                                <a href="#professionals" >professionals</a>
+                            </li>
+                            <li>
+                                <a href="#professionalTypeId" >professionalTypeId</a>
+                            </li>
+                            <li>
+                                <a href="#professionalTypes" >professionalTypes</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
+                                    <span class="modifier">Optional</span>
+                                <a href="#searchBox" >searchBox</a>
+                            </li>
+                            <li>
+                                <a href="#specialties" >specialties</a>
+                            </li>
+                            <li>
+                                <a href="#specialtiesFiltered" >specialtiesFiltered</a>
+                            </li>
+                            <li>
+                                <a href="#specialtyId" >specialtyId</a>
+                            </li>
+                            <li>
+                                <a href="#unsortedProfessionals" >unsortedProfessionals</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#unsubscribe$" >unsubscribe$</a>
+                            </li>
+                            <li>
+                                <a href="#zoom" >zoom</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#calculateStars" >calculateStars</a>
+                            </li>
+                            <li>
+                                <a href="#calculateStarsForProfessionals" >calculateStarsForProfessionals</a>
+                            </li>
+                            <li>
+                                <a href="#clearMarkers" >clearMarkers</a>
+                            </li>
+                            <li>
+                                <a href="#createMarker" >createMarker</a>
+                            </li>
+                            <li>
+                                <a href="#fetchProfessionalsBasedOnMapBounds" >fetchProfessionalsBasedOnMapBounds</a>
+                            </li>
+                            <li>
+                                <a href="#filterProfessionals" >filterProfessionals</a>
+                            </li>
+                            <li>
+                                <a href="#filterProfessionalsCategory" >filterProfessionalsCategory</a>
+                            </li>
+                            <li>
+                                <a href="#filterProfessionalsType" >filterProfessionalsType</a>
+                            </li>
+                            <li>
+                                <a href="#filterSpecialties" >filterSpecialties</a>
+                            </li>
+                            <li>
+                                <a href="#getBoundsMap" >getBoundsMap</a>
+                            </li>
+                            <li>
+                                <a href="#getConcelho" >getConcelho</a>
+                            </li>
+                            <li>
+                                <a href="#getCurrentLocation" >getCurrentLocation</a>
+                            </li>
+                            <li>
+                                <a href="#getProfessionalCategory" >getProfessionalCategory</a>
+                            </li>
+                            <li>
+                                <a href="#getProfessionalName" >getProfessionalName</a>
+                            </li>
+                            <li>
+                                <a href="#getProfessionalsOnBounds" >getProfessionalsOnBounds</a>
+                            </li>
+                            <li>
+                                <a href="#getProfessionalTypes" >getProfessionalTypes</a>
+                            </li>
+                            <li>
+                                <a href="#getSpecialties" >getSpecialties</a>
+                            </li>
+                            <li>
+                                <a href="#initAutocomplete" >initAutocomplete</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#initMap" >initMap</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnDestroy" >ngOnDestroy</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnInit" >ngOnInit</a>
+                            </li>
+                            <li>
+                                <a href="#orderBy" >orderBy</a>
+                            </li>
+                            <li>
+                                <a href="#updateMapWithFilteredProfessionals" >updateMapWithFilteredProfessionals</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#updateProfessionalsWithConcelho" >updateProfessionalsWithConcelho</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(servicesService: <a href="../injectables/ServicesService.html" target="_self">ServicesService</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="37" class="link-to-prism">src/app/services/mapa/mapa.component.ts:37</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>servicesService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/ServicesService.html" target="_self" >ServicesService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+
+
+
+
+    <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="calculateStars"></a>
+                    <span class="name">
+                        <span ><b>calculateStars</b></span>
+                        <a href="#calculateStars"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>calculateStars(professional: <a href="../interfaces/Professional.html" target="_self">Professional</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="377"
+                                    class="link-to-prism">src/app/services/mapa/mapa.component.ts:377</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>professional</td>
+                                            <td>
+                                                            <code><a href="../interfaces/Professional.html" target="_self" >Professional</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="calculateStarsForProfessionals"></a>
+                    <span class="name">
+                        <span ><b>calculateStarsForProfessionals</b></span>
+                        <a href="#calculateStarsForProfessionals"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>calculateStarsForProfessionals()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="370"
+                                    class="link-to-prism">src/app/services/mapa/mapa.component.ts:370</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="clearMarkers"></a>
+                    <span class="name">
+                        <span ><b>clearMarkers</b></span>
+                        <a href="#clearMarkers"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>clearMarkers()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="226"
+                                    class="link-to-prism">src/app/services/mapa/mapa.component.ts:226</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="createMarker"></a>
+                    <span class="name">
+                        <span ><b>createMarker</b></span>
+                        <a href="#createMarker"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>createMarker(professional: <a href="../interfaces/Professional.html" target="_self">Professional</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="210"
+                                    class="link-to-prism">src/app/services/mapa/mapa.component.ts:210</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>professional</td>
+                                            <td>
+                                                            <code><a href="../interfaces/Professional.html" target="_self" >Professional</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Marker</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="fetchProfessionalsBasedOnMapBounds"></a>
+                    <span class="name">
+                        <span ><b>fetchProfessionalsBasedOnMapBounds</b></span>
+                        <a href="#fetchProfessionalsBasedOnMapBounds"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>fetchProfessionalsBasedOnMapBounds()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="200"
+                                    class="link-to-prism">src/app/services/mapa/mapa.component.ts:200</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="filterProfessionals"></a>
+                    <span class="name">
+                        <span ><b>filterProfessionals</b></span>
+                        <a href="#filterProfessionals"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>filterProfessionals()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="296"
+                                    class="link-to-prism">src/app/services/mapa/mapa.component.ts:296</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="filterProfessionalsCategory"></a>
+                    <span class="name">
+                        <span ><b>filterProfessionalsCategory</b></span>
+                        <a href="#filterProfessionalsCategory"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>filterProfessionalsCategory()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="355"
+                                    class="link-to-prism">src/app/services/mapa/mapa.component.ts:355</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="filterProfessionalsType"></a>
+                    <span class="name">
+                        <span ><b>filterProfessionalsType</b></span>
+                        <a href="#filterProfessionalsType"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>filterProfessionalsType()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="336"
+                                    class="link-to-prism">src/app/services/mapa/mapa.component.ts:336</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="filterSpecialties"></a>
+                    <span class="name">
+                        <span ><b>filterSpecialties</b></span>
+                        <a href="#filterSpecialties"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>filterSpecialties()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="359"
+                                    class="link-to-prism">src/app/services/mapa/mapa.component.ts:359</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getBoundsMap"></a>
+                    <span class="name">
+                        <span ><b>getBoundsMap</b></span>
+                        <a href="#getBoundsMap"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getBoundsMap()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="184"
+                                    class="link-to-prism">src/app/services/mapa/mapa.component.ts:184</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getConcelho"></a>
+                    <span class="name">
+                        <span ><b>getConcelho</b></span>
+                        <a href="#getConcelho"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getConcelho(latlng: literal type, geocoder: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="260"
+                                    class="link-to-prism">src/app/services/mapa/mapa.component.ts:260</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>latlng</td>
+                                            <td>
+                                                        <code>literal type</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>geocoder</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;string&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getCurrentLocation"></a>
+                    <span class="name">
+                        <span ><b>getCurrentLocation</b></span>
+                        <a href="#getCurrentLocation"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getCurrentLocation()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="109"
+                                    class="link-to-prism">src/app/services/mapa/mapa.component.ts:109</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getProfessionalCategory"></a>
+                    <span class="name">
+                        <span ><b>getProfessionalCategory</b></span>
+                        <a href="#getProfessionalCategory"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getProfessionalCategory(professional: <a href="../interfaces/Professional.html" target="_self">Professional</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="240"
+                                    class="link-to-prism">src/app/services/mapa/mapa.component.ts:240</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>professional</td>
+                                            <td>
+                                                            <code><a href="../interfaces/Professional.html" target="_self" >Professional</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getProfessionalName"></a>
+                    <span class="name">
+                        <span ><b>getProfessionalName</b></span>
+                        <a href="#getProfessionalName"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getProfessionalName(professional: <a href="../interfaces/Professional.html" target="_self">Professional</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="232"
+                                    class="link-to-prism">src/app/services/mapa/mapa.component.ts:232</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>professional</td>
+                                            <td>
+                                                            <code><a href="../interfaces/Professional.html" target="_self" >Professional</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getProfessionalsOnBounds"></a>
+                    <span class="name">
+                        <span ><b>getProfessionalsOnBounds</b></span>
+                        <a href="#getProfessionalsOnBounds"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getProfessionalsOnBounds()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="150"
+                                    class="link-to-prism">src/app/services/mapa/mapa.component.ts:150</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getProfessionalTypes"></a>
+                    <span class="name">
+                        <span ><b>getProfessionalTypes</b></span>
+                        <a href="#getProfessionalTypes"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getProfessionalTypes()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="384"
+                                    class="link-to-prism">src/app/services/mapa/mapa.component.ts:384</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getSpecialties"></a>
+                    <span class="name">
+                        <span ><b>getSpecialties</b></span>
+                        <a href="#getSpecialties"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getSpecialties()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="395"
+                                    class="link-to-prism">src/app/services/mapa/mapa.component.ts:395</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="initAutocomplete"></a>
+                    <span class="name">
+                        <span ><b>initAutocomplete</b></span>
+                        <a href="#initAutocomplete"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>initAutocomplete()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="87"
+                                    class="link-to-prism">src/app/services/mapa/mapa.component.ts:87</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="initMap"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>initMap</b></span>
+                        <a href="#initMap"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>initMap()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="66"
+                                    class="link-to-prism">src/app/services/mapa/mapa.component.ts:66</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnDestroy"></a>
+                    <span class="name">
+                        <span ><b>ngOnDestroy</b></span>
+                        <a href="#ngOnDestroy"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnDestroy()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="60"
+                                    class="link-to-prism">src/app/services/mapa/mapa.component.ts:60</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <span ><b>ngOnInit</b></span>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="41"
+                                    class="link-to-prism">src/app/services/mapa/mapa.component.ts:41</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="orderBy"></a>
+                    <span class="name">
+                        <span ><b>orderBy</b></span>
+                        <a href="#orderBy"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>orderBy()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="274"
+                                    class="link-to-prism">src/app/services/mapa/mapa.component.ts:274</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateMapWithFilteredProfessionals"></a>
+                    <span class="name">
+                        <span ><b>updateMapWithFilteredProfessionals</b></span>
+                        <a href="#updateMapWithFilteredProfessionals"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>updateMapWithFilteredProfessionals()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="344"
+                                    class="link-to-prism">src/app/services/mapa/mapa.component.ts:344</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateProfessionalsWithConcelho"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>updateProfessionalsWithConcelho</b></span>
+                        <a href="#updateProfessionalsWithConcelho"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>updateProfessionalsWithConcelho(professionals: <a href="../interfaces/Professional.html" target="_self">Professional[]</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="244"
+                                    class="link-to-prism">src/app/services/mapa/mapa.component.ts:244</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>professionals</td>
+                                            <td>
+                                                            <code><a href="../interfaces/Professional.html" target="_self" >Professional[]</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="center"></a>
+                    <span class="name">
+                        <span ><b>center</b></span>
+                        <a href="#center"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../miscellaneous/variables.html#google" target="_self" >google.maps.LatLngLiteral</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>{ lat: 38.736946, lng: -9.142685 }</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="30" class="link-to-prism">src/app/services/mapa/mapa.component.ts:30</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="concelho"></a>
+                    <span class="name">
+                        <span ><b>concelho</b></span>
+                        <a href="#concelho"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>string | null</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>null</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/app/services/mapa/mapa.component.ts:35</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="filteredProfessionals"></a>
+                    <span class="name">
+                        <span ><b>filteredProfessionals</b></span>
+                        <a href="#filteredProfessionals"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/Professional.html" target="_self" >Professional[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="26" class="link-to-prism">src/app/services/mapa/mapa.component.ts:26</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="map"></a>
+                    <span class="name">
+                        <span ><b>map</b></span>
+                        <a href="#map"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../miscellaneous/variables.html#google" target="_self" >google.maps.Map | undefined</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="31" class="link-to-prism">src/app/services/mapa/mapa.component.ts:31</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="mapMoved"></a>
+                    <span class="name">
+                        <span ><b>mapMoved</b></span>
+                        <a href="#mapMoved"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="32" class="link-to-prism">src/app/services/mapa/mapa.component.ts:32</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="markers"></a>
+                    <span class="name">
+                        <span ><b>markers</b></span>
+                        <a href="#markers"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>Marker[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="33" class="link-to-prism">src/app/services/mapa/mapa.component.ts:33</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="professionals"></a>
+                    <span class="name">
+                        <span ><b>professionals</b></span>
+                        <a href="#professionals"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/Professional.html" target="_self" >Professional[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="25" class="link-to-prism">src/app/services/mapa/mapa.component.ts:25</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="professionalTypeId"></a>
+                    <span class="name">
+                        <span ><b>professionalTypeId</b></span>
+                        <a href="#professionalTypeId"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>-1</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="37" class="link-to-prism">src/app/services/mapa/mapa.component.ts:37</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="professionalTypes"></a>
+                    <span class="name">
+                        <span ><b>professionalTypes</b></span>
+                        <a href="#professionalTypes"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>ProfessionalType[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="22" class="link-to-prism">src/app/services/mapa/mapa.component.ts:22</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="searchBox"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                            <span class="modifier">Optional</span>
+                        <span ><b>searchBox</b></span>
+                        <a href="#searchBox"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>ElementRef</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decorators : </b>
+                        <br />
+                        <code>
+                            @ViewChild(&#x27;searchBox&#x27;, {static: false})<br />
+                        </code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="21" class="link-to-prism">src/app/services/mapa/mapa.component.ts:21</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="specialties"></a>
+                    <span class="name">
+                        <span ><b>specialties</b></span>
+                        <a href="#specialties"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/Specialty.html" target="_self" >Specialty[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="23" class="link-to-prism">src/app/services/mapa/mapa.component.ts:23</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="specialtiesFiltered"></a>
+                    <span class="name">
+                        <span ><b>specialtiesFiltered</b></span>
+                        <a href="#specialtiesFiltered"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/Specialty.html" target="_self" >Specialty[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="24" class="link-to-prism">src/app/services/mapa/mapa.component.ts:24</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="specialtyId"></a>
+                    <span class="name">
+                        <span ><b>specialtyId</b></span>
+                        <a href="#specialtyId"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>-1</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="36" class="link-to-prism">src/app/services/mapa/mapa.component.ts:36</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="unsortedProfessionals"></a>
+                    <span class="name">
+                        <span ><b>unsortedProfessionals</b></span>
+                        <a href="#unsortedProfessionals"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/Professional.html" target="_self" >Professional[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="27" class="link-to-prism">src/app/services/mapa/mapa.component.ts:27</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="unsubscribe$"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>unsubscribe$</b></span>
+                        <a href="#unsubscribe$"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new Subject&lt;void&gt;()</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="34" class="link-to-prism">src/app/services/mapa/mapa.component.ts:34</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="zoom"></a>
+                    <span class="name">
+                        <span ><b>zoom</b></span>
+                        <a href="#zoom"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>14</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="29" class="link-to-prism">src/app/services/mapa/mapa.component.ts:29</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, ElementRef, OnInit, ViewChild } from &#x27;@angular/core&#x27;;
+import { ProfessionalType } from &#x27;../../shared/models/authentication/professionalType&#x27;;
+import { Specialty } from &#x27;../../shared/models/profile/specialty&#x27;;
+import { } from &#x27;@angular/google-maps&#x27;;
+import { Loader } from &#x27;@googlemaps/js-api-loader&#x27;;
+import { environment } from &#x27;../../../environments/environment.development&#x27;;
+import { Marker } from &#x27;@googlemaps/adv-markers-utils&#x27;;
+import { ServicesService } from &#x27;../services.service&#x27;;
+import { Professional } from &#x27;../../shared/models/profile/professional&#x27;;
+import { Subject, takeUntil } from &#x27;rxjs&#x27;;
+import { Bounds } from &#x27;../../shared/models/services/bounds&#x27;;
+
+declare var google: any;
+
+@Component({
+  selector: &#x27;app-mapa&#x27;,
+  templateUrl: &#x27;./mapa.component.html&#x27;,
+  styleUrl: &#x27;./mapa.component.css&#x27;
+})
+export class MapaComponent implements OnInit {
+  @ViewChild(&#x27;searchBox&#x27;, { static: false }) searchBox?: ElementRef;
+  professionalTypes: ProfessionalType[] &#x3D; [];
+  specialties: Specialty[] &#x3D; [];
+  specialtiesFiltered: Specialty[] &#x3D; [];
+  professionals: Professional[] &#x3D; [];
+  filteredProfessionals: Professional[] &#x3D; [];
+  unsortedProfessionals: Professional[] &#x3D; [];
+
+  zoom &#x3D; 14;
+  center: google.maps.LatLngLiteral &#x3D; { lat: 38.736946, lng: -9.142685 };
+  map: google.maps.Map | undefined;
+  mapMoved: boolean &#x3D; false;
+  markers: Marker[] &#x3D; [];
+  private unsubscribe$ &#x3D; new Subject&lt;void&gt;();
+  concelho: string | null &#x3D; null;
+  specialtyId: number &#x3D; -1;
+  professionalTypeId: number &#x3D; -1;
+
+  constructor(private servicesService: ServicesService) { }
+
+  ngOnInit() {
+    this.getProfessionalTypes();
+    this.getSpecialties();
+    const loader &#x3D; new Loader({
+      apiKey: environment.googleMapsApiKey,
+      version: &quot;weekly&quot;,
+      libraries: [
+        &quot;places&quot;,
+        &quot;geocoding&quot;
+      ]
+    });
+
+    loader.load().then(async () &#x3D;&gt; {
+      this.initMap();
+      this.initAutocomplete();
+      
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
+
+  async initMap(){
+    await google.maps.importLibrary(&#x27;marker&#x27;);
+
+    const domElement &#x3D; document.querySelector(&#x27;#map&#x27;);
+    // create the map
+    this.map &#x3D; new google.maps.Map(domElement, {
+      center: { lat: 38.7074, lng: -9.1368 },
+      zoom: this.zoom,
+      mapId: &#x27;lusohealth&#x27;
+    });
+    if (this.map) {
+      this.map.addListener(&#x27;dragend&#x27;, () &#x3D;&gt; {
+        this.mapMoved &#x3D; true;
+      });
+      this.map.addListener(&#x27;zoom_changed&#x27;, () &#x3D;&gt; {
+        this.mapMoved &#x3D; true;
+      });
+      this.getCurrentLocation();
+    }
+  }
+
+  initAutocomplete(): void {
+    if (this.searchBox) {
+      const autocomplete &#x3D; new google.maps.places.Autocomplete(this.searchBox.nativeElement);
+      autocomplete.addListener(&#x27;place_changed&#x27;, () &#x3D;&gt; {
+        const place &#x3D; autocomplete.getPlace();
+        if (!place.geometry) {
+          window.alert(&quot;No details available for input: &#x27;&quot; + place.name + &quot;&#x27;&quot;);
+          return;
+        }
+        if (this.map) {
+          if (place.geometry.viewport) {
+            this.map.fitBounds(place.geometry.viewport);
+            this.map.setZoom(this.zoom);
+          } else {
+            this.map.setCenter(place.geometry.location);
+            this.map.setZoom(this.zoom);
+          }
+        }
+      });
+    }
+  }
+
+  getCurrentLocation(): void {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) &#x3D;&gt; {
+          const currentPosition &#x3D; {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          };
+          // Use &#x27;currentPosition&#x27; para centralizar o mapa ou fazer o que precisar
+          if (this.map) {
+            this.map.setCenter(currentPosition);
+            this.map.setZoom(this.zoom);
+
+
+            // Crie um marcador avançado para a posição do usuário
+            const currentPositionMarkerImage &#x3D; document.createElement(&#x27;img&#x27;);
+            currentPositionMarkerImage.style.width &#x3D; &#x27;30px&#x27;;
+            currentPositionMarkerImage.src &#x3D; &#x27;https://assets-global.website-files.com/62c5e0898dea0b799c5f2210/62e8212acc540f291431bad2_location-icon.png&#x27;;
+            const userLocationMarker &#x3D; new Marker({
+              position: currentPosition,
+              map: this.map,
+              content: currentPositionMarkerImage,
+              title: &#x27;Sua Localização&#x27;,
+            });
+            this.getProfessionalsOnBounds();
+          }
+        },
+        (err) &#x3D;&gt; {
+          console.warn(&#x60;ERROR(${err.code}): ${err.message}&#x60;);
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 5000,
+          maximumAge: 0
+        }
+      );
+    } else {
+      alert(&quot;Geolocalização não é suportada por este navegador.&quot;);
+    }
+  }
+
+  getProfessionalsOnBounds(): void {
+    this.clearMarkers();
+    if (this.map) {
+      const bounds &#x3D; this.map.getBounds();
+      if (bounds) {
+        const ne &#x3D; bounds.getNorthEast();
+        const sw &#x3D; bounds.getSouthWest();
+        this.mapMoved &#x3D; false;
+
+        const boundsMap: Bounds &#x3D; {
+          latitudeNorthEast: ne.lat(),
+          longitudeNorthEast: ne.lng(),
+          latitudeSouthWest: sw.lat(),
+          longitudeSouthWest: sw.lng()
+        };
+
+
+        this.servicesService.getProfessionalsOnLocation(boundsMap).pipe(takeUntil(this.unsubscribe$)).subscribe(
+          (professionals: Professional[]) &#x3D;&gt; {
+
+
+            this.updateProfessionalsWithConcelho(professionals).then(() &#x3D;&gt; {
+              this.professionals &#x3D; professionals;
+              this.calculateStarsForProfessionals();
+              this.filterProfessionals();
+            });
+          }, (error) &#x3D;&gt; {
+            console.error(error);
+          }
+        );
+      }
+    }
+  }
+
+  getBoundsMap(): any {
+    if (this.map) {
+      const bounds &#x3D; this.map.getBounds();
+      if (bounds) {
+        const ne &#x3D; bounds.getNorthEast();
+        const sw &#x3D; bounds.getSouthWest();
+        return {
+          latitudeNorthEast: ne.lat(),
+          longitudeNorthEast: ne.lng(),
+          latitudeSouthWest: sw.lat(),
+          longitudeSouthWest: sw.lng()
+        };
+      }
+    }
+  }
+
+  fetchProfessionalsBasedOnMapBounds(): void {
+    this.clearMarkers();
+    if (this.map) {
+      this.filteredProfessionals.forEach(professional &#x3D;&gt; {
+        const marker &#x3D; this.createMarker(professional);
+        this.markers.push(marker);
+      });
+    }
+  }
+
+  createMarker(professional: Professional): Marker {
+    if (!professional.location) {
+      throw new Error(&#x27;Localização do profissional não disponível.&#x27;);
+    }
+    const [lat, lng] &#x3D; professional.location.replace(/,/g, &#x27;.&#x27;).split(&#x27;;&#x27;).map(coord &#x3D;&gt; parseFloat(coord));
+    const position &#x3D; new google.maps.LatLng(lat, lng);
+
+    const marker &#x3D; new Marker({
+      position,
+      map: this.map,
+      title: this.getProfessionalName(professional),
+    });
+
+    return marker;
+  }
+
+  clearMarkers(): void {
+    // Esta função remove todos os marcadores do mapa e limpa o array
+    this.markers.forEach(marker &#x3D;&gt; marker.map &#x3D; null);
+    this.markers &#x3D; [];
+  }
+
+  getProfessionalName(professional: Professional): string {
+    let name &#x3D; &#x27;&#x27;;
+    if (professional.professionalInfo.firstName &amp;&amp; professional.professionalInfo.lastName) {
+      name &#x3D; professional.professionalInfo.firstName.split(&#x27; &#x27;)[0] + &#x27; &#x27; + professional.professionalInfo.lastName.split(&#x27; &#x27;)[0];
+    }
+    return name;
+  }
+
+  getProfessionalCategory(professional: Professional): string {
+    return professional.professionalType;
+  }
+
+  async updateProfessionalsWithConcelho(professionals: Professional[]): Promise&lt;void&gt; {
+    const geocoder &#x3D; new google.maps.Geocoder();
+    for (const professional of professionals) {
+      const location &#x3D; professional.location?.replace(/,/g, &#x27;.&#x27;).split(&#x27;;&#x27;);
+      if (location &amp;&amp; location.length &#x3D;&#x3D;&#x3D; 2) {
+        const latlng &#x3D; {
+          lat: parseFloat(location[0]),
+          lng: parseFloat(location[1])
+        };
+
+        professional.concelho &#x3D; await this.getConcelho(latlng, geocoder);
+      }
+    }
+  }
+
+
+  getConcelho(latlng: { lat: number, lng: number }, geocoder: any): Promise&lt;string&gt; {
+    return new Promise((resolve, reject) &#x3D;&gt; {
+      geocoder.geocode({ &#x27;location&#x27;: latlng }, (results: { address_components: any[]; }[], status: any) &#x3D;&gt; {
+        console.log(&#x27;Chamada de API&#x27;);
+        if (status &#x3D;&#x3D;&#x3D; google.maps.GeocoderStatus.OK) {
+          const concelho &#x3D; results[0]?.address_components.find(ac &#x3D;&gt; ac.types.includes(&#x27;administrative_area_level_2&#x27;))?.long_name || &#x27;Não disponível&#x27;;
+          resolve(concelho);
+        } else {
+          resolve(&#x27;Não disponível&#x27;);
+        }
+      });
+    });
+  }
+
+  orderBy() {
+    const option &#x3D; document.getElementById(&quot;order-select&quot;) as HTMLSelectElement | null;
+    if (option &amp;&amp; option.value &#x3D;&#x3D;&#x3D; &#x27;rank&#x27;) {
+      this.unsortedProfessionals &#x3D; this.filteredProfessionals;
+      let sortedProfessionals &#x3D; [...this.filteredProfessionals];
+
+      // Sort the cloned array
+      sortedProfessionals.sort((prof1, prof2) &#x3D;&gt; {
+        // Assuming getAverageRating is a method that calculates the average rating
+        let ratingA &#x3D; prof1.averageStars;
+        let ratingB &#x3D; prof2.averageStars;
+        if (ratingA &#x3D;&#x3D;&#x3D; undefined || ratingB &#x3D;&#x3D;&#x3D; undefined) {
+          return 0;
+        }
+        return ratingB - ratingA; // Descending order
+      });
+      this.filteredProfessionals &#x3D; sortedProfessionals;
+    } else {
+      this.filteredProfessionals &#x3D; this.unsortedProfessionals;
+    }
+  }
+
+  filterProfessionals(): void {
+    const selectedCategory &#x3D; document.getElementById(&quot;category&quot;) as HTMLSelectElement;
+    const selectedSpecialty &#x3D; document.getElementById(&quot;specialty&quot;) as HTMLSelectElement;
+    const selectedConsultaTipo &#x3D; document.getElementById(&quot;consulta-tipo&quot;) as HTMLSelectElement;
+
+    const professionalTypeId &#x3D; parseInt(selectedCategory.value);
+    let specialtyId &#x3D; parseInt(selectedSpecialty.value);
+
+    console.log(&quot;professionals&quot;, this.professionals);
+
+    // Primeiro filtre por tipo de profissional, se houver um selecionado
+    if (professionalTypeId) {
+      this.filteredProfessionals &#x3D; this.professionals.filter(professional &#x3D;&gt;
+        professional.professionalType &#x3D;&#x3D;&#x3D; this.professionalTypes.find(type &#x3D;&gt; type.id &#x3D;&#x3D;&#x3D; professionalTypeId)?.name
+      );
+      if (professionalTypeId !&#x3D;&#x3D; this.professionalTypeId) {
+        selectedSpecialty.value &#x3D; &quot;0&quot;;
+      }
+      this.professionalTypeId &#x3D; professionalTypeId;
+    }
+
+    specialtyId &#x3D; parseInt(selectedSpecialty.value);
+    if (specialtyId) {
+      this.filteredProfessionals &#x3D; this.professionals.filter(professional &#x3D;&gt;
+        professional.services.some(service &#x3D;&gt; service.specialtyId &#x3D;&#x3D;&#x3D; specialtyId)
+      );
+    }
+
+    const consultaTipo &#x3D; selectedConsultaTipo.value;
+    if (professionalTypeId &#x3D;&#x3D;&#x3D; 0)
+      this.filteredProfessionals &#x3D; this.professionals;
+
+    console.log(&quot;filtered professionals&quot;, this.filteredProfessionals);
+
+    // Agora atualize os marcadores no mapa com os profissionais filtrados
+    this.fetchProfessionalsBasedOnMapBounds();
+  }
+
+
+
+  filterProfessionalsType(): void {
+    const selectedCategory &#x3D; document.getElementById(&quot;category&quot;) as HTMLSelectElement;
+    const professionalType &#x3D; this.professionalTypes.find(type &#x3D;&gt; type.id &#x3D;&#x3D;&#x3D; parseInt(selectedCategory.value));
+    if (professionalType) {
+      this.filteredProfessionals &#x3D; this.professionals.filter(professional &#x3D;&gt; professional.professionalType &#x3D;&#x3D;&#x3D; professionalType.name);
+    }
+  }
+
+  updateMapWithFilteredProfessionals(): void {
+    // Limpa os marcadores antigos
+    this.clearMarkers();
+
+    // Adiciona novos marcadores para os profissionais filtrados
+    this.professionals.forEach(professional &#x3D;&gt; {
+      const marker &#x3D; this.createMarker(professional);
+      this.markers.push(marker);
+    });
+  }
+
+  filterProfessionalsCategory(): void {
+
+  }
+
+  filterSpecialties(): void {
+    const selectedCategory &#x3D; document.getElementById(&quot;category&quot;) as HTMLSelectElement;
+    const professionalType &#x3D; this.professionalTypes.find(type &#x3D;&gt; type.id &#x3D;&#x3D;&#x3D; parseInt(selectedCategory.value));
+
+    if (professionalType) {
+      this.specialtiesFiltered &#x3D; this.specialties.filter(specialty &#x3D;&gt; specialty.professionalTypeId &#x3D;&#x3D;&#x3D; professionalType.id);
+    } else {
+      this.specialtiesFiltered &#x3D; [];
+    }
+  }
+
+  calculateStarsForProfessionals() {
+    this.professionals.forEach(professional &#x3D;&gt; {
+      professional.averageStars &#x3D; this.calculateStars(professional);
+      console.log(&#x27;averageStars&#x27;, professional.averageStars);
+    });
+  }
+
+  calculateStars(professional: Professional): number {
+    if (professional.reviews.length &#x3D;&#x3D;&#x3D; 0) return 0;
+
+    const totalStars &#x3D; professional.reviews.reduce((total, review) &#x3D;&gt; total + review.stars, 0);
+    return totalStars / professional.reviews.length;
+  }
+
+  getProfessionalTypes() {
+    this.servicesService.getProfessionalTypes().pipe(takeUntil(this.unsubscribe$)).subscribe({
+      next: (professionalTypes: ProfessionalType[]) &#x3D;&gt; {
+        this.professionalTypes &#x3D; professionalTypes;
+      },
+      error: (error) &#x3D;&gt; {
+        console.error(error);
+      }
+    });
+  }
+
+  getSpecialties() {
+    this.servicesService.getSpecialties().pipe(
+      takeUntil(this.unsubscribe$)
+    ).subscribe({
+      next: (specialities: Specialty[]) &#x3D;&gt; {
+        this.specialties &#x3D; specialities;
+      },
+      error: (error) &#x3D;&gt; {
+        console.error(error);
+      }
+    });
+  }
+
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;main&gt;
+  &lt;section id&#x3D;&quot;left-panel&quot;&gt;
+    &lt;section id&#x3D;&quot;filter-section&quot;&gt;
+      &lt;div id&#x3D;&quot;filters-div&quot;&gt;
+        &lt;p class&#x3D;&quot;bold margin-select&quot;&gt;Filtrar:&lt;/p&gt;
+        &lt;div id&#x3D;&quot;filters&quot;&gt;
+          &lt;div class&#x3D;&quot;select-form-box&quot;&gt;
+            &lt;div class&#x3D;&quot;select-dropdown&quot;&gt;
+              &lt;select id&#x3D;&quot;category&quot; (change)&#x3D;&quot;filterSpecialties(); filterProfessionalsType(); filterProfessionals();&quot;&gt;
+                &lt;option value&#x3D;&quot;0&quot; selected disabled hidden&gt;Categoria&lt;/option&gt;
+                &lt;option value&#x3D;&quot;0&quot;&gt;Qualquer&lt;/option&gt;
+                &lt;option *ngFor&#x3D;&quot;let type of professionalTypes&quot; value&#x3D;&quot;{{ type.id }}&quot;&gt;{{ type.name }}&lt;/option&gt;
+              &lt;/select&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div id&#x3D;&quot;speciality-select-box&quot; class&#x3D;&quot;select-form-box&quot;&gt;
+            &lt;div class&#x3D;&quot;select-dropdown&quot;&gt;
+              &lt;select id&#x3D;&quot;specialty&quot; (change)&#x3D;&quot;filterProfessionals();&quot;&gt;
+                &lt;option value&#x3D;&quot;0&quot; selected disabled hidden&gt;Especialidade&lt;/option&gt;
+                &lt;option value&#x3D;&quot;0&quot;&gt;Qualquer&lt;/option&gt;
+                &lt;option *ngFor&#x3D;&quot;let specialty of specialtiesFiltered&quot; value&#x3D;&quot;{{ specialty.id }}&quot;&gt;{{ specialty.name }}&lt;/option&gt;
+              &lt;/select&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div style&#x3D;&quot;display:none;&quot; class&#x3D;&quot;select-form-box&quot;&gt;
+            &lt;div class&#x3D;&quot;select-dropdown&quot;&gt;
+              &lt;select id&#x3D;&quot;consulta-tipo&quot; &gt;
+                &lt;option value&#x3D;&quot;0&quot; selected disabled hidden&gt;Tipo de Consulta&lt;/option&gt;
+                &lt;option value&#x3D;&quot;0&quot;&gt;Qualquer&lt;/option&gt;
+                &lt;option value&#x3D;&quot;P&quot;&gt;Presencial&lt;/option&gt;
+                &lt;option value&#x3D;&quot;O&quot;&gt;Online&lt;/option&gt;
+                &lt;option value&#x3D;&quot;D&quot;&gt;Domiciliar&lt;/option&gt;
+              &lt;/select&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;&lt;div id&#x3D;&quot;order-div&quot;&gt;
+        &lt;p class&#x3D;&quot;bold margin-select&quot;&gt;Ordenar:&lt;/p&gt;
+        &lt;div id&#x3D;&quot;order&quot;&gt;
+          &lt;div class&#x3D;&quot;select-form-box&quot;&gt;
+            &lt;div class&#x3D;&quot;select-dropdown&quot;&gt;
+              &lt;select id&#x3D;&quot;order-select&quot; (change)&#x3D;&quot;orderBy()&quot;&gt;
+                &lt;option value&#x3D;&quot;0&quot; selected&gt;Ordenar por&lt;/option&gt;
+                &lt;option value&#x3D;&quot;rank&quot;&gt;Ranking&lt;/option&gt;
+              &lt;/select&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/section&gt;
+    &lt;section id&#x3D;&quot;service-section&quot; *ngIf&#x3D;&quot;professionals.length &gt; 0&quot;&gt;
+      &lt;div class&#x3D;&quot;service-tab&quot; *ngFor&#x3D;&quot;let professional of filteredProfessionals&quot; [routerLink]&#x3D;&quot;[&#x27;/professional-profile&#x27;]&quot; [queryParams]&#x3D;&quot;{ id: professional.professionalInfo.id }&quot;
+&gt;
+        &lt;figure&gt;
+          &lt;img src&#x3D;&quot;/assets/images/Perfil/profileImage.jpg&quot; alt&#x3D;&quot;Foto de Perfil&quot; /&gt;
+        &lt;/figure&gt;
+        &lt;div class&#x3D;&quot;service-info&quot;&gt;
+          &lt;div class&#x3D;&quot;row&quot;&gt;
+            &lt;h3&gt;{{ getProfessionalName(professional) }}&lt;/h3&gt;
+            &lt;div class&#x3D;&quot;row center-height&quot;&gt;
+              &lt;img class&#x3D;&quot;placeholder&quot; src&#x3D;&quot;/assets/images/Mapa/placeholder.png&quot; alt&#x3D;&quot;Localização&quot; /&gt;
+              &lt;p&gt;{{ professional.concelho }}&lt;/p&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div class&#x3D;&quot;row center-height&quot;&gt;
+            &lt;div class&#x3D;&quot;row center-height&quot;&gt;
+              &lt;span class&#x3D;&quot;small-right-margin&quot;&gt;{{ (professional.reviews.length !&#x3D;&#x3D; 0 &amp;&amp; professional.averageStars) ? professional.averageStars.toFixed(1).replace(&#x27;.&#x27;, &#x27;,&#x27;) : &#x27;-&#x27; }}&lt;/span&gt;
+              &lt;img src&#x3D;&quot;assets/images/profile/star.png&quot; alt&#x3D;&quot;Estrela&quot; class&#x3D;&quot;star display-block&quot; /&gt;
+            &lt;/div&gt;
+            &lt;p&gt;{{ getProfessionalCategory(professional) }}&lt;/p&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/section&gt;
+    &lt;section id&#x3D;&quot;service-section&quot; *ngIf&#x3D;&quot;professionals.length &#x3D;&#x3D;&#x3D; 0&quot;&gt;
+      &lt;div id&#x3D;&quot;no-professionals-div&quot;&gt;
+        &lt;p id&#x3D;&quot;no-professionals&quot;&gt;Não existem profissionais neste local&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/section&gt;
+  &lt;/section&gt;
+  &lt;section id&#x3D;&quot;right-panel&quot;&gt;
+    &lt;input id&#x3D;&quot;pac-input&quot; #searchBox class&#x3D;&quot;controls&quot; type&#x3D;&quot;text&quot; placeholder&#x3D;&quot;Search Box&quot; /&gt;
+    &lt;div id&#x3D;&quot;map&quot;&gt;&lt;/div&gt;
+    &lt;button *ngIf&#x3D;&quot;mapMoved&quot; (click)&#x3D;&quot;getProfessionalsOnBounds()&quot; class&#x3D;&quot;button-over-map&quot;&gt;Pesquisar nesta área&lt;/button&gt;
+  &lt;/section&gt;
+&lt;/main&gt;
+</code></pre>
+    </div>
+
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><main>  <section id="left-panel">    <section id="filter-section">      <div id="filters-div">        <p class="bold margin-select">Filtrar:</p>        <div id="filters">          <div class="select-form-box">            <div class="select-dropdown">              <select id="category" (change)="filterSpecialties(); filterProfessionalsType(); filterProfessionals();">                <option value="0" selected disabled hidden>Categoria</option>                <option value="0">Qualquer</option>                <option *ngFor="let type of professionalTypes" value="{{ type.id }}">{{ type.name }}</option>              </select>            </div>          </div>          <div id="speciality-select-box" class="select-form-box">            <div class="select-dropdown">              <select id="specialty" (change)="filterProfessionals();">                <option value="0" selected disabled hidden>Especialidade</option>                <option value="0">Qualquer</option>                <option *ngFor="let specialty of specialtiesFiltered" value="{{ specialty.id }}">{{ specialty.name }}</option>              </select>            </div>          </div>          <div style="display:none;" class="select-form-box">            <div class="select-dropdown">              <select id="consulta-tipo" >                <option value="0" selected disabled hidden>Tipo de Consulta</option>                <option value="0">Qualquer</option>                <option value="P">Presencial</option>                <option value="O">Online</option>                <option value="D">Domiciliar</option>              </select>            </div>          </div>        </div>      </div><div id="order-div">        <p class="bold margin-select">Ordenar:</p>        <div id="order">          <div class="select-form-box">            <div class="select-dropdown">              <select id="order-select" (change)="orderBy()">                <option value="0" selected>Ordenar por</option>                <option value="rank">Ranking</option>              </select>            </div>          </div>        </div>      </div>    </section>    <section id="service-section" *ngIf="professionals.length > 0">      <div class="service-tab" *ngFor="let professional of filteredProfessionals" [routerLink]="[\'/professional-profile\']" [queryParams]="{ id: professional.professionalInfo.id }">        <figure>          <img src="/assets/images/Perfil/profileImage.jpg" alt="Foto de Perfil" />        </figure>        <div class="service-info">          <div class="row">            <h3>{{ getProfessionalName(professional) }}</h3>            <div class="row center-height">              <img class="placeholder" src="/assets/images/Mapa/placeholder.png" alt="Localização" />              <p>{{ professional.concelho }}</p>            </div>          </div>          <div class="row center-height">            <div class="row center-height">              <span class="small-right-margin">{{ (professional.reviews.length !== 0 && professional.averageStars) ? professional.averageStars.toFixed(1).replace(\'.\', \',\') : \'-\' }}</span>              <img src="assets/images/profile/star.png" alt="Estrela" class="star display-block" />            </div>            <p>{{ getProfessionalCategory(professional) }}</p>          </div>        </div>      </div>    </section>    <section id="service-section" *ngIf="professionals.length === 0">      <div id="no-professionals-div">        <p id="no-professionals">Não existem profissionais neste local</p>      </div>    </section>  </section>  <section id="right-panel">    <input id="pac-input" #searchBox class="controls" type="text" placeholder="Search Box" />    <div id="map"></div>    <button *ngIf="mapMoved" (click)="getProfessionalsOnBounds()" class="button-over-map">Pesquisar nesta área</button>  </section></main></div>'
+    var COMPONENTS = [{'name': 'AboutUsComponent', 'selector': 'app-about-us'},{'name': 'AgendaComponent', 'selector': 'app-agenda'},{'name': 'AgendaPacienteComponent', 'selector': 'app-agenda-paciente'},{'name': 'AgendaProfissionalComponent', 'selector': 'app-agenda-profissional'},{'name': 'AlterarPassComponent', 'selector': 'app-alterar-pass'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'CalendarioComponent', 'selector': 'app-calendario'},{'name': 'ConfirmEmailComponent', 'selector': 'app-confirm-email'},{'name': 'ConsultaPacienteComponent', 'selector': 'app-consulta-paciente'},{'name': 'ConsultaProfissionalComponent', 'selector': 'app-consulta-profissional'},{'name': 'DisponibilidadeComponent', 'selector': 'app-disponibilidade'},{'name': 'EditPerfilComponent', 'selector': 'app-edit-perfil'},{'name': 'FooterAuthenticationComponent', 'selector': 'app-footer-authentication'},{'name': 'FooterComponent', 'selector': 'app-footer'},{'name': 'HistoricoConsultasComponent', 'selector': 'app-historico-consultas'},{'name': 'HomePageComponent', 'selector': 'app-home-page'},{'name': 'LoadingSpinnerComponent', 'selector': 'loading-spinner'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'MapaComponent', 'selector': 'app-mapa'},{'name': 'MarcacoesComponent', 'selector': 'app-marcacoes'},{'name': 'MarcarConsultaComponent', 'selector': 'app-marcar-consulta'},{'name': 'NavbarComponent', 'selector': 'app-navbar'},{'name': 'NotFoundComponent', 'selector': 'app-not-found'},{'name': 'PaymentFailureComponent', 'selector': 'app-payment-failure'},{'name': 'PaymentSuccessComponent', 'selector': 'app-payment-success'},{'name': 'PerfilPacienteComponent', 'selector': 'app-perfil-paciente'},{'name': 'PopUpSuccessComponent', 'selector': 'pop-up-success'},{'name': 'PrivacyPolicyComponent', 'selector': 'app-privacy-policy'},{'name': 'PrivateProfileProfessionalComponent', 'selector': 'app-private-profile-professional'},{'name': 'PublicProfileProfessionalComponent', 'selector': 'app-public-profile-professional'},{'name': 'RecuperarContaComponent', 'selector': 'app-recuperar-conta'},{'name': 'RecuperarPassComponent', 'selector': 'app-recuperar-pass'},{'name': 'RegisterWithGoogleComponent', 'selector': 'app-register-with-google'},{'name': 'RegistoComponent', 'selector': 'app-registo'},{'name': 'TermsAndConditionsComponent', 'selector': 'app-terms-and-conditions'},{'name': 'ValidationMessagesComponent', 'selector': 'app-validation-messages'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'MapaComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'MapaComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

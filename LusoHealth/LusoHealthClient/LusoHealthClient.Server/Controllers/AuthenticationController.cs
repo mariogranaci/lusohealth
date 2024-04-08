@@ -55,7 +55,8 @@ namespace LusoHealthClient.Server.Controllers
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user == null) return Unauthorized("Email ou password inválidos");
-            if (user.EmailConfirmed == false) return Unauthorized("Necessita confirmar o seu email para efetuar autenticação");
+            if (user.IsBlocked) return Unauthorized("A sua conta encontra-se banida devido a utilizações indevidas");
+            if (!user.EmailConfirmed) return Unauthorized("Necessita confirmar o seu email para efetuar autenticação");
 
             if (!CheckSuspensionValidityAsync(user))
             {
@@ -163,6 +164,23 @@ namespace LusoHealthClient.Server.Controllers
         [HttpPost("login-with-google")]
         public async Task<ActionResult<UserDto>> LoginWithGoogle(LoginWithGoogleDto model)
         {
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null) return BadRequest("O email não está registado");
+            if (user.IsBlocked) return Unauthorized("A sua conta encontra-se banida devido a utilizações indevidas");
+
+            if (!CheckSuspensionValidityAsync(user))
+            {
+                if (user.IsSuspended)
+                {
+                    await UnlockUserAsync(user);
+                }
+            }
+            else
+            {
+                string dataHora = GetCountdownString(user);
+                return BadRequest($"A sua conta encontra-se suspensa durante {dataHora}");
+            }
+
             if (model.Provider.Equals("google"))
             {
                 try
@@ -183,24 +201,9 @@ namespace LusoHealthClient.Server.Controllers
                 return BadRequest("Provedor Inválido");
             }
 
-            var user = await _userManager.FindByEmailAsync(model.Email);
-            if (user == null) return BadRequest("O email não está registado");
-            if (!CheckSuspensionValidityAsync(user))
-            {
-                if (user.IsSuspended)
-                {
-                    await UnlockUserAsync(user);
-                }
-            }
-            else
-            {
-                string dataHora = GetCountdownString(user);
-                return BadRequest($"A sua conta encontra-se suspensa durante {dataHora}");
-            }
-
             if (await _userManager.IsLockedOutAsync(user))
             {
-                int minutesNumber = (int)user.LockoutEnd.Value.Subtract(DateTime.Now).TotalMinutes;
+                int minutesNumber = (int) user.LockoutEnd.Value.Subtract(DateTime.Now).TotalMinutes;
                 string minutesString = minutesNumber == 1 ? $"minuto" : "minutos";
                 string minutes = $"{minutesNumber} {minutesString}";
                 if (minutesNumber <= 0) minutes = "menos de 1 minuto";
@@ -423,6 +426,29 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
+        [HttpPut("unlock-account")]
+        public async Task<IActionResult> UnlockAccount(ConfirmEmailDto model)
+        {
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null) return Unauthorized("Este endereço de email ainda não foi registado");
+            if (!user.EmailConfirmed) return BadRequest("O email ainda não foi confirmado. Confirme o seu email para poder recuperar a sua password");
+            if (user.IsSuspended) return BadRequest("A sua conta encontra-se suspensa e não é recuperável");
+
+
+            var decodedTokenBytes = WebEncoders.Base64UrlDecode(model.Token);
+            var decodedToken = Encoding.UTF8.GetString(decodedTokenBytes);
+            var isValidToken = await _userManager.VerifyUserTokenAsync(user, "Default", "UnlockUser", decodedToken);
+            if (!isValidToken)
+            {
+                return BadRequest("Token inválido ou expirado.");
+            }
+
+            await _userManager.ResetAccessFailedCountAsync(user);
+            await _userManager.SetLockoutEndDateAsync(user, DateTimeOffset.UtcNow);
+
+            return Ok(new JsonResult(new { title = "Conta desbloqueada", message = "A sua conta foi desbloquada com sucesso. Já pode fazer login com a sua conta" }));
+        }
+
 
 
         [HttpGet("get-professional-types")]
@@ -492,7 +518,7 @@ namespace LusoHealthClient.Server.Controllers
 
         private async Task<bool> SendRecoverAccountEmail(User user)
         {
-            var token = await _userManager.GenerateUserTokenAsync(user,"Default", "UnlockUser");
+            var token = await _userManager.GenerateUserTokenAsync(user, "Default", "UnlockUser");
             token = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
             var url = $"{_config["JWT:ClientUrl"]}/{_config["Email:RecoverAccountPath"]}?token={token}&email={user.Email}";
 

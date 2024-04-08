@@ -53,7 +53,6 @@ export class MapaComponent implements OnInit {
     loader.load().then(async () => {
       this.initMap();
       this.initAutocomplete();
-      
     });
   }
 

@@ -6,6 +6,7 @@ using LusoHealthClient.Server.DTOs.Services;
 using LusoHealthClient.Server.Models.Appointments;
 using LusoHealthClient.Server.Models.Services;
 using LusoHealthClient.Server.Models.Users;
+using LusoHealthClient.Server.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
@@ -27,12 +28,21 @@ namespace TestLusoHealth
 	{
 		private readonly User testUser;
 		private readonly ApplicationDbContext _context;
+		private readonly EmailService _emailService; // Adicionado apenas para nao dar erro de compilação
+        /* Problema : 
+         * O construtor da classe EmailService espera um parametro do tipo IConfiguration (ficheiro appsettings.json) 
+         * Se não for passado o parametro, o construtor não consegue ser executado e dá erro de compilação
+         * 
+         * Linhas que foram mudadas ou adicionadas:
+         * - 31, 41, 45, 72, 103, 139, 180, 211, 247, 288, 320, 358
+         */
 
 
-		public AppointmentControllerTest(ApplicationDbContextFixture fixture)
+        public AppointmentControllerTest(ApplicationDbContextFixture fixture, EmailService emailService)
 		{
 			_context = fixture.DbContext;
 			testUser = fixture.TestUser;
+			_emailService = emailService;
 		}
 
 		//Testes Cancelar e Rejeitar Consulta
@@ -59,7 +69,7 @@ namespace TestLusoHealth
 			mockUserManager.Setup(u => u.FindByIdAsync(It.IsAny<string>()))
 				.ReturnsAsync((string userId) => null);
 
-			var controller = new AppointmentController(_context, mockUserManager.Object);
+			var controller = new AppointmentController(_context, mockUserManager.Object, _emailService);
 			controller.ControllerContext = new ControllerContext();
 			controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
 
@@ -90,7 +100,7 @@ namespace TestLusoHealth
 			mockUserManager.Setup(u => u.FindByIdAsync(It.IsAny<string>()))
 				.ReturnsAsync((string userId) => null);
 
-			var controller = new AppointmentController(_context, mockUserManager.Object);
+			var controller = new AppointmentController(_context, mockUserManager.Object, _emailService);
 			controller.ControllerContext = new ControllerContext();
 			controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
 
@@ -126,7 +136,7 @@ namespace TestLusoHealth
 			mockUserManager.Setup(u => u.FindByIdAsync(It.IsAny<string>()))
 				.ReturnsAsync((string userId) => null);
 
-			var controller = new AppointmentController(_context, mockUserManager.Object);
+			var controller = new AppointmentController(_context, mockUserManager.Object, _emailService);
 			controller.ControllerContext = new ControllerContext();
 			controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
 
@@ -167,7 +177,7 @@ namespace TestLusoHealth
 			mockUserManager.Setup(u => u.FindByIdAsync(It.IsAny<string>()))
 				.ReturnsAsync((string userId) => null);
 
-			var controller = new AppointmentController(_context, mockUserManager.Object);
+			var controller = new AppointmentController(_context, mockUserManager.Object, _emailService);
 			controller.ControllerContext = new ControllerContext();
 			controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
 
@@ -198,7 +208,7 @@ namespace TestLusoHealth
 			mockUserManager.Setup(u => u.FindByIdAsync(It.IsAny<string>()))
 				.ReturnsAsync((string userId) => null);
 
-			var controller = new AppointmentController(_context, mockUserManager.Object);
+			var controller = new AppointmentController(_context, mockUserManager.Object, _emailService);
 			controller.ControllerContext = new ControllerContext();
 			controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
 
@@ -234,7 +244,7 @@ namespace TestLusoHealth
 			mockUserManager.Setup(u => u.FindByIdAsync(It.IsAny<string>()))
 				.ReturnsAsync((string userId) => null);
 
-			var controller = new AppointmentController(_context, mockUserManager.Object);
+			var controller = new AppointmentController(_context, mockUserManager.Object, _emailService);
 			controller.ControllerContext = new ControllerContext();
 			controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
 
@@ -275,7 +285,7 @@ namespace TestLusoHealth
 			mockUserManager.Setup(u => u.FindByIdAsync(It.IsAny<string>()))
 				.ReturnsAsync((string userId) => null);
 
-			var controller = new AppointmentController(_context, mockUserManager.Object);
+			var controller = new AppointmentController(_context, mockUserManager.Object, _emailService);
 			controller.ControllerContext = new ControllerContext();
 			controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
 
@@ -307,7 +317,7 @@ namespace TestLusoHealth
 			mockUserManager.Setup(u => u.FindByIdAsync(It.IsAny<string>()))
 				.ReturnsAsync((string userId) => null);
 
-			var controller = new AppointmentController(_context, mockUserManager.Object);
+			var controller = new AppointmentController(_context, mockUserManager.Object, _emailService);
 			controller.ControllerContext = new ControllerContext();
 			controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
 
@@ -345,7 +355,7 @@ namespace TestLusoHealth
 			mockUserManager.Setup(u => u.FindByIdAsync(It.IsAny<string>()))
 				.ReturnsAsync((string userId) => null);
 
-			var controller = new AppointmentController(_context, mockUserManager.Object);
+			var controller = new AppointmentController(_context, mockUserManager.Object, _emailService);
 			controller.ControllerContext = new ControllerContext();
 			controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
 

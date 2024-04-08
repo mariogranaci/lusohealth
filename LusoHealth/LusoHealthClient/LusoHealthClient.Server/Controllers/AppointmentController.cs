@@ -23,6 +23,7 @@ namespace LusoHealthClient.Server.Controllers
         private readonly ApplicationDbContext _context;
         private readonly UserManager<User> _userManager;
         private EmailService _emailService;
+         
 
         public AppointmentController(ApplicationDbContext context, UserManager<User> userManager, EmailService emailService)
         {

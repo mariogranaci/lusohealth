@@ -40,6 +40,10 @@ builder.Services.AddIdentityCore<User>(options =>
 
     //para confirmar email
     options.SignIn.RequireConfirmedEmail = true;
+
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
+    options.Lockout.MaxFailedAccessAttempts = 5;
+    options.Lockout.AllowedForNewUsers = true;
 })
     .AddRoles<IdentityRole>() //para adicionar roles
     .AddRoleManager<RoleManager<IdentityRole>>() //usar o RoleManager

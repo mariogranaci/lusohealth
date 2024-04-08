@@ -143,6 +143,7 @@ namespace LusoHealthClient.Server.Controllers
                     var currentTime = DateTime.UtcNow;
                     var appointments = _context.Appointment.Include(a => a.Patient).ThenInclude(b => b.User)
                         .Where(p => p.IdProfesional == user.Id && p.Timestamp > currentTime && p.State == AppointmentState.Pending)
+                        .OrderBy(p => p.Timestamp)
                         .ToList();
 
                     if (appointments == null || !appointments.Any()) { return NotFound("Não foi possível encontrar as marcações"); }

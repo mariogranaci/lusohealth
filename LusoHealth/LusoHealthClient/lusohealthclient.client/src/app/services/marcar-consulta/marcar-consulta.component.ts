@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from '../../authentication/authentication.service';
 import { User } from '../../shared/models/authentication/user';
 import { ConfirmEmail } from '../../shared/models/authentication/confirmEmail';
-import { Subject, take, takeUntil } from 'rxjs';
+import { Subject, onErrorResumeNextWith, take, takeUntil } from 'rxjs';
 import { ServicesService } from '../services.service';
 import { MakeAppointment } from '../../shared/models/services/makeAppointment';
 import { Appointment } from '../../shared/models/services/appointment';
@@ -26,7 +26,7 @@ export class MarcarConsultaComponent {
   displayedAvailabity: boolean = false;
   selectedDate: Date = new Date();
   selectedOption: string = "";
-  slots:  AvailableSlot[] = [];
+  slots: AvailableSlot[] = [];
 
   constructor(private authenticationService: AuthenticationService,
     private router: Router,
@@ -86,30 +86,55 @@ export class MarcarConsultaComponent {
     );
   }
 
-  marcarClick() {
+  marcarClick(appointmentId: number) {
     if (this.serviceInfo) {
-      const newAppointment = new Appointment(null, null, null, null, null, 1, null, null, null, parseInt(this.serviceId));
 
-      this.service.addAppointment(newAppointment).subscribe(
-        response => {
+      const slot = this.slots.find((s: AvailableSlot) => s.id === appointmentId);
+      if (!slot || slot.start === undefined || slot.appointmentType === undefined || slot.slotDuration === undefined) {
+        // Handle the case where the slot is not found or start is undefined
+        this.errorMessages.push("Algo correu mal.");
+        return;
+      }
+
+      const newAppointment = new Appointment(
+        slot.start,               // Date | null for timestamp
+        null,                     // string | null for location
+        slot.appointmentType,     // string | null for type
+        null,                     // string | null for description
+        null,                     // string | null for state
+        slot.slotDuration,        // number | null for duration
+        null,                     // string | null for idPatient
+        null,                     // number | null for id
+        null,                     // string | null for idProfessional
+        parseInt(this.serviceId)  // number | null for idService
+      );
+
+      this.service.addAppointment(newAppointment).subscribe({
+        next: (response) => {
           console.log('Consulta marcada com sucesso:', response.appointmentId);
-          this.payment(response.appointmentId);
+
+          if (!newAppointment.duration) {
+            this.errorMessages.push("Algo correu mal.");
+            return;
+          }
+
+          this.payment(response.appointmentId, newAppointment.duration);
         },
-        error => {
-          console.error('Erro ao adicionar o appointment:', error);
+        error: (error) => {
+          console.error('Erro ao adicionar o appointment: ', error);
           this.errorMessages.push("Erro ao marcar consulta.");
         }
-      )
+      });
+
     }
     else {
       this.errorMessages.push("Algo correu mal.");
     }
-
   }
 
-  private payment(appointmentId: number) {
+  private payment(appointmentId: number, slotDuration: number) {
     if (this.serviceInfo) {
-      this.service.requestStripeSession(this.serviceInfo.pricePerHour, appointmentId, this.serviceInfo.specialty);
+      this.service.requestStripeSession((this.serviceInfo.pricePerHour * slotDuration) / 60, appointmentId, this.serviceInfo.specialty);
     }
     else {
       this.errorMessages.push("Algo correu mal.");
@@ -117,7 +142,7 @@ export class MarcarConsultaComponent {
   }
 
   handleDateChange(selectedDate: Date): void {
-    this.selectedDate = selectedDate;      ;
+    this.selectedDate = selectedDate;;
 
     this.getAvailability();
   }
@@ -148,7 +173,7 @@ export class MarcarConsultaComponent {
               return false;
             }
           } else {
-              return false
+            return false
           }
         }).map((s: any) => ({
           appointmentType: s.appointmentType,
@@ -159,13 +184,13 @@ export class MarcarConsultaComponent {
           start: s.start
         }));
 
-        console.log(this.slots,typeof this.slots.length);
+        console.log(this.slots, typeof this.slots.length);
       },
       error => {
         console.error('Erro: ', error);
       }
     );
-  
+
   }
 
   convertToDate(dateTimeString: Date | undefined): string {

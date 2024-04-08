@@ -129,14 +129,13 @@ export class LoginComponent implements OnInit {
           } else {
             if (error.error === 'O email não está registado') {
               this.router.navigateByUrl(`/external-register/google?access_token=${response.credential}&user_id=${decodedToken.sub}&email=${decodedToken.email}&given_name=${decodedToken.given_name}&family_name=${decodedToken.family_name}&picture=${decodedToken.picture}`);
+            } else {
+              this.errorMessages.push(error.error);
 
             }
-            this.errorMessages.push(error.error);
           }
         }
       });
-
-
   }
 
   openPopup(opcao: string) {

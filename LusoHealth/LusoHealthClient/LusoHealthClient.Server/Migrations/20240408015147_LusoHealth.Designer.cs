@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LusoHealthClient.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240321002720_lusohealth")]
-    partial class lusohealth
+    [Migration("20240408015147_LusoHealth")]
+    partial class LusoHealth
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1589,6 +1589,9 @@ namespace LusoHealthClient.Server.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)

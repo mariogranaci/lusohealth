@@ -35,7 +35,8 @@ export class AgendaProfissionalComponent {
   displayedAppointments: Appointment[] = [];
   initialAppointmentCount = 3;
 
-  constructor(private servicesService: ServicesService, private agendaService: AgendaService, private appointmentService: AppointmentService) { }
+  constructor(private servicesService: ServicesService, private agendaService: AgendaService,
+    private appointmentService: AppointmentService) { }
 
   ngOnInit() {
     this.getServices().then(() => {
@@ -80,7 +81,7 @@ export class AgendaProfissionalComponent {
   // Cancela um agendamento
   cancelAppointment(appointment: Appointment) {
     const appontmentDto = new Appointment(appointment.timestamp, appointment.location, null, null, null, appointment.duration, appointment.idPatient, appointment.id, appointment.idProfessional, appointment.idService);
-    this.appointmentService.scheduleAppointment(appontmentDto).pipe(
+    this.appointmentService.cancelAppointment(appontmentDto).pipe(
       takeUntil(this.unsubscribe$)
     ).subscribe({
       next: (response: any) => {
@@ -91,6 +92,7 @@ export class AgendaProfissionalComponent {
           this.getNextAppointments();
           this.getPendingAppointments();
         });
+        this.refundAppointment(response.id);
       },
       error: (error) => {
         console.error("Error scheduling appointment:", error);
@@ -103,7 +105,21 @@ export class AgendaProfissionalComponent {
     });
   }
 
-  // Obtém os tipos de profissionais
+  refundAppointment(appointmentId: number) {
+    this.servicesService.refundPayment(appointmentId).subscribe({
+      next: (response: any) => {
+        console.log(response);
+      },
+      error: (error) => {
+        if (error.error.errors) {
+          this.errorMessages = error.error.errors;
+        } else {
+          this.errorMessages.push(error.error);
+        }
+      }
+    });
+  }
+
   getProfessionalTypes() {
     this.servicesService.getProfessionalTypes().pipe(
       takeUntil(this.unsubscribe$)

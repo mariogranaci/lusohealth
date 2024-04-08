@@ -26,6 +26,7 @@ namespace LusoHealthClient.Server.Models.Users
         [Required]
         public DateTime BirthDate { get; set; }
         public string? Provider { get; set; }
+        public DateTime DateCreated { get; set; }
 
     }
 }

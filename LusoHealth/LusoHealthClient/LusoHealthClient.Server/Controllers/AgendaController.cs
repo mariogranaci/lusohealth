@@ -69,7 +69,7 @@ namespace LusoHealthClient.Server.Controllers
 
                     if (appointments == null || !appointments.Any()) { return NotFound("Não foi possível encontrar as marcações"); }
 
-                    return appointments;
+                    return (List<Appointment>)appointments.Reverse<Appointment>();
                 }
                 else
                 {
@@ -103,6 +103,7 @@ namespace LusoHealthClient.Server.Controllers
                     var currentTime = DateTime.UtcNow;
                     var appointments = _context.Appointment.Include(a => a.Patient).ThenInclude(b => b.User)
                         .Where(p => p.IdPatient == user.Id && p.Timestamp > currentTime && p.State == AppointmentState.Scheduled)
+                        .OrderBy(p => p.Timestamp)
                         .ToList();
 
                     if (appointments == null || !appointments.Any()) { return NotFound("Não foi possível encontrar as marcações"); }
@@ -116,6 +117,7 @@ namespace LusoHealthClient.Server.Controllers
                     var currentTime = DateTime.UtcNow;
                     var appointments = _context.Appointment.Include(a => a.Patient).ThenInclude(b => b.User)
                         .Where(p => p.IdProfesional == user.Id && p.Timestamp > currentTime && p.State == AppointmentState.Scheduled)
+                        .OrderBy(p => p.Timestamp)
                         .ToList();
 
                     if (appointments == null || !appointments.Any()) { return NotFound("Não foi possível encontrar as marcações"); }
@@ -156,6 +158,7 @@ namespace LusoHealthClient.Server.Controllers
                     var currentTime = DateTime.UtcNow;
                     var appointments = _context.Appointment.Include(a => a.Patient).ThenInclude(b => b.User)
                         .Where(p => p.IdProfesional == user.Id && p.Timestamp > currentTime && p.State == AppointmentState.Pending)
+                        .OrderBy(p => p.Timestamp)
                         .ToList();
 
                     if (appointments == null || !appointments.Any()) { return NotFound("Não foi possível encontrar as marcações"); }

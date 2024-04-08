@@ -106,6 +106,10 @@ export class AuthenticationService {
     return this.http.put(`${environment.appUrl}/api/authentication/confirm-email`, model);
   }
 
+  unlockAccount(model: ConfirmEmail) {
+    return this.http.put(`${environment.appUrl}/api/authentication/unlock-account`, model);
+  }
+
   resendEmailConfirmationLink(email: string) {
     return this.http.post(`${environment.appUrl}/api/authentication/resend-email-confirmation-link/${email}`, {});
   }

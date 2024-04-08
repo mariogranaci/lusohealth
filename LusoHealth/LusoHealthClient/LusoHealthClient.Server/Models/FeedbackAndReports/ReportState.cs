@@ -2,7 +2,8 @@
 {
 	public enum ReportState
 	{
+		Pending,
 		Concluded,
-		Pending
+		Canceled
 	}
 }

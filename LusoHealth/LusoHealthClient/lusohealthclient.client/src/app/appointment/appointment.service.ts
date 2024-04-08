@@ -53,6 +53,16 @@ export class AppointmentService {
     return this.http.patch<Appointment>(`${environment.appUrl}/api/appointment/cancel-appointment`, model, { headers });
   }
 
+  finishAppointment(model: Appointment | undefined) {
+    const headers = this.getHeaders();
+    return this.http.patch<Appointment>(`${environment.appUrl}/api/appointment/finish-appointment`, model, { headers });
+  }
+
+  beginAppointment(model: Appointment | undefined) {
+    const headers = this.getHeaders();
+    return this.http.patch<Appointment>(`${environment.appUrl}/api/appointment/begin-appointment`, model, { headers });
+  }
+
   scheduleAppointment(model: Appointment | undefined) {
     const headers = this.getHeaders();
     return this.http.patch<Appointment>(`${environment.appUrl}/api/appointment/schedule-appointment`, model, { headers });

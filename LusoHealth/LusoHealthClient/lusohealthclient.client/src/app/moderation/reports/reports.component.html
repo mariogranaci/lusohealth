@@ -1,0 +1,61 @@
+<main>
+
+  <div class="row">
+    <section class="top-left">
+      <button class="btn btn-blue" (click)="goBack()">Voltar</button>
+    </section>
+
+    <div class="title">
+      <h1>Reports</h1>
+    </div>
+  </div>
+
+ 
+
+  <div class="reports-container">
+    <div class="dropdown">
+      <select id="state" (change)="updateDisplayedReports()">
+        <option value="0" selected>Qualquer</option>
+        <option value="1">Concluídas</option>
+        <option value="2">Canceladas</option>
+        <option value="3">Pendentes</option>
+      </select>
+    </div>
+    <ng-container *ngFor="let report of reports">
+      <div class="report-item">
+        <img class="report-profile-image" alt="Imagem de Perfil" src="/assets/images/Perfil/profileImage.jpg"
+             [routerLink]="['/professional-profile']" [queryParams]="{ id: report?.idProfesional }" />
+        <div class="report-details">
+          <div class="report-info">
+            <div class="report-title">Burla #{{ '000' + report.id | slice: -3 }}</div>
+            <div class="report-title" *ngIf="report?.state?.toString() == '1'">RESOLVIDA</div>
+            <div class="report-title" *ngIf="report?.state?.toString() == '2'">REMOVIDA</div>
+            <div class="report-date-time">
+              <div>{{ convertToDate(report.timestamp)}} - {{ convertToHours(report.timestamp) }}</div>
+            </div>
+          </div>
+          <div class="report-content">
+            <div class="report-description">{{ report.description }}</div>
+            <img src="assets/images/Reports/options.png" class="options-icon" (click)="openPopup(report)">
+          </div>
+        </div>
+      </div>
+      <div class="overlay" id="overlay" (click)="closePopup()">
+        <div id="options" class="overlay-container" autocomplete="off" (click)="stopPropagation($event)">
+          <div class="form-buttons-row">
+            <button type="button" (click)="cancelReport(currentReport); closePopup()" class="no-btn">Rejeitar Report</button>
+            <button type="button" (click)="suspendAccount(currentReport); closePopup()" class="no-btn">Suspender Conta</button>
+            <button type="button" (click)="blockAccount(currentReport); closePopup()" class="no-btn">Bloquear Conta</button>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <div class="more-container">
+      <button class="btn" id="more" (click)="addDisplayedReports()" *ngIf="!hide">
+        <img class="arrow" src="/assets/images/Agenda/arrow-down.png" />
+      </button>
+    </div>
+  </div>
+</main>
+
+

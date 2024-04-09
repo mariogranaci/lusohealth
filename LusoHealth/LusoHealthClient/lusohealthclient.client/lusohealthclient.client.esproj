@@ -8,6 +8,8 @@
     <PublishAssetsDirectory>$(MSBuildProjectDirectory)\dist\lusohealthclient.client\</PublishAssetsDirectory>
   </PropertyGroup>
   <ItemGroup>
+    <Folder Include="src\app\moderation\" />
+    <Folder Include="src\app\reports\" />
     <Folder Include="src\app\shared\models\agenda\" />
     <Folder Include="src\assets\images\login\" />
     <Folder Include="src\assets\images\profile\" />

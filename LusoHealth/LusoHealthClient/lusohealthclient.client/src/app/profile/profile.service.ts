@@ -16,6 +16,7 @@ import { jwtDecode } from 'jwt-decode';
 import { Certificate } from '../shared/models/profile/certificate';
 import { AddReview } from '../shared/models/profile/addReview';
 import { UpdatePicture } from '../shared/models/profile/updatePicture';
+import { Location } from '../shared/models/profile/location';
 
 @Injectable({
   providedIn: 'root'
@@ -120,6 +121,10 @@ export class ProfileService {
   );
 }
 
+  updateAddress(location: Location) {
+    const headers = this.getHeaders();
+    return this.http.patch(`${environment.appUrl}/api/profile/update-address`, location, { headers });
+  }
 
   deleteRelative(relativeId: number): Observable<Relative> {
     const headers = this.getHeaders();

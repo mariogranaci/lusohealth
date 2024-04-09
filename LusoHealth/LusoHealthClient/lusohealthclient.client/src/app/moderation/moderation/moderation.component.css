@@ -1,0 +1,282 @@
+main {
+  position: relative;
+  padding: 0 7%;
+  min-width: 1150px;
+  max-width: 1800px;
+  min-height: calc(100vh - 65px);
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.title {
+  margin: 25px auto;
+  font-size: 20px;
+  text-align: center
+}
+
+.top-left {
+  position: absolute;
+  left: 25px;
+  top: 15px;
+}
+
+.reviews-container {
+  width: 800px;
+  margin: 0 auto;
+}
+
+.review-item {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 50px;
+}
+
+.review-header {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.review-details {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.review-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.review-profile-image {
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  margin-right: 15px;
+}
+
+.review-star-image {
+  width: 20px;
+  height: 20px;
+  margin-left: 4px;
+}
+
+.review-title {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+}
+
+.review-content {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.review-description {
+  max-width: 100%;
+  word-break: break-word;
+  hyphens: auto;
+}
+
+.review-date-time {
+  margin-right: 8px;
+}
+
+.options-icon {
+  cursor: pointer;
+  width: 25px;
+  height: 25px;
+}
+
+.btn {
+  margin: auto 0;
+  width: fit-content;
+  align-self: center;
+  height: 50px;
+  border: none;
+  color: #fff;
+  font-size: 1.3rem;
+  border-radius: 30px;
+  padding: 10px 55px;
+  font-weight: 500;
+  background-color: #1875E7;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0s;
+  right: 30px;
+  display: inline-block;
+  box-shadow: inset 2px 2px 2px 0px rgba(37, 80, 209, 0.5), 7px 7px 20px 0px rgba(0, 0, 0, .1), 4px 4px 5px 0px rgba(0, 0, 0, .1);
+  outline: none;
+}
+
+  .btn:active {
+    transform: translateY(2px);
+  }
+
+  .btn:hover {
+    background-color: #1b69c8;
+    cursor: pointer;
+  }
+
+.btn-blue {
+  background-color: #1875e7;
+}
+
+  .btn-blue:hover {
+    background-color: #1b69c8;
+  }
+
+.btn-red {
+  background-color: #d42a2a;
+}
+
+  .btn-red:hover {
+    background-color: #c31414;
+  }
+
+.arrow {
+  width: 30px;
+}
+
+.more-container {
+  text-align: center;
+  padding-bottom: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#more {
+  width: fit-content;
+  padding: 10px 10px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/*------------------------------*/
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: none;
+}
+
+.close-button {
+  position: absolute;
+  top: 70px;
+  right: 60px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.close-image {
+  height: 50px;
+}
+
+.overlay-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  min-width: 450px;
+  max-width: 500px;
+  height: fit-content;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  background-color: #ECEEF0;
+  padding: 20px 20px;
+  display: none;
+}
+
+  .overlay-container > h2 {
+    text-align: center;
+  }
+
+  .overlay-container label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+  }
+
+#options {
+}
+
+.form-buttons-row {
+  display: flex;
+  flex-direction: column;
+}
+
+
+.no-btn {
+  background-color: #ECEEF0;
+  border: none;
+  font-size: 20px;
+  margin: 20px 0;
+}
+
+
+/*----------------------------------*/
+
+.dropdown,
+.dropdown * {
+  position: relative;
+}
+
+.dropdown {
+  width: fit-content;
+  position: relative;
+  background-color: #fff;
+  border-radius: 10px;
+  margin-bottom: 35px;
+}
+
+  .dropdown select {
+    font-size: 1.1rem;
+    font-weight: normal;
+    max-width: 400px;
+    padding: 8px 24px 8px 10px;
+    border: none;
+    background-color: transparent;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    user-select: none;
+  }
+
+    .dropdown select option {
+      height: fit-content;
+    }
+
+    .dropdown select:active, .dropdown select:focus {
+      outline: none;
+      box-shadow: none;
+    }
+
+  .dropdown:after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 8px;
+    width: 0;
+    height: 0;
+    margin-top: -2px;
+    border-top: 5px solid #aaa;
+    border-right: 5px solid transparent;
+    border-left: 5px solid transparent;
+  }

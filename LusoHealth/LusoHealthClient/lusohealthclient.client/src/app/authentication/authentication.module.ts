@@ -12,6 +12,7 @@ import { ConfirmEmailComponent } from './confirm-email/confirm-email.component';
 import { AlterarPassComponent } from './alterar-pass/alterar-pass.component';
 import { RegisterWithGoogleComponent } from './register-with-google/register-with-google.component';
 import { FooterAuthenticationComponent } from './footer-authentication/footer-authentication.component';
+import { UnlockAccountComponent } from './unlock-account/unlock-account.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { FooterAuthenticationComponent } from './footer-authentication/footer-au
     ConfirmEmailComponent,
     AlterarPassComponent,
     RegisterWithGoogleComponent,
-    FooterAuthenticationComponent
+    FooterAuthenticationComponent,
+    UnlockAccountComponent
   ],
   imports: [
     CommonModule,

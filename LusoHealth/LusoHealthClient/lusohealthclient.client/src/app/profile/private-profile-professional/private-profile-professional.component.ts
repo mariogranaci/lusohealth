@@ -12,6 +12,13 @@ import { Specialty } from '../../shared/models/profile/specialty';
 import { Review } from '../../shared/models/profile/review';
 import { Certificate } from '../../shared/models/profile/certificate';
 
+import { Marker } from '@googlemaps/adv-markers-utils';
+import { Loader } from '@googlemaps/js-api-loader';
+import { environment } from '../../../environments/environment.development';
+import { Location } from '../../shared/models/profile/location';
+
+declare let google: any;
+
 @Component({
   selector: 'app-private-profile-professional',
   templateUrl: './private-profile-professional.component.html',
@@ -22,6 +29,7 @@ export class PrivateProfileProfessionalComponent implements OnInit {
   addSpecialityForm: FormGroup = new FormGroup({});
   editSpecialityForm: FormGroup = new FormGroup({});
   updateDescriptionForm: FormGroup = new FormGroup({});
+  addressForm: FormGroup = new FormGroup({});
   submittedAdd = false;
   submittedEdit = false;
   submittedDescription = false;
@@ -35,6 +43,15 @@ export class PrivateProfileProfessionalComponent implements OnInit {
   public reviews: Review[] = [];
   public averageStars = 0;
   pdfList: Certificate[] = [];
+
+  zoom = 20;
+  center: google.maps.LatLngLiteral = { lat: 38.736946, lng: -9.142685 };
+  map: google.maps.Map | undefined;
+  marker: Marker | undefined;
+  position: google.maps.LatLng | undefined;
+  isInPortugal = false;
+  hasStreetNumber = false;
+  address: string | undefined;
 
   constructor(private authenticationService: AuthenticationService,
     private formBuilder: FormBuilder,
@@ -58,11 +75,23 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     });
   }
   ngOnInit(): void {
+    const loader = new Loader({
+      apiKey: environment.googleMapsApiKey,
+      version: "weekly",
+      libraries: [
+        "places",
+        "geocoding"
+      ]
+    });
     this.initializeForm();
     this.getProfessionalInfo().then(() => {
       this.setUserFields();
       this.getDescription();
       this.changeSpecialtyReview("0");
+      loader.load().then(async () => {
+        this.initMap();
+        this.initAutocomplete();
+      });
     });
     this.getSpecialties();
     this.getPdfs();
@@ -97,6 +126,11 @@ export class PrivateProfileProfessionalComponent implements OnInit {
 
     this.updateDescriptionForm = this.formBuilder.group({
       description: ['', [Validators.maxLength(5000)]],
+    });
+
+    this.addressForm = this.formBuilder.group({
+      address: ['', [Validators.required, Validators.maxLength(100)]],
+      city: ['', [Validators.required, Validators.maxLength(100)]],
     });
   }
 
@@ -133,13 +167,18 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     const nifElement = document.getElementById('nif');
     const genderElement = document.getElementById('gender');
 
-    if (nomeElement && apelidoElement && emailElement && telemovelElement && nifElement && genderElement && this.userData) {
+    const enderecoElement = document.getElementById('endereco');
+
+    console.log(this.userData);
+
+    if (nomeElement && apelidoElement && emailElement && telemovelElement && nifElement && genderElement && this.userData && enderecoElement) {
       nomeElement.textContent = this.userData.professionalInfo.firstName;
       apelidoElement.textContent = this.userData.professionalInfo.lastName;
       emailElement.textContent = this.userData.professionalInfo.email;
       telemovelElement.textContent = this.userData.professionalInfo.telemovel;
       nifElement.textContent = this.userData.professionalInfo.nif;
       genderElement.textContent = (this.userData.professionalInfo.genero === "M") ? "Masculino" : "Feminino";
+      enderecoElement.textContent = this.userData.address;
 
       if (this.userData.professionalInfo.picture) {
         this.profileImagePath = this.userData.professionalInfo.picture;
@@ -488,12 +527,16 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     const overlay = document.getElementById('overlay');
     const add = document.getElementById('add-speciality-container');
     const edit = document.getElementById('edit-speciality-container');
+    const editAddress = document.getElementById('edit-address-container');
 
     if (edit) {
       edit.style.display = "none";
     }
     if (add) {
       add.style.display = "none";
+    }
+    if (editAddress) {
+      editAddress.style.display = "none";
     }
 
     if (overlay) {
@@ -508,6 +551,11 @@ export class PrivateProfileProfessionalComponent implements OnInit {
           edit.style.display = "block";
         }
       }
+      else if (opcao == "address") {
+        if (editAddress) {
+          editAddress.style.display = "block";
+        }
+      }
     }
   }
 
@@ -515,6 +563,7 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     const overlay = document.getElementById('overlay');
     const add = document.getElementById('add-speciality-container');
     const edit = document.getElementById('edit-speciality-container');
+    const address = document.getElementById('edit-address-container');
 
     if (overlay) {
       overlay.style.display = 'none';
@@ -524,10 +573,134 @@ export class PrivateProfileProfessionalComponent implements OnInit {
       if (add) {
         add.style.display = "none";
       }
+      if (address) {
+        address.style.display = "none";
+      }
     }
   }
 
   stopPropagation(event: Event) {
     event.stopPropagation();
+  }
+
+  async initMap() {
+    await google.maps.importLibrary('marker');
+    await this.userData;
+
+    const domElement = document.querySelector('#map');
+    // create the map
+    this.map = new google.maps.Map(domElement, {
+      center:  { lat: 38.7074, lng: -9.1368 },
+      zoom: this.zoom,
+      mapId: 'luso-health'
+    });
+
+    if (this.userData && this.userData.location) {
+      this.marker = this.createMarker(this.userData);
+      const [lat, lng] = this.userData.location.replace(/,/g, '.').split(';').map(coord => parseFloat(coord));
+      const position = new google.maps.LatLng(lat, lng);
+      this.position = position;
+      console.log(position);
+      this.map?.setCenter(position);
+    }
+  }
+
+  private initAutocomplete(): void {
+    const input = document.getElementById('address-input') as HTMLInputElement;
+    const autocomplete = new google.maps.places.Autocomplete(input, {
+      componentRestrictions: { country: 'PT' },
+      types: ['geocode'], // Use 'geocode' para endereços apenas, sem estabelecimentos comerciais.
+      fields: ['formatted_address', 'address_components', 'geometry'] // Lista de campos que você quer que sejam retornados.
+    });
+
+    autocomplete.addListener('place_changed', () => {
+      const place = autocomplete.getPlace();
+      this.hasStreetNumber = place.address_components.some((component: { types: string | string[]; }) =>
+        component.types.includes('street_number')
+      );
+      console.log('hasStreetNumber', this.hasStreetNumber);
+
+      if (!place.geometry) {
+        return;
+      }
+      if (this.map) {
+        if (place.geometry.viewport) {
+          this.map.fitBounds(place.geometry.viewport);
+          this.map.setZoom(this.zoom);
+        } else {
+          this.map.setCenter(place.geometry.location);
+          this.map.setZoom(this.zoom);
+        }
+        if (this.marker && this.hasStreetNumber) {
+          this.marker.position = place.geometry.location;
+          this.address = place.formatted_address;
+          this.position = place.geometry.location;
+
+        } else {
+          if (this.position) {
+            this.marker = new Marker({
+              position: this.position,
+              map: this.map,
+              title: 'marker',
+            });
+          }
+        }
+      }
+    });
+  }
+
+  submitAddress() {
+    this.errorMessages = [];
+
+    if (!this.hasStreetNumber) {
+      this.errorMessages.push('Por favor, inclua o número da porta no endereço.');
+      this.isInPortugal = false;
+      this.hasStreetNumber = false;
+      return;
+    }
+    
+    if (this.position && this.address) {
+      let location = this.position.lat() + ';' + this.position.lng();
+      console.log('location', location);
+      location = location.replace(/\./g, ',');
+      console.log('location replace', location);
+      const model = {
+        location: location,
+        address: this.address,
+      } as Location;
+
+      this.profileService.updateAddress(model).subscribe({
+        next: (response: any) => {
+          const morada = document.getElementById('endereco');
+          if (morada && this.address) {
+            morada.textContent = this.address;
+          }
+          this.closePopup();
+        },
+        error: (error) => {
+          if (error.error.errors) {
+            this.errorMessages = error.error.errors;
+          } else {
+            this.errorMessages.push(error.error);
+          }
+        }
+      });
+    }
+  }
+
+  createMarker(professional: Professional): Marker {
+    if (!professional.location) {
+      throw new Error('Localização do profissional não disponível.');
+    }
+    const [lat, lng] = professional.location.replace(/,/g, '.').split(';').map(coord => parseFloat(coord));
+    const position = new google.maps.LatLng(lat, lng);
+
+    const marker = new Marker({
+      position,
+      map: this.map,
+      title: 'marker',
+    });
+
+    return marker;
   }
 }

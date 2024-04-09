@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using ReviewDto = LusoHealthClient.Server.DTOs.Profile.ReviewDto;
 
 namespace LusoHealthClient.Server.Controllers
 {
@@ -146,7 +147,7 @@ namespace LusoHealthClient.Server.Controllers
                 .ThenInclude(s => s.Specialty)
                 .Include(r => r.Patient)
                 .ThenInclude(p => p.User)
-                .Where(r => r.Service.IdProfessional == user.Id)
+                .Where(r => r.Service.IdProfessional == user.Id && r.State != ReviewState.Deleted)
                 .ToListAsync();
             var reviews = GetReviewDtos(reviewsFromDB);
 
@@ -163,11 +164,61 @@ namespace LusoHealthClient.Server.Controllers
                 Certificates = certificates,
                 Reviews = reviews,
                 Location = professional.Location,
+                Address = professional.Address,
                 Description = professional.Description,
                 ProfessionalType = professional.ProfessionalType.Name
             };
 
             return professionalDto;
+        }
+
+        [HttpPatch("update-address")]
+        public async Task<ActionResult> UpdateAddress(LocationDto model)
+        {
+
+            try
+            {
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
+
+                var user = await _userManager.FindByIdAsync(userIdClaim);
+                if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
+
+                var professional = await _context.Professionals.FirstOrDefaultAsync(p => p.UserID == user.Id);
+                if (professional == null) { return NotFound("Não foi possível encontrar o profissional"); }
+
+
+                if (model.Location.IsNullOrEmpty() || model.Address.IsNullOrEmpty())
+                {
+                    return BadRequest("A localização não é válida");
+                }
+                else
+                {
+                    string[] latLon = model.Location.Split(";");
+                    if (latLon.Length != 2)
+                    {
+                        return BadRequest("A localização não é válida");
+                    }
+                    else
+                    {
+                        if (!double.TryParse(latLon[0], out double lat) || !double.TryParse(latLon[1], out double lon))
+                        {
+                            return BadRequest("A localização não é válida");
+                        }
+                    }
+                }
+                
+                professional.Location = model.Location;
+                professional.Address = model.Address;
+                _context.Professionals.Update(professional);
+                await _context.SaveChangesAsync();
+
+                return Ok(new JsonResult(new { title = "Morada Alterada", message = "A sua morada foi alterada com sucesso." }));
+            }
+            catch (Exception)
+            {
+                return BadRequest("Não foi possivel alterar a morada. Tente Novamente.");
+            }
         }
 
         [HttpPatch("update-description")]

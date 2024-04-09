@@ -2,7 +2,7 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 90vh;
+  height: calc(100vh - 65px);
   flex-direction: column;
 }
 

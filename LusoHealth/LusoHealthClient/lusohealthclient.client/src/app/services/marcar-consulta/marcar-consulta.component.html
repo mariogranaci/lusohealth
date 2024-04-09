@@ -24,7 +24,7 @@
       <div id="name-button">
         <div class="hours"><b>18:00</b></div>
         <div class="type-appointment">Presencial</div>
-        <button class="btn-edit" (click)="marcarClick()">Marcar</button>
+        <button class="btn-edit">Marcar</button>
       </div>
     </div>
   </div>
@@ -48,7 +48,9 @@
             </div>
             <div class="right">
               <div class="type-appointment">{{getAppointmentType(slot.appointmentType)}}</div>
-              <button class="btn-edit" (click)="marcarClick()">Marcar</button>
+              <div *ngIf="slot.id">
+                <button class="btn-edit" (click)="marcarClick(slot.id)">Marcar</button>
+              </div>
             </div>
           </div>
           <hr />

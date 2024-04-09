@@ -9,7 +9,7 @@ namespace LusoHealthClient.Server.DTOs.Administration
 
 		public DateTime Timestamp { get; set; }
 
-		public string IdPatient { get; set; }
+        public string IdPatient { get; set; }
 
 		public string IdProfesional { get; set; }
 

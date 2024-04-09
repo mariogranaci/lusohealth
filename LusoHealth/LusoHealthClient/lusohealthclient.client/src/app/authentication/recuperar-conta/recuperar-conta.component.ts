@@ -29,7 +29,7 @@ export class RecuperarContaComponent {
 
 
 
-  forgotPassword() {
+  recoverAccount() {
     this.submitted = true;
     this.errorMessages = [];
     this.responseText = '';

@@ -100,6 +100,21 @@ export class ConsultaProfissionalComponent {
     });
   }
 
+  refundAppointment(appointmentId: number) {
+    this.servicesService.refundPayment(appointmentId).subscribe({
+      next: (response: any) => {
+        console.log(response);
+      },
+      error: (error) => {
+        if (error.error.errors) {
+          this.errorMessages = error.error.errors;
+        } else {
+          this.errorMessages.push(error.error);
+        }
+      }
+    });
+  }
+
   changeAppointmentScheduled() {
     this.appointmentService.scheduleAppointment(this.appointment).pipe(
       takeUntil(this.unsubscribe$)

@@ -1,8 +1,9 @@
 ﻿namespace LusoHealthClient.Server.Models.FeedbackAndReports
 {
-	public enum ReportState
-	{
-		Concluded,
-		Pending
-	}
+    public enum ReportState
+    {
+        Pending,
+        Concluded,
+        Canceled
+    }
 }

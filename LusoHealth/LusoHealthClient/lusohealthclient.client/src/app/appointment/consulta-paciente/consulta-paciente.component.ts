@@ -68,6 +68,7 @@ export class ConsultaPacienteComponent {
           } else {
             this.errorMessages.push(error.error);
           }
+          reject();
         }
       });
     });

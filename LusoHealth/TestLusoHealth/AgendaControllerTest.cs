@@ -322,6 +322,7 @@ namespace TestLusoHealth
 
 			var availabilityDto = new AvailabilityDto
 			{
+				Id = 1,
 				StartDate = DateTime.Now.Date,
 				EndDate = DateTime.Now.Date.AddDays(+1),
 				StartTime = DateTime.Now,

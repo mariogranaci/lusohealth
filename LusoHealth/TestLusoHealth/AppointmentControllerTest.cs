@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
@@ -38,11 +39,11 @@ namespace TestLusoHealth
          */
 
 
-        public AppointmentControllerTest(ApplicationDbContextFixture fixture, EmailService emailService)
+        public AppointmentControllerTest(ApplicationDbContextFixture fixture)
 		{
 			_context = fixture.DbContext;
 			testUser = fixture.TestUser;
-			_emailService = emailService;
+			_emailService = new Mock<EmailService>(new Mock<IConfiguration>().Object).Object;
 		}
 
 		//Testes Cancelar e Rejeitar Consulta

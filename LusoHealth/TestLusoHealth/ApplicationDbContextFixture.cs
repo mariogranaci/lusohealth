@@ -4,8 +4,9 @@ using LusoHealthClient.Server.Models.Professionals;
 using LusoHealthClient.Server.Models.Services;
 using LusoHealthClient.Server.Models.Users;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Data.Sqlite;
+//using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 
 using Stripe;
@@ -27,10 +28,11 @@ namespace TestLusoHealth
 		{
 
 
-			var connection = new SqliteConnection("DataSource=:memory:");
-			connection.Open();
+			/*var connection = new SqliteConnection("DataSource=:memory:");
+			connection.Open();*/
 			var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-					.UseSqlite(connection)
+					/*.UseSqlite(connection)*/
+					.UseInMemoryDatabase(databaseName:"base-dados-lusohealth")
 					.Options;
 			DbContext = new ApplicationDbContext(options);
 

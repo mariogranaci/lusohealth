@@ -81,7 +81,7 @@ namespace LusoHealthClient.Server.Controllers
             {
 
             }
-            */
+            
 
 
             
@@ -90,7 +90,7 @@ namespace LusoHealthClient.Server.Controllers
             {
 
             }
-            
+            */
 
             //[HttpGet("get-professionals")]
 

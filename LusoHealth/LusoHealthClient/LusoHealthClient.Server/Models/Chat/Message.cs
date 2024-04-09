@@ -8,6 +8,7 @@ namespace LusoHealthClient.Server.Models.Chat
     {
         [Key]
         public int Id { get; set; }
+        [ForeignKey("User")]
         public string UserId { get; set; }
         public string? Text { get; set; }
         public bool IsImage { get; set; }

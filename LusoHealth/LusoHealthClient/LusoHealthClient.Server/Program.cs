@@ -12,6 +12,7 @@ using LusoHealthClient.Server.Services;
 using LusoHealthClient.Server.Data;
 using LusoHealthClient.Server.Models.Users;
 using Stripe;
+using LusoHealthClient.Server.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,8 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddSignalR();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
@@ -134,6 +137,8 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.MapFallbackToFile("/index.html");
+
+app.MapHub<ChatHub>("/chatHub");
 
 #region ContextSeed
 using var scope = app.Services.CreateScope();

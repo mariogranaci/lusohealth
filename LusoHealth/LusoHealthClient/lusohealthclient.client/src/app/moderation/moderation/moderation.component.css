@@ -3,7 +3,7 @@ main {
   padding: 0 7%;
   min-width: 1150px;
   max-width: 1800px;
-  height: calc(100vh - 65px);
+  min-height: calc(100vh - 65px);
 }
 
 .row {

@@ -258,7 +258,7 @@ namespace LusoHealthClient.Server.Controllers
         }
 
         [HttpPatch("suspend-account-patient")]
-        public async Task<ActionResult> SuspendAccountPatient(ReviewDto model)
+        public async Task<ActionResult> SuspendAccountPatient(ReviewAdminDto model)
         {
             var user = await _userManager.FindByIdAsync(model.IdPatient);
 
@@ -295,7 +295,7 @@ namespace LusoHealthClient.Server.Controllers
         }
 
         [HttpPatch("block-account-patient")]
-        public async Task<ActionResult> BlockAccountPatient(ReviewDto model)
+        public async Task<ActionResult> BlockAccountPatient(ReviewAdminDto model)
         {
             var user = await _userManager.FindByIdAsync(model.IdPatient);
 
@@ -332,12 +332,12 @@ namespace LusoHealthClient.Server.Controllers
 
         [Authorize]
         [HttpGet("get-reviews/{offset}/{limit}")]
-        public async Task<ActionResult<List<ReviewDto>>> GetReviews(int offset, int limit)
+        public async Task<ActionResult<List<ReviewAdminDto>>> GetReviews(int offset, int limit)
         {
             try
             {
                 var reviews = await _context.Reviews
-                    .Select(r => new ReviewDto
+                    .Select(r => new ReviewAdminDto
                     {
                         Id = r.Id,
                         Timestamp = r.Timestamp,
@@ -367,13 +367,13 @@ namespace LusoHealthClient.Server.Controllers
 
         [Authorize]
         [HttpGet("get-reviews-reported/{offset}/{limit}")]
-        public async Task<ActionResult<List<ReviewDto>>> GetReviewsReported(int offset, int limit)
+        public async Task<ActionResult<List<ReviewAdminDto>>> GetReviewsReported(int offset, int limit)
         {
             try
             {
                 var reviews = await _context.Reviews
                     .Where(r => r.State == ReviewState.Reported)
-                    .Select(r => new ReviewDto
+                    .Select(r => new ReviewAdminDto
                     {
                         Id = r.Id,
                         Timestamp = r.Timestamp,
@@ -403,13 +403,13 @@ namespace LusoHealthClient.Server.Controllers
 
         [Authorize]
         [HttpGet("get-reviews-deleted/{offset}/{limit}")]
-        public async Task<ActionResult<List<ReviewDto>>> GetReviewsDeleted(int offset, int limit)
+        public async Task<ActionResult<List<ReviewAdminDto>>> GetReviewsDeleted(int offset, int limit)
         {
             try
             {
                 var reviews = await _context.Reviews
                     .Where(r => r.State == ReviewState.Deleted)
-                    .Select(r => new ReviewDto
+                    .Select(r => new ReviewAdminDto
                     {
                         Id = r.Id,
                         Timestamp = r.Timestamp,
@@ -439,13 +439,13 @@ namespace LusoHealthClient.Server.Controllers
 
         [Authorize]
         [HttpGet("get-reviews-normal/{offset}/{limit}")]
-        public async Task<ActionResult<List<ReviewDto>>> GetReviewsNormal(int offset, int limit)
+        public async Task<ActionResult<List<ReviewAdminDto>>> GetReviewsNormal(int offset, int limit)
         {
             try
             {
                 var reviews = await _context.Reviews
                     .Where(r => r.State == ReviewState.Normal)
-                    .Select(r => new ReviewDto
+                    .Select(r => new ReviewAdminDto
                     {
                         Id = r.Id,
                         Timestamp = r.Timestamp,
@@ -474,7 +474,7 @@ namespace LusoHealthClient.Server.Controllers
         }
 
         [HttpPatch("delete-review")]
-        public async Task<ActionResult> DeleteReview(ReviewDto model)
+        public async Task<ActionResult> DeleteReview(ReviewAdminDto model)
         {
             var review = await _context.Reviews.FirstOrDefaultAsync(r => r.Id == model.Id);
 

@@ -2,7 +2,7 @@
 
 namespace LusoHealthClient.Server.DTOs.Administration
 {
-    public class ReviewDto
+    public class ReviewAdminDto
     {
         public int Id { get; set; }
         public string IdPatient { get; set; }

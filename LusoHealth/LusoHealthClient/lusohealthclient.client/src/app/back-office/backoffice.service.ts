@@ -33,8 +33,15 @@ export class BackOfficeService {
     return headers;
   }
 
-  getUsers() {
+  getValidUsers() {
     const headers = this.getHeaders();
-    return this.http.get<User>(`${environment.appUrl}/api/backoffice/get-users`, { headers });
+    return this.http.get<User>(`${environment.appUrl}/api/backoffice/get-valid-users`, { headers });
   }
+
+  getAppointmentsPerProfessional() {
+    const headers = this.getHeaders();
+    return this.http.get<User>(`${environment.appUrl}/api/backoffice/get-apointments-per-professional`, { headers });
+  }
+
+
 }

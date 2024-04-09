@@ -19,12 +19,11 @@ export class EstatisticasUtilizadoresRegistadosComponent {
   constructor(public service: BackOfficeService) { }
 
   ngOnInit() {
-    this.getUsers();
+    this.getValidUsers();
   }
 
-
-   getUsers() {
-     this.service.getUsers().subscribe(
+   getValidUsers() {
+     this.service.getValidUsers().subscribe(
        (response: any) => {
          console.log("Success!", response);
          this.users = response;
@@ -42,8 +41,6 @@ export class EstatisticasUtilizadoresRegistadosComponent {
              }
            }
          });
-
-         console.log('User count: ', this.userCount, 'Professional count: ', this.professionalCount);
        },
        error => {
          console.error('Error: ', error);

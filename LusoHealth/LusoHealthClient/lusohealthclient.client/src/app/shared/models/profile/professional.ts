@@ -9,6 +9,7 @@ export interface Professional {
   certificates: Certificate[];
   reviews: Review[];
   location: string | null;
+  address: string | null;
   description: string | null;
   professionalType: string;
   concelho: string | undefined;

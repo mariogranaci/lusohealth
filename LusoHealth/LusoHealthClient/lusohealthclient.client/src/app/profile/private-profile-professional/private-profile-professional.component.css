@@ -1,5 +1,3 @@
-
-
 main {
   padding: 0 7%;
   margin-top: 50px;
@@ -8,8 +6,6 @@ main {
   max-width: 1500px;
   padding-bottom: 50px;
 }
-
-
 
 .form-row {
   display: flex;
@@ -66,7 +62,6 @@ main {
     cursor: pointer;
   }
 
-
 .image {
   width: 150px;
   height: 150px;
@@ -83,12 +78,7 @@ figure {
 }
 
 
-
-
 /*------------------------------------------------------------------*/
-
-
-
 
 
 .center-row {
@@ -272,19 +262,57 @@ tbody {
   width: 1% !important;
 }
 
-
-
 /*-----------------------------------------------------------------*/
 
 
 
-/*----------------------------- Descrição -------------------------*/
-
-
-
-
-#update-description-form {
+/*------------------------------ Morada ---------------------------*/
+#morada > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
 }
+
+#morada > h2 {
+    margin-bottom: 20px;
+}
+
+#endereco {
+  height: fit-content;
+  word-break: break-word;
+  width: 80%;
+}
+
+#edit-morada {
+    margin: 0;
+}
+
+#map {
+  height: 500px;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+#edit-address-container {
+    width: 700px !important;
+}
+
+  #edit-address-container > section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+  }
+
+
+
+
+
+  /*-----------------------------------------------------------------*/
+  /*----------------------------- Descrição -------------------------*/
+  #update-description-form {
+  }
 
   #update-description-form textarea {
     width: 100%;
@@ -664,17 +692,11 @@ hr {
   text-justify: inter-word;
 }
 
-
-
-
 /*-----------------------------------------------------------------*/
 
 
 
 /*------------------------------ Popups ---------------------------*/
-
-
-
 
 .overlay {
   position: fixed;
@@ -721,9 +743,6 @@ hr {
     margin-bottom: 5px;
     font-weight: 600;
   }
-
-#add-speciality-container {
-}
 
 #edit-speciality-container {
   display: none;

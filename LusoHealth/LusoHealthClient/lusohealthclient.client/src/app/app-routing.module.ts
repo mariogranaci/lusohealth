@@ -9,13 +9,14 @@ const routes: Routes = [
   { path: '', loadChildren: () => import('./agenda/agenda.module').then(m => m.AgendaModule) },
   { path: '', loadChildren: () => import('./authentication/authentication.module').then(m => m.AuthenticationModule) },
   { path: '', loadChildren: () => import('./appointment/appointment.module').then(m => m.AppointmentModule) },
+  { path: '', loadChildren: () => import('./back-office/backoffice-routing.module').then(m => m.BackOfficeRoutingModule) },
   { path: 'not-found', component: NotFoundComponent },
   { path: '**', component: NotFoundComponent, pathMatch: 'full' },
 ];
 
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, { enableTracing: true })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

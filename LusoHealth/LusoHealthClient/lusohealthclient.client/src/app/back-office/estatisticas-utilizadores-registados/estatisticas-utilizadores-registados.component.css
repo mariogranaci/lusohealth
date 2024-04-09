@@ -1,0 +1,45 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Center vertically */
+  align-items: center; /* Center horizontally */
+  background-color: #f2f2f2; /* Light grey background */
+  padding: 30px; /* Add padding to create space around content */
+  margin-bottom: 22vh; /* Add margin below container */
+}
+
+.title {
+  font-size: 32px; /* Increase font size for title */
+  margin-bottom: 30px; /* Add more space below the title */
+}
+
+.small-title {
+  font-size: 28px; /* Increase font size for small title */
+  margin-bottom: 20px; /* Add more space below the small title */
+  padding-left: 20px; /* Add left padding to small title */
+}
+
+.row-container {
+  display: flex; /* Display rows horizontally */
+  justify-content: space-between; /* Distribute rows evenly */
+}
+
+.row {
+  display: flex; /* Align items horizontally */
+  flex-direction: column; /* Stack items vertically */
+  margin-bottom: 40px; /* Add more space between rows */
+}
+
+.card {
+  background-color: #fff; /* White background for cards */
+  border-radius: 20px; /* Increase border radius for cards */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Increase box shadow for cards */
+  padding: 60px; /* Increase padding inside cards */
+  margin: 20px; /* Increase margin between cards */
+}
+
+.card-header {
+  font-weight: bold; /* Make card headers bold */
+  font-size: 24px; /* Increase font size for card headers */
+  margin-bottom: 20px; /* Add more space below card headers */
+}

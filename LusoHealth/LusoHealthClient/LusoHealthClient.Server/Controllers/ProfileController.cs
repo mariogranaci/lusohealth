@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using ReviewDto = LusoHealthClient.Server.DTOs.Profile.ReviewDto;
 
 namespace LusoHealthClient.Server.Controllers
 {
@@ -146,7 +147,7 @@ namespace LusoHealthClient.Server.Controllers
                 .ThenInclude(s => s.Specialty)
                 .Include(r => r.Patient)
                 .ThenInclude(p => p.User)
-                .Where(r => r.Service.IdProfessional == user.Id)
+                .Where(r => r.Service.IdProfessional == user.Id && r.State != ReviewState.Deleted)
                 .ToListAsync();
             var reviews = GetReviewDtos(reviewsFromDB);
 

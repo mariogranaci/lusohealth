@@ -437,9 +437,9 @@ namespace LusoHealthClient.Server.Services
 				List<Appointment> appointments = new List<Appointment>();
 				foreach (var service in infoService)
 				{
-					Review review1 = new Review { IdPatient = random.Next(1, 16).ToString(), IdService = service.Id, Stars = random.Next(1, 5), Description = "" };
-					Review review2 = new Review { IdPatient = random.Next(1, 16).ToString(), IdService = service.Id, Stars = random.Next(1, 5), Description = "" };
-					Review review3 = new Review { IdPatient = random.Next(1, 16).ToString(), IdService = service.Id, Stars = random.Next(1, 5), Description = "" };
+					Review review1 = new Review { IdPatient = random.Next(1, 16).ToString(), IdService = service.Id, State = ReviewState.Normal, Timestamp = DateTime.Now , Stars = random.Next(1, 5), Description = "Serviço Bom!" };
+					Review review2 = new Review { IdPatient = random.Next(1, 16).ToString(), IdService = service.Id, State = ReviewState.Normal, Timestamp = DateTime.Now, Stars = random.Next(1, 5), Description = "Cumpriu." };
+					Review review3 = new Review { IdPatient = random.Next(1, 16).ToString(), IdService = service.Id, State = ReviewState.Normal, Timestamp = DateTime.Now, Stars = random.Next(1, 5), Description = "Ladrão..." };
 					reviews.AddRange(new List<Review> { review1, review2, review3 });
 
 					DateTime dataAtual = DateTime.Now;

@@ -200,7 +200,7 @@ namespace LusoHealthClient.Server.Controllers
             {
                 user.IsSuspended = true;
                 _context.Users.Update(user);
-                await _userManager.SetLockoutEndDateAsync(user, model.BanTime.Date);
+                await _userManager.SetLockoutEndDateAsync(user, DateTime.Now.AddDays(7));
 
                 var report = await _context.Report.FirstOrDefaultAsync(r => r.Id == model.Id);
 
@@ -258,7 +258,7 @@ namespace LusoHealthClient.Server.Controllers
         }
 
         [HttpPatch("suspend-account-patient")]
-        public async Task<ActionResult> SuspendAccountPatient(ReportDto model)
+        public async Task<ActionResult> SuspendAccountPatient(ReviewDto model)
         {
             var user = await _userManager.FindByIdAsync(model.IdPatient);
 
@@ -273,17 +273,17 @@ namespace LusoHealthClient.Server.Controllers
             {
                 user.IsSuspended = true;
                 _context.Users.Update(user);
-                await _userManager.SetLockoutEndDateAsync(user, model.BanTime.Date);
+                await _userManager.SetLockoutEndDateAsync(user, DateTime.Now.AddDays(5));
 
-                var report = await _context.Report.FirstOrDefaultAsync(r => r.Id == model.Id);
+                var review = await _context.Reviews.FirstOrDefaultAsync(r => r.Id == model.Id);
 
-                if (report == null)
+                if (review == null)
                 {
                     return NotFound();
                 }
 
-                report.State = ReportState.Concluded;
-                _context.Report.Update(report);
+                review.State = ReviewState.Deleted;
+                _context.Reviews.Update(review);
                 await _context.SaveChangesAsync();
 
                 return Ok(new { message = "Conta suspensa com sucesso." });
@@ -295,7 +295,7 @@ namespace LusoHealthClient.Server.Controllers
         }
 
         [HttpPatch("block-account-patient")]
-        public async Task<ActionResult> BlockAccountPatient(ReportDto model)
+        public async Task<ActionResult> BlockAccountPatient(ReviewDto model)
         {
             var user = await _userManager.FindByIdAsync(model.IdPatient);
 
@@ -311,15 +311,15 @@ namespace LusoHealthClient.Server.Controllers
                 user.IsBlocked = true;
                 _context.Users.Update(user);
 
-                var report = await _context.Report.FirstOrDefaultAsync(r => r.Id == model.Id);
+                var review = await _context.Reviews.FirstOrDefaultAsync(r => r.Id == model.Id);
 
-                if (report == null)
+                if (review == null)
                 {
                     return NotFound();
                 }
 
-                report.State = ReportState.Concluded;
-                _context.Report.Update(report);
+                review.State = ReviewState.Deleted;
+                _context.Reviews.Update(review);
                 await _context.SaveChangesAsync();
 
                 return Ok(new { message = "Conta bloqueada com sucesso." });
@@ -328,6 +328,174 @@ namespace LusoHealthClient.Server.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Erro ao bloquear conta.");
             }
+        }
+
+        [Authorize]
+        [HttpGet("get-reviews/{offset}/{limit}")]
+        public async Task<ActionResult<List<ReviewDto>>> GetReviews(int offset, int limit)
+        {
+            try
+            {
+                var reviews = await _context.Reviews
+                    .Select(r => new ReviewDto
+                    {
+                        Id = r.Id,
+                        Timestamp = r.Timestamp,
+                        IdPatient = r.IdPatient,
+                        IdService = r.IdService,
+                        State = r.State,
+                        Stars = r.Stars,
+                        Description = r.Description
+
+                    })
+                   .Skip(offset)
+                   .Take(limit)
+                   .ToListAsync();
+
+                if (reviews == null || reviews.Count == 0)
+                {
+                    return NotFound("No more reviews available.");
+                }
+
+                return reviews;
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error retrieving reviews.");
+            }
+        }
+
+        [Authorize]
+        [HttpGet("get-reviews-reported/{offset}/{limit}")]
+        public async Task<ActionResult<List<ReviewDto>>> GetReviewsReported(int offset, int limit)
+        {
+            try
+            {
+                var reviews = await _context.Reviews
+                    .Where(r => r.State == ReviewState.Reported)
+                    .Select(r => new ReviewDto
+                    {
+                        Id = r.Id,
+                        Timestamp = r.Timestamp,
+                        IdPatient = r.IdPatient,
+                        IdService = r.IdService,
+                        State = r.State,
+                        Stars = r.Stars,
+                        Description = r.Description
+
+                    })
+                   .Skip(offset)
+                   .Take(limit)
+                   .ToListAsync();
+
+                if (reviews == null || reviews.Count == 0)
+                {
+                    return NotFound("No more reviews available.");
+                }
+
+                return reviews;
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Erro ao obter reviews cancelados.");
+            }
+        }
+
+        [Authorize]
+        [HttpGet("get-reviews-deleted/{offset}/{limit}")]
+        public async Task<ActionResult<List<ReviewDto>>> GetReviewsDeleted(int offset, int limit)
+        {
+            try
+            {
+                var reviews = await _context.Reviews
+                    .Where(r => r.State == ReviewState.Deleted)
+                    .Select(r => new ReviewDto
+                    {
+                        Id = r.Id,
+                        Timestamp = r.Timestamp,
+                        IdPatient = r.IdPatient,
+                        IdService = r.IdService,
+                        State = r.State,
+                        Stars = r.Stars,
+                        Description = r.Description
+
+                    })
+                   .Skip(offset)
+                   .Take(limit)
+                   .ToListAsync();
+
+                if (reviews == null || reviews.Count == 0)
+                {
+                    return NotFound("No more reviews available.");
+                }
+
+                return reviews;
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Erro ao obter reviews cancelados.");
+            }
+        }
+
+        [Authorize]
+        [HttpGet("get-reviews-normal/{offset}/{limit}")]
+        public async Task<ActionResult<List<ReviewDto>>> GetReviewsNormal(int offset, int limit)
+        {
+            try
+            {
+                var reviews = await _context.Reviews
+                    .Where(r => r.State == ReviewState.Normal)
+                    .Select(r => new ReviewDto
+                    {
+                        Id = r.Id,
+                        Timestamp = r.Timestamp,
+                        IdPatient = r.IdPatient,
+                        IdService = r.IdService,
+                        State = r.State,
+                        Stars = r.Stars,
+                        Description = r.Description
+
+                    })
+                   .Skip(offset)
+                   .Take(limit)
+                   .ToListAsync();
+
+                if (reviews == null || reviews.Count == 0)
+                {
+                    return NotFound("No more reviews available.");
+                }
+
+                return reviews;
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Erro ao obter reviews cancelados.");
+            }
+        }
+
+        [HttpPatch("delete-review")]
+        public async Task<ActionResult> DeleteReview(ReviewDto model)
+        {
+            var review = await _context.Reviews.FirstOrDefaultAsync(r => r.Id == model.Id);
+
+            if (review == null)
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                review.State = ReviewState.Deleted;
+                _context.Reviews.Update(review);
+                await _context.SaveChangesAsync();
+
+                return Ok(new { message = "Review apagada." });
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Erro ao apagar review 🧀.");
+            }
+
         }
     }
 }

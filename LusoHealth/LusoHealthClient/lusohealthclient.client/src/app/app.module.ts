@@ -9,6 +9,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { FooterComponent } from './footer/footer.component';
 import { ModerationComponent } from './moderation/moderation/moderation.component';
 import { ReportsComponent } from './moderation/reports/reports.component';
+import { SharedModule } from './shared/shared.module';
 
 
 
@@ -21,7 +22,8 @@ import { ReportsComponent } from './moderation/reports/reports.component';
   ],
   imports: [
     BrowserModule, HttpClientModule,
-    AppRoutingModule, FormsModule
+    AppRoutingModule, FormsModule,
+    SharedModule
   ],
   providers: [
     provideAnimationsAsync()

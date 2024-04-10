@@ -35,13 +35,16 @@ export class BackOfficeService {
 
   getValidUsers() {
     const headers = this.getHeaders();
-    return this.http.get<User>(`${environment.appUrl}/api/backoffice/get-valid-users`, { headers });
+    return this.http.get<any>(`${environment.appUrl}/api/backoffice/get-valid-users`, { headers });
   }
 
   getAppointmentsPerProfessional() {
     const headers = this.getHeaders();
-    return this.http.get<User>(`${environment.appUrl}/api/backoffice/get-apointments-per-professional`, { headers });
+    return this.http.get<any>(`${environment.appUrl}/api/backoffice/get-apointments-per-professional`, { headers });
   }
 
-
+  getProfessionalsByRanking() {
+    const headers = this.getHeaders();
+    return this.http.get<any>(`${environment.appUrl}/api/backoffice/get-professionals-by-ranking`, { headers });
+  }
 }

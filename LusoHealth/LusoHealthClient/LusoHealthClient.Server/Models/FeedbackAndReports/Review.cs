@@ -17,6 +17,8 @@ namespace LusoHealthClient.Server.Models.FeedbackAndReports
         public ReviewState? State { get; set; }
         public int Stars { get; set; }
         public string Description { get; set; }
+        [ForeignKey("Professional")]
+        public int ProfessionalUserId { get; set; }
         #region Navigation Properties
         public Patient Patient { get; set; }
         public Service Service { get; set; }

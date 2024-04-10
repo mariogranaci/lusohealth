@@ -42,7 +42,7 @@ namespace LusoHealthClient.Server.Migrations
                     UserType = table.Column<string>(type: "nvarchar(1)", nullable: false),
                     BirthDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Provider = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -387,6 +387,7 @@ namespace LusoHealthClient.Server.Migrations
                     State = table.Column<int>(type: "int", nullable: true),
                     Stars = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProfessionalUserId = table.Column<int>(type: "int", nullable: false),
                     ProfessionalUserID = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>

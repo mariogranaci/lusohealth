@@ -110,6 +110,9 @@ namespace LusoHealthClient.Server.Migrations
                     b.Property<string>("ProfessionalUserID")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<int>("ProfessionalUserId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Stars")
                         .HasColumnType("int");
 
@@ -1599,7 +1602,7 @@ namespace LusoHealthClient.Server.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("DateCreated")
+                    b.Property<DateTime?>("DateCreated")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")

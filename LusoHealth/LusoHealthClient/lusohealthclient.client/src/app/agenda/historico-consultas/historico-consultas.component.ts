@@ -5,7 +5,7 @@ import { Specialty } from '../../shared/models/profile/specialty';
 import { ServicesService } from '../../services/services.service';
 import { AgendaService } from '../agenda.service';
 import { Appointment } from '../../shared/models/servic/appointment';
-import { Service } from '../../shared/models/services/service';
+import { Service } from '../../shared/models/servic/service';
 import { Professional } from '../../shared/models/profile/professional';
 
 @Component({

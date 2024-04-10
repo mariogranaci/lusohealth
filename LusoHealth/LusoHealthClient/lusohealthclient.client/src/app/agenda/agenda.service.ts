@@ -6,8 +6,8 @@ import { environment } from '../../environments/environment.development';
 import { User } from '../shared/models/authentication/user';
 import { jwtDecode } from 'jwt-decode';
 import { Specialty } from '../shared/models/profile/specialty';
-import { Availability } from '../shared/models/services/availability';
-import { AvailableSlot } from '../shared/models/services/availableSlot';
+import { Availability } from '../shared/models/servic/availability';
+import { AvailableSlot } from '../shared/models/servic/availableSlot';
 import { Observable } from 'rxjs';
 
 @Injectable({

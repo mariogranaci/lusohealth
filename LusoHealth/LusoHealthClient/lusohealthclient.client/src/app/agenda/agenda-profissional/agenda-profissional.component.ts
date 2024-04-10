@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ServicesService } from '../../services/services.service';
 import { AgendaService } from '../agenda.service';
-import { Service } from '../../shared/models/services/service';
+import { Service } from '../../shared/models/servic/service';
 import { Specialty } from '../../shared/models/profile/specialty';
 import { ProfessionalType } from '../../shared/models/authentication/professionalType';
 import { Subject, take, takeUntil } from 'rxjs';

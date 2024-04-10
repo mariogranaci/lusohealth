@@ -3,7 +3,7 @@ import { ServicesService } from '../../services/services.service';
 import { AppointmentService } from '../appointment.service';
 import { Subject, takeUntil } from 'rxjs';
 import { Professional } from '../../shared/models/profile/professional';
-import { Service } from '../../shared/models/services/service';
+import { Service } from '../../shared/models/servic/service';
 import { ActivatedRoute } from '@angular/router';
 import { Appointment } from '../../shared/models/servic/appointment';
 import { ProfileService } from '../../profile/profile.service';

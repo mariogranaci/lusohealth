@@ -6,12 +6,12 @@ import { ServicesService } from '../../services/services.service';
 import { Professional } from '../../shared/models/profile/professional';
 import { UserProfile } from '../../shared/models/profile/userProfile';
 import { Appointment } from '../../shared/models/servic/appointment';
-import { Service } from '../../shared/models/services/service';
+import { Service } from '../../shared/models/servic/service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AppointmentService } from '../appointment.service';
 import { AgendaService } from '../../agenda/agenda.service';
-import { Availability } from '../../shared/models/services/availability';
-import { AvailableSlot } from '../../shared/models/services/availableSlot';
+import { Availability } from '../../shared/models/servic/availability';
+import { AvailableSlot } from '../../shared/models/servic/availableSlot';
 
 @Component({
   selector: 'app-consulta-profissional',

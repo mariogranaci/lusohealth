@@ -4,9 +4,9 @@ import { AuthenticationService } from '../../authentication/authentication.servi
 import { User } from '../../shared/models/authentication/user';
 import { Subject, take, takeUntil } from 'rxjs';
 import { ServicesService } from '../services.service';
-import { MakeAppointment } from '../../shared/models/services/makeAppointment';
+import { MakeAppointment } from '../../shared/models/servic/makeAppointment';
 import { Appointment } from '../../shared/models/servic/appointment';
-import { AvailableSlot } from '../../shared/models/services/availableSlot';
+import { AvailableSlot } from '../../shared/models/servic/availableSlot';
 
 @Component({
   selector: 'app-marcar-consulta',

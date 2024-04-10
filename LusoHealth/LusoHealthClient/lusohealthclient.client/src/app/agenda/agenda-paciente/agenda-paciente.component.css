@@ -139,17 +139,6 @@ main {
     cursor: pointer;
   }
 
-.more-container {
-  text-align: center;
-  margin: 30px auto;
-}
-
-#more {
-  width: fit-content;
-  padding: 10px 10px;
-  height: 50px;
-}
-
 .btn-top {
   margin: 0 20px 20px 0;
   width: fit-content;
@@ -201,7 +190,9 @@ main {
 }
 
 #more {
-  padding: 10px;
+  width: fit-content;
+  padding: 10px 10px;
+  height: 50px;
   display: flex;
   justify-content: center;
   align-items: center;

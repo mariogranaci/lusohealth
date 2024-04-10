@@ -11,6 +11,7 @@ namespace LusoHealthClient.Server.DTOs.Profile
         public string PatientName { get; set; }
         public string? PatientPicture { get; set; }
         public int IdService { get; set; }
+        public bool Deleted { get; set; }
         public string ServiceName { get; set; }
         public int Stars { get; set; }
         public string Description { get; set; }

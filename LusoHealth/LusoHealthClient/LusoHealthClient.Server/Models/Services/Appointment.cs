@@ -14,6 +14,7 @@ namespace LusoHealthClient.Server.Models.Services
         public int? Id { get; set; }
         public DateTime Timestamp { get; set; }
         public string? Location { get; set; }
+        public string? Address { get; set; }
         public AppointmentType? Type { get; set; }
         public string? Description { get; set; }
         public AppointmentState? State { get; set; }

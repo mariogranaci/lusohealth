@@ -5,7 +5,7 @@ import { User } from '../../shared/models/authentication/user';
 import { Subject, take, takeUntil } from 'rxjs';
 import { ServicesService } from '../services.service';
 import { MakeAppointment } from '../../shared/models/services/makeAppointment';
-import { Appointment } from '../../shared/models/services/appointment';
+import { Appointment } from '../../shared/models/servic/appointment';
 import { AvailableSlot } from '../../shared/models/services/availableSlot';
 
 @Component({

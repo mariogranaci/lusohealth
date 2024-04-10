@@ -5,7 +5,7 @@ import { ProfileService } from '../../profile/profile.service';
 import { ServicesService } from '../../services/services.service';
 import { Professional } from '../../shared/models/profile/professional';
 import { UserProfile } from '../../shared/models/profile/userProfile';
-import { Appointment } from '../../shared/models/services/appointment';
+import { Appointment } from '../../shared/models/servic/appointment';
 import { Service } from '../../shared/models/services/service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AppointmentService } from '../appointment.service';

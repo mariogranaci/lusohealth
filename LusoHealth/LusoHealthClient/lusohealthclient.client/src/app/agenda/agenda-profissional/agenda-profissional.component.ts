@@ -7,7 +7,7 @@ import { ProfessionalType } from '../../shared/models/authentication/professiona
 import { Subject, take, takeUntil } from 'rxjs';
 import { Professional } from '../../shared/models/profile/professional';
 import { AppointmentService } from '../../appointment/appointment.service';
-import { Appointment } from '../../shared/models/services/appointment';
+import { Appointment } from '../../shared/models/servic/appointment';
 
 
 @Component({

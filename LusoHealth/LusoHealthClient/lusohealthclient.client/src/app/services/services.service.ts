@@ -10,7 +10,7 @@ import { Service } from '../shared/models/profile/service';
 import { ProfessionalType } from '../shared/models/authentication/professionalType';
 import { Bounds } from '../shared/models/services/bounds';
 import { MakeAppointment } from '../shared/models/services/makeAppointment';
-import { Appointment } from '../shared/models/services/appointment';
+import { Appointment } from '../shared/models/servic/appointment';
 import { Session } from '../shared/models/services/session';
 
 declare const Stripe: any;

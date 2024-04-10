@@ -5,7 +5,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { Professional } from '../../shared/models/profile/professional';
 import { Service } from '../../shared/models/services/service';
 import { ActivatedRoute } from '@angular/router';
-import { Appointment } from '../../shared/models/services/appointment';
+import { Appointment } from '../../shared/models/servic/appointment';
 import { ProfileService } from '../../profile/profile.service';
 import { User } from '../../shared/models/authentication/user';
 import { UserProfile } from '../../shared/models/profile/userProfile';

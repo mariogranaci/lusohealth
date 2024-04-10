@@ -8,5 +8,5 @@ export interface MakeAppointment {
   presential: boolean;
   home: boolean;
   pricePerHour: number;
-  availability: string[] | null; 
+  availability: string[] | null;
 }

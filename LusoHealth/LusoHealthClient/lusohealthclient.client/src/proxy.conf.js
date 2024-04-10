@@ -3,7 +3,7 @@ const PROXY_CONFIG = [
     context: [
       "/api",
     ],
-    target: "https://luso-health-backend.azurewebsites.net",
+    target: "https://lusohealth.azurewebsites.net",
     secure: false
   }
 ]

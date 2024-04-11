@@ -33,8 +33,28 @@ export class BackOfficeService {
     return headers;
   }
 
-  getUsers() {
+  getValidUsers() {
     const headers = this.getHeaders();
-    return this.http.get<User>(`${environment.appUrl}/api/backoffice/get-users`, { headers });
+    return this.http.get<any>(`${environment.appUrl}/api/backoffice/get-valid-users`, { headers });
+  }
+
+  getAppointmentsPerProfessional(selectedFilter: number) {
+    const headers = this.getHeaders();
+    return this.http.get<any>(`${environment.appUrl}/api/backoffice/get-apointments-per-professional/${selectedFilter}`, { headers });
+  }
+
+  getProfessionalsByRanking() {
+    const headers = this.getHeaders();
+    return this.http.get<any>(`${environment.appUrl}/api/backoffice/get-professionals-by-ranking`, { headers });
+  }
+
+  getProfessionalTypes() {
+    const headers = this.getHeaders();
+    return this.http.get<any>(`${environment.appUrl}/api/backoffice/get-professional-types`, { headers });
+  }
+
+  getAnuallyRegisteredUsers() {
+    const headers = this.getHeaders();
+    return this.http.get<any>(`${environment.appUrl}/api/backoffice/get-anually-registered-users`, { headers });
   }
 }

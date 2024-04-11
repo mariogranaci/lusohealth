@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using LusoHealthClient.Server.Models.Users;
+using LusoHealthClient.Server.Models.FeedbackAndReports;
 
 namespace LusoHealthClient.Server.Models.Professionals
 {
@@ -16,6 +17,7 @@ namespace LusoHealthClient.Server.Models.Professionals
         public bool Online { get; set; }
         public bool Presential { get; set; }
         public bool Home { get; set; }
+        public virtual ICollection<Review> Reviews { get; set; }
 
         #region Navigation Properties
         public Professional Professional { get; set; }

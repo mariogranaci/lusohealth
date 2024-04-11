@@ -11,9 +11,8 @@ const routes: Routes = [
   { path: 'statistics-professional-classification', component: EstatisticasClassificacaoProfissionalComponent },
   { path: 'statistics-professional-appointments', component: EstatisticasConsultasProfissionalComponent },
   { path: 'statistics-professional-county', component: EstatisticasProfissionalConcelhoComponent },
-  { path: 'statistics-users-year', component: EstatisticasUtilizadoresAnoComponent },
-  { path: 'statistics-users-registered', component: EstatisticasUtilizadoresRegistadosComponent },
-  { path: 'statistics-professional-year', component: EstatisticasUtilizadoresRegistadosComponent }
+  { path: 'statistics-users-per-year', component: EstatisticasUtilizadoresAnoComponent },
+  { path: 'statistics-users-registered', component: EstatisticasUtilizadoresRegistadosComponent }
 ]
 
 

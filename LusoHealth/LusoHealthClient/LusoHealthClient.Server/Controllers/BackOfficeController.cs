@@ -70,16 +70,53 @@ namespace LusoHealthClient.Server.Controllers
             }
 
 
-            /*
-            [HttpGet("get-anually-registered")]
+            
+            [HttpGet("get-anually-registered-users")]
             public async Task<ActionResult<List<object>>> GetAnuallyRegistered()
             {
+                //Professionals
+                var professionalsRegistered = await _context.Professionals
+                    .Include(u => u.User)
+                    .ToListAsync();
 
+                var professionalRegistrationsByYear = professionalsRegistered
+                    .Where(p => p.User.DateCreated != null && p.User.UserType == 'P')
+                    .GroupBy(p => p.User.DateCreated.Value.Year)
+                    .OrderBy(group => group.Key)
+                    .Select(group => new
+                    {
+                        Year = group.Key,
+                        Count = group.Count()
+                    })
+                    .ToList();
+
+                //Patients
+                var patientsRegistered = await _context.Users
+                    .Where(u => u.UserType != 'U') 
+                    .ToListAsync();
+
+                var patientRegistrationsByYear = patientsRegistered
+                    .Where(u => u.DateCreated != null) 
+                    .GroupBy(u => u.DateCreated.Value.Year)
+                    .OrderBy(group => group.Key)
+                    .Select(group => new
+                    {
+                        Year = group.Key,
+                        Count = group.Count()
+                    })
+                    .ToList();
+
+                var registrationSummary = new
+                {
+                    Patients = patientRegistrationsByYear,
+                    Professionals = professionalRegistrationsByYear
+                };
+
+                return Ok(registrationSummary);
             }
-            
-            */
 
-            
+
+
             [HttpGet("get-professionals-by-ranking")]
             public async Task<ActionResult<List<object>>> GetProfessionalsByRanking()
             {

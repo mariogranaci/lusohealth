@@ -6,17 +6,16 @@ import { EstatisticasUtilizadoresAnoComponent } from './estatisticas-utilizadore
 import { EstatisticasProfissionalConcelhoComponent } from './estatisticas-profissional-concelho/estatisticas-profissional-concelho.component';
 import { EstatisticasConsultasProfissionalComponent } from './estatisticas-consultas-profissional/estatisticas-consultas-profissional.component';
 import { DoughnutChartComponent } from './charts/doughnut-chart/doughnut-chart.component';
-import { BarChartComponent } from './charts/bar-chart/bar-chart.component';
 import { FormsModule } from '@angular/forms';
+import { BarChartComponent } from './charts/bar-chart/bar-chart.component';
 
 
 
 @NgModule({
   declarations: [EstatisticasClassificacaoProfissionalComponent, EstatisticasUtilizadoresRegistadosComponent,
     EstatisticasUtilizadoresAnoComponent, EstatisticasProfissionalConcelhoComponent,
-    EstatisticasConsultasProfissionalComponent,
-    DoughnutChartComponent,
-    BarChartComponent],
+    EstatisticasConsultasProfissionalComponent, BarChartComponent,
+    DoughnutChartComponent],
   imports: [
     CommonModule,
     FormsModule

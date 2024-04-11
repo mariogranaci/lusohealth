@@ -41,7 +41,7 @@
     </li>
     <li class="sub-menu-parent" [routerLink]="['/reports']" *ngIf="userRole === 'Admin'">
       <a class="nav-link" routerLinkActive="active">
-        <img class="menu-icons" src="assets/images/NavBar/statistics.png" alt="Ícone Reports" />
+        <img class="menu-icons" src="assets/images/NavBar/warning.png" alt="Ícone Reports" />
         <div id="login-text" class="nav-text">Reports</div>
       </a>
     </li>
@@ -59,6 +59,26 @@
         <div id="perfil-text" class="nav-text">Estatísticas</div>
       </a>
       <ul class="sub-menu" *ngIf="(authenticationService.user$ | async) as user">
+        <li class="dropdown-element" *ngIf="userRole === 'Admin'">
+          <img src="assets/images/NavBar/barchart.png" />
+          <a [routerLink]="['/statistics-users-per-year']" class="nav-link" routerLinkActive="active">Evolução de Registos</a>
+        </li>
+        <li class="dropdown-element" *ngIf="userRole === 'Admin'">
+          <img src="assets/images/NavBar/cards.png" />
+          <a [routerLink]="['/statistics-users-registered']" class="nav-link" routerLinkActive="active">Contas Válidas</a>
+        </li>
+        <li class="dropdown-element" *ngIf="userRole === 'Admin'">
+          <img src="assets/images/NavBar/heatmap.png" />
+          <a [routerLink]="['/statistics-professional-county']" class="nav-link" routerLinkActive="active">Distribuição Geográfica</a>
+        </li>
+        <li class="dropdown-element" *ngIf="userRole === 'Admin'">
+          <img src="assets/images/NavBar/pie-chart.png" />
+          <a [routerLink]="['/statistics-professional-appointments']" class="nav-link" routerLinkActive="active">Maiores Especialidades</a>
+        </li>
+        <li class="dropdown-element" *ngIf="userRole === 'Admin'">
+          <img src="assets/images/NavBar/star-search.png" />
+          <a [routerLink]="['/statistics-professional-classification']" class="nav-link" routerLinkActive="active">Melhores Profissionais</a>
+        </li>
         <li class="dropdown-element" (click)="logout()" *ngIf="user">
           <img src="assets/images/NavBar/logout.png" />
           <a routerLink="" class="nav-link" routerLinkActive="active">Terminar Sessão</a>

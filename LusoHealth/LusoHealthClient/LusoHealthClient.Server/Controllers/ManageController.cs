@@ -161,7 +161,7 @@ namespace LusoHealthClient.Server.Controllers
 
         [HttpPatch("cancel-report")]
         public async Task<ActionResult> ConcludeReport(ReportDto model)
-        {
+       {
             var report = await _context.Report.FirstOrDefaultAsync(r => r.Id == model.Id);
 
             if (report == null)

@@ -1,5 +1,6 @@
 ﻿using LusoHealthClient.Server.Data;
 using LusoHealthClient.Server.Models.Appointments;
+using LusoHealthClient.Server.Models.FeedbackAndReports;
 using LusoHealthClient.Server.Models.Professionals;
 using LusoHealthClient.Server.Models.Services;
 using LusoHealthClient.Server.Models.Users;
@@ -22,7 +23,7 @@ namespace TestLusoHealth
 
 		public User TestUser { get;  set; }
 
-
+		public User TestUser1 { get; set; }
 
 		public ApplicationDbContextFixture()
 		{
@@ -85,7 +86,7 @@ namespace TestLusoHealth
 				BirthDate = new DateTime(1990, 1, 1)
 			};
 
-			TestUser = user2;
+			
 
 			DbContext.Users.AddRange(user1, user2);
 
@@ -94,36 +95,38 @@ namespace TestLusoHealth
 				UserID = user1.Id		
 			};
 
-			/*ProfessionalType professionalType1 = new ProfessionalType
+			User user3 = new User
 			{
-				Id = 1,
-				Name = "Médico",
+				FirstName = "User",
+				LastName = "Test",
+				Email = "usertest@mail.com",
+				NormalizedEmail = "usertest@mail.com".ToUpper(),
+				Gender = 'M',
+				Nif = "123456798",
+				UserType = 'U',
+				PhoneNumber = null,
+				PhoneNumberConfirmed = false,
+				IsSuspended = true,
+				IsBlocked = true,
+				ProfilePicPath = null,
+				TwoFactorEnabled = false,
+				LockoutEnabled = false,
+				AccessFailedCount = 0,
+				UserName = "usertest@mail.com",
+				BirthDate = new DateTime(1990, 1, 1),
 			};
 
-			DbContext.ProfessionalTypes.Add(professionalType1);*/
-			
+			TestUser = user2;
+			TestUser1 = user3;
 
 			Professional professional1 = new Professional
 			{
 				UserID = user2.Id,
 				ProfessionalTypeId = 1,
-				
 			};
 
 			DbContext.Patients.Add(patient1);
 			DbContext.Professionals.Add(professional1) ;
-			
-
-			/*Specialty specialty1 = new Specialty 
-			{
-				Id = 1,
-				Name = "Anatomia Patológica",
-				ProfessionalTypeId = 1,
-				TimesScheduled = 0
-			};
-
-			DbContext.Specialties.Add(specialty1);*/
-
 			
 
 			Service service1 = new Service
@@ -173,7 +176,10 @@ namespace TestLusoHealth
 			DbContext.AvailableSlots.Add(new AvailableSlot { Id = 1 , Start = DateTime.Now , SlotDuration = 10 , IdService = service1.Id,
 				AppointmentType =  AppointmentType.Online , IsAvailable = true ,AppointmentId = appointment1.Id });
 
-			
+
+			DbContext.Report.Add(new Report {Id= 1 ,Timestamp = DateTime.Now, IdPatient = patient1.UserID, IdProfesional = professional1.UserID, Description = "Não apareceu a consulta e fiquei sem o dinheiro.", State = ReportState.Pending });
+			DbContext.Reviews.Add(new LusoHealthClient.Server.Models.FeedbackAndReports.Review {Id=1 , IdPatient = patient1.UserID, IdService = service1.Id, State = ReviewState.Normal, Timestamp = DateTime.Now, Stars = random.Next(1, 5), Description = "Serviço Bom!" });
+
 			DbContext.SaveChanges();
 
 		}

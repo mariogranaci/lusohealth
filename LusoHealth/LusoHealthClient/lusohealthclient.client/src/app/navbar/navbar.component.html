@@ -17,7 +17,7 @@
         </li>
       </ul>
     </li>
-    <li *ngIf="(authenticationService.user$ | async) as user" class="sub-menu-parent">
+    <li *ngIf="userRole === 'Professional' || userRole === 'Patient'" class="sub-menu-parent">
       <a [routerLink]="['/professional-agenda']" *ngIf="userRole === 'Professional'" class="nav-link" routerLinkActive="active">
         <img class="menu-icons" src="assets/images/NavBar/agenda-icon.png" alt="Ícone Agenda" />
         <div id="agenda-text" class="nav-text"> Agenda </div>
@@ -47,6 +47,10 @@
       <a [routerLink]="['/patient-profile']" *ngIf="userRole === 'Patient'" class="nav-link" routerLinkActive="active">
         <img class="menu-icons" src="assets/images/NavBar/user-icon.png" alt="Ícone Perfil" />
         <div id="perfil-text" class="nav-text">Perfil</div>
+      </a>
+      <a *ngIf="userRole === 'Admin'" class="nav-link" routerLinkActive="active">
+        <img class="menu-icons" src="assets/images/NavBar/statistics.png" alt="Ícone Estatísticas" />
+        <div id="perfil-text" class="nav-text">Estatísticas</div>
       </a>
       <ul class="sub-menu" *ngIf="(authenticationService.user$ | async) as user">
         <li class="dropdown-element" (click)="logout()" *ngIf="user">

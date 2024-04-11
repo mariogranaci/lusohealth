@@ -1,6 +1,6 @@
 main {
+  margin-bottom: 50px;
   min-height: calc(100vh - 65px);
-  margin-bottom:50px;
 }
 
 .form-row, .form-pass {

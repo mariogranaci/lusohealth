@@ -8,7 +8,7 @@ export class Appointment {
     duration: number | null;
     idPatient: string | null;
     idProfessional: string | null;
-    idService: number | null;
+    idService: number | null;   
     
 
   constructor(timestamp: Date | null, location: string | null, type: string | null, description: string | null,

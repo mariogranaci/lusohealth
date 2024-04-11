@@ -78,7 +78,7 @@ namespace LusoHealthClient.Server.Controllers
 
             if (await _userManager.IsLockedOutAsync(user))
             {
-                int minutesNumber = (int) user.LockoutEnd.Value.Subtract(DateTime.Now).TotalMinutes;
+                int minutesNumber = (int) user.LockoutEnd.Value.Subtract(DateTime.UtcNow).TotalMinutes;
                 string minutesString = minutesNumber == 1 ? $"minuto" : "minutos";
                 string minutes = $"{minutesNumber} {minutesString}";
                 if (minutesNumber <= 0) minutes = "menos de 1 minuto";
@@ -127,7 +127,7 @@ namespace LusoHealthClient.Server.Controllers
                 AccessFailedCount = 0,
                 UserName = model.Nif.Trim() + '_' + DateTime.Now.Millisecond,
                 BirthDate = model.DataNascimento,
-                DateCreated = DateTime.Now
+                DateCreated = DateTime.UtcNow
             };
 
             var result = await _userManager.CreateAsync(userToAdd, model.Password);

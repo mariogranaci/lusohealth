@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
-import { Appointment } from '../../shared/models/services/appointment';
 import { ServicesService } from '../../services/services.service';
 import { AgendaService } from '../agenda.service';
-import { Service } from '../../shared/models/services/service';
+import { Service } from '../../shared/models/servic/service';
 import { Specialty } from '../../shared/models/profile/specialty';
 import { ProfessionalType } from '../../shared/models/authentication/professionalType';
 import { Subject, take, takeUntil } from 'rxjs';
 import { Professional } from '../../shared/models/profile/professional';
 import { AppointmentService } from '../../appointment/appointment.service';
+import { Appointment } from '../../shared/models/servic/appointment';
 
 
 @Component({

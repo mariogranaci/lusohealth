@@ -6,6 +6,7 @@ main {
   min-height: calc(100vh - 65px);
 }
 
+
 .row {
   display: flex;
   flex-direction: row;

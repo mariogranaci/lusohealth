@@ -327,14 +327,14 @@
       </div>
     </form>
 
-    <form id="edit-address-container" class="overlay-container" [formGroup]="addressForm" (ngSubmit)="submitAddress()" (click)="stopPropagation($event)">
+    <form id="edit-address-container" class="overlay-container" [formGroup]="addressForm" (click)="stopPropagation($event)">
       <section>
         <h2>Editar Morada</h2>
         <div id="map"></div>
         <div class="row">
           <input class="info" type="text" id="address-input" formControlName="address" placeholder="Digite seu endereço">
         </div>
-        <button class="btn btn-blue" type="submit">Salvar Endereço</button>
+        <button class="btn btn-blue" (click)="submitAddress()">Salvar Endereço</button>
       </section>
     </form>
   </div>

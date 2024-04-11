@@ -2,12 +2,11 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from '../../authentication/authentication.service';
 import { User } from '../../shared/models/authentication/user';
-import { ConfirmEmail } from '../../shared/models/authentication/confirmEmail';
-import { Subject, onErrorResumeNextWith, take, takeUntil } from 'rxjs';
+import { Subject, take, takeUntil } from 'rxjs';
 import { ServicesService } from '../services.service';
-import { MakeAppointment } from '../../shared/models/services/makeAppointment';
-import { Appointment } from '../../shared/models/services/appointment';
-import { AvailableSlot } from '../../shared/models/services/availableSlot';
+import { MakeAppointment } from '../../shared/models/servic/makeAppointment';
+import { Appointment } from '../../shared/models/servic/appointment';
+import { AvailableSlot } from '../../shared/models/servic/availableSlot';
 
 @Component({
   selector: 'app-marcar-consulta',

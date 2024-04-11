@@ -8,10 +8,10 @@ import { Professional } from '../shared/models/profile/professional';
 import { Specialty } from '../shared/models/profile/specialty';
 import { Service } from '../shared/models/profile/service';
 import { ProfessionalType } from '../shared/models/authentication/professionalType';
-import { Bounds } from '../shared/models/services/bounds';
-import { MakeAppointment } from '../shared/models/services/makeAppointment';
-import { Appointment } from '../shared/models/services/appointment';
-import { Session } from '../shared/models/services/session';
+import { Bounds } from '../shared/models/servic/bounds';
+import { MakeAppointment } from '../shared/models/servic/makeAppointment';
+import { Appointment } from '../shared/models/servic/appointment';
+import { Session } from '../shared/models/servic/session';
 
 declare const Stripe: any;
 

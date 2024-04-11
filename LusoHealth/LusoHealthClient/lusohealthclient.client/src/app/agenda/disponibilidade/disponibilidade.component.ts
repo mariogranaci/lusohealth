@@ -10,7 +10,7 @@ import { User } from '../../shared/models/authentication/user';
 import { ProfileService } from '../../profile/profile.service';
 import { Router } from '@angular/router';
 import { AgendaService } from '../agenda.service';
-import { Availability } from '../../shared/models/services/availability';
+import { Availability } from '../../shared/models/servic/availability';
 import { Professional } from '../../shared/models/profile/professional';
 
 @Component({

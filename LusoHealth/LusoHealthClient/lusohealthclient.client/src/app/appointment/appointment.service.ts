@@ -1,11 +1,11 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Appointment } from '../shared/models/services/appointment';
+import { Appointment } from '../shared/models/servic/appointment';
 import { environment } from '../../environments/environment.development';
 import { User } from '../shared/models/authentication/user';
 import { jwtDecode } from 'jwt-decode';
-import { AvailableSlot } from '../shared/models/services/availableSlot';
+import { AvailableSlot } from '../shared/models/servic/availableSlot';
 
 @Injectable({
   providedIn: 'root'

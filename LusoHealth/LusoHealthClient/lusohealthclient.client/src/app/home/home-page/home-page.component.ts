@@ -1,7 +1,7 @@
 import { Component, HostListener } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { HomeService } from '../home.service';
-import { Service } from '../../shared/models/services/service';
+import { Service } from '../../shared/models/servic/service';
 import { Specialty } from '../../shared/models/profile/specialty';
 import { ProfessionalType } from '../../shared/models/authentication/professionalType';
 

@@ -631,13 +631,12 @@ export class PrivateProfileProfessionalComponent implements OnInit {
           this.map.setCenter(place.geometry.location);
           this.map.setZoom(this.zoom);
         }
-        if (this.marker && this.hasStreetNumber) {
-          this.marker.position = place.geometry.location;
-          this.address = place.formatted_address;
-          this.position = place.geometry.location;
-
-        } else {
-          if (this.position) {
+        if (this.hasStreetNumber) {
+            this.position = place.geometry.location;
+            this.address = place.formatted_address;
+          if (this.marker) {
+            this.marker.position = place.geometry.location;
+          } else {
             this.marker = new Marker({
               position: this.position,
               map: this.map,
@@ -654,7 +653,6 @@ export class PrivateProfileProfessionalComponent implements OnInit {
 
     if (!this.hasStreetNumber) {
       this.errorMessages.push('Por favor, inclua o número da porta no endereço.');
-      this.isInPortugal = false;
       this.hasStreetNumber = false;
       return;
     }

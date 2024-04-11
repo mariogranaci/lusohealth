@@ -148,8 +148,8 @@ try
     }
     else if (app.Environment.IsProduction())
     {
-        await contextSeedService.InitializeProductionAsync();
-        //await contextSeedService.InitializeContextAsync();
+        //await contextSeedService.InitializeProductionAsync();
+        await contextSeedService.InitializeContextAsync();
     }
 
 }

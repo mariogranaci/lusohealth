@@ -10,7 +10,8 @@
     "prestart": "node aspnetcore-https",
     "start:windows": "ng serve --ssl --ssl-cert \"%APPDATA%\\ASP.NET\\https\\%npm_package_name%.pem\" --ssl-key \"%APPDATA%\\ASP.NET\\https\\%npm_package_name%.key\" --host=127.0.0.1",
     "start:default": "ng serve --ssl --ssl-cert \"$HOME/.aspnet/https/${npm_package_name}.pem\" --ssl-key \"$HOME/.aspnet/https/${npm_package_name}.key\" --host=127.0.0.1",
-    "compodoc": "npx compodoc -p tsconfig.doc.json"
+    "compodoc": "npx compodoc -p tsconfig.doc.json",
+    "azurebuild": "ng build --configuration=production"
   },
   "private": true,
   "dependencies": {
@@ -35,6 +36,7 @@
     "@types/google.maps": "^3.55.4",
     "bootstrap": "^5.3.2",
     "bootswatch": "^5.3.2",
+    "chart.js": "^4.4.2",
     "jest-editor-support": "*",
     "jsonwebtoken": "^9.0.2",
     "jsonwebtoken-promisified": "^1.0.3",
@@ -62,5 +64,11 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
     "typescript": "~5.2.2"
+  },
+  "browser": {
+    "http": false,
+    "https": false,
+    "url": false,
+    "util": false
   }
 }

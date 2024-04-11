@@ -8,7 +8,7 @@ import { Marker } from '@googlemaps/adv-markers-utils';
 import { ServicesService } from '../services.service';
 import { Professional } from '../../shared/models/profile/professional';
 import { Subject, takeUntil } from 'rxjs';
-import { Bounds } from '../../shared/models/services/bounds';
+import { Bounds } from '../../shared/models/servic/bounds';
 
 declare var google: any;
 

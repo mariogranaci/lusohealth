@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { Specialty } from '../../shared/models/profile/specialty';
 import { ServicesService } from '../services.service';
-import { Service } from '../../shared/models/services/service';
+import { Service } from '../../shared/models/servic/service';
 import { ProfessionalType } from '../../shared/models/authentication/professionalType';
 
 

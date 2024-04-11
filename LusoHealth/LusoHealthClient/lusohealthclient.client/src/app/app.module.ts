@@ -12,7 +12,6 @@ import { ReportsComponent } from './moderation/reports/reports.component';
 
 
 
-
 @NgModule({
   declarations: [
     AppComponent,

@@ -5,15 +5,21 @@ import { EstatisticasUtilizadoresRegistadosComponent } from './estatisticas-util
 import { EstatisticasUtilizadoresAnoComponent } from './estatisticas-utilizadores-ano/estatisticas-utilizadores-ano.component';
 import { EstatisticasProfissionalConcelhoComponent } from './estatisticas-profissional-concelho/estatisticas-profissional-concelho.component';
 import { EstatisticasConsultasProfissionalComponent } from './estatisticas-consultas-profissional/estatisticas-consultas-profissional.component';
+import { DoughnutChartComponent } from './charts/doughnut-chart/doughnut-chart.component';
+import { BarChartComponent } from './charts/bar-chart/bar-chart.component';
+import { FormsModule } from '@angular/forms';
 
 
 
 @NgModule({
   declarations: [EstatisticasClassificacaoProfissionalComponent, EstatisticasUtilizadoresRegistadosComponent,
     EstatisticasUtilizadoresAnoComponent, EstatisticasProfissionalConcelhoComponent,
-    EstatisticasConsultasProfissionalComponent],
+    EstatisticasConsultasProfissionalComponent,
+    DoughnutChartComponent,
+    BarChartComponent],
   imports: [
-    CommonModule
+    CommonModule,
+    FormsModule
   ]
 })
 export class BackofficeModule { }

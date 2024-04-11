@@ -38,13 +38,18 @@ export class BackOfficeService {
     return this.http.get<any>(`${environment.appUrl}/api/backoffice/get-valid-users`, { headers });
   }
 
-  getAppointmentsPerProfessional() {
+  getAppointmentsPerProfessional(selectedFilter: number) {
     const headers = this.getHeaders();
-    return this.http.get<any>(`${environment.appUrl}/api/backoffice/get-apointments-per-professional`, { headers });
+    return this.http.get<any>(`${environment.appUrl}/api/backoffice/get-apointments-per-professional/${selectedFilter}`, { headers });
   }
 
   getProfessionalsByRanking() {
     const headers = this.getHeaders();
     return this.http.get<any>(`${environment.appUrl}/api/backoffice/get-professionals-by-ranking`, { headers });
+  }
+
+  getProfessionalTypes() {
+    const headers = this.getHeaders();
+    return this.http.get<any>(`${environment.appUrl}/api/backoffice/get-professional-types`, { headers });
   }
 }

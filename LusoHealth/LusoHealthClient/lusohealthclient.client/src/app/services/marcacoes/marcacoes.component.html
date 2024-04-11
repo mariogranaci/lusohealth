@@ -1,36 +1,36 @@
 <div class="firstRow">
   <h4>Filtrar:</h4>
   <div class="dropdown">
-    <select id="category" (change)="filterSpecialties(); filterProfessionalsCategory(); filterProfessionalsType(); orderBy()">
-      <option value="Qualquer" disabled hidden selected>Categoria</option>
-      <option>Qualquer</option>
-      <option *ngFor="let professionalType of professionalTypes" value="{{ professionalType.name }}">{{ professionalType.name }}</option>
+    <select id="category" [(ngModel)]="selectedCategory" (change)="filterSpecialties(); getServicesFiltered();">
+      <option value="" disabled hidden selected>Categoria</option>
+      <option value="0">Qualquer</option>
+      <option *ngFor="let professionalType of professionalTypes" value="{{ professionalType.id }}">{{ professionalType.name }}</option>
     </select>
   </div>
   <div class="dropdown">
-    <select id="specialty" (change)="filterProfessionalsCategory(); filterProfessionalsType(); orderBy()">
-      <option value="Qualquer" disabled hidden selected>Especialidade</option>
-      <option>Qualquer</option>
+    <select id="specialty" [(ngModel)]="selectedSpecialty" (change)="getServicesFiltered()">
+      <option value="" disabled hidden selected>Especialidade</option>
+      <option value="0">Qualquer</option>
       <option *ngFor="let specialty of specialtiesFiltered" value="{{specialty.name}}">{{ specialty.name }}</option>
     </select>
   </div>
   <div class="dropdown">
-    <select id="type" (change)="filterProfessionalsType(); orderBy()">
-      <option value="Qualquer" disabled hidden selected>Tipo de Consulta</option>
-      <option>Qualquer</option>
+    <select id="type" [(ngModel)]="selectedType" (change)="getServicesFiltered()">
+      <option value="" disabled hidden selected>Tipo de Consulta</option>
+      <option value="0">Qualquer</option>
       <option value="Online">Online</option>
       <option value="Presential">Presencial</option>
       <option value="Home">Domicilio</option>
     </select>
   </div>
-  <button class="btn">Ver Mapa</button>
+  <button class="btn" [routerLink]="['/map']">Ver Mapa</button>
 </div>
 
 <div class="secondRow">
   <h4>Ordenar:</h4>
   <div class="dropdown">
-    <select id="order" (change)="orderBy()">
-      <option value="Qualquer" disabled hidden selected>Ordenar</option>
+    <select id="order" [(ngModel)]="selectedOrder" (ngModelChange)="orderBy()">
+      <option disabled hidden selected>Ordenar</option>
       <option value="Rank">Ranking</option>
       <option value="p<">Preco Ascendente</option>
       <option value="p>">Preco Descendente</option>
@@ -43,12 +43,12 @@
     <figure class="searchIcon">
       <img src="assets/images/HomePage/search.png" alt="Ícone de pesquisa de filtros">
     </figure>
-    <input class="searchBar" type="text" placeholder="Pesquise por nome" (keyup)="onSearchInput($event)">
+    <input class="searchBar" type="text" placeholder="Pesquise por nome" [(ngModel)]="searchTerm" (keyup)="onSearchInput()">
   </div>
 </div>
 
 <section class="categorias">
-  <div class="categoria" *ngFor="let service of paginatedServices">
+  <div class="categoria" *ngFor="let service of services">
     <div class="tab" [routerLink]="['/make-appointment']" [queryParams]="{ serviceId: service.serviceId }">
       <div id="icons">
         <figure class="rating">{{ returnStars(service) === 0 ? '-' : returnStars(service)}} <img alt="Estrela" class="star" src="/assets/images/profile/star.png"></figure>
@@ -70,12 +70,10 @@
 
 <div class="pagination">
   <button class="page-arrow" id="prev" (click)="prevPage()" [disabled]="currentPage === 1"><</button>
-  <button class="page-btn" (click)="goToPage(currentPage-2)" [disabled]="currentPage-2 <= 0">{{currentPage-2}}</button>
-  <button class="page-btn" (click)="goToPage(currentPage-1)" [disabled]="currentPage-1 <= 0">{{currentPage-1}}</button>
-  <button class="page-btn current" (click)="goToPage(currentPage)">{{currentPage}}</button>
-  <button class="page-btn" (click)="goToPage(currentPage+1)" [disabled]="currentPage+1 > totalPages">{{currentPage+1}}</button>
-  <button class="page-btn" (click)="goToPage(currentPage+2)" [disabled]="currentPage+2 > totalPages">{{currentPage+2}}</button>
-  <button class="page-btn" (click)="goToPage(currentPage+3)" [disabled]="currentPage+3 > totalPages">{{currentPage+3}}</button>
-  <button class="page-arrow" id="next" (click)="nextPage()" [disabled]="currentPage === totalPages">></button>
+  <button class="page-btn" *ngIf="currentPage > 2" (click)="goToPage(currentPage-2)">{{currentPage-2}}</button>
+  <button class="page-btn" *ngIf="currentPage > 1" (click)="goToPage(currentPage-1)">{{currentPage-1}}</button>
+  <button class="page-btn current">{{currentPage}}</button>
+  <button class="page-btn" (click)="goToPage(currentPage+1)" [disabled]="!hasMorePages">{{currentPage+1}}</button>
+  <button class="page-arrow" id="next" (click)="nextPage()" [disabled]="!hasMorePages">></button>
 </div>
 

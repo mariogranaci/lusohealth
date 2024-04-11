@@ -139,7 +139,6 @@ export class HomePageComponent {
     const sortedSpecialties = this.specialties.slice().sort((a, b) => {
       return b.timesScheduled - a.timesScheduled;
     });
-
     this.topSpecialties = sortedSpecialties.slice(0, 3);
   }
 

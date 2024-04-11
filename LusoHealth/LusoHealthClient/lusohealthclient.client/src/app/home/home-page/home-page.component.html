@@ -23,9 +23,12 @@
     <div class="populares">
       <div class="form-buttons-row" *ngIf="(topSpecialties.length > 0)">
         <p class="populares-texto">Populares:</p>
-        <button class="btn">{{topSpecialties[0].name}}</button>
-        <button class="btn">{{topSpecialties[1].name}}</button>
-        <button class="btn">{{topSpecialties[2].name}}</button>
+        <button class="btn"
+                *ngFor="let specialty of topSpecialties; let i = index"
+                [routerLink]="['/services']"
+                [queryParams]="{categoryId: specialty.professionalTypeId, specialty: specialty.name }">
+          {{specialty.name}}
+        </button>
       </div>
     </div>
   </div>

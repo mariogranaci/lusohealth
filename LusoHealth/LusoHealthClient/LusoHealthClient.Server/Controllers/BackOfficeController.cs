@@ -172,6 +172,13 @@ namespace LusoHealthClient.Server.Controllers
                 return Ok(professionalTypes);
             }
 
+            [HttpGet("get-professionals")]
+            public async Task<ActionResult<List<object>>> GetProfessionals()
+            {
+                var professionals = await _context.Professionals.ToListAsync();
+                return Ok(professionals);
+            }   
+            
         }
     }
 }

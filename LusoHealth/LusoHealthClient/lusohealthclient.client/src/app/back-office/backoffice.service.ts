@@ -57,4 +57,9 @@ export class BackOfficeService {
     const headers = this.getHeaders();
     return this.http.get<any>(`${environment.appUrl}/api/backoffice/get-anually-registered-users`, { headers });
   }
+
+  getProfessionals() {
+    const headers = this.getHeaders();
+    return this.http.get<any>(`${environment.appUrl}/api/backoffice/get-professionals`, { headers });
+  }
 }

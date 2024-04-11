@@ -34,7 +34,7 @@ namespace TestLusoHealth
 			testUser1 = fixture.TestUser1;
 		}
 
-		//
+		//Testes cancelar consulta
 		[Fact]
 		public async Task TestConcludeReport_ReturnsNotFound_WhenReportDontExist()
 		{
@@ -102,6 +102,8 @@ namespace TestLusoHealth
 			Assert.IsType<OkObjectResult>(result);
 		}
 
+
+		//Testes suspender  a conta do profissional
 		[Fact]
 		public async Task TestSuspendAccountProfessional_ReturnsBadRequestObjectResult_WhenUserExist()
 		{
@@ -176,6 +178,8 @@ namespace TestLusoHealth
 			Assert.IsType<OkObjectResult>(result);
 		}
 
+
+		//Testes bloquear a conta do profissional
 		[Fact]
 		public async Task TestBlockAccountProfessional_ReturnsBadRequestObjectResult_WhenUserExist()
 		{
@@ -250,6 +254,8 @@ namespace TestLusoHealth
 			Assert.IsType<OkObjectResult>(result);
 		}
 
+
+		//Testes suspender a conta do paciente
 		[Fact]
 		public async Task TestSuspendAccountPatient_ReturnsBadRequestObjectResult_WhenUserExist()
 		{
@@ -321,6 +327,43 @@ namespace TestLusoHealth
 
 			Assert.IsType<OkObjectResult>(result);
 		}
+
+
+		//Testes bloquear a conta do paciente
+		[Fact]
+		public async Task TestBlockAccountPatient_ReturnsBadRequestObjectResult_WhenUserExist()
+		{
+			var mockUserManager = new Mock<UserManager<User>>(new Mock<IUserStore<User>>().Object,
+			   new Mock<IOptions<IdentityOptions>>().Object,
+			   new Mock<IPasswordHasher<User>>().Object,
+			   new IUserValidator<User>[0],
+			   new IPasswordValidator<User>[0],
+			   new Mock<ILookupNormalizer>().Object,
+			   new Mock<IdentityErrorDescriber>().Object,
+			   new Mock<IServiceProvider>().Object,
+			   new Mock<ILogger<UserManager<User>>>().Object);
+			var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
+										new Claim(ClaimTypes.NameIdentifier, "professionaltest@mail.com"),
+								   }, "TestAuthentication"));
+
+			mockUserManager.Setup(u => u.FindByIdAsync(It.IsAny<string>()))
+				.ReturnsAsync((string userId) => testUser1);
+
+			var controller = new ManageController(_context, mockUserManager.Object);
+			controller.ControllerContext = new ControllerContext();
+			controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
+
+			var review = new ReviewAdminDto
+			{
+				
+			};
+
+			var result = await controller.BlockAccountPatient(review);
+
+			Assert.IsType<BadRequestObjectResult>(result);
+		}
+
+
 
 
 		[Fact]

@@ -427,7 +427,12 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpPost("recover-account")]
+		/// <summary>
+		/// Inicia o processo de recuperação de conta enviando um email para o utilizador com um link de recuperação.
+		/// </summary>
+		/// <param name="model">O modelo de dados contendo o email do usuário.</param>
+		/// <returns>Um ActionResult representando o resultado da solicitação.</returns>
+		[HttpPost("recover-account")]
         public async Task<ActionResult> RecoverAccount(EmailDto model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
@@ -457,7 +462,12 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpPut("unlock-account")]
+		/// <summary>
+		/// Desbloqueia a conta do utilizador após confirmar o token.
+		/// </summary>
+		/// <param name="model">O modelo de dados contendo o email do usuário e o token.</param>
+		/// <returns>Um IActionResult representando o resultado da solicitação.</returns>
+		[HttpPut("unlock-account")]
         public async Task<IActionResult> UnlockAccount(ConfirmEmailDto model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);

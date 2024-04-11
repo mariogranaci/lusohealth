@@ -9,7 +9,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LusoHealthClient.Server.Controllers
 {
-    [Authorize(Roles = SD.AdminRole + "," + SD.ManagerRole)]
+	/// <summary>
+	/// Controlador responsável por gerir relatórios, análises e ações administrativas.
+	/// </summary>
+	[Authorize(Roles = SD.AdminRole + "," + SD.ManagerRole)]
     [Route("api/[controller]")]
     [ApiController]
     public class ManageController : ControllerBase
@@ -158,8 +161,12 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-
-        [HttpPatch("cancel-report")]
+		// <summary>
+		/// Conclui um relatório, alterando seu estado para cancelado.
+		/// </summary>
+		/// <param name="model">As informações do relatório a ser cancelado.</param>
+		/// <returns>Um ActionResult representando o resultado da operação de conclusão do relatório.</returns>
+		[HttpPatch("cancel-report")]
         public async Task<ActionResult> ConcludeReport(ReportDto model)
        {
             var report = await _context.Report.FirstOrDefaultAsync(r => r.Id == model.Id);
@@ -184,7 +191,12 @@ namespace LusoHealthClient.Server.Controllers
 
         }
 
-        [HttpPatch("suspend-account-professional")]
+		/// <summary>
+		/// Suspende a conta de um profissional e conclui um relatório associado a essa ação.
+		/// </summary>
+		/// <param name="model">As informações do relatório e do profissional cuja conta será suspensa.</param>
+		/// <returns>Um ActionResult representando o resultado da operação de suspensão de conta.</returns>
+		[HttpPatch("suspend-account-professional")]
         public async Task<ActionResult> SuspendAccountProfessional(ReportDto model)
         {
             var user = await _userManager.FindByIdAsync(model.IdProfesional);

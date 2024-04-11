@@ -111,7 +111,12 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpPatch("finish-appointment")]
+		/// <summary>
+		/// Termina uma consulta.
+		/// </summary>
+		/// <param name="model">As informações da consulta a ser terminada.</param>
+		/// <returns>A consulta terminada.</returns>
+		[HttpPatch("finish-appointment")]
         public async Task<ActionResult<AppointmentDto>> FinishAppointment(AppointmentDto model)
         {
             if (model == null) return BadRequest("Não foi possível acabar a consulta.");
@@ -138,7 +143,12 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpPatch("begin-appointment")]
+		/// <summary>
+		/// Começa uma consulta.
+		/// </summary>
+		/// <param name="model">As informações da consulta a ser iniciada.</param>
+		/// <returns>A consulta iniciada.</returns>
+		[HttpPatch("begin-appointment")]
         public async Task<ActionResult<AppointmentDto>> BeginAppointment(AppointmentDto model)
         {
             if (model == null) return BadRequest("Não foi possível começar a consulta.");
@@ -243,7 +253,12 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpGet("get-available-slots/{serviceId}")]
+		/// <summary>
+		/// Obtém os slots de horário disponíveis para um determinado serviço.
+		/// </summary>
+		/// <param name="serviceId">ID do serviço.</param>
+		/// <returns>Os slots de horário disponíveis.</returns>
+		[HttpGet("get-available-slots/{serviceId}")]
         public async Task<ActionResult<List<AvailableSlotDto>>> GetAvailableSlots(int serviceId)
         {
             var slots = await _context.AvailableSlots.Where(x => x.IdService == serviceId).ToListAsync();

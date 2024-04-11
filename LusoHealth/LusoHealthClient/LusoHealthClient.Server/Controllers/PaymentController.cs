@@ -234,7 +234,12 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpPost("refund-appointment")]
+		/// <summary>
+		/// Efetua o reembolso de uma consulta cancelada, utilizando o ID da consulta para encontrar o pagamento associado.
+		/// </summary>
+		/// <param name="dto">Os dados necessários para o pedido de reembolso, incluindo o ID da consulta.</param>
+		/// <returns>Um ActionResult representando o resultado da operação de reembolso.</returns>
+		[HttpPost("refund-appointment")]
         public async Task<ActionResult> RefundAppointment(RefundRequestDto dto)
         {
             try

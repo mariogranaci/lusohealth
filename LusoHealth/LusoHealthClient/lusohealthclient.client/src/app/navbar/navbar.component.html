@@ -39,6 +39,12 @@
         <div id="login-text" class="nav-text">Login</div>
       </a>
     </li>
+    <li class="sub-menu-parent" [routerLink]="['/reports']" *ngIf="userRole === 'Admin'">
+      <a class="nav-link" routerLinkActive="active">
+        <img class="menu-icons" src="assets/images/NavBar/statistics.png" alt="Ícone Reports" />
+        <div id="login-text" class="nav-text">Reports</div>
+      </a>
+    </li>
     <li class="sub-menu-parent" *ngIf="(authenticationService.user$ | async) as user">
       <a [routerLink]="['/edit-professional-profile']" *ngIf="userRole === 'Professional'" class="nav-link" routerLinkActive="active">
         <img class="menu-icons" src="assets/images/NavBar/user-icon.png" alt="Ícone Perfil" />

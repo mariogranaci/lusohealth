@@ -4,8 +4,8 @@
   <div class="small-title">Número de utilizadores registados por ano</div>
 
   <div class="options">
-    <button [class.active]="selectedOption === 'Client'" (click)="selectOption('Client')">Cliente</button>
-    <button [class.active]="selectedOption === 'Professional'" (click)="selectOption('Professional')">Profissional</button>
+    <button id="client-button" [class.active]="selectedOption === 'Client'" (click)="selectOption('Client')">Cliente</button>
+    <button id="professional-button" [class.active]="selectedOption === 'Professional'" (click)="selectOption('Professional')">Profissional</button>
   </div>
 
   <div class="chart">

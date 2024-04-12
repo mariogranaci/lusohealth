@@ -1,4 +1,5 @@
 ﻿using LusoHealthClient.Server.Data;
+using LusoHealthClient.Server.Models.Professionals;
 using LusoHealthClient.Server.Models.Users;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,12 +15,10 @@ namespace LusoHealthClient.Server.Controllers
         public class BackOfficeController : ControllerBase
         {
             private readonly ApplicationDbContext _context;
-            //private readonly UserManager<User> _userManager;
 
-            public BackOfficeController(ApplicationDbContext context/*, UserManager<User> userManager*/)
+            public BackOfficeController(ApplicationDbContext context)
             {
                 _context = context;
-              //  _userManager = userManager;
             }
 
             [HttpGet("get-valid-users")]
@@ -68,8 +67,6 @@ namespace LusoHealthClient.Server.Controllers
 
                 return Ok(specialtyData);
             }
-
-
             
             [HttpGet("get-anually-registered-users")]
             public async Task<ActionResult<List<object>>> GetAnuallyRegistered()
@@ -137,7 +134,7 @@ namespace LusoHealthClient.Server.Controllers
             }
 
             [HttpGet("get-professional-types")]
-            public async Task<ActionResult<List<object>>> GetProfessionalTypes()
+            public async Task<ActionResult<List<ProfessionalType>>> GetProfessionalTypes()
             {
                 var professionalTypes = await _context.ProfessionalTypes.ToListAsync();
                 if (professionalTypes == null) return BadRequest("Não foi possível encontrar a informação dos tipos de profissionais.");
@@ -145,12 +142,56 @@ namespace LusoHealthClient.Server.Controllers
             }
 
             [HttpGet("get-professionals")]
-            public async Task<ActionResult<List<object>>> GetProfessionals()
+            public async Task<ActionResult<List<Professional>>> GetProfessionals()
             {
                 var professionals = await _context.Professionals.ToListAsync();
                 return Ok(professionals);
-            }   
-            
+            }
+
+
+            [HttpGet("compare-registration")]
+            public async Task<ActionResult<string>> CompareRegistration()
+            {
+                try
+                {
+                    var thisWeekProfessionalsCount = await _context.Professionals.Include(p => p.User).CountAsync(u => u.User.DateCreated >= DateTime.UtcNow.AddDays(-7));
+                    var lastWeekProfessionalsCount = await _context.Professionals.Include(p => p.User).CountAsync(u => u.User.DateCreated >= DateTime.UtcNow.AddDays(-14) && u.User.DateCreated < DateTime.UtcNow.AddDays(-7));
+
+                    var professionalComparison = GetRegistrationChangeMessage(thisWeekProfessionalsCount, lastWeekProfessionalsCount);
+
+                    var thisWeekPatientsCount = await _context.Patients.Include(p => p.User).CountAsync(u => u.User.DateCreated >= DateTime.UtcNow.AddDays(-7));
+                    var lastWeekPatientsCount = await _context.Patients.Include(p => p.User).CountAsync(u => u.User.DateCreated >= DateTime.UtcNow.AddDays(-14) && u.User.DateCreated < DateTime.UtcNow.AddDays(-7));
+
+                    var patientComparison = GetRegistrationChangeMessage(thisWeekPatientsCount, lastWeekPatientsCount);
+
+                    return Ok(new { professional = professionalComparison, patient = patientComparison });
+                } catch (Exception)
+                {
+                    return BadRequest("Não foi possível comparar os registos.");
+                }
+            }
+
+            /// <summary>
+            /// Retorna uma mensagem baseada na comparação do número de registros desta semana com a semana passada.
+            /// </summary>
+            /// <param name="thisWeek">Número de registros desta semana.</param>
+            /// <param name="lastWeek">Número de registros da semana passada.</param>
+            /// <returns>Uma string indicando se o número aumentou, diminuiu ou permaneceu igual.</returns>
+            private string GetRegistrationChangeMessage(int thisWeek, int lastWeek)
+            {
+                if (thisWeek > lastWeek)
+                {
+                    return "up";
+                }
+                else if (thisWeek < lastWeek)
+                {
+                    return "down";
+                }
+                else
+                {
+                    return "same";
+                }
+            }
         }
     }
 }

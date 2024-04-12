@@ -62,4 +62,9 @@ export class BackOfficeService {
     const headers = this.getHeaders();
     return this.http.get<any>(`${environment.appUrl}/api/backoffice/get-professionals`, { headers });
   }
+
+  compareRegistration() {
+    const headers = this.getHeaders();
+    return this.http.get<any>(`${environment.appUrl}/api/backoffice/compare-registration`, { headers });
+  }
 }

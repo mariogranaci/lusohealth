@@ -3,7 +3,6 @@ import { BackOfficeService } from '../backoffice.service';
 import { environment } from '../../../environments/environment.development';
 import { Loader } from '@googlemaps/js-api-loader';
 import { } from '@angular/google-maps';
-import { Marker } from '@googlemaps/adv-markers-utils';
 
 
 @Component({

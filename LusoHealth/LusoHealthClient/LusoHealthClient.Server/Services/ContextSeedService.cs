@@ -215,14 +215,14 @@ namespace LusoHealthClient.Server.Services
 						LockoutEnabled = false,
 						AccessFailedCount = 0,
 						UserName = ("12345678" + i) + '_' + DateTime.Now.Millisecond,
-						BirthDate = DateTime.Now.AddYears(-18 - random.Next(1, 15)),
-						DateCreated = DateTime.Now.AddYears(- random.Next(0, 5))
+						BirthDate = DateTime.UtcNow.AddYears(-18 - random.Next(1, 15)),
+						DateCreated = DateTime.UtcNow.AddYears(- random.Next(0, 5)).AddDays(- random.Next(0, DateTime.UtcNow.Day))
 					};
 					users.Add(patientUser);
 				}
 
 
-				for (int i = 16; i <= 71; i++)
+				for (int i = 16; i <= 40; i++)
 				{
 
 					var professionalUser = new User
@@ -246,15 +246,44 @@ namespace LusoHealthClient.Server.Services
 						AccessFailedCount = 0,
 						UserName = ("12345678" + i) + '_' + DateTime.Now.Millisecond,
 						BirthDate = DateTime.Now.AddYears(-18 - random.Next(1, 15)),
-                        DateCreated = DateTime.Now.AddYears(-random.Next(0, 5))
+                        DateCreated = DateTime.UtcNow.AddYears(-random.Next(0, 5)).AddMonths(-random.Next(0, DateTime.UtcNow.Month)).AddDays(-random.Next(0, DateTime.UtcNow.Day))
                     };
 					users.Add(professionalUser);
 				}
 
+                for (int i = 41; i <= 71; i++)
+                {
+
+                    var professionalUser = new User
+                    {
+                        Id = i.ToString(),
+                        FirstName = $"Professional{i}",
+                        LastName = "User",
+                        Email = $"professional{i}@mail.com",
+                        NormalizedEmail = $"professional{i}@mail.com",
+                        Gender = i % 2 == 0 ? 'M' : 'F',
+                        Nif = (12345678 + i).ToString(),
+                        UserType = 'P',
+                        PhoneNumber = null,
+                        PhoneNumberConfirmed = false,
+                        EmailConfirmed = true,
+                        IsSuspended = false,
+                        IsBlocked = false,
+                        ProfilePicPath = null,
+                        TwoFactorEnabled = false,
+                        LockoutEnabled = false,
+                        AccessFailedCount = 0,
+                        UserName = ("12345678" + i) + '_' + DateTime.Now.Millisecond,
+                        BirthDate = DateTime.Now.AddYears(-18 - random.Next(1, 15)),
+                        DateCreated = DateTime.UtcNow.AddDays(-random.Next(0, DateTime.UtcNow.Day))
+                    };
+                    users.Add(professionalUser);
+                }
 
 
 
-				List<Professional> usersProfessionals = new List<Professional>();
+
+                List<Professional> usersProfessionals = new List<Professional>();
 				List<Patient> usersPatients = new List<Patient>();
 				List<Service> services = new List<Service>();
 

@@ -11,21 +11,24 @@ import { User } from '../../shared/models/authentication/user';
 export class EstatisticasUtilizadoresRegistadosComponent {
 
   private users: any[] = [];
-  public userCount: number = 0;
-  public professionalCount: number = 0;
-  public userEmailCount: number = 0;
-  public professionalEmailCount: number = 0;
+  userCount: number = 0;
+  professionalCount: number = 0;
+  userEmailCount: number = 0;
+  professionalEmailCount: number = 0;
+
+  compareRegistrationClients: string = '';
+  compareRegistrationProfessionals: string = '';
 
   constructor(public service: BackOfficeService) { }
 
   ngOnInit() {
     this.getValidUsers();
+    this.getRegistrationComparison();
   }
 
    getValidUsers() {
      this.service.getValidUsers().subscribe(
        (response: any) => {
-         console.log("Success!", response);
          this.users = response;
 
          this.users.forEach(user => {
@@ -46,6 +49,19 @@ export class EstatisticasUtilizadoresRegistadosComponent {
          console.error('Error: ', error);
        }
      );
-    }
+  }
+
+  getRegistrationComparison() {
+    this.service.compareRegistration().subscribe(
+      (response: any) => {
+        console.log("resposta", response);
+        this.compareRegistrationClients = response.patient;
+        this.compareRegistrationProfessionals = response.professional;
+      },
+      (error: any) => {
+        console.error('Error: ', error);
+      }
+    );
+  }
 }
 

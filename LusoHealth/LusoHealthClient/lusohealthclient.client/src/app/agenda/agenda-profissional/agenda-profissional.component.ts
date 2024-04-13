@@ -347,39 +347,53 @@ export class AgendaProfissionalComponent {
       "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
     ];
 
-    // Create a new Date object from the input string
+    /*
+    *Create a new Date object from the input string
+    */
     let dateTime: Date = new Date(dateTimeString);
 
-    // Extract day, month, and year
+    /*
+    * Extract day, month, and year
+    */  
     let day: number = dateTime.getDate();
     let month: number = dateTime.getMonth();
     let year: number = dateTime.getFullYear();
 
-    // Format the date in the desired format
+    /*
+    *Format the date in the desired format
+    */
     let formattedDate: string = `${day} ${monthsInPortuguese[month]} ${year}`;
 
     return formattedDate;
   }
 
-  // Método para carregar mais agendamentos na interface
+  /*
+  *Método para carregar mais agendamentos na interface
+  */
   loadMoreAppointments() {
     this.initialAppointmentCount += 3;
     this.updateDisplayedAppointments();
   }
 
-  // Método para carregar mais agendamentos pendentes na interface
+  /*
+  *Método para carregar mais agendamentos pendentes na interface
+  */
   loadMoreAppointmentsPending() {
     this.initialAppointmentPendingCount += 3;
     this.updateDisplayedAppointmentsPending();
   }
 
-  // Método para atualizar os agendamentos exibidos na interface
+  /*
+  *Método para atualizar os agendamentos exibidos na interface
+  */
   updateDisplayedAppointments() {
     this.displayedAppointments = this.appointments.slice(0, this.initialAppointmentCount);
     //console.log(typeof this.displayedAppointments[0].type);
   }
 
-  // Método para atualizar os agendamentos pendentes exibidos na interface
+  /*
+  * Método para atualizar os agendamentos pendentes exibidos na interface
+  */
   updateDisplayedAppointmentsPending() {
     this.displayedAppointmentsPending = this.appointmentsPending.slice(0, this.initialAppointmentPendingCount);
   }

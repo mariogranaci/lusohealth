@@ -49,6 +49,7 @@ export class MarcacoesComponent {
     this.unsubscribe$.complete();
   }
 
+ 
   getFirstAndLastName(fullName: string): string {
     const names = fullName.split(' ');
     if (names.length > 2) {
@@ -98,6 +99,9 @@ export class MarcacoesComponent {
     });
   }
 
+  /**
+  * Obtém as especialidades.
+   */
   getSpecialties() {
     this.servicesService.getSpecialties().pipe(
       takeUntil(this.unsubscribe$)
@@ -117,6 +121,10 @@ export class MarcacoesComponent {
     });
   }
 
+  /**
+  * Obtém as especialidades com base no número de agendamentos.
+  * @returns Uma lista das principais especialidades.
+  */
   getSpecialtiesByTimesScheduled(): Specialty[] {
     const sortedSpecialties = this.specialties.slice().sort((a, b) => {
       return b.timesScheduled - a.timesScheduled;
@@ -129,11 +137,18 @@ export class MarcacoesComponent {
     return topSpecialties;
   }
 
+  /**
+ * Obtém os serviços paginados.
+ * @returns Uma lista de serviços paginados.
+ */
   get paginatedServices(): Service[] {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     return this.servicesFilteredAgain.slice(startIndex, startIndex + this.itemsPerPage);
   }
 
+  /**
+  * Avança para a próxima página na paginação.
+  */
   nextPage() {
     if (this.currentPage < this.totalPages) {
       this.currentPage++;
@@ -141,6 +156,9 @@ export class MarcacoesComponent {
     }
   }
 
+  /**
+  * Retrocede para a página anterior na paginação.
+  */
   prevPage() {
     if (this.currentPage > 1) {
       this.currentPage--;
@@ -148,15 +166,25 @@ export class MarcacoesComponent {
     }
   }
 
+  /**
+  * Calcula o número total de páginas.
+  * @returns O número total de páginas.
+  */
   get totalPages(): number {
     return Math.ceil(this.servicesFilteredAgain.length / this.itemsPerPage);
   }
 
+  /**
+  * Atualiza a paginação para a primeira página.
+  */
   updatePagination() {
     this.currentPage = 1;
     this.updatePageButtons();
   }
 
+  /**
+  * Atualiza os botões de página.
+  */
   updatePageButtons() {
     this.pageButtons = [this.currentPage];
     for (let i = 1; i <= 3; i++) {
@@ -166,6 +194,10 @@ export class MarcacoesComponent {
     }
   }
 
+  /**
+   * Vai para uma página específica.
+   * @param page O número da página para ir.
+   */
   goToPage(page: number) {
     if (page >= 1 && page <= this.totalPages) {
       this.currentPage = page;
@@ -173,6 +205,10 @@ export class MarcacoesComponent {
     }
   }
 
+  /**
+  * Manipula a entrada de pesquisa.
+  * @param event O evento de entrada.
+  */
   onSearchInput(event: any) {
     this.searchTerm = event.target.value.trim();
     const searchTermNormalized = this.removeAccents(this.searchTerm.toLowerCase());
@@ -197,14 +233,28 @@ export class MarcacoesComponent {
     }
   }
 
+  /**
+  * Remove acentos de uma string.
+  * @param str A string com acentos.
+  * @returns A string sem acentos.
+  */
   removeAccents(str: string): string {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   }
 
+  /**
+  * Seleciona uma especialidade.
+  * @param specialty A especialidade selecionada.
+  */
   selectSpecialty(specialty: string) {
     console.log("Selected specialty:", specialty);
   }
 
+  /**
+  * Retorna a classificação média de um serviço.
+  * @param service O serviço.
+   * @returns A classificação média do serviço.
+  */
   returnStars(service: Service): number {
     const reviewsForService = service.professional.reviews.filter(review => review.idService === service.serviceId);
 
@@ -217,7 +267,9 @@ export class MarcacoesComponent {
     return parseFloat(averageStars.toFixed(1)); // Round to one decimal place
   }
 
-
+  /**
+  * Filtra as especialidades com base na categoria selecionada.
+  */
   filterSpecialties(): void {
 
     const selectedCategory = document.getElementById("category") as HTMLSelectElement;
@@ -234,7 +286,9 @@ export class MarcacoesComponent {
     }
   }
 
-
+  /**
+  * Filtra os serviços com base na categoria selecionada.
+  */
   filterProfessionalsCategory(): void {
 
     this.servicesFiltered = this.services;
@@ -300,6 +354,9 @@ export class MarcacoesComponent {
     this.updatePagination();
   }
 
+  /**
+  * Filtra os serviços com base no tipo selecionado.
+  */
   filterProfessionalsType(): void {
     const selectedType = document.getElementById("type") as HTMLSelectElement | null;
 
@@ -332,6 +389,9 @@ export class MarcacoesComponent {
     this.updatePagination();
   }
 
+  /**
+  * Ordena os serviços com base na opção selecionada.
+  */
   orderBy() {
 
     const option = document.getElementById("order") as HTMLSelectElement | null;

@@ -17,12 +17,21 @@ export class ConfirmEmailComponent implements OnInit {
   errorMessages: string[] = [];
   email: string | undefined;
 
+  /**
+  * Construtor da classe.
+  * @param authenticationService Serviço de autenticação para gerenciar as operações relacionadas à autenticação do usuário.
+  * @param router Serviço de roteamento para navegar entre componentes.
+  * @param activateRoute O serviço de rota ativada que fornece informações sobre a rota atual.
+  */
   constructor(private authenticationService: AuthenticationService,
     private router: Router,
     private activateRoute: ActivatedRoute) {
 
   }
 
+  /**
+  * Método executado após a inicialização do componente.
+  */
   ngOnInit(): void {
     this.authenticationService.user$.pipe(take(1)).subscribe({
       next: (user: User | null) => {
@@ -63,6 +72,9 @@ export class ConfirmEmailComponent implements OnInit {
     });
   }
 
+  /**
+  * Método para reenviar o link de confirmação de email.
+  */
   resendEmailConfirmationLink() {
     this.responseText = 'A reenviar link. Aguarde...';
     if (this.email) {

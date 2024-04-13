@@ -8,6 +8,9 @@ import { Appointment } from '../../shared/models/servic/appointment';
 import { Service } from '../../shared/models/servic/service';
 import { Professional } from '../../shared/models/profile/professional';
 
+/**
+ * Componente responsável por exibir o histórico de consultas do usuário.
+ */
 @Component({
   selector: 'app-historico-consultas',
   templateUrl: './historico-consultas.component.html',
@@ -32,6 +35,9 @@ export class HistoricoConsultasComponent {
 
   constructor(public servicesService: ServicesService, public agendaService: AgendaService) { }
 
+  /**
+   * Método executado ao inicializar o componente.
+   */
   ngOnInit() {
     this.getServices().then(() => {
       this.getProfessionalTypes();
@@ -40,11 +46,17 @@ export class HistoricoConsultasComponent {
     });
   }
 
+  /**
+  * Método executado ao destruir o componente.
+  */
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
 
+  /**
+ * Método para obter os tipos de profissionais disponíveis.
+ */
   getProfessionalTypes() {
     this.servicesService.getProfessionalTypes().pipe(
       takeUntil(this.unsubscribe$)
@@ -63,6 +75,9 @@ export class HistoricoConsultasComponent {
     });
   }
 
+  /**
+ * Método para obter as consultas anteriores.
+ */
   getPreviousAppointments() {
     this.agendaService.getPreviousAppointments().pipe(
       takeUntil(this.unsubscribe$)
@@ -83,6 +98,9 @@ export class HistoricoConsultasComponent {
     });
   }
 
+  /**
+ * Método para obter as especialidades disponíveis.
+ */
   getSpecialties() {
     this.agendaService.getSpecialties().pipe(
       takeUntil(this.unsubscribe$)
@@ -101,6 +119,10 @@ export class HistoricoConsultasComponent {
     });
   }
 
+  /**
+ * Método para obter os serviços disponíveis.
+ * @returns Uma promessa que é resolvida quando os serviços são obtidos com sucesso.
+ */
   getServices(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       this.servicesService.getServices().pipe(
@@ -123,6 +145,10 @@ export class HistoricoConsultasComponent {
     });
   }
 
+  /**
+ * Método para redefinir os dropdowns de categoria e especialidade.
+ * Também limpa as especialidades filtradas e atualiza as consultas exibidas.
+ */
   resetDropdowns() {
     const categoryDropdown = document.getElementById("category") as HTMLSelectElement;
     const specialtyDropdown = document.getElementById("specialty") as HTMLSelectElement;
@@ -135,6 +161,9 @@ export class HistoricoConsultasComponent {
     this.updateDisplayedAppointments();
   }
 
+  /**
+ * Método para filtrar especialidades com base na categoria selecionada.
+ */
   filterSpecialties(): void {
 
     const selectedCategory = document.getElementById("category") as HTMLSelectElement;
@@ -151,6 +180,9 @@ export class HistoricoConsultasComponent {
     }
   }
 
+  /**
+ * Método para filtrar consultas com base na categoria e especialidade selecionadas.
+ */
   filterProfessionalsCategory(): void {
 
     this.appointmentsFiltered = this.appointments;
@@ -197,6 +229,11 @@ export class HistoricoConsultasComponent {
     this.updateDisplayedAppointments();
   }
 
+  /**
+ * Método para obter o tipo de consulta com base no código.
+ * @param type O código do tipo de consulta.
+ * @returns O nome do tipo de consulta.
+ */
   getAppointmentType(type: string | null): string {
     switch (type) {
       case "0":
@@ -210,6 +247,11 @@ export class HistoricoConsultasComponent {
     }
   }
 
+  /**
+ * Método para encontrar a especialidade com base no ID do serviço.
+ * @param serviceId O ID do serviço.
+ * @returns O nome da especialidade ou null se não encontrado.
+ */
   findSpecialtyByServiceId(serviceId: number | null): String | null {
     const service = this.services.find(s => s.serviceId === serviceId);
 
@@ -219,18 +261,33 @@ export class HistoricoConsultasComponent {
     return null;
   }
 
+  /**
+ * Método para obter o nome do profissional com base no ID do serviço.
+ * @param serviceId O ID do serviço.
+ * @returns O nome completo do profissional.
+ */
   getProfessionalNameById(serviceId: number | null): string {
     const professional = this.services.find(s => s.professional.services.find(p => p.serviceId === serviceId))?.professional;
 
     return professional?.professionalInfo.firstName + " " + professional?.professionalInfo.lastName;
   }
 
+  /**
+ * Método para obter o objeto Professional com base no ID do serviço.
+ * @param serviceId O ID do serviço.
+ * @returns O objeto Professional ou undefined se não encontrado.
+ */
   getProfessionalById(serviceId: number | null): Professional | undefined {
     const professional = this.services.find(s => s.professional.services.find(p => p.serviceId === serviceId))?.professional;
 
     return professional;
   }
 
+  /**
+ * Método para converter uma string de data e hora em apenas a hora (formato HH:MM).
+ * @param dateTimeString A string de data e hora.
+ * @returns A hora formatada.
+ */
   convertToHours(dateTimeString: Date | null): string {
     if (!dateTimeString) {
       return ""; // Or any other default value you prefer
@@ -247,6 +304,11 @@ export class HistoricoConsultasComponent {
     return formattedHours + ":" + formattedMinutes;
   }
 
+  /**
+ * Método para converter uma string de data e hora em uma data formatada (formato DD MêsAno).
+ * @param dateTimeString A string de data e hora.
+ * @returns A data formatada.
+ */
   convertToDate(dateTimeString: Date | null): string {
     if (!dateTimeString) {
       return ""; // Or any other default value you prefer
@@ -271,15 +333,24 @@ export class HistoricoConsultasComponent {
     return formattedDate;
   }
 
+  /**
+ * Método para carregar mais consultas, aumentando o contador inicial e atualizando as consultas exibidas.
+ */
   loadMoreAppointments() {
     this.initialAppointmentCount += 3;
     this.updateDisplayedAppointments();
   }
 
+  /**
+ * Método para atualizar as consultas exibidas com base na contagem inicial.
+ */
   updateDisplayedAppointments() {
     this.displayedAppointments = this.appointmentsFiltered.slice(0, this.initialAppointmentCount);
   }
 
+  /**
+ * Método para ordenar as consultas com base na opção selecionada (ascendente ou descendente por data).
+ */
   orderBy() {
 
     const option = document.getElementById("order") as HTMLSelectElement | null;

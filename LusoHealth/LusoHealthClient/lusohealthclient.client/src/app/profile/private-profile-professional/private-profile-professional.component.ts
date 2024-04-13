@@ -107,6 +107,9 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     this.getProfessionalInfo();
   }
 
+  /**
+   * Inicializa os formulários de adição e edição de especialidades, descrição e endereço.
+   */
   initializeForm() {
 
     this.addSpecialityForm = this.formBuilder.group({
@@ -134,6 +137,9 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     });
   }
 
+  /**
+   * Obtém as informações do profissional.
+   */
   getProfessionalInfo(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       this.profileService.getProfessionalInfo().pipe(takeUntil(this.unsubscribe$)).subscribe(
@@ -148,6 +154,9 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     });
   }
 
+  /**
+   * Obtém as especialidades disponíveis.
+   */
   getSpecialties() {
     this.profileService.getServices().pipe(takeUntil(this.unsubscribe$)).subscribe(
       (specialties: Specialty[]) => {
@@ -158,6 +167,9 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     );
   }
 
+  /**
+   * Define os campos do utilizador.
+   */
   setUserFields() {
 
     const nomeElement = document.getElementById('nome');
@@ -186,6 +198,10 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     }
   }
 
+  /**
+ * Manipula o evento de seleção de arquivo.
+ */
+
   onFileSelected(event: any) {
     const file = event.target.files[0];
 
@@ -208,6 +224,10 @@ export class PrivateProfileProfessionalComponent implements OnInit {
       this.errorMessages.push('Ficheiro não é um pdf.');
     }
   }
+
+  /**
+  * Obtém a lista de PDFs.
+  */
   getPdfs() {
     this.profileService.getPdfs().subscribe(
       pdfs => {
@@ -220,6 +240,9 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     );
   }
 
+  /**
+   * Exclui um PDF com o ID fornecido.
+   */
   deletePdf(certificateId: number) {
     this.profileService.deletePdf(certificateId).subscribe(
       response => {
@@ -233,6 +256,9 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     );
   }
 
+  /**
+  * Abre o PDF especificado.
+  */
   openPdf(pdfFilename: string): void {
     this.profileService.downloadPdf(pdfFilename).subscribe(
       (blob: Blob) => {
@@ -250,6 +276,9 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     );
   }
 
+  /**
+   * Obtém a descrição do utilizador.
+   */
   getDescription() {
     const descriptionElement = document.getElementById('description');
 
@@ -260,6 +289,9 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     }
   }
 
+  /**
+ * Atualiza a descrição do profissional.
+ */
   updateDescription() {
     this.submittedDescription = true;
     this.errorMessages = [];
@@ -313,6 +345,9 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     }
   }
 
+ /**
+ * Exibe a animação de verificação.
+ */
   showCheckAnimation() {
     const checkmark = document.querySelector('.container-animation');
 
@@ -321,6 +356,9 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     }
   }
 
+ /**
+ * Oculta a animação de verificação.
+ */
   hideCheckAnimation() {
 
     const checkmark = document.querySelector('.container-animation');
@@ -337,6 +375,9 @@ export class PrivateProfileProfessionalComponent implements OnInit {
 
   }
 
+ /**
+ * Oculta a animação de verificação em caso de erro.
+ */
   errorHideCheckAnimation() {
     const checkmark = document.querySelector('.container-animation');
 
@@ -345,6 +386,9 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     }
   }
 
+ /**
+ * Adiciona uma especialidade ao profissional.
+ */
   addSpeciality() {
     this.submittedAdd = true;
     this.errorMessages = [];
@@ -383,6 +427,9 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     }
   }
 
+ /**
+ * Edita uma especialidade do profissional.
+ */
   editSpeciality() {
     this.submittedEdit = true;
     this.errorMessages = [];
@@ -423,6 +470,10 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     }
   }
 
+  /**
+ * Apaga uma especialidade do profissional.
+ * @param specialtyId O ID da especialidade a ser apagada.
+ */
   deleteSpeciality(specialtyId: number | null) {
     if (specialtyId != null) {
       this.profileService.deleteSpecialty(specialtyId).subscribe({
@@ -440,6 +491,10 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     }
   }
 
+  /**
+ * Exibe a interface de edição de especialidade.
+ * @param service O serviço a ser editado.
+ */
   showSpecialtyEdit(service: Service) {
 
     this.selectEditService = service;
@@ -449,6 +504,9 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     this.setEditFormFields();
   }
 
+  /**
+ * Define os campos do formulário de edição de especialidade com os valores existentes.
+ */
   setEditFormFields() {
 
     const nome = document.getElementById('speciality-name');
@@ -467,6 +525,10 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     }
   }
 
+  /**
+ * Manipula o evento de seleção de revisão.
+ * @param event O evento de seleção.
+ */
   selectReviewEventReceiver(event: Event) {
     const target = event.target as HTMLSelectElement;
     if (target) {
@@ -476,6 +538,10 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     }
   }
 
+ /**
+ * Altera a especialidade de revisão selecionada.
+ * @param value O valor da especialidade selecionada.
+ */
   changeSpecialtyReview(value: string) {
 
     const selectedValue = parseInt(value);
@@ -497,6 +563,10 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     }
   }
 
+ /**
+ * Filtra as revisões pela especialidade selecionada.
+ * @param serviceId O ID da especialidade.
+ */
   filterReviews(serviceId: number) {
     this.profileService.filterReviewsByService(serviceId).subscribe({
       next: (reviews: Review[]) => {
@@ -513,6 +583,9 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     });
   }
 
+ /**
+ * Calcula a média das estrelas nas revisões.
+ */
   private getAverageStars()
   {
     var sum = 0;
@@ -523,6 +596,10 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     this.averageStars = sum / this.reviews.length;
   }
 
+ /**
+ * Abre o popup com a opção especificada.
+ * @param opcao A opção a ser exibida no popup.
+ */
   openPopup(opcao: string) {
     const overlay = document.getElementById('overlay');
     const add = document.getElementById('add-speciality-container');
@@ -559,6 +636,9 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     }
   }
 
+ /**
+ * Fecha o popup.
+ */
   closePopup() {
     const overlay = document.getElementById('overlay');
     const add = document.getElementById('add-speciality-container');
@@ -579,10 +659,17 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     }
   }
 
+ /**
+ * Impede a propagação do evento.
+ * @param event O evento a ser manipulado.
+ */
   stopPropagation(event: Event) {
     event.stopPropagation();
   }
 
+ /**
+ * Inicializa o mapa do Google Maps.
+ */
   async initMap() {
     await google.maps.importLibrary('marker');
     await this.userData;
@@ -605,6 +692,9 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     }
   }
 
+  /**
+ * Inicializa o autocompletar do Google Places para o campo de endereço.
+ */
   private initAutocomplete(): void {
     const input = document.getElementById('address-input') as HTMLInputElement;
     const autocomplete = new google.maps.places.Autocomplete(input, {
@@ -648,6 +738,10 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     });
   }
 
+
+  /**
+   * Submete o endereço atualizado.
+   */
   submitAddress() {
     this.errorMessages = [];
 
@@ -686,6 +780,11 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     }
   }
 
+  /**
+ * Cria um marcador no mapa com base na localização do profissional.
+ * @param professional O profissional.
+ * @returns O marcador criado.
+ */
   createMarker(professional: Professional): Marker {
     if (!professional.location) {
       throw new Error('Localização do profissional não disponível.');

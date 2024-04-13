@@ -13,6 +13,10 @@ import { AgendaService } from '../agenda.service';
 import { Availability } from '../../shared/models/servic/availability';
 import { Professional } from '../../shared/models/profile/professional';
 
+/**
+ * Componente Angular responsável pela gestão da disponibilidade de um profissional.
+ * Permite adicionar e excluir horários de disponibilidade, visualizar eventos no calendário e interagir com eles.
+ */
 @Component({
   selector: 'app-disponibilidade',
   templateUrl: './disponibilidade.component.html',
@@ -45,6 +49,14 @@ export class DisponibilidadeComponent {
     eventDidMount: this.hideEventsInMonthView.bind(this),
   }
 
+  /**
+   * Construtor do componente DisponibilidadeComponent.
+   * @param authenticationService Serviço de autenticação para verificar o usuário logado.
+   * @param profileService Serviço de perfil para obter informações do profissional.
+   * @param agendaService Serviço de agenda para manipular horários de disponibilidade.
+   * @param formBuilder Construtor de formulários para criar o formulário de adição de horários.
+   * @param router Roteador para navegar entre as páginas.
+   */
   constructor(private authenticationService: AuthenticationService,
     private profileService: ProfileService, private agendaService: AgendaService,
     private formBuilder: FormBuilder, private router: Router) {
@@ -66,12 +78,20 @@ export class DisponibilidadeComponent {
     });
   }
 
+  /**
+   * Método de inicialização do componente, chamado após a criação do componente.
+   * Inicializa o formulário e obtém os slots de disponibilidade.
+   */
   ngOnInit(): void {
     this.initializeForm();
     this.getSlots();
     this.geSpecialties();
   }
 
+  /**
+   * Método de destruição do componente, chamado antes da destruição do componente.
+   * Desinscreve observables para evitar vazamentos de memória.
+   */
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
@@ -96,6 +116,10 @@ export class DisponibilidadeComponent {
     });
   }
 
+  /**
+ * Método que manipula o clique em uma data no calendário.
+ * @param arg Objeto contendo informações sobre o clique na data.
+ */
   dateClick(arg: DateClickArg): void { // Apply the type to 'arg'
     this.isSelecting = true;
     let calendarApi = arg.view.calendar;
@@ -106,6 +130,10 @@ export class DisponibilidadeComponent {
     }, 300);
   }
 
+  /**
+ * Manipula a seleção de data no calendário.
+ * @param selectInfo Informações sobre a seleção de data.
+ */
   handleDateSelect(selectInfo: any) {
     setTimeout(() => {
       if (!this.isSelecting) {
@@ -121,6 +149,10 @@ export class DisponibilidadeComponent {
     }, 200);
   }
 
+  /**
+ * Obtém as especialidades do profissional.
+ * @returns Uma Promise resolvida quando as especialidades são obtidas com sucesso.
+ */
   geSpecialties(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       this.profileService.getProfessionalInfo().pipe(takeUntil(this.unsubscribe$)).subscribe(
@@ -141,6 +173,10 @@ export class DisponibilidadeComponent {
     });
   }
 
+
+  /**
+ * Obtém os slots de disponibilidade do profissional.
+ */
   getSlots() {
 
     var slots;
@@ -165,6 +201,9 @@ export class DisponibilidadeComponent {
     });
   }
 
+  /**
+ * Adiciona um novo horário de disponibilidade.
+ */
   addAvailability() {
     this.submittedAddSlots = true;
     this.errorMessages = [];
@@ -237,6 +276,11 @@ export class DisponibilidadeComponent {
     });
   }
 
+  /**
+ * Retorna o tipo de disponibilidade com base no código.
+ * @param type O código do tipo de disponibilidade.
+ * @returns O tipo de disponibilidade correspondente.
+ */
   private getType(type: string) {
     switch (type) {
       case "0":
@@ -248,6 +292,9 @@ export class DisponibilidadeComponent {
     }
   }
 
+  /**
+ * Exclui um horário de disponibilidade.
+ */
   deleteAvailability() {
     this.submittedDeleteSlots = true;
     this.errorMessages = [];
@@ -286,6 +333,10 @@ export class DisponibilidadeComponent {
     this.selectedDates = null;
   }
 
+  /**
+ * Abre o popup especificado.
+ * @param option A opção do popup a ser aberto.
+ */
   openPopup(option: string) {
     const overlay = document.getElementById('overlay');
     const add = document.getElementById('add-slots-container');
@@ -313,6 +364,9 @@ export class DisponibilidadeComponent {
     }
   }
 
+  /**
+ * Fecha o popup.
+ */
   closePopup() {
     const overlay = document.getElementById('overlay');
     const add = document.getElementById('add-speciality-container');
@@ -329,6 +383,10 @@ export class DisponibilidadeComponent {
     }
   }
 
+  /**
+ * Impede a propagação do evento.
+ * @param event O evento a ser interrompido.
+ */
   stopPropagation(event: Event) {
     event.stopPropagation();
   }

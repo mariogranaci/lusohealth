@@ -19,6 +19,13 @@ export class AlterarPassComponent implements OnInit {
   responseText: string | undefined;
   model: ResetPassword | undefined;
 
+  /**
+   * Construtor da classe.
+   * @param authenticationService Serviço de autenticação para gerenciar as operações relacionadas à autenticação do usuário.
+   * @param formBuilder Construtor de formulários para criar instâncias de FormGroup.
+   * @param router Serviço de roteamento para navegar entre componentes.
+   * @param activateRoute O serviço de rota ativada que fornece informações sobre a rota atual.
+   */
   constructor(private authenticationService: AuthenticationService,
     private formBuilder: FormBuilder,
     private router: Router,
@@ -32,6 +39,10 @@ export class AlterarPassComponent implements OnInit {
     });
   }
 
+
+  /**
+   * Método executado após a inicialização do componente.
+   */
   ngOnInit(): void {
     this.authenticationService.user$.pipe(take(1)).subscribe({
       next: (user: User | null) => {
@@ -54,6 +65,9 @@ export class AlterarPassComponent implements OnInit {
     this.initializeForm();
   }
 
+  /**
+  * Método para inicializar o formulário de redefinição de senha.
+  */
   initializeForm() {
     this.resetPasswordForm = this.formBuilder.group({
       password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(50)], [this.passwordPatternValidator()]],
@@ -62,7 +76,9 @@ export class AlterarPassComponent implements OnInit {
   }
 
 
-
+  /**
+   * Método para redefinir a password do utilizador.
+   */
   resetPassword() {
     this.submitted = true;
     this.errorMessages = [];
@@ -92,6 +108,10 @@ export class AlterarPassComponent implements OnInit {
     }
   }
 
+  /**
+   * Validador assíncrono para verificar o padrão da senha.
+   * @returns Um objeto de validação se a senha não atender ao padrão, caso contrário, retorna null.
+   */
   passwordPatternValidator(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
       const value: string = control.value || '';

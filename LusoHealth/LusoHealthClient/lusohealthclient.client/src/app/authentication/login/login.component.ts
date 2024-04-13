@@ -21,6 +21,14 @@ export class LoginComponent implements OnInit {
   loading = false;
   errorMessages: string[] = [];
 
+  /**
+   * Construtor da classe.
+   * @param service Serviço de autenticação para gerenciar as operações relacionadas à autenticação do usuário.
+   * @param formBuilder Construtor de formulários para criar instâncias de FormGroup.
+   * @param router Serviço de roteamento para navegar entre componentes.
+   * @param _renderer2 Serviço de renderização para manipulação de elementos do DOM.
+   * @param _document Referência ao objeto Document.
+   */
   constructor(private service: AuthenticationService,
     private formBuilder: FormBuilder,
     private router: Router,
@@ -35,11 +43,17 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  /**
+   * Método executado após a inicialização do componente.
+   */
   ngOnInit(): void {
     this.initializeGoogleButton();
     this.initializeForm();
   }
 
+  /**
+  * Método executado após a visualização dos elementos filhos.
+  */
   ngAfterViewInit() {
     const script1 = this._renderer2.createElement('script');
     script1.src = 'https://accounts.google.com/gsi/client';
@@ -48,6 +62,9 @@ export class LoginComponent implements OnInit {
     this._renderer2.appendChild(this._document.body, script1);
   }
 
+  /**
+   * Inicializa o formulário de login.
+   */
   initializeForm() {
     this.loginForm = this.formBuilder.group({
       email: ['', Validators.required],
@@ -55,6 +72,9 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  /**
+   * Método para realizar o login.
+   */
   login() {
     this.submitted = true;
     this.errorMessages = [];
@@ -90,6 +110,9 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  /**
+   * Inicializa o botão de login do Google.
+   */
   initializeGoogleButton() {
     (window as any).onGoogleLibraryLoad = () => {
       // @ts-ignore
@@ -114,6 +137,10 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  /**
+   * Função de callback para lidar com a resposta do Google One Tap.
+   * @param response Resposta da credencial do Google.
+   */
   private async googleCallback(response: CredentialResponse) {
     this.submitted = true;
     this.errorMessages = [];
@@ -138,6 +165,10 @@ export class LoginComponent implements OnInit {
       });
   }
 
+  /**
+   * Abre a janela popup para recuperar a senha ou a conta.
+   * @param opcao Opção selecionada ('pass' para recuperar a senha, 'conta' para recuperar a conta).
+   */
   openPopup(opcao: string) {
     const overlay = document.getElementById('overlay');
     const recuperarPass = document.getElementById('recuperar-pass');
@@ -165,6 +196,9 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  /**
+   * Fecha a janela popup.
+   */
   closePopup() {
     const overlay = document.getElementById('overlay');
     const recuperarPass = document.getElementById('recuperar-pass');
@@ -181,6 +215,10 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  /**
+   * Impede a propagação do evento.
+   * @param event Evento de clique.
+   */
   stopPropagation(event: Event) {
     event.stopPropagation();
   }

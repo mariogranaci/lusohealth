@@ -114,23 +114,26 @@ namespace LusoHealthClient.Server.Controllers
 
 
 
-            [HttpGet("get-professionals-by-ranking")]
-            public async Task<ActionResult<List<object>>> GetProfessionalsByRanking()
+            [HttpGet("get-services-by-ranking")]
+            public async Task<ActionResult<List<object>>> GetServicesByRanking()
             {
-                var query = _context.Professionals
-                            .SelectMany(p => p.Services)
-                            .GroupBy(s => new { s.Professional.UserID, s.Specialty.Name })
-                            .Select(g => new
-                                                {
-                                                    Nome = g.Key.UserID, // Você precisará substituir isso pelo nome do profissional se ele estiver em uma propriedade diferente
-                                                    Categoria = g.FirstOrDefault().Professional.ProfessionalType.Name,
-                                                    Especialidade = g.Key.Name,
-                                                    Classificacao = g.SelectMany(s => s.Reviews).Average(r => r.Stars)
-                                                })
-                            .OrderByDescending(x => x.Classificacao)
-                            .ToList();
+                var servicesWithRatings = await _context.Services
+                    .Include(s => s.Professional)
+                    .ThenInclude(p => p.User)
+                    .Include(s => s.Professional)
+                    .ThenInclude(p => p.ProfessionalType)
+                    .Include(s => s.Specialty)
+                    .Include(s => s.Reviews)
+                    .Select(s => new
+                    {
+                        ProfessionalName = s.Professional.User.FirstName + " " + s.Professional.User.LastName,
+                        ProfessionalType = s.Professional.ProfessionalType.Name,
+                        SpecialtyName = s.Specialty.Name,
+                        Rating = s.Reviews.Any() ? s.Reviews.Average(r => r.Stars) : 0 // Certifique-se de que há reviews antes de calcular a média
+                    })
+                    .ToListAsync();
 
-                return Ok(query);
+                return Ok(servicesWithRatings);
             }
 
             [HttpGet("get-professional-types")]

@@ -1,8 +1,4 @@
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -21,6 +17,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//builder.Services.AddSignalR().AddAzureSignalR("Endpoint=https://lusohealth.service.signalr.net;AccessKey=PIeBG1eCMojxiAtcrWvBN3UF34b6lawADCyH1MWSEO0=;Version=1.0;");
 builder.Services.AddSignalR();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -134,11 +131,13 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
+//app.UseRouting();
+
 app.MapControllers();
 
 app.MapFallbackToFile("/index.html");
 
-app.MapHub<ChatHub>("/chatHub");
+app.MapHub<ChatHub>("/chathub");
 
 #region ContextSeed
 using var scope = app.Services.CreateScope();

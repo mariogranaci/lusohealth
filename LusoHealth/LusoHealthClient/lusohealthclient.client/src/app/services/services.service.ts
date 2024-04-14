@@ -76,6 +76,19 @@ export class ServicesService {
     return this.http.get<Service[]>(`${environment.appUrl}/api/home/get-services`);
   }
 
+  getServicesFiltered(professionalType?: string, specialty?: string, searchTerm?: string, serviceType?: string, page: number = 1, pageSize: number = 10): Observable<Service[]> {
+    // Construct the URL with optional query parameters
+    let queryParams = new URLSearchParams();
+    if (professionalType) queryParams.append('professionalType', professionalType);
+    if (specialty) queryParams.append('specialty', specialty);
+    if (searchTerm) queryParams.append('searchTerm', searchTerm);
+    if (serviceType) queryParams.append('serviceType', serviceType);
+    queryParams.append('page', page.toString());
+    queryParams.append('pageSize', pageSize.toString());
+
+    return this.http.get<Service[]>(`${environment.appUrl}/api/home/get-services-filtered?${queryParams.toString()}`);
+  }
+
   getProfessionalsOnLocation(model: Bounds): Observable<Professional[]> {
     return this.http.post<Professional[]>(`${environment.appUrl}/api/home/get-professionals-on-location`, model);
   }

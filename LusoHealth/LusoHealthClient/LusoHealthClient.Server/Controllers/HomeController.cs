@@ -238,6 +238,63 @@ namespace LusoHealthClient.Server.Controllers
             return services;
         }
 
+        [HttpGet("get-services-filtered")]
+        public async Task<List<ServicesDto>> GetServicesFiltered(string? professionalType = null, string? specialty = null, string? searchTerm = null, string? serviceType = null, int page = 1, int pageSize = 10)
+        {
+            var query = _context.Services
+                .Include(s => s.Specialty)
+                .Include(d => d.Professional).ThenInclude(a => a.ProfessionalType)
+                .AsQueryable();
+
+            // Apply filters if parameters are not null or whitespace
+            int professionalTypeId;
+            if (professionalType != "0" && int.TryParse(professionalType, out professionalTypeId))
+            {
+                query = query.Where(s => s.Professional.ProfessionalType.Id == professionalTypeId);
+            }
+
+            if (!string.IsNullOrWhiteSpace(specialty) && specialty != "0")
+            {
+                query = query.Where(s => s.Specialty.Name == specialty);
+            }
+
+            // Filter by search term if provided
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                // Assuming Professional has User.FirstName and User.LastName properties
+                query = query.Where(s => (s.Professional.User.FirstName + " " + s.Professional.User.LastName).Contains(searchTerm));
+            }
+
+            // Filter by service type if provided
+            if (!string.IsNullOrWhiteSpace(serviceType) && serviceType != "0")
+            {
+                // Assuming Service has boolean properties: IsOnline, IsPresencial, IsDomicilio
+                switch (serviceType.ToLower())
+                {
+                    case "online":
+                        query = query.Where(s => s.Online);
+                        break;
+                    case "presencial":
+                        query = query.Where(s => s.Presential);
+                        break;
+                    case "domicilio":
+                        query = query.Where(s => s.Home);
+                        break;
+                }
+            }
+
+            // Calculate the number of items to skip based on the current page and page size
+            int skip = (page - 1) * pageSize;
+
+            // Apply pagination to the query
+            var pagedServices = await query.Skip(skip).Take(pageSize).ToListAsync();
+
+            // Convert the paged services to DTOs
+            var services = await GetServiceDtos(pagedServices);
+
+            return services;
+        }
+
         [HttpPost("get-professionals-on-location")]
         public async Task<ActionResult<List<ProfessionalDto>>> GetProfessionalsOnLocation(BoundsDto locationDto)
         {

@@ -18,11 +18,7 @@ export class MarcacoesComponent {
 
   professionalTypes: ProfessionalType[] = [];
 
-  //Filtragem 
   services: Service[] = [];
-  servicesFiltered: Service[] = [];
-  servicesFilteredAgain: Service[] = [];
-  servicesTemp: Service[] = [];
 
   specialties: Specialty[] = [];
   specialtiesFiltered: Specialty[] = [];
@@ -30,53 +26,42 @@ export class MarcacoesComponent {
   searchResults: string[] = [];
   searchTerm: string = '';
   currentPage: number = 1;
-  itemsPerPage: number = 15;
+  itemsPerPage: number = 10;
   pageButtons: number[] = [];
+  hasMorePages: boolean = true;
+
+  selectedCategory: string = '';
+  selectedSpecialty: string = '';
+  selectedType: string = '';
+  selectedOrder: string = 'Rank';
 
   constructor(public servicesService: ServicesService,
-    private route: ActivatedRoute,
-    private router: Router) { }
+  private route: ActivatedRoute,
+  private router: Router) { }
 
   ngOnInit() {
-    this.getProfessionalTypes();
-    this.getSpecialties();
-    this.getServices().then(() => {
-      // Move initial filtering logic to a dedicated method
-      this.route.queryParams.subscribe(params => {
-        const professionalTypeId = params['professionalTypeId'];
-        const specialtyName = params['specialtyName'];
-        this.updateFiltersAndUrl(professionalTypeId, specialtyName); // Update filters based on URL params
+    Promise.all([
+      this.getProfessionalTypes(),
+      this.getSpecialties()
+    ]).then(() => {
+      this.route.queryParams.pipe(takeUntil(this.unsubscribe$)).subscribe(params => {
+
+        const professionalType = this.professionalTypes.find(type => type.id === +params['categoryId'])?.id;
+
+        if (professionalType && params['categoryId'])
+        {
+          this.selectedCategory = professionalType.toString();
+
+          this.filterSpecialties();
+
+          if (params['specialty'])
+          {
+            this.selectedSpecialty = params['specialty'];
+          }
+        }
+        this.getServicesFiltered();
       });
     });
-  }
-
-  updateFiltersAndUrl(professionalTypeId: string, specialtyName: string) {
-    // Navigate only if parameters are different to avoid unnecessary navigation
-    if (this.route.snapshot.queryParams['professionalTypeId'] !== professionalTypeId ||
-      this.route.snapshot.queryParams['specialtyName'] !== specialtyName) {
-      this.router.navigate([], {
-        relativeTo: this.route,
-        queryParams: { professionalTypeId, specialtyName },
-        queryParamsHandling: 'merge',
-      });
-    }
-
-    // Directly filter without additional navigation
-    this.filterByProfessionalType(professionalTypeId);
-    this.filterBySpecialty(specialtyName);
-  }
-
-  // Adjust filtering methods to handle undefined or empty parameters gracefully
-  filterByProfessionalType(professionalTypeId: string) {
-    this.servicesFiltered = professionalTypeId ?
-      this.services.filter(service => service.professional.professionalType === professionalTypeId) :
-      [...this.services]; // Clone or reset to all services if parameter is undefined/empty
-  }
-
-  filterBySpecialty(specialtyName: string) {
-    this.servicesFilteredAgain = specialtyName ?
-      this.servicesFiltered.filter(service => service.specialty === specialtyName) :
-      [...this.servicesFiltered]; // Clone or reset based on already filtered services
   }
 
   ngOnDestroy(): void {
@@ -84,107 +69,132 @@ export class MarcacoesComponent {
     this.unsubscribe$.complete();
   }
 
-  getFirstAndLastName(fullName: string): string {
-    const names = fullName.split(' ');
-    if (names.length > 2) {
-      return `${names[0]} ${names[names.length - 1]}`;
-    } else {
-      return fullName;
-    }
-  }
 
-  getProfessionalTypes() {
-    this.servicesService.getProfessionalTypes().pipe(
+  getServicesFiltered() {
+
+    this.updateUrlParams();
+
+    this.servicesService.getServicesFiltered(this.selectedCategory, this.selectedSpecialty, this.searchTerm, this.selectedType, this.currentPage, this.itemsPerPage).pipe(
       takeUntil(this.unsubscribe$)
     ).subscribe({
-      next: (professionalTypes: ProfessionalType[]) => {
-        this.professionalTypes = professionalTypes;
+      next: (services: any) => {
+        this.services = services;
+        console.log(this.selectedCategory, this.selectedSpecialty, this.searchTerm, this.selectedType, this.currentPage, this.itemsPerPage, services);
+        this.hasMorePages = services.length === this.itemsPerPage;
+        this.updatePageButtons();
       },
-      error: (error) => {
-        console.log(error);
-        if (error.error.errors) {
-          this.errorMessages = error.error.errors;
-        } else {
-          this.errorMessages.push(error.error);
-        }
+      error: (error: any) => {
+        this.errorMessages = [error.message || "An error occurred while fetching services."];
       }
     });
   }
 
-  getServices(): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
-      this.servicesService.getServices().pipe(
+  updateUrlParams() {
+    const queryParams: any = {};
+    if (this.selectedCategory) queryParams.categoryId = this.selectedCategory;
+    if (this.selectedSpecialty) queryParams.specialty = this.selectedSpecialty;
+    if (this.selectedType) queryParams.type = this.selectedType;
+    if (this.selectedOrder) queryParams.order = this.selectedOrder;
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: queryParams,
+      queryParamsHandling: 'merge'
+    });
+  }
+
+  getProfessionalTypes(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.servicesService.getProfessionalTypes().pipe(
         takeUntil(this.unsubscribe$)
       ).subscribe({
-        next: (services: any) => {
-          this.services = services;
+        next: (professionalTypes: ProfessionalType[]) => {
+          this.professionalTypes = professionalTypes;
           resolve();
         },
-        error: (error) => {
-          console.log(error);
-          if (error.error.errors) {
-            this.errorMessages = error.error.errors;
-          } else {
-            this.errorMessages.push(error.error);
-          }
-          reject(error);
-        }
+        error: (error) => reject(error)
       });
     });
   }
 
-  getSpecialties() {
-    this.servicesService.getSpecialties().pipe(
-      takeUntil(this.unsubscribe$)
-    ).subscribe({
-      next: (specialities: Specialty[]) => {
-        this.specialties = specialities;
-
-      },
-      error: (error) => {
-        console.log(error);
-        if (error.error.errors) {
-          this.errorMessages = error.error.errors;
-        } else {
-          this.errorMessages.push(error.error);
-        }
-      }
+  getSpecialties(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.servicesService.getSpecialties().pipe(
+        takeUntil(this.unsubscribe$)
+      ).subscribe({
+        next: (specialities: Specialty[]) => {
+          this.specialties = specialities;
+          resolve();
+        },
+        error: (error) => reject(error)
+      });
     });
   }
 
-  getSpecialtiesByTimesScheduled(): Specialty[] {
-    const sortedSpecialties = this.specialties.slice().sort((a, b) => {
-      return b.timesScheduled - a.timesScheduled;
-    });
-
-    const topSpecialties = sortedSpecialties.slice(0, 3);
-
-    console.log(topSpecialties);
-
-    return topSpecialties;
+  onSearchInput() {
+    this.searchTerm = this.removeAccents(this.searchTerm.trim().toLowerCase());
+    this.currentPage = 1;
+    this.getServicesFiltered();
   }
 
-  get paginatedServices(): Service[] {
-    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-    return this.servicesFilteredAgain.slice(startIndex, startIndex + this.itemsPerPage);
+
+  filterSpecialties(): void {
+    const professionalType = this.professionalTypes.find(type => type.id === +this.selectedCategory);
+    this.specialtiesFiltered = professionalType ? this.specialties.filter(specialty => specialty.professionalTypeId === professionalType.id) : [];
+    this.selectedSpecialty = '0';
+    this.updatePagination();
+  }
+
+  orderBy() {
+    switch (this.selectedOrder) {
+      case 'Rank':
+        this.services.sort((a, b) => this.returnStars(b) - this.returnStars(a));
+        break;
+      case 'p<':
+        this.services.sort((a, b) => (a.pricePerHour || 0) - (b.pricePerHour || 0));
+        break;
+      case 'p>':
+        this.services.sort((a, b) => (b.pricePerHour || 0) - (a.pricePerHour || 0));
+        break;
+    }
+    this.updatePagination();
+  }
+
+  removeAccents(str: string): string {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  }
+
+  returnStars(service: Service): number {
+    const reviewsForService = service.professional.reviews.filter(review => review.idService === service.serviceId);
+
+    if (reviewsForService.length === 0) {
+      return 0;
+    }
+
+    const sumStars = reviewsForService.reduce((sum, review) => sum + review.stars, 0);
+    const averageStars = sumStars / reviewsForService.length;
+    return parseFloat(averageStars.toFixed(1));
   }
 
   nextPage() {
-    if (this.currentPage < this.totalPages) {
+    if (this.hasMorePages) {
       this.currentPage++;
-      this.updatePageButtons();
+      this.getServicesFiltered();
     }
   }
 
   prevPage() {
     if (this.currentPage > 1) {
       this.currentPage--;
-      this.updatePageButtons();
+      this.getServicesFiltered();
     }
   }
 
   get totalPages(): number {
-    return Math.ceil(this.servicesFilteredAgain.length / this.itemsPerPage);
+    if (this.hasMorePages) {
+      return this.currentPage = 1;
+    }
+    return this.currentPage;
   }
 
   updatePagination() {
@@ -194,210 +204,18 @@ export class MarcacoesComponent {
 
   updatePageButtons() {
     this.pageButtons = [this.currentPage];
-    for (let i = 1; i <= 3; i++) {
-      if (this.currentPage + i <= this.totalPages) {
-        this.pageButtons.push(this.currentPage + i);
-      }
+    if (this.hasMorePages) {
+      this.pageButtons.push(this.currentPage + 1);
+    }
+    if (this.currentPage > 1) {
+      this.pageButtons.unshift(this.currentPage - 1);
     }
   }
 
   goToPage(page: number) {
-    if (page >= 1 && page <= this.totalPages) {
+    if (page >= 1 && (!this.hasMorePages && page <= this.currentPage) || (this.hasMorePages && page <= this.currentPage + 1)) {
       this.currentPage = page;
-      this.updatePageButtons();
+      this.getServicesFiltered();
     }
-  }
-
-  onSearchInput(event: any) {
-    this.searchTerm = event.target.value.trim();
-    const searchTermNormalized = this.removeAccents(this.searchTerm.toLowerCase());
-
-    if (searchTermNormalized.length > 0) {
-      this.servicesFilteredAgain = this.servicesFilteredAgain.filter(service => {
-        const firstName = service.professional.professionalInfo?.firstName ?? '';
-        const lastName = service.professional.professionalInfo?.lastName ?? '';
-        const fullNameNormalized = this.removeAccents(`${firstName} ${lastName}`.toLowerCase());
-        return fullNameNormalized.includes(searchTermNormalized);
-      });
-
-      this.searchResults = this.servicesFilteredAgain.map(service => `${service.professional.professionalInfo?.firstName} ${service.professional.professionalInfo?.lastName}`)
-        .filter(name => name.trim() !== '');
-    } else {
-      this.searchResults = [];
-      this.servicesFilteredAgain = this.servicesTemp;
-    }
-    if (event.key === "Backspace") {
-      event.target.value = "";
-      this.servicesFilteredAgain = this.servicesTemp;
-    }
-  }
-
-  removeAccents(str: string): string {
-    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-  }
-
-  selectSpecialty(specialty: string) {
-    console.log("Selected specialty:", specialty);
-  }
-
-  returnStars(service: Service): number {
-    const reviewsForService = service.professional.reviews.filter(review => review.idService === service.serviceId);
-
-    if (reviewsForService.length === 0) {
-      return 0; // Default value when there are no reviews
-    }
-
-    const sumStars = reviewsForService.reduce((sum, review) => sum + review.stars, 0);
-    const averageStars = sumStars / reviewsForService.length;
-    return parseFloat(averageStars.toFixed(1)); // Round to one decimal place
-  }
-
-
-  filterSpecialties(): void {
-
-    const selectedCategory = document.getElementById("category") as HTMLSelectElement;
-
-    const professionalType = this.professionalTypes.find(type => type.name === selectedCategory.value);
-
-    if (professionalType) {
-
-      this.specialtiesFiltered = this.specialties.filter(specialty => specialty.professionalTypeId === professionalType.id);
-
-    } else {
-
-      this.specialtiesFiltered = [];
-    }
-  }
-
-
-  filterProfessionalsCategory(): void {
-
-    this.servicesFiltered = this.services;
-
-    const selectedCategory = document.getElementById("category") as HTMLSelectElement | null;
-    const selectedSpecialty = document.getElementById("specialty") as HTMLSelectElement | null;
-
-    if (selectedCategory && selectedCategory.value != "Qualquer") {
-
-      const professionalType = this.professionalTypes.find(type => type.name.trim() === selectedCategory.value.trim());
-
-      if (professionalType) {
-
-        this.servicesFilteredAgain = this.servicesFiltered.filter(service => {
-          return service.professional.professionalType.trim() === professionalType.name.trim();
-        });
-
-        this.servicesFiltered = this.servicesFiltered.filter(service => {
-          return service.professional.professionalType.trim() === professionalType.name.trim();
-        });
-
-        this.servicesTemp = this.servicesFilteredAgain;
-
-        if (selectedSpecialty) {
-
-          const specialty = this.specialties.find(type => type.name.trim() === selectedSpecialty.value.trim());
-
-
-          if (specialty) {
-
-            this.servicesFiltered = this.services.filter(service => {
-
-              if (service.specialty) return service.specialty.trim() === specialty.name.trim();
-              return false;
-            });
-
-            this.servicesFilteredAgain = this.servicesFiltered.filter(service => {
-              if (service.specialty) return service.specialty.trim() === specialty.name.trim();
-              return false;
-            });
-
-            this.servicesTemp = this.servicesFilteredAgain;
-
-          } else if (selectedSpecialty.value == "Qualquer") {
-
-            this.servicesFiltered = this.services.filter(service => {
-              return service.professional.professionalType.trim() === professionalType.name.trim();
-            });
-
-            this.servicesFilteredAgain = this.servicesFiltered.filter(service => {
-              return service.professional.professionalType.trim() === professionalType.name.trim();
-            });
-            this.servicesTemp = this.servicesFilteredAgain;
-          }
-        }
-      }
-    }
-    else {
-      this.servicesFiltered = this.services;
-      this.servicesFilteredAgain = this.servicesFiltered;
-      this.servicesTemp = this.servicesFilteredAgain;
-    }
-    this.updatePagination();
-  }
-
-  filterProfessionalsType(): void {
-    const selectedType = document.getElementById("type") as HTMLSelectElement | null;
-
-    if (selectedType && selectedType.value != "Qualquer") {
-      this.servicesFilteredAgain = this.servicesFiltered.filter(s => {
-        return this.services.find(service => service.serviceId === s.serviceId);
-      });
-
-      this.servicesFilteredAgain = this.servicesFiltered.filter(service => {
-
-        if (service) {
-          if (selectedType.value == "Home") {
-            return service.home === true;
-          }
-          else if (selectedType.value == "Online") {
-            return service.online === true;
-          }
-          else if (selectedType.value == "Presential") {
-            return service.presential === true;
-          }
-        }
-        return false;
-      });
-      this.servicesTemp = this.servicesFilteredAgain;
-    }
-    else {
-      this.servicesFilteredAgain = this.servicesFiltered;
-      this.servicesTemp = this.servicesFilteredAgain;
-    }
-    this.updatePagination();
-  }
-
-  orderBy() {
-
-    const option = document.getElementById("order") as HTMLSelectElement | null;
-
-    switch (option?.value) {
-      case 'Rank':
-        // Order by rank (assuming rank is calculated in some method)
-        this.servicesFilteredAgain.sort((a, b) => {
-          // You need to replace calculateHighestRatedStars with your actual method
-          return this.returnStars(b) - this.returnStars(a);
-        });
-        break;
-      case 'p<':
-        // Order by price ascending
-        this.servicesFilteredAgain.sort((a, b) => {
-          const priceA = a.pricePerHour || 0;
-          const priceB = b.pricePerHour || 0;
-          return priceA - priceB;
-        });
-        break;
-      case 'p>':
-        // Order by price descending
-        this.servicesFilteredAgain.sort((a, b) => {
-          const priceA = a.pricePerHour || 0;
-          const priceB = b.pricePerHour || 0;
-          return priceB - priceA;
-        });
-        break;
-      default:
-        break;
-    }
-    this.updatePagination();
   }
 }

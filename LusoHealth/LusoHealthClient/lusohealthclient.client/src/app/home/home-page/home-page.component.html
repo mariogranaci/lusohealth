@@ -5,6 +5,7 @@
 
     <h1>LusoHealth</h1>
 
+
     <div id="searchSection">
       <div id="searchDiv" [class.rounded-bottom]=" searchResults.length > 0">
         <input class="searchBar" type="text" placeholder="Pesquise por especialidades"
@@ -28,14 +29,13 @@
           <button class="btn"
                   *ngFor="let specialty of topSpecialties; let i = index"
                   [routerLink]="['/services']"
-                  [queryParams]="{ professionalTypeId: specialty.professionalTypeId, specialtyName: specialty.name }">
+                  [queryParams]="{categoryId: specialty.professionalTypeId, specialty: specialty.name }">
             {{specialty.name}}
           </button>
         </div>
       </div>
     </div>
   </div>
-
 
 
   <section class="categorias" *ngFor="let professionalType of professionalTypes">

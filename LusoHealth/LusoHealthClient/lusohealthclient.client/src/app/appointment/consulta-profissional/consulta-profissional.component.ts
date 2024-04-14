@@ -13,6 +13,12 @@ import { AgendaService } from '../../agenda/agenda.service';
 import { Availability } from '../../shared/models/servic/availability';
 import { AvailableSlot } from '../../shared/models/servic/availableSlot';
 
+import { Loader } from '@googlemaps/js-api-loader';
+import { environment } from '../../../environments/environment.development';
+import { Marker } from '@googlemaps/adv-markers-utils';
+
+declare var google: any;
+
 @Component({
   selector: 'app-consulta-profissional',
   templateUrl: './consulta-profissional.component.html',
@@ -40,15 +46,35 @@ export class ConsultaProfissionalComponent {
 
   minDate: string;
 
-  constructor(public servicesService: ServicesService, public appointmentService: AppointmentService,
-    public agendaService: AgendaService, private route: ActivatedRoute, public profileService: ProfileService, private formBuilder: FormBuilder)
+  zoom = 20;
+  map: google.maps.Map | undefined;
+  address: string = '';
+
+  constructor(public servicesService: ServicesService,
+    public appointmentService: AppointmentService,
+    public agendaService: AgendaService,
+    private route: ActivatedRoute,
+    public profileService: ProfileService,
+    private formBuilder: FormBuilder)
   {
     this.minDate = new Date(Date.now()).toISOString().split('T')[0];
   }
 
   ngOnInit() {
+    const loader = new Loader({
+      apiKey: environment.googleMapsApiKey,
+      version: "weekly",
+      libraries: [
+        "places",
+        "geocoding"
+      ]
+    });
+    
     this.initializeForm();
     this.getAppointmentInfo().then(() => {
+      loader.load().then(async () => {
+        this.initMap();
+      });
       this.getServiceInfo();
       this.getProfessional();
       this.getUser();
@@ -67,6 +93,7 @@ export class ConsultaProfissionalComponent {
       ).subscribe({
         next: (appointment: any) => {
           this.appointment = appointment;
+          this.address = appointment.address;
           resolve();
         },
         error: (error) => {
@@ -370,5 +397,30 @@ export class ConsultaProfissionalComponent {
   changeDate() {
     this.chosenDate = new Date((document.getElementById('edit-data-consulta') as HTMLInputElement).value);
     this.getAvaiableSlots();
+  }
+
+  async initMap() {
+    await google.maps.importLibrary('marker');
+    const domElement = document.querySelector('#map');
+
+    if (this.appointment && this.appointment.location) {
+      const [lat, lng] = this.appointment.location.replace(/,/g, '.').split(';').map(coord => parseFloat(coord));
+
+      // create the map
+      this.map = new google.maps.Map(domElement, {
+        center: { lat: 38.7074, lng: -9.1368 },
+        zoom: this.zoom,
+        mapId: 'luso-health-consulta'
+      });
+
+      const position = new google.maps.LatLng(lat, lng);
+      if (this.map) this.map.setCenter(position);
+
+      const marker = new Marker({
+        position,
+        map: this.map,
+        title: 'marker',
+      });
+    }
   }
 }

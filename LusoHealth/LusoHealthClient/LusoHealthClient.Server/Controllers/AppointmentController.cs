@@ -44,6 +44,7 @@ namespace LusoHealthClient.Server.Controllers
             {
                 Timestamp = info.Timestamp,
                 Location = info.Location,
+                Address = info.Address,
                 Type = info.Type.ToString(),
                 Description = info.Description,
                 State = info.State.ToString(),

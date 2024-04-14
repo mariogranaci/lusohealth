@@ -129,7 +129,7 @@ namespace LusoHealthClient.Server.Controllers
                         ProfessionalName = s.Professional.User.FirstName + " " + s.Professional.User.LastName,
                         ProfessionalType = s.Professional.ProfessionalType.Name,
                         SpecialtyName = s.Specialty.Name,
-                        Rating = s.Reviews.Any() ? s.Reviews.Average(r => r.Stars) : 0 // Certifique-se de que há reviews antes de calcular a média
+                        Rating = s.Reviews.Any() ? s.Reviews.Average(r => r.Stars) : 0
                     })
                     .ToListAsync();
 

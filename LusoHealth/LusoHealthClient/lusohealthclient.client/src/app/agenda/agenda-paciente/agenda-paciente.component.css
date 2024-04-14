@@ -103,6 +103,7 @@ main {
   display: flex;
   font-size: 18px;
   margin-top: 10px;
+  max-width: 300px;
 }
 
 .hours {

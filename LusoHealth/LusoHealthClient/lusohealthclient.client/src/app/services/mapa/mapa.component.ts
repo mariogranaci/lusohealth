@@ -2,12 +2,13 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ProfessionalType } from '../../shared/models/authentication/professionalType';
 import { Specialty } from '../../shared/models/profile/specialty';
 import { } from '@angular/google-maps';
-import { Loader } from '@googlemaps/js-api-loader';
-import { environment } from '../../../environments/environment.development';
-import { Marker } from '@googlemaps/adv-markers-utils';
 import { ServicesService } from '../services.service';
 import { Professional } from '../../shared/models/profile/professional';
 import { Subject, takeUntil } from 'rxjs';
+
+import { Loader } from '@googlemaps/js-api-loader';
+import { environment } from '../../../environments/environment.development';
+import { Marker } from '@googlemaps/adv-markers-utils';
 import { Bounds } from '../../shared/models/servic/bounds';
 
 declare var google: any;

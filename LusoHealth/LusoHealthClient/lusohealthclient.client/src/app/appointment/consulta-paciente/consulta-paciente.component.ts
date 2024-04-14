@@ -7,11 +7,13 @@ import { Service } from '../../shared/models/servic/service';
 import { ActivatedRoute } from '@angular/router';
 import { Appointment } from '../../shared/models/servic/appointment';
 import { ProfileService } from '../../profile/profile.service';
-import { User } from '../../shared/models/authentication/user';
 import { UserProfile } from '../../shared/models/profile/userProfile';
+
+import { Loader } from '@googlemaps/js-api-loader';
 import { environment } from '../../../environments/environment.development';
 import { Marker } from '@googlemaps/adv-markers-utils';
 
+declare var google: any;
 
 @Component({
   selector: 'app-consulta-paciente',
@@ -30,17 +32,29 @@ export class ConsultaPacienteComponent {
   professional: Professional | undefined;
   patient: UserProfile | undefined;
 
-  zoom = 14;
-  center: google.maps.LatLngLiteral = { lat: 38.736946, lng: -9.142685 };
+  zoom = 20;
   map: google.maps.Map | undefined;
-  mapMoved: boolean = false;
-  markers: Marker[] = [];
+  address: string = '';
 
-  constructor(public servicesService: ServicesService, public appointmentService: AppointmentService, private route: ActivatedRoute,
+  constructor(public servicesService: ServicesService,
+    public appointmentService: AppointmentService,
+    private route: ActivatedRoute,
     public profileService: ProfileService) { }
 
   ngOnInit() {
+    const loader = new Loader({
+      apiKey: environment.googleMapsApiKey,
+      version: "weekly",
+      libraries: [
+        "places",
+        "geocoding"
+      ]
+    });
+
     this.getAppointmentInfo().then(() => {
+      loader.load().then(async () => {
+        this.initMap();
+      });
       this.getServiceInfo();
       this.getProfessional();
       this.getUser();
@@ -59,6 +73,7 @@ export class ConsultaPacienteComponent {
       ).subscribe({
         next: (appointement: any) => {
           this.appointment = appointement;
+          this.address = appointement.address;
           resolve();
         },
         error: (error) => {
@@ -252,4 +267,28 @@ export class ConsultaPacienteComponent {
     event.stopPropagation();
   }
 
+  async initMap() {
+    await google.maps.importLibrary('marker');
+    const domElement = document.querySelector('#map');
+
+    if (this.appointment && this.appointment.location) {
+      const [lat, lng] = this.appointment.location.replace(/,/g, '.').split(';').map(coord => parseFloat(coord));
+
+      // create the map
+      this.map = new google.maps.Map(domElement, {
+        center: { lat: 38.7074, lng: -9.1368 },
+        zoom: this.zoom,
+        mapId: 'luso-health-consulta'
+      });
+
+      const position = new google.maps.LatLng(lat, lng);
+      if (this.map) this.map.setCenter(position);
+
+      const marker = new Marker({
+        position,
+        map: this.map,
+        title: 'marker',
+      });
+    }
+  }
 }

@@ -53,7 +53,7 @@ export class AgendaProfissionalComponent {
   }
 
   changeAppointmentScheduled(appointment: Appointment) {
-    const appontmentDto = new Appointment(appointment.timestamp, appointment.location, null, null, null, appointment.duration, appointment.idPatient, appointment.id, appointment.idProfessional, appointment.idService);
+    const appontmentDto = new Appointment(appointment.timestamp, appointment.location, appointment.address, null, null, null, appointment.duration, appointment.idPatient, appointment.id, appointment.idProfessional, appointment.idService);
     this.appointmentService.scheduleAppointment(appontmentDto).pipe(
       takeUntil(this.unsubscribe$)
     ).subscribe({
@@ -78,7 +78,7 @@ export class AgendaProfissionalComponent {
   }
 
   cancelAppointment(appointment: Appointment) {
-    const appontmentDto = new Appointment(appointment.timestamp, appointment.location, null, null, null, appointment.duration, appointment.idPatient, appointment.id, appointment.idProfessional, appointment.idService);
+    const appontmentDto = new Appointment(appointment.timestamp, appointment.location, appointment.address, null, null, null, appointment.duration, appointment.idPatient, appointment.id, appointment.idProfessional, appointment.idService);
     this.appointmentService.cancelAppointment(appontmentDto).pipe(
       takeUntil(this.unsubscribe$)
     ).subscribe({

@@ -44,8 +44,8 @@ export class PrivateProfileProfessionalComponent implements OnInit {
   public averageStars = 0;
   pdfList: Certificate[] = [];
 
-  zoom = 20;
   center: google.maps.LatLngLiteral = { lat: 38.736946, lng: -9.142685 };
+  zoom = 20;
   map: google.maps.Map | undefined;
   marker: Marker | undefined;
   position: google.maps.LatLng | undefined;
@@ -592,7 +592,7 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     this.map = new google.maps.Map(domElement, {
       center:  { lat: 38.7074, lng: -9.1368 },
       zoom: this.zoom,
-      mapId: 'luso-health'
+      mapId: 'luso-health-appointment'
     });
 
     if (this.userData && this.userData.location) {

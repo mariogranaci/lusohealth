@@ -14,6 +14,7 @@ using System.Security.Claims;
 using ServicesDto = LusoHealthClient.Server.DTOs.Services.ServicesDto;
 using ServiceProfileDto = LusoHealthClient.Server.DTOs.Profile.ServiceDto;
 using LusoHealthClient.Server.DTOs.Appointments;
+using Microsoft.IdentityModel.Tokens;
 
 namespace LusoHealthClient.Server.Controllers
 {
@@ -95,6 +96,17 @@ namespace LusoHealthClient.Server.Controllers
 
                     if (slot == null) return BadRequest("Não foi possível encontrar o slot.");
 
+                    var service = await _context.Services.FirstOrDefaultAsync(x => x.Id == appointmentDto.IdService);
+                    if (service == null) return NotFound("Não foi possível encontrar o serviço.");
+                    var professional = await _context.Professionals.FirstOrDefaultAsync(x => x.UserID == service.IdProfessional);
+                    if (professional == null) return NotFound("Houve um problema a localizar o profissional");
+                    if (professional.Location.IsNullOrEmpty() || professional.Address.IsNullOrEmpty()) return BadRequest("O profissional não tem localização definida.");
+                    if (appointmentDto.Type == "Presential")
+                    {
+                        appointmentDto.Location = professional.Location;
+                        appointmentDto.Address = professional.Address;
+                    }
+
                     if (!Enum.TryParse(appointmentDto.Type, out AppointmentType appointmentType))
                     {
                         throw new ArgumentException("Algo correu mal.");
@@ -104,6 +116,7 @@ namespace LusoHealthClient.Server.Controllers
                     {
                         Timestamp = appointmentDto.Timestamp.Value,
                         Location = appointmentDto.Location,
+                        Address = appointmentDto.Address,
                         Type = appointmentType,
                         Description = appointmentDto.Description,
                         State = AppointmentState.PaymentPending,

@@ -7,7 +7,8 @@
 
   <div class="select-dropdown">
     <select [(ngModel)]="selectedOption" (change)="onOptionSelectionChange($event)">
-      <option value="">Tipo de Consulta</option>
+      <option disabled hidden value="">Tipo de Consulta</option>
+      <option value="">Qualquer</option>
       <option value="Presential">Presencial</option>
       <option value="Online">Online</option>
       <option value="Home">Domicílio</option>
@@ -46,10 +47,11 @@
               <div class="hours-slots"><b>{{convertToHours(slot.start)}}</b></div>
               <div class="data-slots">{{convertToDate(slot.start)}} </div>
             </div>
-            <div class="right">
+            <div class="right center-height">
               <div class="type-appointment">{{getAppointmentType(slot.appointmentType)}}</div>
               <div *ngIf="slot.id">
-                <button class="btn-edit" (click)="marcarClick(slot.id)">Marcar</button>
+                <button *ngIf="slot.appointmentType !== 'Home'" class="btn-edit" (click)="marcarClick(slot.id, null, null)">Marcar</button>
+                <button *ngIf="slot.appointmentType === 'Home'" class="btn-edit" (click)="openPopupAndDefineAppointmentId('address', slot.id)">Marcar</button>
               </div>
             </div>
           </div>
@@ -65,6 +67,21 @@
         </div>
       </ng-template>
     </div>
+  </div>
+  <div class="overlay" id="overlay" (click)="closePopup()">
+    <a class="close-button" (click)="closePopup()">
+      <img src="assets/images/login/close.png" alt="Close button" class="close-image">
+    </a>
+    <form id="edit-address-container" class="overlay-container" [formGroup]="addressForm" (click)="stopPropagation($event)">
+      <section>
+        <h2>Escolher Morada da Consulta</h2>
+        <div id="map"></div>
+        <div class="row">
+          <input class="info" type="text" id="address-input" formControlName="address" placeholder="Digite o endereço desejado">
+        </div>
+        <button class="btn btn-blue" (click)="submitAddress()">Salvar Endereço</button>
+      </section>
+    </form>
   </div>
   <div *ngIf="errorMessages.length > 0">
     <app-validation-messages [errorMessages]="errorMessages"></app-validation-messages>

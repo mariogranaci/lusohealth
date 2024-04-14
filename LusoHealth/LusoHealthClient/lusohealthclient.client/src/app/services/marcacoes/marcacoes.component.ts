@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { Specialty } from '../../shared/models/profile/specialty';
 import { ServicesService } from '../services.service';
@@ -32,16 +33,50 @@ export class MarcacoesComponent {
   itemsPerPage: number = 15;
   pageButtons: number[] = [];
 
-  constructor(public servicesService: ServicesService) { }
+  constructor(public servicesService: ServicesService,
+    private route: ActivatedRoute,
+    private router: Router) { }
 
   ngOnInit() {
     this.getProfessionalTypes();
     this.getSpecialties();
     this.getServices().then(() => {
-      this.servicesFiltered = this.services;
-      this.servicesFilteredAgain = this.servicesFiltered;
-      this.servicesTemp = this.servicesFilteredAgain;
-    });;
+      // Move initial filtering logic to a dedicated method
+      this.route.queryParams.subscribe(params => {
+        const professionalTypeId = params['professionalTypeId'];
+        const specialtyName = params['specialtyName'];
+        this.updateFiltersAndUrl(professionalTypeId, specialtyName); // Update filters based on URL params
+      });
+    });
+  }
+
+  updateFiltersAndUrl(professionalTypeId: string, specialtyName: string) {
+    // Navigate only if parameters are different to avoid unnecessary navigation
+    if (this.route.snapshot.queryParams['professionalTypeId'] !== professionalTypeId ||
+      this.route.snapshot.queryParams['specialtyName'] !== specialtyName) {
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: { professionalTypeId, specialtyName },
+        queryParamsHandling: 'merge',
+      });
+    }
+
+    // Directly filter without additional navigation
+    this.filterByProfessionalType(professionalTypeId);
+    this.filterBySpecialty(specialtyName);
+  }
+
+  // Adjust filtering methods to handle undefined or empty parameters gracefully
+  filterByProfessionalType(professionalTypeId: string) {
+    this.servicesFiltered = professionalTypeId ?
+      this.services.filter(service => service.professional.professionalType === professionalTypeId) :
+      [...this.services]; // Clone or reset to all services if parameter is undefined/empty
+  }
+
+  filterBySpecialty(specialtyName: string) {
+    this.servicesFilteredAgain = specialtyName ?
+      this.servicesFiltered.filter(service => service.specialty === specialtyName) :
+      [...this.servicesFiltered]; // Clone or reset based on already filtered services
   }
 
   ngOnDestroy(): void {

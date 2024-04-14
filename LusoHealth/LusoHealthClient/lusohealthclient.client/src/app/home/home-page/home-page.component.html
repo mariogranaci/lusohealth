@@ -4,32 +4,35 @@
      <h1 *ngIf="(authenticationService.user$ | async) as user">Bem-vindo ao LusoHealth, {{ getFirstAndLastName(user.name) }}</h1>-->
     <h1>LusoHealth</h1>
 
-    <div id="searchSection">
-      <div id="searchDiv" [class.rounded-bottom]=" searchResults.length > 0">
-        <input class="searchBar" type="text" placeholder="Pesquise por especialidades"
-               (input)="onSearchInput($event)">
-        <figure class="searchIcon">
-          <img src="assets/images/HomePage/search.png" alt="Ícone de pesquisa de filtros">
-        </figure>
-      </div>
-      <ul id="myUL">
-        <li class="option" *ngFor="let specialty of searchResults" (click)="selectSpecialty(specialty)">
-          <a href="#">
-            <p>{{ specialty.name }}</p>
-            <p class="gray">{{ getProfessionalTypeName(specialty.professionalTypeId) }}</p>
-          </a>
-        </li>
-      </ul>
+  <div id="searchSection">
+    <div id="searchDiv" [class.rounded-bottom]=" searchResults.length > 0">
+      <input class="searchBar" type="text" placeholder="Pesquise por especialidades"
+             (input)="onSearchInput($event)">
+      <figure class="searchIcon">
+        <img src="assets/images/HomePage/search.png" alt="Ícone de pesquisa de filtros">
+      </figure>
+    </div>
+    <ul id="myUL">
+      <li class="option" *ngFor="let specialty of searchResults" (click)="selectSpecialty(specialty)">
+        <a href="#">
+          <p>{{ specialty.name }}</p>
+          <p class="gray">{{ getProfessionalTypeName(specialty.professionalTypeId) }}</p>
+        </a>
+      </li>
+    </ul>
 
-      <div class="populares">
-        <div class="form-buttons-row" *ngIf="(topSpecialties.length > 0)">
-          <p class="populares-texto">Populares:</p>
-          <button class="btn">{{topSpecialties[0].name}}</button>
-          <button class="btn">{{topSpecialties[1].name}}</button>
-          <button class="btn">{{topSpecialties[2].name}}</button>
-        </div>
+    <div class="populares">
+      <div class="form-buttons-row" *ngIf="(topSpecialties.length > 0)">
+        <p class="populares-texto">Populares:</p>
+        <button class="btn"
+                *ngFor="let specialty of topSpecialties; let i = index"
+                [routerLink]="['/services']"
+                [queryParams]="{ professionalTypeId: specialty.professionalTypeId, specialtyName: specialty.name }">
+          {{specialty.name}}
+        </button>
       </div>
     </div>
+
   </div>
 
 

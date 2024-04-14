@@ -1,33 +1,64 @@
 ﻿using LusoHealthClient.Server.Data;
+using LusoHealthClient.Server.DTOs.Chat;
+using LusoHealthClient.Server.Models.Chat;
 using Microsoft.AspNetCore.SignalR;
-
 
 namespace LusoHealthClient.Server.Hubs
 {
     public class ChatHub : Hub
     {
-        public async Task SendMessage(int chatId, string senderId, string message)
-        {
-            // Store message in DB (omitted for brevity)
+        private readonly ApplicationDbContext _context;
 
-            using (var scope = Context.GetHttpContext().RequestServices.CreateScope())
+        public ChatHub(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
+        public async Task JoinChat(string groupName)
+        {
+            await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
+        }
+
+        public async Task LeaveChat(string groupName)
+        {
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, groupName);
+        }
+
+        public async Task SendMessage(string groupName, int chatId, string userId, string message, bool isImage, string imageUrl)
+        {
+            var timestamp = DateTime.UtcNow;
+
+            var newMessage = new Message
             {
-                var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-                // Now use dbContext as needed
-            }
+                UserId = userId,
+                Text = message,
+                IsImage = isImage,
+                ImageUrl = imageUrl,
+                Timestamp = ConvertUtcToPortugal(DateTime.UtcNow),
+                ChatId = chatId
+            };
 
-            // Broadcast message to all clients in the chat
-            await Clients.Group(chatId.ToString()).SendAsync("ReceiveMessage", new { SenderId = senderId, Content = message, Timestamp = DateTime.UtcNow });
+            _context.Message.Add(newMessage);
+            await _context.SaveChangesAsync();
+
+            var messageDto = new MessageDto
+            {
+                UserId = newMessage.UserId,
+                Text = newMessage.Text,
+                IsImage = newMessage.IsImage,
+                ImageUrl = newMessage.ImageUrl,
+                Timestamp = newMessage.Timestamp,
+                ChatId = newMessage.ChatId
+            };
+
+            await Clients.Group(groupName).SendAsync("ReceiveMessage", messageDto);
         }
 
-        public async Task JoinChat(int chatId)
+        private static DateTime ConvertUtcToPortugal(DateTime utcDateTime)
         {
-            await Groups.AddToGroupAsync(Context.ConnectionId, chatId.ToString());
-        }
-
-        public async Task LeaveChat(int chatId)
-        {
-            await Groups.RemoveFromGroupAsync(Context.ConnectionId, chatId.ToString());
+            TimeZoneInfo portugalTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Lisbon");
+            DateTime portugalDateTime = TimeZoneInfo.ConvertTimeFromUtc(utcDateTime, portugalTimeZone);
+            return portugalDateTime;
         }
     }
 }

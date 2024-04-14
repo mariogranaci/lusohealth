@@ -14,7 +14,7 @@
 
     <div class="left">
 
-      <div id="title-data" *ngIf="senderRole === 'Professional'">
+      <div id="title-data" *ngIf="senderRole === 'Patient'">
         <figure>
           <img class="image" alt="Imagem de Perfil" src="/assets/images/Perfil/profileImage.jpg" />
         </figure>
@@ -23,7 +23,7 @@
         <div class="text-appointment">Especialidade: {{service?.specialty}}</div>
       </div>
 
-      <div id="title-data" *ngIf="senderRole === 'Patient'">
+      <div id="title-data" *ngIf="senderRole === 'Professional'">
         <figure>
           <img class="image" alt="Imagem de Perfil" src="/assets/images/Perfil/profileImage.jpg" />
         </figure>
@@ -57,40 +57,43 @@
             <div *ngIf="userId === message.userId">
               <p class="name">{{professional?.professionalInfo?.firstName}} {{professional?.professionalInfo?.lastName}}</p>
               <p class="text">{{message.text}}</p>
-              <span class="time">{{message.timestamp | date:'shortDate':'':'pt-PT'}} {{message.timestamp | date:'shortTime':'':'pt-PT'}}</span>
+              <span class="time">{{ message.timestamp | date:'shortDate':'UTC +1':'pt-PT'}} {{message.timestamp | date:'shortTime':'UTC +1':'pt-PT' }}</span>
             </div>
             <div *ngIf="!(userId === message.userId)">
               <p class="name">{{patient?.firstName}} {{patient?.lastName}}</p>
               <p class="text">{{message.text}}</p>
-              <span class="time">{{message.timestamp | date:'shortDate':'':'pt-PT'}} {{message.timestamp | date:'shortTime':'':'pt-PT'}}</span>
+              <span class="time">{{message.timestamp | date:'shortDate':'UTC +1':'pt-PT'}} {{message.timestamp | date:'shortTime':'UTC +1':'pt-PT'}}</span>
             </div>
           </div>
           <div *ngIf="senderRole === 'Patient'">
             <div *ngIf="userId === message.userId">
               <p class="name">{{patient?.firstName}} {{patient?.lastName}}</p>
               <p class="text">{{message.text}}</p>
-              <span class="time">{{message.timestamp | date:'shortDate':'':'pt-PT'}} {{message.timestamp | date:'shortTime':'':'pt-PT'}}</span>
+              <span class="time">{{message.timestamp | date:'shortDate':'UTC +1':'pt-PT'}} {{message.timestamp | date:'shortTime':'UTC +1':'pt-PT'}}</span>
             </div>
             <div *ngIf="!(userId === message.userId)">
               <p class="name">{{professional?.professionalInfo?.firstName}} {{professional?.professionalInfo?.lastName}}</p>
               <p class="text">{{message.text}}</p>
-              <span class="time">{{message.timestamp | date:'shortDate':'':'pt-PT'}} {{message.timestamp | date:'shortTime':'':'pt-PT'}}</span>
+              <span class="time">{{message.timestamp | date:'shortDate':'UTC +1':'pt-PT'}} {{message.timestamp | date:'shortTime':'UTC +1':'pt-PT'}}</span>
             </div>
           </div>
         </div>
 
 
       </div>
-      <div id="messageDiv">
-        <figure class="message-icon-left">
-          <img src="assets/images/Chat/image-icon.png" alt="Ícone de pesquisa de filtros">
-        </figure>
-        <input class="messageBar" type="text" placeholder="Escreva uma mensagem">
-        <figure class="message-icon-right">
-          <img src="assets/images/Chat/send-icon.png" alt="Ícone de pesquisa de filtros">
-        </figure>
-        <button (click)="sendMessage()">Enviar</button>
-      </div>
+      <form [formGroup]="sendMessageForm" id="messageDiv" autocomplete="off" (ngSubmit)="sendMessage()">
+        <button class="send-button message-icon-left">
+          <figure class="">
+            <img src="assets/images/Chat/image-icon.png" alt="Butão de submissão de imagens">
+          </figure>
+        </button>
+        <input class="messageBar" type="text" formControlName="message" placeholder="Escreva uma mensagem...">
+        <button type="submit" class="send-button message-icon-right">
+          <figure class="">
+            <img src="assets/images/Chat/send-icon.png" alt="Butão de envio de mensagens">
+          </figure>
+        </button>
+      </form>
     </div>
   </section>
 

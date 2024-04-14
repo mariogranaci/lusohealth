@@ -96,12 +96,21 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 
 });
 
-builder.Services.AddCors(options =>
+/*builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAllOrigins", builder =>
         builder.AllowAnyOrigin()
                .AllowAnyMethod()
                .AllowAnyHeader());
+});*/
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigins", build =>
+        build.WithOrigins(builder.Configuration["JWT:ClientUrl"], builder.Configuration["JWT:Issuer"])
+               .AllowAnyMethod()
+               .AllowAnyHeader()
+               .AllowCredentials());
 });
 
 builder.Services.AddAuthorization(options =>
@@ -117,7 +126,7 @@ var app = builder.Build();
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
-app.UseCors("AllowAllOrigins");
+app.UseCors("AllowSpecificOrigins");
 
 // Configure the HTTP request pipeline.
 //if (app.Environment.IsDevelopment())
@@ -128,8 +137,16 @@ app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
+app.UseRouting();
+
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseEndpoints
+    (endpoints =>
+    {
+        _ = endpoints.MapHub<ChatHub>("/chathub");
+    });
 
 //app.UseRouting();
 
@@ -137,7 +154,9 @@ app.MapControllers();
 
 app.MapFallbackToFile("/index.html");
 
-app.MapHub<ChatHub>("/chathub");
+//app.MapHub<ChatHub>("/chathub");
+
+
 
 #region ContextSeed
 using var scope = app.Services.CreateScope();

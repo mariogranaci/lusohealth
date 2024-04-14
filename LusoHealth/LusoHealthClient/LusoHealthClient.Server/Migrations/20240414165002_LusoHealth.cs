@@ -78,6 +78,20 @@ namespace LusoHealthClient.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Chat",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AppointmentId = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Chat", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ProfessionalTypes",
                 columns: table => new
                 {
@@ -226,6 +240,36 @@ namespace LusoHealthClient.Server.Migrations
                         name: "FK_Patients_AspNetUsers_UserID",
                         column: x => x.UserID,
                         principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Message",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Text = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsImage = table.Column<bool>(type: "bit", nullable: false),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Timestamp = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ChatId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Message", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Message_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Message_Chat_ChatId",
+                        column: x => x.ChatId,
+                        principalTable: "Chat",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -728,6 +772,16 @@ namespace LusoHealthClient.Server.Migrations
                 column: "IdProfessional");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Message_ChatId",
+                table: "Message",
+                column: "ChatId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Message_UserId",
+                table: "Message",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Professionals_AddressId",
                 table: "Professionals",
                 column: "AddressId");
@@ -798,6 +852,9 @@ namespace LusoHealthClient.Server.Migrations
                 name: "Certificates");
 
             migrationBuilder.DropTable(
+                name: "Message");
+
+            migrationBuilder.DropTable(
                 name: "Relatives");
 
             migrationBuilder.DropTable(
@@ -811,6 +868,9 @@ namespace LusoHealthClient.Server.Migrations
 
             migrationBuilder.DropTable(
                 name: "Appointment");
+
+            migrationBuilder.DropTable(
+                name: "Chat");
 
             migrationBuilder.DropTable(
                 name: "Patients");

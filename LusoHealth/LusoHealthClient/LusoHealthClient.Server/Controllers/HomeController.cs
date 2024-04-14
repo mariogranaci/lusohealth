@@ -280,10 +280,10 @@ namespace LusoHealthClient.Server.Controllers
                     case "online":
                         query = query.Where(s => s.Online);
                         break;
-                    case "presencial":
+                    case "presential":
                         query = query.Where(s => s.Presential);
                         break;
-                    case "domicilio":
+                    case "home":
                         query = query.Where(s => s.Home);
                         break;
                 }

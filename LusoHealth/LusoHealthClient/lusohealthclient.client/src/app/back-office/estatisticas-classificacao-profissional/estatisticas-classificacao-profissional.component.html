@@ -1,1 +1,100 @@
-<p>estatisticas-classificacao-profissional works!</p>
+<!-- <div class="container">
+  <div class="title"> <b>ESTATÍSTICAS</b></div>
+  <div class="small-title">Classificação por profissional</div>
+
+  <div class="filters">
+    <label for="filter-category">Filtrar:</label>
+    <select id="filter-category" [(ngModel)]="selectedCategoryOption" (change)="applyCategoryFilter($event)">
+      <option *ngFor="let option of filterOptionsCategory" [value]="option.id">{{ option.name }}</option>
+    </select>
+    <select id="filter-speciality" [(ngModel)]="selectedSpecialityOption" (change)="applySpecialityFilter($event)">
+      <option *ngFor="let option of presentedFilterOptionsSpeciality" [value]="option.id">{{ option.name }}</option>
+    </select>
+  </div>
+  <div>
+    <label for="order">Ordenar</label>
+    <select id="order" (change)="applyOrder($event)">
+      <option value="none">Nenhum</option>
+      <option value="professionalName">Nome</option>
+      <option value="professionalType">Categoria</option>
+      <option value="specialtyName">Especialidade</option>
+      <option value="rating">Classificação</option>
+    </select>
+  </div>
+
+
+  <ng-container *ngIf="dataLoaded">
+    <table>
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Categoria</th>
+          <th>Especialidade</th>
+          <th>Classificação</th>
+        </tr>
+      </thead>
+      <tbody *ngIf="(presentedData && (presentedData.length > 0))">
+        <tr *ngFor="let data of presentedData">
+          <td>{{ data.professionalName }}</td>
+          <td>{{ data.professionalType }}</td>
+          <td>{{ data.specialtyName}}</td>
+          <td>{{ data.rating }}</td>
+        </tr>
+
+    </table>
+  </ng-container>
+  
+
+</div> -->
+
+<div class="container">
+  <div class="title"><b>ESTATÍSTICAS</b></div>
+  <div class="small-title">Classificação por profissional</div>
+
+  <div class="filters">
+    <div>
+      <label for="filter-category">Filtrar:</label>
+      <select id="filter-category" [(ngModel)]="selectedCategoryOption" (change)="applyCategoryFilter($event)">
+        <option *ngFor="let option of filterOptionsCategory" [value]="option.id">{{ option.name }}</option>
+      </select>
+    </div>
+    <div>
+      <label for="filter-speciality">Especialidade:</label>
+      <select id="filter-speciality" [(ngModel)]="selectedSpecialityOption" (change)="applySpecialityFilter($event)">
+        <option *ngFor="let option of presentedFilterOptionsSpeciality" [value]="option.id">{{ option.name }}</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="order">
+    <label for="order">Ordenar:</label>
+    <select id="order" (change)="applyOrder($event)">
+      <option value="none">Nenhum</option>
+      <option value="professionalName">Nome</option>
+      <option value="professionalType">Categoria</option>
+      <option value="specialtyName">Especialidade</option>
+      <option value="rating">Classificação</option>
+    </select>
+  </div>
+
+  <ng-container *ngIf="dataLoaded">
+    <table>
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Categoria</th>
+          <th>Especialidade</th>
+          <th>Classificação</th>
+        </tr>
+      </thead>
+      <tbody *ngIf="(presentedData && (presentedData.length > 0))">
+        <tr *ngFor="let data of presentedData">
+          <td>{{ data.professionalName }}</td>
+          <td>{{ data.professionalType }}</td>
+          <td>{{ data.specialtyName }}</td>
+          <td>{{ data.rating }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </ng-container>
+</div>

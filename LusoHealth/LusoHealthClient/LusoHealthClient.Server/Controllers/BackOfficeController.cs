@@ -128,8 +128,10 @@ namespace LusoHealthClient.Server.Controllers
                     {
                         ProfessionalName = s.Professional.User.FirstName + " " + s.Professional.User.LastName,
                         ProfessionalType = s.Professional.ProfessionalType.Name,
+                        ProfessionalTypeId = s.Professional.ProfessionalTypeId,
                         SpecialtyName = s.Specialty.Name,
-                        Rating = s.Reviews.Any() ? s.Reviews.Average(r => r.Stars) : 0 // Certifique-se de que há reviews antes de calcular a média
+                        SpecialtyId = s.Specialty.Id,
+                        Rating = s.Reviews.Any() ? Math.Round(s.Reviews.Average(r => r.Stars), 2) : 0  // Certifique-se de que há reviews antes de calcular a média
                     })
                     .ToListAsync();
 
@@ -193,6 +195,21 @@ namespace LusoHealthClient.Server.Controllers
                 else
                 {
                     return "same";
+                }
+            }
+
+            [HttpGet("get-specialties")]
+            public Task<ActionResult<List<Specialty>>> GetSpecialties()
+            {
+                try
+                {
+                    var specialties = _context.Specialties.OrderByDescending(a => a.Name).ToList();
+                    if (specialties == null) { return Task.FromResult<ActionResult<List<Specialty>>>(NotFound("Não foi possível encontrar as especialidades")); }
+                    return Task.FromResult<ActionResult<List<Specialty>>>(specialties);
+                }
+                catch (Exception)
+                {
+                    return Task.FromResult<ActionResult<List<Specialty>>>(BadRequest("Não foi possível encontrar as especialidades. Tente novamente."));
                 }
             }
         }

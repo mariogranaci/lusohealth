@@ -1846,7 +1846,7 @@ namespace LusoHealthClient.Server.Migrations
                         .IsRequired();
 
                     b.HasOne("LusoHealthClient.Server.Models.Professionals.Service", "Service")
-                        .WithMany()
+                        .WithMany("Reviews")
                         .HasForeignKey("IdService")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2012,6 +2012,11 @@ namespace LusoHealthClient.Server.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("LusoHealthClient.Server.Models.Professionals.Service", b =>
+                {
+                    b.Navigation("Reviews");
                 });
 
             modelBuilder.Entity("LusoHealthClient.Server.Models.Users.Patient", b =>

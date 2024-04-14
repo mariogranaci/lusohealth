@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LusoHealthClient.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240411063725_LusoHealth")]
+    [Migration("20240413223902_LusoHealth")]
     partial class LusoHealth
     {
         /// <inheritdoc />
@@ -1849,7 +1849,7 @@ namespace LusoHealthClient.Server.Migrations
                         .IsRequired();
 
                     b.HasOne("LusoHealthClient.Server.Models.Professionals.Service", "Service")
-                        .WithMany()
+                        .WithMany("Reviews")
                         .HasForeignKey("IdService")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2015,6 +2015,11 @@ namespace LusoHealthClient.Server.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("LusoHealthClient.Server.Models.Professionals.Service", b =>
+                {
+                    b.Navigation("Reviews");
                 });
 
             modelBuilder.Entity("LusoHealthClient.Server.Models.Users.Patient", b =>

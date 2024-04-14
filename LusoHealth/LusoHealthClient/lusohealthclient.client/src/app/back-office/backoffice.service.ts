@@ -43,9 +43,9 @@ export class BackOfficeService {
     return this.http.get<any>(`${environment.appUrl}/api/backoffice/get-apointments-per-professional/${selectedFilter}`, { headers });
   }
 
-  getProfessionalsByRanking() {
+  getServicesByRanking() {
     const headers = this.getHeaders();
-    return this.http.get<any>(`${environment.appUrl}/api/backoffice/get-professionals-by-ranking`, { headers });
+    return this.http.get<any>(`${environment.appUrl}/api/backoffice/get-services-by-ranking`, { headers });
   }
 
   getProfessionalTypes() {
@@ -61,6 +61,11 @@ export class BackOfficeService {
   getProfessionals() {
     const headers = this.getHeaders();
     return this.http.get<any>(`${environment.appUrl}/api/backoffice/get-professionals`, { headers });
+  }
+
+  getSpecialties() {
+    const headers = this.getHeaders();
+    return this.http.get<any>(`${environment.appUrl}/api/backoffice/get-specialties`, { headers });
   }
 
   compareRegistration() {

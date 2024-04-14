@@ -35,7 +35,6 @@ export class MarcacoesComponent {
   selectedType: string = '';
   selectedOrder: string = 'Rank';
 
-
   constructor(public servicesService: ServicesService,
   private route: ActivatedRoute,
   private router: Router) { }

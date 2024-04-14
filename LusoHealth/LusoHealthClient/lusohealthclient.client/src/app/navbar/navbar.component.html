@@ -50,6 +50,10 @@
         <img class="menu-icons" src="assets/images/NavBar/user-icon.png" alt="Ícone Perfil" />
         <div id="perfil-text" class="nav-text">Perfil</div>
       </a>
+      <a class="nav-link" [routerLink]="['/moderation']" *ngIf="userRole === 'Manager'" routerLinkActive="active">
+        <img class="menu-icons" src="assets/images/NavBar/comment.png" alt="Ícone Comentários" />
+        <div id="login-text" class="nav-text">Comentários</div>
+      </a>
       <a [routerLink]="['/patient-profile']" *ngIf="userRole === 'Patient'" class="nav-link" routerLinkActive="active">
         <img class="menu-icons" src="assets/images/NavBar/user-icon.png" alt="Ícone Perfil" />
         <div id="perfil-text" class="nav-text">Perfil</div>

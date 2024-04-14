@@ -98,13 +98,19 @@ namespace LusoHealthClient.Server.Controllers
 
                     var service = await _context.Services.FirstOrDefaultAsync(x => x.Id == appointmentDto.IdService);
                     if (service == null) return NotFound("Não foi possível encontrar o serviço.");
+
+
                     var professional = await _context.Professionals.FirstOrDefaultAsync(x => x.UserID == service.IdProfessional);
                     if (professional == null) return NotFound("Houve um problema a localizar o profissional");
-                    if (professional.Location.IsNullOrEmpty() || professional.Address.IsNullOrEmpty()) return BadRequest("O profissional não tem localização definida.");
+
+                    if (professional.AddressId == null) return BadRequest("O profissional não tem localização definida.");
+                    var address = await _context.Addresses.FirstOrDefaultAsync(x => x.Id == professional.AddressId);
+                    if (address == null) return NotFound("Não foi possível encontrar a morada do profissional.");
+                    if (address.Location.IsNullOrEmpty() || address.AddressName.IsNullOrEmpty()) return BadRequest("O profissional não tem localização definida.");
                     if (appointmentDto.Type == "Presential")
                     {
-                        appointmentDto.Location = professional.Location;
-                        appointmentDto.Address = professional.Address;
+                        appointmentDto.Location = address.Location;
+                        appointmentDto.Address = address.AddressName;
                     }
 
                     if (!Enum.TryParse(appointmentDto.Type, out AppointmentType appointmentType))
@@ -115,8 +121,7 @@ namespace LusoHealthClient.Server.Controllers
                     var appointmentInfo = new Appointment
                     {
                         Timestamp = appointmentDto.Timestamp.Value,
-                        Location = appointmentDto.Location,
-                        Address = appointmentDto.Address,
+                        AddressId = address.Id,
                         Type = appointmentType,
                         Description = appointmentDto.Description,
                         State = AppointmentState.PaymentPending,
@@ -172,6 +177,7 @@ namespace LusoHealthClient.Server.Controllers
         {
             var professionals = await _context.Professionals
                 .Include(pt => pt.ProfessionalType)
+                .Include(a => a.Address)
                 .ToListAsync();
 
             if (professionals == null)
@@ -203,7 +209,7 @@ namespace LusoHealthClient.Server.Controllers
                     Services = services,
                     Certificates = null,
                     Reviews = reviews,
-                    Location = professional.Location,
+                    Location = professional.Address != null ? professional.Address.Location : null,
                     Description = professional.Description,
                     ProfessionalType = professional.ProfessionalType.Name
                 };
@@ -305,13 +311,14 @@ namespace LusoHealthClient.Server.Controllers
 
             var professionalsUnfiltered = await _context.Professionals
             .Include(pt => pt.ProfessionalType)
+            .Include(a => a.Address)
             .ToListAsync();
 
             var professionals = professionalsUnfiltered.Where(p =>
                 {
-                    if (string.IsNullOrEmpty(p.Location)) return false;
+                    if (p.Address == null || string.IsNullOrEmpty(p.Address.Location)) return false;
 
-                    var locationParts = p.Location.Split(';');
+                    var locationParts = p.Address.Location.Split(';');
 
                     if (locationParts.Length != 2) return false;
 
@@ -352,7 +359,7 @@ namespace LusoHealthClient.Server.Controllers
                     Services = services,
                     Certificates = null,
                     Reviews = reviews,
-                    Location = professional.Location,
+                    Location = professional.Address.Location,
                     Description = professional.Description,
                     ProfessionalType = professional.ProfessionalType.Name
                 };
@@ -444,7 +451,7 @@ namespace LusoHealthClient.Server.Controllers
                 Services = services,
                 Certificates = null,
                 Reviews = reviews,
-                Location = professional.Location,
+                Location = professional.Address != null ? professional.Address.Location : null,
                 Description = professional.Description,
                 ProfessionalType = professional.ProfessionalType.Name
             };

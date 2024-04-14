@@ -318,7 +318,7 @@ namespace LusoHealthClient.Server.Services
 						{
 							UserID = user.Id,
 							ProfessionalTypeId = counter++,
-							Location = null,
+							AddressId = null,
 							Services = new List<Service>(),
 							Reviews = new List<Review>(),
 						};
@@ -422,10 +422,18 @@ namespace LusoHealthClient.Server.Services
 					double newLatitude = portugalLatitude + latOffset;
 					double newLongitude = portugalLongitude + lonOffset;
 
+                    var newAddress = new Address
+                    {
+                        Location = $"{newLatitude};{newLongitude}",
+                        AddressName = null
+                    };
 
-					if (counterLocations <= 15)
+                    await _context.Addresses.AddAsync(newAddress);
+                    await _context.SaveChangesAsync(); // Salva as mudanças e gera o Id
+
+                    if (counterLocations <= 15)
 					{
-						professional.Location = $"{newLatitude};{newLongitude}";
+						professional.AddressId = newAddress.Id;
 					}
 
 

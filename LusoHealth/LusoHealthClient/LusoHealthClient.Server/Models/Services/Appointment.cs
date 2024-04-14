@@ -10,13 +10,13 @@ namespace LusoHealthClient.Server.Models.Services
         [Key]
         public int? Id { get; set; }
         public DateTime Timestamp { get; set; }
-        public string? Location { get; set; }
-        public string? Address { get; set; }
         public AppointmentType? Type { get; set; }
         public string? Description { get; set; }
         public AppointmentState? State { get; set; }
         public int? Duration { get; set; }
         public string? PaymentIntentId { get; set; }
+        [ForeignKey("Address")]
+        public int? AddressId { get; set; }
 
         [ForeignKey("Professional")]
         public string? IdProfesional { get; set; }
@@ -33,6 +33,7 @@ namespace LusoHealthClient.Server.Models.Services
         public Patient Patient { get; set; }
 
         public Service Service { get; set; }
+        public Address Address { get; set; }
 		#endregion
 	}
 }

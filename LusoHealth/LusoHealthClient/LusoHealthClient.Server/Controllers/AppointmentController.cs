@@ -36,15 +36,15 @@ namespace LusoHealthClient.Server.Controllers
         [HttpGet("get-appointment-info/{id}")]
         public async Task<ActionResult<AppointmentDto>> GetAppointment(int id)
         {
-            var info = await _context.Appointment.FirstOrDefaultAsync(x => x.Id == id);
+            var info = await _context.Appointment.Include(a => a.Address).FirstOrDefaultAsync(x => x.Id == id);
 
             if (info == null) return BadRequest("Não foi possível encontrar a informação da consulta.");
 
             AppointmentDto appointmentDto = new AppointmentDto
             {
                 Timestamp = info.Timestamp,
-                Location = info.Location,
-                Address = info.Address,
+                Location = info.Address != null ? info.Address.Location : null,
+                Address = info.Address != null ? info.Address.AddressName : null,
                 Type = info.Type.ToString(),
                 Description = info.Description,
                 State = info.State.ToString(),

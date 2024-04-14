@@ -151,7 +151,7 @@ namespace LusoHealthClient.Server.Controllers
                 .ToListAsync();
             var reviews = GetReviewDtos(reviewsFromDB);
 
-            var professional = await _context.Professionals.Include(pt => pt.ProfessionalType).FirstOrDefaultAsync(p => p.UserID == user.Id);
+            var professional = await _context.Professionals.Include(pt => pt.ProfessionalType).Include(a => a.Address).FirstOrDefaultAsync(p => p.UserID == user.Id);
             //var certificates = GetCertificateDtos(professional.Certificates);
             //var professionalType = await _context.ProfessionalTypes.FirstOrDefaultAsync(pt => pt.Id == professional.ProfessionalTypeId);
 
@@ -163,8 +163,8 @@ namespace LusoHealthClient.Server.Controllers
                 Services = services,
                 Certificates = certificates,
                 Reviews = reviews,
-                Location = professional.Location,
-                Address = professional.Address,
+                Location = professional.Address != null ? professional.Address.Location : null,
+                Address = professional.Address != null ? professional.Address.AddressName : null,
                 Description = professional.Description,
                 ProfessionalType = professional.ProfessionalType.Name
             };
@@ -184,9 +184,8 @@ namespace LusoHealthClient.Server.Controllers
                 var user = await _userManager.FindByIdAsync(userIdClaim);
                 if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
 
-                var professional = await _context.Professionals.FirstOrDefaultAsync(p => p.UserID == user.Id);
+                var professional = await _context.Professionals.Include(a => a.Address).FirstOrDefaultAsync(p => p.UserID == user.Id);
                 if (professional == null) { return NotFound("Não foi possível encontrar o profissional"); }
-
 
                 if (model.Location.IsNullOrEmpty() || model.Address.IsNullOrEmpty())
                 {
@@ -208,9 +207,29 @@ namespace LusoHealthClient.Server.Controllers
                     }
                 }
                 
-                professional.Location = model.Location;
-                professional.Address = model.Address;
-                _context.Professionals.Update(professional);
+                if (professional.AddressId != null)
+                {
+                    var address = await _context.Addresses.FirstOrDefaultAsync(a => a.Id == professional.AddressId);
+                    if (address == null) { return NotFound("Não foi possível encontrar a morada"); }
+
+                    address.Location = model.Location;
+                    address.AddressName = model.Address;
+
+                    _context.Addresses.Update(address);
+                }
+                else
+                {
+                    var newAddress = new Address
+                    {
+                        Location = model.Location,
+                        AddressName = model.Address
+                    };
+
+                    await _context.Addresses.AddAsync(newAddress);
+                    professional.AddressId = newAddress.Id;
+                    _context.Professionals.Update(professional);
+                }
+
                 await _context.SaveChangesAsync();
 
                 return Ok(new JsonResult(new { title = "Morada Alterada", message = "A sua morada foi alterada com sucesso." }));

@@ -23,6 +23,7 @@ namespace LusoHealthClient.Server.Data
 		public DbSet<Relative> Relatives { get; set; }
 		public DbSet<Certificate> Certificates { get; set; }
 		public DbSet<AvailableSlot> AvailableSlots { get; set; }
+		public DbSet<Address> Addresses { get; set; }
 		public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
 		{
 		}

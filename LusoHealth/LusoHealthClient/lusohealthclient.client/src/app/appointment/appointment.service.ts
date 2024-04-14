@@ -6,13 +6,16 @@ import { environment } from '../../environments/environment.development';
 import { User } from '../shared/models/authentication/user';
 import { jwtDecode } from 'jwt-decode';
 import { AvailableSlot } from '../shared/models/servic/availableSlot';
+import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AppointmentService {
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, private router: Router) {
+    
+  }
 
   getJWT() {
     const key = localStorage.getItem(environment.userKey);
@@ -39,7 +42,7 @@ export class AppointmentService {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${jwt}`
     });
-
+     
     return headers;
   }
 
@@ -72,4 +75,7 @@ export class AppointmentService {
     const headers = this.getHeaders();
     return this.http.patch(`${environment.appUrl}/api/appointment/change-appointment`, model, { headers });
   }
+
+  
+
 }

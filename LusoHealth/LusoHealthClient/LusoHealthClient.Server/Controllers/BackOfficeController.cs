@@ -178,7 +178,7 @@ namespace LusoHealthClient.Server.Controllers
             [HttpGet("get-professionals")]
             public async Task<ActionResult<List<Professional>>> GetProfessionals()
             {
-                var professionals = await _context.Professionals.ToListAsync();
+                var professionals = await _context.Professionals.Include(a => a.Address).ToListAsync();
                 return Ok(professionals);
             }
 

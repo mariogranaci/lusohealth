@@ -40,12 +40,12 @@ export class EstatisticasProfissionalConcelhoComponent implements OnInit {
     return new Promise((resolve, reject) => {
       this.backoffice.getProfessionals().subscribe(
         (response: any) => {
-          console.log("Success!");
+          console.log("Success!", response);
           this.coordinates = [];
 
           response.forEach((professional: any) => {
-            if (professional.location) {
-              const parts = professional.location.split(';');
+            if (professional.address && professional.address.location) {
+              const parts = professional.address.location.split(';');
               console.log(parts);
               if (parts.length === 2) {
                 const latitude = parseFloat(parts[0].replace(',', '.'));

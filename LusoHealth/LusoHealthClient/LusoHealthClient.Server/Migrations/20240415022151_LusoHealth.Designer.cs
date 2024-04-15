@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LusoHealthClient.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240414164609_LusoHealth")]
+    [Migration("20240415022151_LusoHealth")]
     partial class LusoHealth
     {
         /// <inheritdoc />
@@ -1541,11 +1541,11 @@ namespace LusoHealthClient.Server.Migrations
 
             modelBuilder.Entity("LusoHealthClient.Server.Models.Services.Appointment", b =>
                 {
-                    b.Property<int?>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("AddressId")
                         .HasColumnType("int");

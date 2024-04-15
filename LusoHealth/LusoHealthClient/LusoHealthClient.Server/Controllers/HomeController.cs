@@ -354,7 +354,6 @@ namespace LusoHealthClient.Server.Controllers
             return services;
         }
 
-        [HttpPost("get-professionals-on-location")]
 		/// <summary>
 		/// Método para obter profissionais com base na localização fornecida.
 		/// </summary>

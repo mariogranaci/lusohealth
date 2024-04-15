@@ -34,6 +34,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.userSub.unsubscribe();
   }
 
+  /**
+   * Realiza o logout do utilizador.
+   */
   logout(): void {
     // Chamada de logout do serviço de autenticação
     this.authenticationService.logout();

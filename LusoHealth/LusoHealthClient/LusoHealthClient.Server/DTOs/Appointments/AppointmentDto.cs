@@ -2,7 +2,10 @@
 
 namespace LusoHealthClient.Server.DTOs.Appointments
 {
-    public class AppointmentDto
+	/// <summary>
+	///(DTO) para representar os dados de um agendamento.
+	/// </summary>
+	public class AppointmentDto
     {
         public int? Id { get; set; }
         public DateTime? Timestamp { get; set; }

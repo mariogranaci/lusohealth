@@ -9,7 +9,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LusoHealthClient.Server.Controllers
 {
-    [Authorize(Roles = SD.AdminRole + "," + SD.ManagerRole)]
+	/// <summary>
+	/// Controlador responsável por gerir relatórios, análises e ações administrativas.
+	/// </summary>
+	[Authorize(Roles = SD.AdminRole + "," + SD.ManagerRole)]
     [Route("api/[controller]")]
     [ApiController]
     public class ManageController : ControllerBase
@@ -23,7 +26,13 @@ namespace LusoHealthClient.Server.Controllers
             _userManager = userManager;
         }
 
-        [Authorize]
+		/// <summary>
+		/// Obtém uma lista paginada de relatórios.
+		/// </summary>
+		/// <param name="offset">O deslocamento da página.</param>
+		/// <param name="limit">O limite de relatórios por página.</param>
+		/// <returns>Uma lista paginada de relatórios.</returns>
+		[Authorize]
         [HttpGet("get-reports/{offset}/{limit}")]
         public async Task<ActionResult<List<ReportDto>>> GetMoreReports(int offset, int limit)
         {
@@ -56,7 +65,13 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [Authorize]
+		/// <summary>
+		/// Obtém uma lista paginada de relatórios cancelados.
+		/// </summary>
+		/// <param name="offset">O deslocamento da página.</param>
+		/// <param name="limit">O limite de relatórios por página.</param>
+		/// <returns>Uma lista paginada de relatórios cancelados.</returns>
+		[Authorize]
         [HttpGet("get-reports-canceled/{offset}/{limit}")]
         public async Task<ActionResult<List<ReportDto>>> GetAllReportsCanceled(int offset, int limit)
         {
@@ -90,7 +105,13 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [Authorize]
+		/// <summary>
+		/// Obtém uma lista paginada de relatórios concluídos.
+		/// </summary>
+		/// <param name="offset">O deslocamento da página.</param>
+		/// <param name="limit">O limite de relatórios por página.</param>
+		/// <returns>Uma lista paginada de relatórios concluídos.</returns>
+		[Authorize]
         [HttpGet("get-reports-concluded/{offset}/{limit}")]
         public async Task<ActionResult<List<ReportDto>>> GetAllReportsConcluded(int offset, int limit)
         {
@@ -124,7 +145,13 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [Authorize]
+		/// <summary>
+		/// Obtém uma lista paginada de relatórios pendentes.
+		/// </summary>
+		/// <param name="offset">O deslocamento da página.</param>
+		/// <param name="limit">O limite de relatórios por página.</param>
+		/// <returns>Uma lista paginada de relatórios pendentes.</returns>
+		[Authorize]
         [HttpGet("get-reports-pending/{offset}/{limit}")]
         public async Task<ActionResult<List<ReportDto>>> GetAllReportsPending(int offset, int limit)
         {
@@ -158,10 +185,14 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-
-        [HttpPatch("cancel-report")]
+		// <summary>
+		/// Conclui um relatório, alterando seu estado para cancelado.
+		/// </summary>
+		/// <param name="model">As informações do relatório a ser cancelado.</param>
+		/// <returns>Um ActionResult representando o resultado da operação de conclusão do relatório.</returns>
+		[HttpPatch("cancel-report")]
         public async Task<ActionResult> ConcludeReport(ReportDto model)
-        {
+       {
             var report = await _context.Report.FirstOrDefaultAsync(r => r.Id == model.Id);
 
             if (report == null)
@@ -184,7 +215,12 @@ namespace LusoHealthClient.Server.Controllers
 
         }
 
-        [HttpPatch("suspend-account-professional")]
+		/// <summary>
+		/// Suspende a conta de um profissional e conclui um relatório associado a essa ação.
+		/// </summary>
+		/// <param name="model">As informações do relatório e do profissional cuja conta será suspensa.</param>
+		/// <returns>Um ActionResult representando o resultado da operação de suspensão de conta.</returns>
+		[HttpPatch("suspend-account-professional")]
         public async Task<ActionResult> SuspendAccountProfessional(ReportDto model)
         {
             var user = await _userManager.FindByIdAsync(model.IdProfesional);
@@ -221,7 +257,12 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpPatch("block-account-professional")]
+		/// <summary>
+		/// Bloqueia a conta de um profissional e conclui um relatório associado a essa ação.
+		/// </summary>
+		/// <param name="model">As informações do relatório e do profissional cuja conta será bloqueada.</param>
+		/// <returns>Um ActionResult representando o resultado da operação de bloqueio de conta.</returns>
+		[HttpPatch("block-account-professional")]
         public async Task<ActionResult> BlockAccountProfessional(ReportDto model)
         {
             var user = await _userManager.FindByIdAsync(model.IdProfesional);
@@ -257,7 +298,12 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpPatch("suspend-account-patient")]
+		/// <summary>
+		/// Suspende a conta de um paciente e exclui uma Review associada a essa ação.
+		/// </summary>
+		/// <param name="model">As informações da Review e do paciente cuja conta será suspensa.</param>
+		/// <returns>Um ActionResult representando o resultado da operação de suspensão de conta.</returns>
+		[HttpPatch("suspend-account-patient")]
         public async Task<ActionResult> SuspendAccountPatient(ReviewAdminDto model)
         {
             var user = await _userManager.FindByIdAsync(model.IdPatient);
@@ -294,7 +340,12 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpPatch("block-account-patient")]
+		/// <summary>
+		/// Bloqueia a conta de um paciente e exclui uma Review associada a essa ação.
+		/// </summary>
+		/// <param name="model">As informações da Review e do paciente cuja conta será bloqueada.</param>
+		/// <returns>Um ActionResult representando o resultado da operação de bloqueio de conta.</returns>
+		[HttpPatch("block-account-patient")]
         public async Task<ActionResult> BlockAccountPatient(ReviewAdminDto model)
         {
             var user = await _userManager.FindByIdAsync(model.IdPatient);
@@ -330,7 +381,13 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [Authorize]
+		/// <summary>
+		/// Obtém uma lista paginada de Reviews.
+		/// </summary>
+		/// <param name="offset">O deslocamento da página.</param>
+		/// <param name="limit">O limite de Reviews por página.</param>
+		/// <returns>Uma lista paginada de Reviews.</returns>
+		[Authorize]
         [HttpGet("get-reviews/{offset}/{limit}")]
         public async Task<ActionResult<List<ReviewAdminDto>>> GetReviews(int offset, int limit)
         {
@@ -365,7 +422,13 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [Authorize]
+		/// <summary>
+		/// Obtém uma lista paginada de Reviews reportadas.
+		/// </summary>
+		/// <param name="offset">O deslocamento da página.</param>
+		/// <param name="limit">O limite de Reviews por página.</param>
+		/// <returns>Uma lista paginada de Reviews reportadas.</returns>
+		[Authorize]
         [HttpGet("get-reviews-reported/{offset}/{limit}")]
         public async Task<ActionResult<List<ReviewAdminDto>>> GetReviewsReported(int offset, int limit)
         {
@@ -401,7 +464,13 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [Authorize]
+		/// <summary>
+		/// Obtém uma lista paginada de Reviews excluídas.
+		/// </summary>
+		/// <param name="offset">O deslocamento da página.</param>
+		/// <param name="limit">O limite de Reviews por página.</param>
+		/// <returns>Uma lista paginada de Reviews excluídas.</returns>
+		[Authorize]
         [HttpGet("get-reviews-deleted/{offset}/{limit}")]
         public async Task<ActionResult<List<ReviewAdminDto>>> GetReviewsDeleted(int offset, int limit)
         {
@@ -437,7 +506,13 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [Authorize]
+		/// <summary>
+		/// Obtém uma lista paginada de Reviews normais.
+		/// </summary>
+		/// <param name="offset">O deslocamento da página.</param>
+		/// <param name="limit">O limite de Reviews por página.</param>
+		/// <returns>Uma lista paginada de Reviews normais.</returns>
+		[Authorize]
         [HttpGet("get-reviews-normal/{offset}/{limit}")]
         public async Task<ActionResult<List<ReviewAdminDto>>> GetReviewsNormal(int offset, int limit)
         {
@@ -473,7 +548,12 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpPatch("delete-review")]
+		/// <summary>
+		/// Apaga uma Review, alterando seu estado para deletado.
+		/// </summary>
+		/// <param name="model">As informações da Review a ser apagada.</param>
+		/// <returns>Um ActionResult representando o resultado da operação de exclusão da Review.</returns>
+		[HttpPatch("delete-review")]
         public async Task<ActionResult> DeleteReview(ReviewAdminDto model)
         {
             var review = await _context.Reviews.FirstOrDefaultAsync(r => r.Id == model.Id);

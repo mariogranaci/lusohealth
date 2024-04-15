@@ -3,7 +3,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LusoHealthClient.Server.Models.Professionals
 {
-    public class Specialty
+	/// <summary>
+	/// Representa uma especialidade associada a um profissional de saúde.
+	/// </summary>
+	public class Specialty
     {
         [Key]
         public int Id { get; set; }

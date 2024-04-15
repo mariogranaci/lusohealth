@@ -19,29 +19,41 @@ using LusoHealthClient.Server.Models.Chat;
 
 namespace LusoHealthClient.Server.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class HomeController : ControllerBase
-    {
-        private readonly ApplicationDbContext _context;
-        private readonly UserManager<User> _userManager;
+	/// <summary>
+	/// Controlador responsável por lidar com a lógica relacionada à página inicial e aos serviços oferecidos.
+	/// </summary>
+	[Route("api/[controller]")]
+	[ApiController]
+	public class HomeController : ControllerBase
+	{
+		private readonly ApplicationDbContext _context;
+		private readonly UserManager<User> _userManager;
 
-        public HomeController(ApplicationDbContext context, UserManager<User> userManager)
-        {
-            _context = context;
-            _userManager = userManager;
-        }
+		/// <summary>
+		/// Construtor da classe HomeController.
+		/// </summary>
+		/// <param name="context">Contexto da base de dados.</param>
+		/// <param name="userManager">O usermanager dos utilizadores.</param>
+		/// <param name="logger">O logger para registrar informações de log.</param>
+		public HomeController(ApplicationDbContext context, UserManager<User> userManager)
+		{
+			_context = context;
+			_userManager = userManager;
+		}
 
-        [Authorize]
-        [HttpGet("get-service-info/{id}")]
-        public async Task<ActionResult<MakeAppointmentDto>> GetServiceInfo(int id)
-        {
-            var info = await _context.Services
-                .Include(s => s.Specialty)
-                .ThenInclude(o => o.ProfessionalType)
-                .Include(p => p.Professional)
-                .ThenInclude(u => u.User)
-                .FirstOrDefaultAsync(x => x.Id == id);
+		/// <summary>
+		/// Método para obter informações sobre um serviço específico.
+		/// </summary>
+		[Authorize]
+		[HttpGet("get-service-info/{id}")]
+		public async Task<ActionResult<MakeAppointmentDto>> GetServiceInfo(int id)
+		{
+			var info = await _context.Services
+				.Include(s => s.Specialty)
+				.ThenInclude(o => o.ProfessionalType)
+				.Include(p => p.Professional)
+				.ThenInclude(u => u.User)
+				.FirstOrDefaultAsync(x => x.Id == id);
 
             if (info == null)
             {
@@ -65,7 +77,9 @@ namespace LusoHealthClient.Server.Controllers
         }
 
 
-
+        /// <summary>
+		/// Método para adicionar uma nova consulta.
+		/// </summary>
         [HttpPost("add-appointment")]
         public async Task<ActionResult> AddAppointment(AppointmentDto appointmentDto)
         {
@@ -183,7 +197,11 @@ namespace LusoHealthClient.Server.Controllers
         }
 
 
-        [HttpGet("get-professional-types")]
+
+		/// <summary>
+		/// Método para obter os tipos de profissionais.
+		/// </summary>
+		[HttpGet("get-professional-types")]
         public async Task<ActionResult<List<ProfessionalType>>> GetProfessionalTypes()
         {
             try
@@ -198,7 +216,10 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpGet("get-professionals")]
+		/// <summary>
+		/// Método para obter informações sobre os profissionais disponíveis.
+		/// </summary>
+		[HttpGet("get-professionals")]
         public async Task<ActionResult<List<ProfessionalDto>>> GetProfessionals()
         {
             var professionals = await _context.Professionals
@@ -246,7 +267,10 @@ namespace LusoHealthClient.Server.Controllers
             return professionalsDtoList;
         }
 
-        [HttpGet("get-specialties")]
+		/// <summary>
+		/// Método para obter as especialidades disponíveis.
+		/// </summary>
+		[HttpGet("get-specialties")]
         public Task<ActionResult<List<Specialty>>> GetSpecialties()
         {
             try
@@ -261,7 +285,10 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpGet("get-services")]
+		/// <summary>
+		/// Método para obter os serviços disponíveis.
+		/// </summary>
+		[HttpGet("get-services")]
         public async Task<List<ServicesDto>> GetServices()
         {
             var servicesFromDB = await _context.Services.Include(s => s.Specialty).Include(d => d.Professional).ThenInclude(a => a.ProfessionalType).ToListAsync();
@@ -328,6 +355,10 @@ namespace LusoHealthClient.Server.Controllers
         }
 
         [HttpPost("get-professionals-on-location")]
+		/// <summary>
+		/// Método para obter profissionais com base na localização fornecida.
+		/// </summary>
+		[HttpPost("get-professionals-on-location")]
         public async Task<ActionResult<List<ProfessionalDto>>> GetProfessionalsOnLocation(BoundsDto locationDto)
         {
             double latNE = locationDto.LatitudeNorthEast;

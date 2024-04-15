@@ -3,7 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace LusoHealthClient.Server.DTOs.Profile
 {
-    public class UserProfileDto
+	/// <summary>
+	///(DTO) para informações do perfil do utilizador.
+	/// </summary>
+	public class UserProfileDto
     {
         public string? Id { get; set; }
         //[MaxLength(50, ErrorMessage = "Não pode introduzir mais de {1} caracteres")]

@@ -16,12 +16,20 @@ namespace LusoHealthClient.Server.Controllers
         {
             private readonly ApplicationDbContext _context;
 
-            public BackOfficeController(ApplicationDbContext context)
+			/// <summary>
+			/// Construtor da classe BackOfficeController.
+			/// </summary>
+			/// <param name="context">Contexto do banco de dados.</param>
+			public BackOfficeController(ApplicationDbContext context)
             {
                 _context = context;
             }
 
-            [HttpGet("get-valid-users")]
+			/// <summary>
+			/// Obtém todos os utilizadores válidos do sistema.
+			/// </summary>
+			/// <returns>Uma lista de usuários válidos.</returns>
+			[HttpGet("get-valid-users")]
             public async Task<ActionResult<User>> GetValidUsers()
             {
                 var users = await _context.Users.ToListAsync();
@@ -29,7 +37,12 @@ namespace LusoHealthClient.Server.Controllers
                 return Ok(users);
             }
 
-            [HttpGet("get-apointments-per-professional/{selectedFilter}")]
+			/// <summary>
+			/// Obtém o número de consultas por especialidade, filtrado pelo tipo de profissional selecionado.
+			/// </summary>
+			/// <param name="selectedFilter">Filtro para o tipo de profissional.</param>
+			/// <returns>Uma lista de objetos representando as especialidades e o número de consultas associadas.</returns>
+			[HttpGet("get-apointments-per-professional/{selectedFilter}")]
             public async Task<ActionResult<List<object>>> GetAppointmentsPerProfessional(int selectedFilter)
             {
                 var specialties = await _context.Specialties.ToListAsync();
@@ -67,8 +80,13 @@ namespace LusoHealthClient.Server.Controllers
 
                 return Ok(specialtyData);
             }
-            
-            [HttpGet("get-anually-registered-users")]
+
+
+			/// <summary>
+			/// Obtém o número de usuários registrados anualmente, separados por pacientes e profissionais.
+			/// </summary>
+			/// <returns>Um objeto contendo o número de registos de pacientes e profissionais por ano.</returns>
+			[HttpGet("get-anually-registered-users")]
             public async Task<ActionResult<List<object>>> GetAnuallyRegistered()
             {
                 //Professionals
@@ -113,8 +131,11 @@ namespace LusoHealthClient.Server.Controllers
             }
 
 
-
-            [HttpGet("get-services-by-ranking")]
+			/// <summary>
+			/// Obtém os profissionais classificados por sua média de classificação.
+			/// </summary>
+			/// <returns>Uma lista de profissionais ordenados por sua média de classificação.</returns>
+			[HttpGet("get-services-by-ranking")]
             public async Task<ActionResult<List<object>>> GetServicesByRanking()
             {
                 var servicesWithRatings = await _context.Services
@@ -138,6 +159,10 @@ namespace LusoHealthClient.Server.Controllers
                 return Ok(servicesWithRatings);
             }
 
+            /// <summary>
+			/// Obtém os tipos de profissionais disponíveis no sistema.
+			/// </summary>
+			/// <returns>Uma lista de tipos de profissionais.</returns>
             [HttpGet("get-professional-types")]
             public async Task<ActionResult<List<ProfessionalType>>> GetProfessionalTypes()
             {
@@ -146,6 +171,10 @@ namespace LusoHealthClient.Server.Controllers
                 return Ok(professionalTypes);
             }
 
+            /// <summary>
+			/// Obtém todos os profissionais registrados no sistema.
+			/// </summary>
+			/// <returns>Uma lista de todos os profissionais registados.</returns>
             [HttpGet("get-professionals")]
             public async Task<ActionResult<List<Professional>>> GetProfessionals()
             {

@@ -20,6 +20,7 @@ export class AgendaProfissionalComponent {
   private unsubscribe$ = new Subject<void>();
   errorMessages: string[] = [];
 
+  // Arrays para armazenar os dados obtidos dos serviços
   professionalTypes: ProfessionalType[] = [];
 
   specialties: Specialty[] = [];
@@ -38,6 +39,10 @@ export class AgendaProfissionalComponent {
   constructor(private servicesService: ServicesService, private agendaService: AgendaService,
     private appointmentService: AppointmentService) { }
 
+  /*
+  * Método chamado após a inicialização do componente
+  */
+
   ngOnInit() {
     this.getServices().then(() => {
       this.getProfessionalTypes();
@@ -47,11 +52,16 @@ export class AgendaProfissionalComponent {
     });
   }
 
+  // Método chamado quando o componente é destruído
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
 
+  /*
+  * Método para alterar o estado de um agendamento para "agendado"
+  * @param appointment - O agendamento a ser marcado como agendado
+  */
   changeAppointmentScheduled(appointment: Appointment) {
     const appontmentDto = new Appointment(appointment.timestamp, appointment.location, appointment.address, null, null, null, appointment.duration, appointment.idPatient, appointment.id, appointment.idProfessional, appointment.idService);
     this.appointmentService.scheduleAppointment(appontmentDto).pipe(
@@ -77,6 +87,10 @@ export class AgendaProfissionalComponent {
     });
   }
 
+  /*
+  * Método para cancelar um agendamento
+  * @param appointment - O agendamento a ser cancelado
+  */
   cancelAppointment(appointment: Appointment) {
     const appontmentDto = new Appointment(appointment.timestamp, appointment.location, appointment.address, null, null, null, appointment.duration, appointment.idPatient, appointment.id, appointment.idProfessional, appointment.idService);
     this.appointmentService.cancelAppointment(appontmentDto).pipe(
@@ -103,6 +117,10 @@ export class AgendaProfissionalComponent {
     });
   }
 
+  /*
+  * Método para reembolsar um agendamento cancelado
+  * @param appointmentId - O ID do agendamento a ser reembolsado
+  */
   refundAppointment(appointmentId: number) {
     this.servicesService.refundPayment(appointmentId).subscribe({
       next: (response: any) => {
@@ -118,6 +136,7 @@ export class AgendaProfissionalComponent {
     });
   }
 
+  // Método para obter os tipos de profissionais
   getProfessionalTypes() {
     this.servicesService.getProfessionalTypes().pipe(
       takeUntil(this.unsubscribe$)
@@ -136,6 +155,7 @@ export class AgendaProfissionalComponent {
     });
   }
 
+  // Método para obter os próximos agendamentos
   getNextAppointments() {
     this.agendaService.getNextAppointments().pipe(
       takeUntil(this.unsubscribe$)
@@ -155,6 +175,7 @@ export class AgendaProfissionalComponent {
     });
   }
 
+  // Método para obter os agendamentos pendentes
   getPendingAppointments() {
     this.agendaService.getPendingAppointments().pipe(
       takeUntil(this.unsubscribe$)
@@ -174,7 +195,7 @@ export class AgendaProfissionalComponent {
     });
   }
 
-
+  // Método para obter as especialidades
   getSpecialties() {
     this.agendaService.getSpecialties().pipe(
       takeUntil(this.unsubscribe$)
@@ -194,6 +215,7 @@ export class AgendaProfissionalComponent {
     });
   }
 
+  // Método para obter os serviços disponíveis
   getServices(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       this.servicesService.getServices().pipe(
@@ -216,6 +238,11 @@ export class AgendaProfissionalComponent {
     });
   }
 
+  /*
+  * Método para obter o tipo de agendamento com base no número fornecido
+  * @param type - O número representando o tipo de agendamento
+  * @returns O tipo de agendamento
+  */
   getAppointmentType(type: string | null ): string {
     /*console.log(type);*/
     if (type) {
@@ -234,6 +261,11 @@ export class AgendaProfissionalComponent {
     return '';
   }
 
+  /*
+  * Método para encontrar a especialidade com base no ID do serviço
+  * @param serviceId - O ID do serviço
+  * @returns A especialidade relacionada ao serviço
+  */
   findSpecialtyByServiceId(serviceId: number | null): String | null {
     const service = this.services.find(s => s.serviceId === serviceId);
     if (service) {
@@ -242,6 +274,11 @@ export class AgendaProfissionalComponent {
     return null;
   }
 
+  /*
+ * Método para obter o nome do paciente pelo ID
+ * @param idPatient - O ID do paciente
+ * @returns O nome completo do paciente
+ */
  getPatientNameById(idPatient: string | null): string {
    const patient = this.appointments.find(p => p.idPatient === idPatient);
    if (patient) {
@@ -250,6 +287,11 @@ export class AgendaProfissionalComponent {
    return '';
   }
 
+  /*
+  * Método para obter o nome do paciente pendente pelo ID
+  * @param idPatient - O ID do paciente pendente
+  * @returns O nome completo do paciente pendente
+  */
   getPatientNamePendingById(idPatient: string | null): string {
     const patient = this.appointmentsPending.find(p => p.idPatient === idPatient);
     if (patient) {
@@ -258,12 +300,22 @@ export class AgendaProfissionalComponent {
     return '';
   }
 
+  /*
+  * Método para obter o profissional pelo ID do serviço
+  * @param serviceId - O ID do serviço
+  * @returns O objeto profissional relacionado ao serviço
+  */
   getProfessionalById(serviceId: number | null): Professional | undefined {
     const professional = this.services.find(s => s.professional.services.find(p => p.serviceId === serviceId))?.professional;
 
     return professional;
   }
 
+  /*
+  * Método para converter uma data e hora em uma string de horas formatada
+  * @param dateTimeString - A string de data e hora a ser convertida
+  * @returns A string de horas formatada
+  */
   convertToHours(dateTimeString: Date | null): string {
     if (!dateTimeString) {
       return ""; // Or any other default value you prefer
@@ -280,6 +332,11 @@ export class AgendaProfissionalComponent {
     return formattedHours + ":" + formattedMinutes;
   }
 
+  /*
+  * Método para converter uma data e hora em uma string de data formatada
+  * @param dateTimeString - A string de data e hora a ser convertida
+  * @returns A string de data formatada
+  */
   convertToDate(dateTimeString: Date | null): string {
     if (!dateTimeString) {
       return ""; // Or any other default value you prefer
@@ -290,35 +347,53 @@ export class AgendaProfissionalComponent {
       "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
     ];
 
-    // Create a new Date object from the input string
+    /*
+    *Create a new Date object from the input string
+    */
     let dateTime: Date = new Date(dateTimeString);
 
-    // Extract day, month, and year
+    /*
+    * Extract day, month, and year
+    */  
     let day: number = dateTime.getDate();
     let month: number = dateTime.getMonth();
     let year: number = dateTime.getFullYear();
 
-    // Format the date in the desired format
+    /*
+    *Format the date in the desired format
+    */
     let formattedDate: string = `${day} ${monthsInPortuguese[month]} ${year}`;
 
     return formattedDate;
   }
 
+  /*
+  *Método para carregar mais agendamentos na interface
+  */
   loadMoreAppointments() {
     this.initialAppointmentCount += 3;
     this.updateDisplayedAppointments();
   }
 
+  /*
+  *Método para carregar mais agendamentos pendentes na interface
+  */
   loadMoreAppointmentsPending() {
     this.initialAppointmentPendingCount += 3;
     this.updateDisplayedAppointmentsPending();
   }
 
+  /*
+  *Método para atualizar os agendamentos exibidos na interface
+  */
   updateDisplayedAppointments() {
     this.displayedAppointments = this.appointments.slice(0, this.initialAppointmentCount);
     //console.log(typeof this.displayedAppointments[0].type);
   }
 
+  /*
+  * Método para atualizar os agendamentos pendentes exibidos na interface
+  */
   updateDisplayedAppointmentsPending() {
     this.displayedAppointmentsPending = this.appointmentsPending.slice(0, this.initialAppointmentPendingCount);
   }

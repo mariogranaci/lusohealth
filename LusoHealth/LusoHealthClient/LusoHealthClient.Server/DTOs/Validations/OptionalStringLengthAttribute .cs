@@ -3,7 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace LusoHealthClient.Server.DTOs.Validations
 {
-    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter, AllowMultiple = false)]
+	/// <summary>
+	/// Atributo de validação que permite especificar o comprimento de uma string opcional.
+	/// </summary>
+	[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter, AllowMultiple = false)]
     public class OptionalStringLengthAttribute : ValidationAttribute
     {
         public int MinLength { get; set; }

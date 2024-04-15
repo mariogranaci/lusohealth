@@ -16,10 +16,19 @@ export class UnlockAccountComponent implements OnInit{
   errorMessages: string[] = [];
   email: string | undefined;
 
+  /**
+  * Construtor da classe.
+  * @param authenticationService Serviço de autenticação para gerir as operações relacionadas à autenticação do utilizador.
+  * @param router Serviço de roteamento para manipular navegação entre componentes.
+  * @param activateRoute Serviço para acessar os parâmetros de rota.
+  */
   constructor(private authenticationService: AuthenticationService,
     private router: Router,
     private activateRoute: ActivatedRoute) { }
 
+  /**
+ * Método executado após a inicialização do componente.
+ */
   ngOnInit(): void {
     this.authenticationService.user$.pipe(take(1)).subscribe({
       next: (user: User | null) => {

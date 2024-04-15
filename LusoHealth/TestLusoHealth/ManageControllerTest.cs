@@ -1,42 +1,76 @@
 ﻿using LusoHealthClient.Server.Controllers;
 using LusoHealthClient.Server.Data;
-using LusoHealthClient.Server.Models.Services;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Stripe;
-using Moq;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using LusoHealthClient.Server.DTOs.Administration;
+using LusoHealthClient.Server.Models.FeedbackAndReports;
 using LusoHealthClient.Server.Models.Users;
 using Microsoft.AspNetCore.Http;
-using System.Security.Claims;
-using System.Collections.Generic;
-using LusoHealthClient.Server.DTOs.Agenda;
-using LusoHealthClient.Server.DTOs.Appointments;
 using Microsoft.AspNetCore.Http.HttpResults;
-using LusoHealthClient.Server.Models.Professionals;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Moq;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace TestLusoHealth
 {
-	
-	public class AgendaControllerTest : IClassFixture<ApplicationDbContextFixture>
+	public class ManageControllerTest:IClassFixture<ApplicationDbContextFixture>
 	{
-		private readonly User testUser ;
+		private readonly User testUser;
+		private readonly User testUser1;
 		private readonly ApplicationDbContext _context;
-		
 
-		public AgendaControllerTest(ApplicationDbContextFixture fixture)
+
+		public ManageControllerTest(ApplicationDbContextFixture fixture)
 		{
 			_context = fixture.DbContext;
 			testUser = fixture.TestUser;
+			testUser1 = fixture.TestUser1;
 		}
 
-		//Testes Consultas agendadas
+		//Testes cancelar consulta
+		[Fact]
+		public async Task TestConcludeReport_ReturnsNotFound_WhenReportDontExist()
+		{
+			var mockUserManager = new Mock<UserManager<User>>(new Mock<IUserStore<User>>().Object,
+			   new Mock<IOptions<IdentityOptions>>().Object,
+			   new Mock<IPasswordHasher<User>>().Object,
+			   new IUserValidator<User>[0],
+			   new IPasswordValidator<User>[0],
+			   new Mock<ILookupNormalizer>().Object,
+			   new Mock<IdentityErrorDescriber>().Object,
+			   new Mock<IServiceProvider>().Object,
+			   new Mock<ILogger<UserManager<User>>>().Object);
+			var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
+										new Claim(ClaimTypes.NameIdentifier, "professionaltest@mail.com"),
+								   }, "TestAuthentication"));
+
+			mockUserManager.Setup(u => u.FindByIdAsync(It.IsAny<string>()))
+				.ReturnsAsync((string userId) => null);
+
+			var controller = new ManageController(_context, mockUserManager.Object);
+			controller.ControllerContext = new ControllerContext();
+			controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
+
+			var report1 = new ReportDto
+			{
+				
+			};
+
+			var result = await controller.ConcludeReport(report1);
+
+			Assert.IsType<NotFoundResult>(result);
+		}
+
 
 		[Fact]
-		public async Task TestGetNextAppointments_ReturnsNotFound_WhenUserDontExist()
+		public async Task TestConcludeReport_ReturnsOkObjectResult_WhenReportExist()
 		{
 			//var userManegar UserManager<LusoHealthClient.Server.Models.Users.User> _userManager;
 			var mockUserManager = new Mock<UserManager<User>>(new Mock<IUserStore<User>>().Object,
@@ -48,62 +82,30 @@ namespace TestLusoHealth
 			   new Mock<IdentityErrorDescriber>().Object,
 			   new Mock<IServiceProvider>().Object,
 			   new Mock<ILogger<UserManager<User>>>().Object);
-
-
 			var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
 										new Claim(ClaimTypes.NameIdentifier, "professionaltest@mail.com"),
-                                   }, "TestAuthentication"));
-			
-			mockUserManager.Setup(u => u.FindByIdAsync(It.IsAny<string>()))
-				.ReturnsAsync((string userId) => null);
-
-			var controller = new AgendaController(_context, mockUserManager.Object);
-			controller.ControllerContext = new ControllerContext();
-			controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
-
-			var result =  await controller.GetNextAppointments();
-
-			Assert.IsType<NotFoundObjectResult>(result.Result);
-		}
-
-		[Fact]
-		public async Task TestGetNextAppointments_ReturnListAppointments_WhenUserExist()
-		{
-			var mockUserManager = new Mock<UserManager<User>>(new Mock<IUserStore<User>>().Object,
-			   new Mock<IOptions<IdentityOptions>>().Object,
-			   new Mock<IPasswordHasher<User>>().Object,
-			   new IUserValidator<User>[0],
-			   new IPasswordValidator<User>[0],
-			   new Mock<ILookupNormalizer>().Object,
-			   new Mock<IdentityErrorDescriber>().Object,
-			   new Mock<IServiceProvider>().Object,
-			   new Mock<ILogger<UserManager<User>>>().Object);
-
-
-			var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
-										new Claim(ClaimTypes.NameIdentifier, "professionaltest@mail.com"),
-										new Claim(ClaimTypes.Role, "Professional"),
 								   }, "TestAuthentication"));
 
 			mockUserManager.Setup(u => u.FindByIdAsync(It.IsAny<string>()))
-				.ReturnsAsync((string userId) => testUser);
+				.ReturnsAsync((string userId) => null);
 
-			var controller = new AgendaController(_context, mockUserManager.Object);
+			var controller = new ManageController(_context, mockUserManager.Object);
 			controller.ControllerContext = new ControllerContext();
 			controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
 
+			var report1 = new ReportDto {Id=1, Timestamp = DateTime.Now, 
+				IdPatient = "1", IdProfesional = "1", 
+				Description = "Não apareceu a consulta e fiquei sem o dinheiro.", State = ReportState.Pending };
 
-			var result = await controller.GetNextAppointments();
+			var result = await controller.ConcludeReport(report1);
 
-			Assert.IsType<ActionResult<List<Appointment>>>(result);
-
+			Assert.IsType<OkObjectResult>(result);
 		}
 
 
-		//Testes Histórico de consultas
-
+		//Testes suspender  a conta do profissional
 		[Fact]
-		public async Task TestGetPreviousAppointments_ReturnsNotFound_WhenUserDontExist()
+		public async Task TestSuspendAccountProfessional_ReturnsBadRequestObjectResult_WhenUserExist()
 		{
 			//var userManegar UserManager<LusoHealthClient.Server.Models.Users.User> _userManager;
 			var mockUserManager = new Mock<UserManager<User>>(new Mock<IUserStore<User>>().Object,
@@ -115,103 +117,32 @@ namespace TestLusoHealth
 			   new Mock<IdentityErrorDescriber>().Object,
 			   new Mock<IServiceProvider>().Object,
 			   new Mock<ILogger<UserManager<User>>>().Object);
-
-
 			var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
 										new Claim(ClaimTypes.NameIdentifier, "professionaltest@mail.com"),
 								   }, "TestAuthentication"));
 
 			mockUserManager.Setup(u => u.FindByIdAsync(It.IsAny<string>()))
-				.ReturnsAsync((string userId) => null);
+				.ReturnsAsync((string userId) => testUser1);
 
-			var controller = new AgendaController(_context, mockUserManager.Object);
+			var controller = new ManageController(_context, mockUserManager.Object);
 			controller.ControllerContext = new ControllerContext();
 			controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
 
-			var result = await controller.GetPreviousAppointments();
-
-			Assert.IsType<NotFoundObjectResult>(result.Result);
-		}
-
-
-
-		[Fact]
-		public async Task TestGetPreviousAppointments_ReturnListAppointments_WhenUserExist()
-		{
-			var mockUserManager = new Mock<UserManager<User>>(new Mock<IUserStore<User>>().Object,
-			   new Mock<IOptions<IdentityOptions>>().Object,
-			   new Mock<IPasswordHasher<User>>().Object,
-			   new IUserValidator<User>[0],
-			   new IPasswordValidator<User>[0],
-			   new Mock<ILookupNormalizer>().Object,
-			   new Mock<IdentityErrorDescriber>().Object,
-			   new Mock<IServiceProvider>().Object,
-			   new Mock<ILogger<UserManager<User>>>().Object);
-
-
-			var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
-										new Claim(ClaimTypes.NameIdentifier, "professionaltest@mail.com"),
-										new Claim(ClaimTypes.Role, "Professional"),
-								   }, "TestAuthentication"));
-
-			mockUserManager.Setup(u => u.FindByIdAsync(It.IsAny<string>()))
-				.ReturnsAsync((string userId) => testUser);
-
-			var controller = new AgendaController(_context, mockUserManager.Object);
-			controller.ControllerContext = new ControllerContext();
-			controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
-
-
-			var result = await controller.GetPreviousAppointments();
-
-			Assert.IsType<ActionResult<List<Appointment>>>(result);
-
-		}
-
-
-		// Testes Adicionar Disponibilidade
-
-		[Fact]
-		public async Task TestAddAvailability_ReturnsBadRequest_WhenAppointmentIsNull()
-		{
-
-			var mockUserManager = new Mock<UserManager<User>>(new Mock<IUserStore<User>>().Object,
-			   new Mock<IOptions<IdentityOptions>>().Object,
-			   new Mock<IPasswordHasher<User>>().Object,
-			   new IUserValidator<User>[0],
-			   new IPasswordValidator<User>[0],
-			   new Mock<ILookupNormalizer>().Object,
-			   new Mock<IdentityErrorDescriber>().Object,
-			   new Mock<IServiceProvider>().Object,
-			   new Mock<ILogger<UserManager<User>>>().Object);
-
-
-			var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
-										new Claim(ClaimTypes.NameIdentifier, "professionaltest@mail.com"),
-								   }, "TestAuthentication"));
-
-			mockUserManager.Setup(u => u.FindByIdAsync(It.IsAny<string>()))
-				.ReturnsAsync((string userId) => testUser);
-
-			var controller = new AgendaController(_context, mockUserManager.Object);
-			controller.ControllerContext = new ControllerContext();
-			controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
-
-			var availabilityDto = new AvailabilityDto
+			var report1 = new ReportDto
 			{
-				 
+				
 			};
 
-			var result = await controller.AddAvailability(availabilityDto);
+			var result = await controller.SuspendAccountProfessional(report1);
 
 			Assert.IsType<BadRequestObjectResult>(result);
 		}
 
 
 		[Fact]
-		public async Task TestAddAvailability_ReturnsBadRequest_WhenStartDateBiggerEndDate()
+		public async Task TestSuspendAccountProfessional_ReturnsOkObjectResult_WhenReportExist()
 		{
-
+			//var userManegar UserManager<LusoHealthClient.Server.Models.Users.User> _userManager;
 			var mockUserManager = new Mock<UserManager<User>>(new Mock<IUserStore<User>>().Object,
 			   new Mock<IOptions<IdentityOptions>>().Object,
 			   new Mock<IPasswordHasher<User>>().Object,
@@ -221,8 +152,6 @@ namespace TestLusoHealth
 			   new Mock<IdentityErrorDescriber>().Object,
 			   new Mock<IServiceProvider>().Object,
 			   new Mock<ILogger<UserManager<User>>>().Object);
-
-
 			var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
 										new Claim(ClaimTypes.NameIdentifier, "professionaltest@mail.com"),
 								   }, "TestAuthentication"));
@@ -230,119 +159,31 @@ namespace TestLusoHealth
 			mockUserManager.Setup(u => u.FindByIdAsync(It.IsAny<string>()))
 				.ReturnsAsync((string userId) => testUser);
 
-			var controller = new AgendaController(_context, mockUserManager.Object);
+			var controller = new ManageController(_context, mockUserManager.Object);
 			controller.ControllerContext = new ControllerContext();
 			controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
 
-			var availabilityDto = new AvailabilityDto
-			{
-				StartDate = DateTime.Now.Date,
-				EndDate = DateTime.Now.Date.AddDays(- 1),
-				StartTime = DateTime.Now,
-				EndTime = DateTime.Now.Date.AddDays(-1),
-				ServiceId = 1,
-				SlotDuration = 10,
-				Type = "Online"
-			};
-
-			var result = await controller.AddAvailability(availabilityDto);
-
-			Assert.IsType<BadRequestObjectResult>(result);
-		}
-
-
-		[Fact]
-		public async Task TestAddAvailability_ReturnsBadRequest_WhenStartTimeBiggerEndTime()
-		{
-
-			var mockUserManager = new Mock<UserManager<User>>(new Mock<IUserStore<User>>().Object,
-			   new Mock<IOptions<IdentityOptions>>().Object,
-			   new Mock<IPasswordHasher<User>>().Object,
-			   new IUserValidator<User>[0],
-			   new IPasswordValidator<User>[0],
-			   new Mock<ILookupNormalizer>().Object,
-			   new Mock<IdentityErrorDescriber>().Object,
-			   new Mock<IServiceProvider>().Object,
-			   new Mock<ILogger<UserManager<User>>>().Object);
-
-
-			var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
-										new Claim(ClaimTypes.NameIdentifier, "professionaltest@mail.com"),
-								   }, "TestAuthentication"));
-
-			mockUserManager.Setup(u => u.FindByIdAsync(It.IsAny<string>()))
-				.ReturnsAsync((string userId) => testUser);
-
-			var controller = new AgendaController(_context, mockUserManager.Object);
-			controller.ControllerContext = new ControllerContext();
-			controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
-
-			var availabilityDto = new AvailabilityDto
-			{
-				StartDate = DateTime.Now.Date,
-				EndDate = DateTime.Now.Date.AddDays(+1),
-				StartTime = DateTime.Now,
-				EndTime = DateTime.Now.Date.AddDays(-1),
-				ServiceId = 1,
-				SlotDuration = 10,
-				Type = "Online"
-			};
-
-			var result = await controller.AddAvailability(availabilityDto);
-
-			Assert.IsType<BadRequestObjectResult>(result);
-		}
-
-
-		[Fact]
-		public async Task TestAddAvailability_ReturnsOK_WhenAvailabilityExists()
-		{
-
-			var mockUserManager = new Mock<UserManager<User>>(new Mock<IUserStore<User>>().Object,
-			   new Mock<IOptions<IdentityOptions>>().Object,
-			   new Mock<IPasswordHasher<User>>().Object,
-			   new IUserValidator<User>[0],
-			   new IPasswordValidator<User>[0],
-			   new Mock<ILookupNormalizer>().Object,
-			   new Mock<IdentityErrorDescriber>().Object,
-			   new Mock<IServiceProvider>().Object,
-			   new Mock<ILogger<UserManager<User>>>().Object);
-
-
-			var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
-										new Claim(ClaimTypes.NameIdentifier, "professionaltest@mail.com"),
-								   }, "TestAuthentication"));
-
-			mockUserManager.Setup(u => u.FindByIdAsync(It.IsAny<string>()))
-				.ReturnsAsync((string userId) => testUser);
-
-			var controller = new AgendaController(_context, mockUserManager.Object);
-			controller.ControllerContext = new ControllerContext();
-			controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
-
-			var availabilityDto = new AvailabilityDto
+			var report1 = new ReportDto
 			{
 				Id = 1,
-				StartDate = DateTime.Now.Date,
-				EndDate = DateTime.Now.Date.AddDays(+1),
-				StartTime = DateTime.Now,
-				EndTime = DateTime.Now.Date.AddDays(+1),
-				ServiceId = 1,
-				SlotDuration = 10,
-				Type = "Online"
+				Timestamp = DateTime.Now,
+				IdPatient = "1",
+				IdProfesional = "1",
+				Description = "Não apareceu a consulta e fiquei sem o dinheiro.",
+				State = ReportState.Pending
 			};
 
-			var result = await controller.AddAvailability(availabilityDto);
+			var result = await controller.SuspendAccountProfessional(report1);
 
 			Assert.IsType<OkObjectResult>(result);
 		}
 
 
-		//Testes de Delete 
+		//Testes bloquear a conta do profissional
 		[Fact]
-		public async Task TestDeleteAvailability_ReturnsBadRequest_WhenStartDateBiggerEndDate()
+		public async Task TestBlockAccountProfessional_ReturnsBadRequestObjectResult_WhenUserExist()
 		{
-
+			//var userManegar UserManager<LusoHealthClient.Server.Models.Users.User> _userManager;
 			var mockUserManager = new Mock<UserManager<User>>(new Mock<IUserStore<User>>().Object,
 			   new Mock<IOptions<IdentityOptions>>().Object,
 			   new Mock<IPasswordHasher<User>>().Object,
@@ -352,40 +193,32 @@ namespace TestLusoHealth
 			   new Mock<IdentityErrorDescriber>().Object,
 			   new Mock<IServiceProvider>().Object,
 			   new Mock<ILogger<UserManager<User>>>().Object);
-
-
 			var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
 										new Claim(ClaimTypes.NameIdentifier, "professionaltest@mail.com"),
 								   }, "TestAuthentication"));
 
 			mockUserManager.Setup(u => u.FindByIdAsync(It.IsAny<string>()))
-				.ReturnsAsync((string userId) => testUser);
+				.ReturnsAsync((string userId) => testUser1);
 
-			var controller = new AgendaController(_context, mockUserManager.Object);
+			var controller = new ManageController(_context, mockUserManager.Object);
 			controller.ControllerContext = new ControllerContext();
 			controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
 
-			var availabilityDto = new AvailabilityDto
+			var report1 = new ReportDto
 			{
-				StartDate = DateTime.Now.Date,
-				EndDate = DateTime.Now.Date.AddDays(-1),
-				StartTime = DateTime.Now,
-				EndTime = DateTime.Now.Date.AddDays(-1),
-				ServiceId = 1,
-				SlotDuration = 10,
-				Type = "Online"
+
 			};
 
-			var result = await controller.DeleteSlots(availabilityDto);
+			var result = await controller.BlockAccountProfessional(report1);
 
 			Assert.IsType<BadRequestObjectResult>(result);
 		}
 
 
 		[Fact]
-		public async Task TestDeleteAvailability_ReturnsOK_WhenAvailabilityExists()
+		public async Task TestBlockAccountProfessional_ReturnsOkObjectResult_WhenUserExist()
 		{
-
+			//var userManegar UserManager<LusoHealthClient.Server.Models.Users.User> _userManager;
 			var mockUserManager = new Mock<UserManager<User>>(new Mock<IUserStore<User>>().Object,
 			   new Mock<IOptions<IdentityOptions>>().Object,
 			   new Mock<IPasswordHasher<User>>().Object,
@@ -395,8 +228,6 @@ namespace TestLusoHealth
 			   new Mock<IdentityErrorDescriber>().Object,
 			   new Mock<IServiceProvider>().Object,
 			   new Mock<ILogger<UserManager<User>>>().Object);
-
-
 			var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
 										new Claim(ClaimTypes.NameIdentifier, "professionaltest@mail.com"),
 								   }, "TestAuthentication"));
@@ -404,24 +235,175 @@ namespace TestLusoHealth
 			mockUserManager.Setup(u => u.FindByIdAsync(It.IsAny<string>()))
 				.ReturnsAsync((string userId) => testUser);
 
-			var controller = new AgendaController(_context, mockUserManager.Object);
+			var controller = new ManageController(_context, mockUserManager.Object);
 			controller.ControllerContext = new ControllerContext();
 			controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
 
-			var availabilityDto = new AvailabilityDto
+			var report1 = new ReportDto
 			{
-				StartDate = DateTime.Now.Date,
-				EndDate = DateTime.Now.Date.AddDays(+1),
-				StartTime = DateTime.Now,
-				EndTime = DateTime.Now.Date.AddDays(+1),
-				ServiceId = 1,
-				SlotDuration = 10,
-				Type = "Online"
+				Id = 1,
+				Timestamp = DateTime.Now,
+				IdPatient = "1",
+				IdProfesional = "1",
+				Description = "Não apareceu a consulta e fiquei sem o dinheiro.",
+				State = ReportState.Pending
 			};
 
-			var result = await controller.DeleteSlots(availabilityDto);
+			var result = await controller.BlockAccountProfessional(report1);
 
 			Assert.IsType<OkObjectResult>(result);
 		}
+
+
+		//Testes suspender a conta do paciente
+		[Fact]
+		public async Task TestSuspendAccountPatient_ReturnsBadRequestObjectResult_WhenUserExist()
+		{
+			var mockUserManager = new Mock<UserManager<User>>(new Mock<IUserStore<User>>().Object,
+			   new Mock<IOptions<IdentityOptions>>().Object,
+			   new Mock<IPasswordHasher<User>>().Object,
+			   new IUserValidator<User>[0],
+			   new IPasswordValidator<User>[0],
+			   new Mock<ILookupNormalizer>().Object,
+			   new Mock<IdentityErrorDescriber>().Object,
+			   new Mock<IServiceProvider>().Object,
+			   new Mock<ILogger<UserManager<User>>>().Object);
+			var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
+										new Claim(ClaimTypes.NameIdentifier, "professionaltest@mail.com"),
+								   }, "TestAuthentication"));
+
+			mockUserManager.Setup(u => u.FindByIdAsync(It.IsAny<string>()))
+				.ReturnsAsync((string userId) => testUser1);
+
+			var controller = new ManageController(_context, mockUserManager.Object);
+			controller.ControllerContext = new ControllerContext();
+			controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
+
+			var review = new ReviewAdminDto
+			{
+
+			};
+
+			var result = await controller.SuspendAccountPatient(review);
+
+			Assert.IsType<BadRequestObjectResult>(result);
+		}
+
+
+		[Fact]
+		public async Task TestSuspendAccountPatient_ReturnsOkObjectResult_WhenUserExist()
+		{
+			var mockUserManager = new Mock<UserManager<User>>(new Mock<IUserStore<User>>().Object,
+			   new Mock<IOptions<IdentityOptions>>().Object,
+			   new Mock<IPasswordHasher<User>>().Object,
+			   new IUserValidator<User>[0],
+			   new IPasswordValidator<User>[0],
+			   new Mock<ILookupNormalizer>().Object,
+			   new Mock<IdentityErrorDescriber>().Object,
+			   new Mock<IServiceProvider>().Object,
+			   new Mock<ILogger<UserManager<User>>>().Object);
+			var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
+										new Claim(ClaimTypes.NameIdentifier, "professionaltest@mail.com"),
+								   }, "TestAuthentication"));
+
+			mockUserManager.Setup(u => u.FindByIdAsync(It.IsAny<string>()))
+				.ReturnsAsync((string userId) => testUser);
+
+			var controller = new ManageController(_context, mockUserManager.Object);
+			controller.ControllerContext = new ControllerContext();
+			controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
+
+			var review = new ReviewAdminDto
+			{
+				Id = 1,
+				Timestamp = DateTime.Now,
+				IdPatient = "1",
+				IdService = 1,
+				Description = "Não apareceu a consulta e fiquei sem o dinheiro.",
+				Stars = 5
+			};
+
+			var result = await controller.SuspendAccountPatient(review);
+
+			Assert.IsType<OkObjectResult>(result);
+		}
+
+
+		//Testes bloquear a conta do paciente
+		[Fact]
+		public async Task TestBlockAccountPatient_ReturnsBadRequestObjectResult_WhenUserExist()
+		{
+			var mockUserManager = new Mock<UserManager<User>>(new Mock<IUserStore<User>>().Object,
+			   new Mock<IOptions<IdentityOptions>>().Object,
+			   new Mock<IPasswordHasher<User>>().Object,
+			   new IUserValidator<User>[0],
+			   new IPasswordValidator<User>[0],
+			   new Mock<ILookupNormalizer>().Object,
+			   new Mock<IdentityErrorDescriber>().Object,
+			   new Mock<IServiceProvider>().Object,
+			   new Mock<ILogger<UserManager<User>>>().Object);
+			var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
+										new Claim(ClaimTypes.NameIdentifier, "professionaltest@mail.com"),
+								   }, "TestAuthentication"));
+
+			mockUserManager.Setup(u => u.FindByIdAsync(It.IsAny<string>()))
+				.ReturnsAsync((string userId) => testUser1);
+
+			var controller = new ManageController(_context, mockUserManager.Object);
+			controller.ControllerContext = new ControllerContext();
+			controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
+
+			var review = new ReviewAdminDto
+			{
+				
+			};
+
+			var result = await controller.BlockAccountPatient(review);
+
+			Assert.IsType<BadRequestObjectResult>(result);
+		}
+
+
+
+
+		[Fact]
+		public async Task TestBlockAccountPatient_ReturnsOkObjectResult_WhenUserExist()
+		{
+			var mockUserManager = new Mock<UserManager<User>>(new Mock<IUserStore<User>>().Object,
+			   new Mock<IOptions<IdentityOptions>>().Object,
+			   new Mock<IPasswordHasher<User>>().Object,
+			   new IUserValidator<User>[0],
+			   new IPasswordValidator<User>[0],
+			   new Mock<ILookupNormalizer>().Object,
+			   new Mock<IdentityErrorDescriber>().Object,
+			   new Mock<IServiceProvider>().Object,
+			   new Mock<ILogger<UserManager<User>>>().Object);
+			var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
+										new Claim(ClaimTypes.NameIdentifier, "professionaltest@mail.com"),
+								   }, "TestAuthentication"));
+
+			mockUserManager.Setup(u => u.FindByIdAsync(It.IsAny<string>()))
+				.ReturnsAsync((string userId) => testUser);
+
+			var controller = new ManageController(_context, mockUserManager.Object);
+			controller.ControllerContext = new ControllerContext();
+			controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
+
+			var review = new ReviewAdminDto
+			{
+				Id = 1,
+				Timestamp = DateTime.Now,
+				IdPatient = "1",
+				IdService = 1,
+				Description = "Não apareceu a consulta e fiquei sem o dinheiro.",
+				Stars = 5
+			};
+
+			var result = await controller.BlockAccountPatient(review);
+
+			Assert.IsType<OkObjectResult>(result);
+		}
+
+
 	}
 }

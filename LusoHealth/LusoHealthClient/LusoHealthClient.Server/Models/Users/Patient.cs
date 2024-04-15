@@ -4,7 +4,10 @@ using LusoHealthClient.Server.Models.Services;
 
 namespace LusoHealthClient.Server.Models.Users
 {
-    public class Patient
+	/// <summary>
+	/// Representa um paciente no sistema.
+	/// </summary>
+	public class Patient
     {
         [Key, ForeignKey("User")]
         public string UserID { get; set; }

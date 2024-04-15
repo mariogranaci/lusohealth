@@ -12,6 +12,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="8.0.3" />
+    <PackageReference Include="microsoft.entityframeworkcore.inmemory" Version="8.0.3" />
     <PackageReference Include="microsoft.entityframeworkcore.sqlite" Version="8.0.3" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
     <PackageReference Include="Moq" Version="4.20.70" />

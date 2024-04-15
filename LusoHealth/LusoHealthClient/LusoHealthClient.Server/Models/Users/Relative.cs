@@ -3,7 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace LusoHealthClient.Server.Models.Users
 {
-    public class Relative
+	/// <summary>
+	/// Representa um familiar de um paciente no sistema.
+	/// </summary>
+	public class Relative
     {
         [Key]
         public int Id { get; set; }

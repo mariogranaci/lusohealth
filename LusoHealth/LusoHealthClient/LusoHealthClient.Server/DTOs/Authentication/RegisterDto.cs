@@ -4,7 +4,10 @@ using System.Drawing;
 
 namespace LusoHealthClient.Server.DTOs.Authentication
 {
-    public class RegisterDto
+	/// <summary>
+	///(DTO) para o registo de novos utilizadores.
+	/// </summary>
+	public class RegisterDto
     {
         [Required(ErrorMessage = "Introduza o seu nome")]
         [MaxLength(50, ErrorMessage = "Não pode introduzir mais de {1} caracteres")]

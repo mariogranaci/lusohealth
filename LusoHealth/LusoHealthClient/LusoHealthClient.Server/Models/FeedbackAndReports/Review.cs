@@ -5,7 +5,10 @@ using LusoHealthClient.Server.Models.Professionals;
 
 namespace LusoHealthClient.Server.Models.FeedbackAndReports
 {
-    public class Review
+	/// <summary>
+	/// Representa uma revisão feita por um paciente para um serviço.
+	/// </summary>
+	public class Review
     {
         [Key]
         public int Id { get; set; }

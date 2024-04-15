@@ -17,6 +17,9 @@ export class ValidationMessagesComponent {
     this.showAlert = false;
   }
 
+  /**
+   * Reenvia o link de confirmação de e-mail.
+   */
   resendEmailConfirmationLink(): void {
     if (this.email) {
       this.authService.resendEmailConfirmationLink(this.email).subscribe({

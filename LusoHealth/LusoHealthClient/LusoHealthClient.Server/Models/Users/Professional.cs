@@ -7,7 +7,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LusoHealthClient.Server.Models.Users
 {
-    public class Professional
+	/// <summary>
+	/// Representa um profissional de saúde no sistema.
+	/// </summary>
+	public class Professional
     {
         [Key, ForeignKey("User")]
         public string UserID { get; set; }

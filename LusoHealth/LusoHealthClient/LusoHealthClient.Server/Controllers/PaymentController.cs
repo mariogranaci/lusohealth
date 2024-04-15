@@ -13,6 +13,9 @@ using Stripe.Checkout;
 
 namespace LusoHealthClient.Server.Controllers
 {
+    /// <summary>
+	/// Controlador responsável por lidar com as operações relacionadas ao pagamento.
+	/// </summary>
     [Authorize(Roles = "Patient,Professional")]
     [Route("api/[controller]")]
     [ApiController]
@@ -22,14 +25,23 @@ namespace LusoHealthClient.Server.Controllers
         private readonly UserManager<User> _userManager;
         private readonly IConfiguration _config;
 
-        public PaymentController(ApplicationDbContext context, UserManager<User> userManager, IConfiguration config)
+		/// <summary>
+		/// Construtor da classe PaymentController.
+		/// </summary>
+		/// <param name="context">Contexto da base de dados.</param>
+		/// <param name="userManager">O usermanager dos utilizadores.</param>
+		/// <param name="config">O logger para registrar informações de log.</param>
+		public PaymentController(ApplicationDbContext context, UserManager<User> userManager, IConfiguration config)
         {
             _context = context;
             _userManager = userManager;
             _config = config;
         }
 
-        [HttpPost("create-checkout-session")]
+		/// <summary>
+		/// Método para criar uma sessão de checkout do Stripe.
+		/// </summary>
+		[HttpPost("create-checkout-session")]
         public async Task<IActionResult> CreateCheckoutSession([FromBody] CreateCheckoutSessionRequest req)
         {
             string? userId;
@@ -105,7 +117,10 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpGet("get-session-details/{sessionId}")]
+		/// <summary>
+		/// Método para obter detalhes de uma sessão do Stripe.
+		/// </summary>
+		[HttpGet("get-session-details/{sessionId}")]
         public async Task<ActionResult> GetStripeSession(string sessionId)
         {
             try
@@ -134,7 +149,10 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpPost("update-appointment-to-pending")]
+		/// <summary>
+		/// Método para alterar o estado de uma consulta para pendente após o pagamento.
+		/// </summary>
+		[HttpPost("update-appointment-to-pending")]
         public async Task<ActionResult> ChangeAppointmentState(UpdateAppointmentToPaidDto dto)
         {
             try
@@ -168,7 +186,10 @@ namespace LusoHealthClient.Server.Controllers
             
         }
 
-        [HttpDelete("cancel-appointment/{appointmentId}")]
+		/// <summary>
+		/// Método para cancelar uma consulta.
+		/// </summary>
+		[HttpDelete("cancel-appointment/{appointmentId}")]
         public async Task<ActionResult> CancelAppointment(int appointmentId)
         {
             try
@@ -213,7 +234,12 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpPost("refund-appointment")]
+		/// <summary>
+		/// Efetua o reembolso de uma consulta cancelada, utilizando o ID da consulta para encontrar o pagamento associado.
+		/// </summary>
+		/// <param name="dto">Os dados necessários para o pedido de reembolso, incluindo o ID da consulta.</param>
+		/// <returns>Um ActionResult representando o resultado da operação de reembolso.</returns>
+		[HttpPost("refund-appointment")]
         public async Task<ActionResult> RefundAppointment(RefundRequestDto dto)
         {
             try

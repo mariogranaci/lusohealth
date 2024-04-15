@@ -3,7 +3,10 @@ using LusoHealthClient.Server.Models.Users;
 
 namespace LusoHealthClient.Server.DTOs.Services
 {
-    public class ServicesDto
+	/// <summary>
+	/// DTO para representar os detalhes de um serviço de saúde.
+	/// </summary>
+	public class ServicesDto
     {
         public int? ServiceId { get; set; }
         public int SpecialtyId { get; set; }

@@ -60,6 +60,9 @@ export class ConsultaProfissionalComponent {
     this.minDate = new Date(Date.now()).toISOString().split('T')[0];
   }
 
+  /**
+   * Método executado ao inicializar o componente
+   */
   ngOnInit() {
     const loader = new Loader({
       apiKey: environment.googleMapsApiKey,
@@ -81,11 +84,18 @@ export class ConsultaProfissionalComponent {
     });
   }
 
+  /**
+  * Método executado ao destruir o componente
+  */
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
 
+  /**
+  * Obtém informações da consulta
+  * @returns Uma promessa vazia
+  */
   getAppointmentInfo(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       this.appointmentService.getAppointmentInfo(this.appointmentId).pipe(
@@ -108,6 +118,9 @@ export class ConsultaProfissionalComponent {
     });
   }
 
+  /**
+  * Cancela a consulta
+  */
   changeAppointmentCancel() {
     this.appointmentService.cancelAppointment(this.appointment).pipe(
       takeUntil(this.unsubscribe$)
@@ -127,6 +140,10 @@ export class ConsultaProfissionalComponent {
     });
   }
 
+  /**
+   * Reembolsa a consulta
+   * @param appointmentId ID da consulta
+   */
   refundAppointment(appointmentId: number) {
     this.servicesService.refundPayment(appointmentId).subscribe({
       next: (response: any) => {
@@ -142,6 +159,9 @@ export class ConsultaProfissionalComponent {
     });
   }
 
+  /**
+   * Agenda a consulta
+   */
   changeAppointmentScheduled() {
     this.appointmentService.scheduleAppointment(this.appointment).pipe(
       takeUntil(this.unsubscribe$)
@@ -161,6 +181,9 @@ export class ConsultaProfissionalComponent {
     });
   }
 
+  /**
+  * Altera a consulta
+  */
   changeAppointment() {
     this.errorMessages = [];
     this.responseText = "";
@@ -193,7 +216,9 @@ export class ConsultaProfissionalComponent {
     
   }
 
-
+  /**
+   * Obtém informações do serviço
+   */
   getServiceInfo() {
     if (this.appointment && this.appointment.idService != null) {
       this.servicesService.getServiceInfo(this.appointment.idService).pipe(
@@ -214,6 +239,9 @@ export class ConsultaProfissionalComponent {
     }
   }
 
+  /**
+   * Obtém informações do profissional
+   */
   getProfessional() {
     if (this.appointment && this.appointment.idProfessional != null) {
       this.profileService.getProfessionalInfoById(this.appointment?.idProfessional).pipe(
@@ -234,6 +262,9 @@ export class ConsultaProfissionalComponent {
     }
   }
 
+  /**
+   * Obtém informações do paciente
+   */
   getUser() {
     if (this.appointment?.idPatient)
     {
@@ -255,6 +286,9 @@ export class ConsultaProfissionalComponent {
     }
   }
 
+  /**
+   * Obtém slots disponíveis
+   */
   getAvaiableSlots() {
     if (this.appointment?.idService)
     {
@@ -277,6 +311,10 @@ export class ConsultaProfissionalComponent {
     }
   }
 
+  /**
+   * Obtém o nome do profissional pelo ID
+   * @returns O nome do profissional
+   */
   getProfessionalNameById(): string {
     if (this.service?.professional) {
       return this.service?.professional.professionalInfo.firstName + " " + this.service?.professional.professionalInfo.lastName;
@@ -284,10 +322,18 @@ export class ConsultaProfissionalComponent {
     return "";
   }
 
+  /**
+   * Obtém o profissional pelo ID
+   * @returns O profissional
+   */
   getProfessionalById(): Professional | undefined {
     return this.service?.professional; 
   }
 
+  /**
+   * Converte a data para o formato de horas
+   * @returns A hora formatada
+   */
   convertToHours(): string {
 
     const dateTimeString = this.appointment?.timestamp;
@@ -307,6 +353,10 @@ export class ConsultaProfissionalComponent {
     return formattedHours + ":" + formattedMinutes;
   }
 
+  /**
+   * Converte a data para o formato de data
+   * @returns A data formatada
+   */
   convertToDate(): string {
 
     const dateTimeString = this.appointment?.timestamp;
@@ -334,6 +384,10 @@ export class ConsultaProfissionalComponent {
     return formattedDate;
   }
 
+  /**
+   * Abre o popup correspondente
+   * @param opcao Opção para determinar qual popup abrir
+   */
   openPopup(opcao: string) {
     const overlay = document.getElementById('overlay');
     const remove = document.getElementById('remove-appointment-container');
@@ -361,6 +415,9 @@ export class ConsultaProfissionalComponent {
     }
   }
 
+  /**
+   * Fecha o popup
+   */
   closePopup() {
     const overlay = document.getElementById('overlay');
     const add = document.getElementById('add-appointment-container');
@@ -377,16 +434,26 @@ export class ConsultaProfissionalComponent {
     }
   }
 
+  /**
+   * Cancela a consulta
+   */
   cancelAppointment()
   {
     this.changeAppointmentCancel();
     this.closePopup();
   }
 
+  /**
+   * Impede a propagação de eventos
+   * @param event O evento a ser manipulado
+   */
   stopPropagation(event: Event) {
     event.stopPropagation();
   }
 
+  /**
+   * Inicializa o formulário
+   */
   initializeForm() {
     this.editAppointment = this.formBuilder.group({
       dataConsulta: [this.minDate, [Validators.required]],
@@ -394,6 +461,9 @@ export class ConsultaProfissionalComponent {
     });
   }
 
+  /**
+   * Altera a data
+   */
   changeDate() {
     this.chosenDate = new Date((document.getElementById('edit-data-consulta') as HTMLInputElement).value);
     this.getAvaiableSlots();

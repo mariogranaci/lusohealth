@@ -1,6 +1,9 @@
 ﻿namespace LusoHealthClient.Server.DTOs.Profile
 {
-    public class ProfessionalDto
+	///<summary>
+	///(DTO) para representar um profissional de saúde.
+	/// </summary>
+	public class ProfessionalDto
     {
         public UserProfileDto ProfessionalInfo { get; set; }
         public List<ServiceDto> Services { get; set; }

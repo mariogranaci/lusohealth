@@ -42,6 +42,9 @@ export class PaymentSuccessComponent {
     this.unsubscribe$.complete();
   }
 
+  /**
+  * Verifica a autenticidade.
+  */
   verifyAuthenticity(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       this.authenticationService.user$.pipe(take(1)).subscribe({
@@ -66,6 +69,9 @@ export class PaymentSuccessComponent {
     });
   }
 
+  /**
+   * Obtém os detalhes da sessão.
+   */
   getSessionDetails() {
     if (this.sessionId) {
       this.service.getSessionDetails(this.sessionId).subscribe({
@@ -86,6 +92,9 @@ export class PaymentSuccessComponent {
     }
   };
 
+  /**
+   * Altera o status da consulta para paga.
+   */
   private changeAppointmentStatus(data: any) {
     if (data && data.metadata.appointment_id && data.paymentIntentId) {
       this.service.updateAppointmentState(parseInt(data.metadata.appointment_id), data.paymentIntentId).subscribe({

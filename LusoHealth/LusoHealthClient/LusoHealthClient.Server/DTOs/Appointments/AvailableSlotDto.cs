@@ -1,6 +1,9 @@
 ﻿namespace LusoHealthClient.Server.DTOs.Appointments
 {
-    public class AvailableSlotDto
+	/// <summary>
+	///(DTO) para representar um slot de horário disponível para agendamento.
+	/// </summary>
+	public class AvailableSlotDto
     {
         public int? Id { get; set; }
         public DateTime? Start { get; set; }

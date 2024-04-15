@@ -2,6 +2,9 @@
 
 namespace LusoHealthClient.Server.DTOs.Profile
 {
+	/// <summary>
+	///(DTO) para atualização de senha do utilizador.
+	/// </summary>
 	public class UpdatePasswordDto
 	{
 		[Required(ErrorMessage = "Introduza a password atual.")]

@@ -56,13 +56,18 @@ export class MarcarConsultaComponent {
 
   }
 
+  /**
+  * Método executado quando o componente é destruído.
+  */
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
 
 
-
+  /**
+   * Método executado quando o componente é inicializado.
+   */
   ngOnInit(): void {
     this.initializeForm();
     const loader = new Loader({
@@ -89,6 +94,9 @@ export class MarcarConsultaComponent {
     });
   }
 
+  /**
+   * Obtém o identificador do serviço.
+   */
   getServiceId(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       this.authenticationService.user$.pipe(take(1)).subscribe({
@@ -108,7 +116,9 @@ export class MarcarConsultaComponent {
     });
   }
 
-
+  /**
+   * Obtém as informações do serviço.
+   */
   getServiceInfo() {
     const name = document.getElementById('name-title');
     this.service.getServiceInfo(parseInt(this.serviceId)).pipe(takeUntil(this.unsubscribe$)).subscribe(
@@ -128,6 +138,9 @@ export class MarcarConsultaComponent {
     );
   }
 
+  /**
+   * Manipula o clique no botão de marcar consulta.
+   */
   marcarClick(appointmentId: number, location: string | null, address: string | null) {
     if (this.serviceInfo) {
 
@@ -175,6 +188,9 @@ export class MarcarConsultaComponent {
     }
   }
 
+  /**
+   * Realiza o pagamento.
+   */
   private payment(appointmentId: number, slotDuration: number) {
     if (this.serviceInfo) {
       this.service.requestStripeSession((this.serviceInfo.pricePerHour * slotDuration) / 60, appointmentId, this.serviceInfo.specialty);
@@ -184,12 +200,18 @@ export class MarcarConsultaComponent {
     }
   }
 
+  /**
+  * Manipula a mudança de data.
+  */
   handleDateChange(selectedDate: Date): void {
     this.selectedDate = selectedDate;;
 
     this.getAvailability();
   }
 
+  /**
+   * Manipula a mudança de seleção de opção.
+   */
   onOptionSelectionChange(selectedOption: any) {
     if (selectedOption !== null && selectedOption !== undefined) {
       this.selectedOption = selectedOption.target.value;
@@ -199,6 +221,9 @@ export class MarcarConsultaComponent {
     this.getAvailability();
   }
 
+  /**
+   * Obtém a disponibilidade.
+   */
   getAvailability() {
     this.service.getAvailableSlots(parseInt(this.serviceId)).subscribe(
       response => {
@@ -235,6 +260,9 @@ export class MarcarConsultaComponent {
 
   }
 
+  /**
+  * Converte uma data para uma string formatada.
+  */
   convertToDate(dateTimeString: Date | undefined): string {
     if (!dateTimeString) {
       return "";
@@ -256,6 +284,9 @@ export class MarcarConsultaComponent {
     return formattedDate;
   }
 
+  /**
+   * Converte uma hora para uma string formatada.
+   */
   convertToHours(dateTimeString: Date | undefined): string {
     if (!dateTimeString) {
       return "";
@@ -272,6 +303,9 @@ export class MarcarConsultaComponent {
     return formattedHours + ":" + formattedMinutes;
   }
 
+  /**
+   * Obtém o tipo de consulta.
+   */
   getAppointmentType(type: string | undefined): string {
     switch (type) {
       case "Presential":

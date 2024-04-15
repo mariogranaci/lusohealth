@@ -3,7 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace LusoHealthClient.Server.DTOs.Authentication
 {
-    public class LoginWithGoogleDto
+	/// <summary>
+	///(DTO) para informações de login usando o Google.
+	/// </summary>
+	public class LoginWithGoogleDto
     {
         
         [Required]

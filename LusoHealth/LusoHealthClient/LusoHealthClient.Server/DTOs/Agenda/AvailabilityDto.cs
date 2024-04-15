@@ -1,6 +1,9 @@
 ﻿namespace LusoHealthClient.Server.DTOs.Agenda
 {
-    public class AvailabilityDto
+	/// <summary>
+	///(DTO) para representar a disponibilidade de um profissional.
+	/// </summary>
+	public class AvailabilityDto
     {
         public int? Id { get; set; }
         public DateTime? StartDate { get; set; }

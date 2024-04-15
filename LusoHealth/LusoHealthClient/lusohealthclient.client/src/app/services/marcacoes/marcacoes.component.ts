@@ -117,6 +117,9 @@ export class MarcacoesComponent {
     });
   }
 
+  /**
+  * Obtém as especialidades.
+  */  
   getSpecialties(): Promise<void> {
     return new Promise((resolve, reject) => {
       this.servicesService.getSpecialties().pipe(
@@ -131,20 +134,29 @@ export class MarcacoesComponent {
     });
   }
 
+  /**
+  * Manipula a entrada de pesquisa.
+  * @param event O evento de entrada.
+  */
   onSearchInput() {
     this.searchTerm = this.removeAccents(this.searchTerm.trim().toLowerCase());
     this.currentPage = 1;
     this.getServicesFiltered();
   }
 
-
+  /**
+  * Filtra as especialidades com base na categoria selecionada.
+  */
   filterSpecialties(): void {
     const professionalType = this.professionalTypes.find(type => type.id === +this.selectedCategory);
     this.specialtiesFiltered = professionalType ? this.specialties.filter(specialty => specialty.professionalTypeId === professionalType.id) : [];
     this.selectedSpecialty = '0';
     this.updatePagination();
   }
-
+  
+  /**
+  * Ordena os serviços com base na opção selecionada.
+  */
   orderBy() {
     switch (this.selectedOrder) {
       case 'Rank':
@@ -159,11 +171,20 @@ export class MarcacoesComponent {
     }
     this.updatePagination();
   }
-
+  /**
+  * Remove acentos de uma string.
+  * @param str A string com acentos.
+  * @returns A string sem acentos.
+  */
   removeAccents(str: string): string {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   }
 
+  /**
+  * Retorna a classificação média de um serviço.
+  * @param service O serviço.
+   * @returns A classificação média do serviço.
+  */
   returnStars(service: Service): number {
     const reviewsForService = service.professional.reviews.filter(review => review.idService === service.serviceId);
 
@@ -176,6 +197,9 @@ export class MarcacoesComponent {
     return parseFloat(averageStars.toFixed(1));
   }
 
+  /**
+  * Avança para a próxima página na paginação.
+  */
   nextPage() {
     if (this.hasMorePages) {
       this.currentPage++;
@@ -183,6 +207,9 @@ export class MarcacoesComponent {
     }
   }
 
+  /**
+  * Retrocede para a página anterior na paginação.
+  */
   prevPage() {
     if (this.currentPage > 1) {
       this.currentPage--;
@@ -190,6 +217,10 @@ export class MarcacoesComponent {
     }
   }
 
+  /**
+  * Calcula o número total de páginas.
+  * @returns O número total de páginas.
+  */
   get totalPages(): number {
     if (this.hasMorePages) {
       return this.currentPage = 1;
@@ -197,11 +228,17 @@ export class MarcacoesComponent {
     return this.currentPage;
   }
 
+  /**
+  * Atualiza a paginação para a primeira página.
+  */
   updatePagination() {
     this.currentPage = 1;
     this.updatePageButtons();
   }
 
+  /**
+  * Atualiza os botões de página.
+  */
   updatePageButtons() {
     this.pageButtons = [this.currentPage];
     if (this.hasMorePages) {
@@ -212,6 +249,10 @@ export class MarcacoesComponent {
     }
   }
 
+  /**
+   * Vai para uma página específica.
+   * @param page O número da página para ir.
+   */
   goToPage(page: number) {
     if (page >= 1 && (!this.hasMorePages && page <= this.currentPage) || (this.hasMorePages && page <= this.currentPage + 1)) {
       this.currentPage = page;

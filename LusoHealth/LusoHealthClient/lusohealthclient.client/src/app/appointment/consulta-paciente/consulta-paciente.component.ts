@@ -41,6 +41,9 @@ export class ConsultaPacienteComponent {
     private route: ActivatedRoute,
     public profileService: ProfileService) { }
 
+  /**
+  * Método Angular que é executado quando o componente é inicializado.
+   */
   ngOnInit() {
     const loader = new Loader({
       apiKey: environment.googleMapsApiKey,
@@ -61,11 +64,18 @@ export class ConsultaPacienteComponent {
     });
   }
 
+  /**
+   * Método executado ao destruir o componente
+   */
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
 
+  /**
+   * Obtém informações da consulta
+   * @returns Uma promessa vazia
+   */
   getAppointmentInfo(): Promise<void>{
     return new Promise<void>((resolve, reject) => {
       this.appointmentService.getAppointmentInfo(this.appointmentId).pipe(
@@ -89,6 +99,9 @@ export class ConsultaPacienteComponent {
     });
   }
 
+  /**
+   * Obtém informações do serviço
+   */
   getServiceInfo() {
     if (this.appointment && this.appointment.idService != null)
     {
@@ -110,6 +123,9 @@ export class ConsultaPacienteComponent {
     }
   }
 
+  /**
+   * Obtém informações do profissional
+   */
   getProfessional() {
     if (this.appointment && this.appointment.idProfessional != null) {
       this.profileService.getProfessionalInfoById(this.appointment?.idProfessional).pipe(
@@ -130,6 +146,9 @@ export class ConsultaPacienteComponent {
     }
   }
 
+  /**
+   * Obtém informações do paciente
+   */
   getUser() {
     this.profileService.getUserData().pipe(
       takeUntil(this.unsubscribe$)
@@ -148,6 +167,9 @@ export class ConsultaPacienteComponent {
     });
   }
 
+  /**
+   * Cancela a consulta
+   */
   changeAppointmentCancel() {
     this.appointmentService.cancelAppointment(this.appointment).pipe(
       takeUntil(this.unsubscribe$)
@@ -167,6 +189,10 @@ export class ConsultaPacienteComponent {
     });
   }
 
+  /**
+   * Obtém o nome do profissional pelo ID do serviço
+   * @returns O nome do profissional
+   */
   getProfessionalNameById(): string {
     if (this.service?.professional) {
       return this.service?.professional.professionalInfo.firstName + " " + this.service?.professional.professionalInfo.lastName;
@@ -174,10 +200,18 @@ export class ConsultaPacienteComponent {
     return "";
   }
 
+  /**
+   * Obtém informações do profissional pelo ID do serviço
+   * @returns Informações do profissional
+   */
   getProfessionalById(): Professional | undefined {
     return this.service?.professional;
   }
 
+  /**
+   * Converte a hora da consulta para o formato HH:MM
+   * @returns A hora formatada
+   */
   convertToHours(): string {
 
     const dateTimeString = this.appointment?.timestamp;
@@ -197,6 +231,10 @@ export class ConsultaPacienteComponent {
     return formattedHours + ":" + formattedMinutes;
   }
 
+  /**
+   * Converte a data da consulta para o formato 'Dia Mês Ano'
+   * @returns A data formatada
+   */
   convertToDate(): string {
 
     const dateTimeString = this.appointment?.timestamp;
@@ -224,6 +262,10 @@ export class ConsultaPacienteComponent {
     return formattedDate;
   }
 
+  /**
+   * Abre o popup correspondente
+   * @param opcao Opção para determinar qual popup abrir
+   */
   openPopup(opcao: string) {
     const overlay = document.getElementById('overlay');
     const remove = document.getElementById('remove-appointment-container');
@@ -242,6 +284,9 @@ export class ConsultaPacienteComponent {
     }
   }
 
+  /**
+   * Fecha o popup
+   */
   closePopup() {
     const overlay = document.getElementById('overlay');
     const add = document.getElementById('add-appointment-container');
@@ -258,11 +303,18 @@ export class ConsultaPacienteComponent {
     }
   }
 
+  /**
+   * Cancela a consulta
+   */
   cancelAppointment() {
     this.changeAppointmentCancel();
     this.closePopup();
   }
 
+  /**
+   * Impede a propagação de eventos
+   * @param event O evento a ser manipulado
+   */
   stopPropagation(event: Event) {
     event.stopPropagation();
   }

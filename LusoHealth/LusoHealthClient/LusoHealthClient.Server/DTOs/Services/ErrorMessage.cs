@@ -1,6 +1,9 @@
 ﻿namespace LusoHealthClient.Server.DTOs.Services
 {
-    public class ErrorMessage
+	/// <summary>
+	///(DTO) que representa uma mensagem de erro.
+	/// </summary>
+	public class ErrorMessage
     {
         public string Message { get; set; }
     }

@@ -39,7 +39,9 @@ export class EditPerfilComponent implements OnInit {
     private profileService: ProfileService) { }
 
 
-
+  /**
+  * Abre a janela de seleção de arquivos.
+  */
   openFiles() {
     const imgupload = document.getElementById('imgupload') as HTMLInputElement;
 
@@ -48,6 +50,9 @@ export class EditPerfilComponent implements OnInit {
     }
   }
 
+  /**
+   * Obtém a imagem do perfil do utilizador.
+   */
   getImage(): void {
     this.profileService.getProfilePicture().subscribe(
       (blob: Blob) => {
@@ -62,6 +67,9 @@ export class EditPerfilComponent implements OnInit {
     );
   }
 
+  /**
+  * Converte um Blob para uma URL de dados.
+  */
   convertBlobToDataURL(blob: Blob): Promise<string> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -93,6 +101,9 @@ export class EditPerfilComponent implements OnInit {
     });
   }*/
 
+  /**
+   * Manipula a seleção de arquivo.
+   */
   onFileSelected(event: any) {
     const file = event.target.files[0];
     this.responseText = undefined;
@@ -121,7 +132,9 @@ export class EditPerfilComponent implements OnInit {
     }
   }
 
-
+  /**
+  * Obtém informações do perfil do utilizador.
+  */
   getUserProfileInfo() {
     this.profileService.getUserData().subscribe({
       next: (response: UserProfile) => {
@@ -152,6 +165,9 @@ export class EditPerfilComponent implements OnInit {
     this.unsubscribe$.complete();
   }
 
+  /**
+  * Define os campos do formulário.
+  */
   setFields() {
     this.profileService.getUserData().pipe(takeUntil(this.unsubscribe$)).subscribe(
       (userData: UserProfile) => {
@@ -191,7 +207,10 @@ export class EditPerfilComponent implements OnInit {
       }
     );
   }
-  
+
+  /**
+  * Inicializa os formulários.
+  */
   initializeForm() {
       this.perfilForm = this.fb.group({
         firstName: ['', [Validators.minLength(3), Validators.maxLength(50)]],
@@ -209,6 +228,9 @@ export class EditPerfilComponent implements OnInit {
     });
   }
 
+  /**
+  * Atualiza o perfil do utilizador.
+  */
   atualizarPerfil() {
     this.submittedProfile = true;
     this.errorMessages = [];
@@ -252,6 +274,9 @@ export class EditPerfilComponent implements OnInit {
     }
   }
 
+  /**
+   * Altera a senha do utilizador.
+   */
   alterarPassword() {
     this.submittedPassword = true;
     this.errorMessages = [];
@@ -280,6 +305,9 @@ export class EditPerfilComponent implements OnInit {
     
   }
 
+  /**
+   * Validador de padrão de senha.
+   */
   passwordPatternValidator(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
       const value: string = control.value || '';

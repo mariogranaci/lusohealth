@@ -2,6 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from './authentication/authentication.service';
 
+/**
+ * askfasofgsdlkgflçmsd
+ */
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',

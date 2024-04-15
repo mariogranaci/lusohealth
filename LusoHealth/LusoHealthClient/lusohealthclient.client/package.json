@@ -10,6 +10,7 @@
     "prestart": "node aspnetcore-https",
     "start:windows": "ng serve --ssl --ssl-cert \"%APPDATA%\\ASP.NET\\https\\%npm_package_name%.pem\" --ssl-key \"%APPDATA%\\ASP.NET\\https\\%npm_package_name%.key\" --host=127.0.0.1",
     "start:default": "ng serve --ssl --ssl-cert \"$HOME/.aspnet/https/${npm_package_name}.pem\" --ssl-key \"$HOME/.aspnet/https/${npm_package_name}.key\" --host=127.0.0.1",
+    "compodoc": "npx compodoc -p tsconfig.doc.json",
     "azurebuild": "ng build --configuration=production"
   },
   "private": true,
@@ -51,6 +52,7 @@
     "@angular/cli": "^17.0.7",
     "@angular/compiler-cli": "^17.0.0",
     "@angular/localize": "^17.0.8",
+    "@compodoc/compodoc": "^1.1.23",
     "@fullcalendar/interaction": "^6.1.11",
     "@types/googlemaps": "^3.43.3",
     "@types/jasmine": "~5.1.0",

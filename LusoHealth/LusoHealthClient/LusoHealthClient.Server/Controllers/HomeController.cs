@@ -24,13 +24,11 @@ namespace LusoHealthClient.Server.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<User> _userManager;
-        private readonly ILogger<ProfileController> _logger;
 
-        public HomeController(ApplicationDbContext context, UserManager<User> userManager, ILogger<ProfileController> logger)
+        public HomeController(ApplicationDbContext context, UserManager<User> userManager)
         {
             _context = context;
             _userManager = userManager;
-            _logger = logger;
         }
 
         [Authorize]

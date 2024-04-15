@@ -427,7 +427,7 @@ namespace LusoHealthClient.Server.Controllers
         }
 
         [HttpPut("unlock-account")]
-        public async Task<IActionResult> UnlockAccount(ConfirmEmailDto model)
+        public async Task<ActionResult> UnlockAccount(ConfirmEmailDto model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user == null) return Unauthorized("Este endereço de email ainda não foi registado");

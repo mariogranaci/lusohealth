@@ -127,7 +127,10 @@ export class AgendaService {
     });
   }
 
-  // Método para obter todos os slots
+  /**
+    * Obtém todos os slots disponíveis.
+    * @returns Um Observable para a requisição HTTP.
+    */
   getAllSlots(): Observable<any> {
     const headers = this.getHeaders();
     return this.http.get<any>(`${environment.appUrl}/api/agenda/get-all-slots`, { headers });

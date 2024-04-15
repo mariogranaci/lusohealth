@@ -8,7 +8,7 @@ namespace LusoHealthClient.Server.Models.Services
     public class Appointment
     {
         [Key]
-        public int? Id { get; set; }
+        public int Id { get; set; }
         public DateTime Timestamp { get; set; }
         public AppointmentType? Type { get; set; }
         public string? Description { get; set; }

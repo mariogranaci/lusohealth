@@ -15,6 +15,7 @@ using ServicesDto = LusoHealthClient.Server.DTOs.Services.ServicesDto;
 using ServiceProfileDto = LusoHealthClient.Server.DTOs.Profile.ServiceDto;
 using LusoHealthClient.Server.DTOs.Appointments;
 using Microsoft.IdentityModel.Tokens;
+using LusoHealthClient.Server.Models.Chat;
 
 namespace LusoHealthClient.Server.Controllers
 {
@@ -106,11 +107,28 @@ namespace LusoHealthClient.Server.Controllers
                     if (professional.AddressId == null) return BadRequest("O profissional não tem localização definida.");
                     var address = await _context.Addresses.FirstOrDefaultAsync(x => x.Id == professional.AddressId);
                     if (address == null) return NotFound("Não foi possível encontrar a morada do profissional.");
-                    if (address.Location.IsNullOrEmpty() || address.AddressName.IsNullOrEmpty()) return BadRequest("O profissional não tem localização definida.");
+                    
+                    var addressId = address.Id;
+
                     if (appointmentDto.Type == "Presential")
                     {
+                        if (address.Location.IsNullOrEmpty() || address.AddressName.IsNullOrEmpty()) return BadRequest("O profissional não tem localização definida.");
+
                         appointmentDto.Location = address.Location;
                         appointmentDto.Address = address.AddressName;
+                    }
+                    else if (appointmentDto.Type == "Home")
+                    {
+                        var newAddress = new Address
+                        {
+                            AddressName = appointmentDto.Address,
+                            Location = appointmentDto.Location
+                        };
+
+                        _context.Addresses.Add(newAddress);
+                        await _context.SaveChangesAsync();
+
+                        addressId = newAddress.Id;
                     }
 
                     if (!Enum.TryParse(appointmentDto.Type, out AppointmentType appointmentType))
@@ -121,7 +139,7 @@ namespace LusoHealthClient.Server.Controllers
                     var appointmentInfo = new Appointment
                     {
                         Timestamp = appointmentDto.Timestamp.Value,
-                        AddressId = address.Id,
+                        AddressId = addressId,
                         Type = appointmentType,
                         Description = appointmentDto.Description,
                         State = AppointmentState.PaymentPending,
@@ -139,6 +157,16 @@ namespace LusoHealthClient.Server.Controllers
                     slot.AppointmentId = appointmentInfo.Id;
 
                     _context.AvailableSlots.Update(slot);
+
+                    if (appointmentDto.Type == "Online")
+                    {
+                        var newChat = new Chat
+                        {
+                            AppointmentId = appointmentInfo.Id,
+                            IsActive = false
+                        };
+                        _context.Chat.Add(newChat);
+                    }
 
                     await _context.SaveChangesAsync();
 

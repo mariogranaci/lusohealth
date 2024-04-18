@@ -70,7 +70,7 @@ namespace TestLusoHealth
 			mockUserManager.Setup(u => u.FindByIdAsync(It.IsAny<string>()))
 				.ReturnsAsync((string userId) => null);
 
-			var controller = new AppointmentController(_context, mockUserManager.Object, _emailService);
+			var controller = new AppointmentController(_context, _emailService);
 			controller.ControllerContext = new ControllerContext();
 			controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
 
@@ -101,7 +101,7 @@ namespace TestLusoHealth
 			mockUserManager.Setup(u => u.FindByIdAsync(It.IsAny<string>()))
 				.ReturnsAsync((string userId) => null);
 
-			var controller = new AppointmentController(_context, mockUserManager.Object, _emailService);
+			var controller = new AppointmentController(_context, _emailService);
 			controller.ControllerContext = new ControllerContext();
 			controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
 
@@ -137,7 +137,7 @@ namespace TestLusoHealth
 			mockUserManager.Setup(u => u.FindByIdAsync(It.IsAny<string>()))
 				.ReturnsAsync((string userId) => null);
 
-			var controller = new AppointmentController(_context, mockUserManager.Object, _emailService);
+			var controller = new AppointmentController(_context, _emailService);
 			controller.ControllerContext = new ControllerContext();
 			controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
 
@@ -178,7 +178,7 @@ namespace TestLusoHealth
 			mockUserManager.Setup(u => u.FindByIdAsync(It.IsAny<string>()))
 				.ReturnsAsync((string userId) => null);
 
-			var controller = new AppointmentController(_context, mockUserManager.Object, _emailService);
+			var controller = new AppointmentController(_context, _emailService);
 			controller.ControllerContext = new ControllerContext();
 			controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
 
@@ -209,7 +209,7 @@ namespace TestLusoHealth
 			mockUserManager.Setup(u => u.FindByIdAsync(It.IsAny<string>()))
 				.ReturnsAsync((string userId) => null);
 
-			var controller = new AppointmentController(_context, mockUserManager.Object, _emailService);
+			var controller = new AppointmentController(_context, _emailService);
 			controller.ControllerContext = new ControllerContext();
 			controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
 
@@ -245,7 +245,7 @@ namespace TestLusoHealth
 			mockUserManager.Setup(u => u.FindByIdAsync(It.IsAny<string>()))
 				.ReturnsAsync((string userId) => null);
 
-			var controller = new AppointmentController(_context, mockUserManager.Object, _emailService);
+			var controller = new AppointmentController(_context, _emailService);
 			controller.ControllerContext = new ControllerContext();
 			controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
 
@@ -286,7 +286,7 @@ namespace TestLusoHealth
 			mockUserManager.Setup(u => u.FindByIdAsync(It.IsAny<string>()))
 				.ReturnsAsync((string userId) => null);
 
-			var controller = new AppointmentController(_context, mockUserManager.Object, _emailService);
+			var controller = new AppointmentController(_context, _emailService);
 			controller.ControllerContext = new ControllerContext();
 			controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
 
@@ -318,7 +318,7 @@ namespace TestLusoHealth
 			mockUserManager.Setup(u => u.FindByIdAsync(It.IsAny<string>()))
 				.ReturnsAsync((string userId) => null);
 
-			var controller = new AppointmentController(_context, mockUserManager.Object, _emailService);
+			var controller = new AppointmentController(_context, _emailService);
 			controller.ControllerContext = new ControllerContext();
 			controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
 
@@ -356,7 +356,7 @@ namespace TestLusoHealth
 			mockUserManager.Setup(u => u.FindByIdAsync(It.IsAny<string>()))
 				.ReturnsAsync((string userId) => null);
 
-			var controller = new AppointmentController(_context, mockUserManager.Object, _emailService);
+			var controller = new AppointmentController(_context, _emailService);
 			controller.ControllerContext = new ControllerContext();
 			controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
 

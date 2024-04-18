@@ -25,14 +25,12 @@ namespace LusoHealthClient.Server.Controllers
 	public class AppointmentController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<User> _userManager;
         private EmailService _emailService;
          
 
-        public AppointmentController(ApplicationDbContext context, UserManager<User> userManager, EmailService emailService)
+        public AppointmentController(ApplicationDbContext context, EmailService emailService)
         {
             _context = context;
-            _userManager = userManager;
             _emailService = emailService;
         }
 

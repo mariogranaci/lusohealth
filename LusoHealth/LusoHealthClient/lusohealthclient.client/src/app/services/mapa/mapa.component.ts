@@ -174,10 +174,11 @@ export class MapaComponent implements OnInit {
           longitudeSouthWest: sw.lng()
         };
 
+        console.log('boundsMap', boundsMap);
 
         this.servicesService.getProfessionalsOnLocation(boundsMap).pipe(takeUntil(this.unsubscribe$)).subscribe(
           (professionals: Professional[]) => {
-
+            console.log("Professionals", professionals);
 
             this.updateProfessionalsWithConcelho(professionals).then(() => {
               this.professionals = professionals;

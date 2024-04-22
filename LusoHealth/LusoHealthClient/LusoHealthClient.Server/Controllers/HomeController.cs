@@ -372,7 +372,7 @@ namespace LusoHealthClient.Server.Controllers
 
             var professionals = professionalsUnfiltered.Where(p =>
                 {
-                    if (p.Address == null || string.IsNullOrEmpty(p.Address.Location)) return false;
+                    if (p.AddressId == null || string.IsNullOrEmpty(p.Address.Location)) return false;
 
                     var locationParts = p.Address.Location.Split(';');
 

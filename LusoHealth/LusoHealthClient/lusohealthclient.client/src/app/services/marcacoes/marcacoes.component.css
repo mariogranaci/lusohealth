@@ -1,6 +1,8 @@
 main {
   min-height: calc(100vh - 65px);
-  margin-bottom: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .header {
@@ -17,13 +19,12 @@ h1 {
 }
 
 .firstRow {
-  padding-top: 10px;
+  padding-top: 30px;
   padding-left: 20px;
   justify-content: flex-start;
-  margin-top: 20px;
   display: flex;
   align-items: center;
-  width:50%;
+  width: 50%;
 }
 
   .firstRow h4 {
@@ -294,11 +295,9 @@ h1 {
 .pagination {
   display: flex;
   justify-content: center;
-  align-items: center;
-  padding: 10px;
-  position: fixed;
-  bottom: 0;
+  align-items: flex-end;
   width: 100%;
+  margin-bottom: 20px;
 }
 
 .page-btn {

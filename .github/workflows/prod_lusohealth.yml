@@ -58,7 +58,7 @@ jobs:
           }' > ./appsettings.json
 
       - name: Publish server
-        run: dotnet publish -c Release -o ./publish --no-dependencies
+        run: dotnet publish -c Debug -o ./publish --no-dependencies
 
       - name: Zip artifact for deployment
         working-directory: LusoHealth/LusoHealthClient/LusoHealthClient.Server/publish

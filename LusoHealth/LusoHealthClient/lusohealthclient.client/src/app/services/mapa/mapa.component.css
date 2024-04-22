@@ -225,7 +225,7 @@ main {
   position: absolute;
   left: 60%;
   top: 5px;
-  z-index: 5;
+  z-index: 1;
   transform: translateX(-50%);
 }
 

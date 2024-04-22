@@ -2,7 +2,7 @@
   background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/assets/images/AboutUs/background-image.png');
   background-position: center;
   opacity: 0.9;
-  height: 100vh;
+  height: calc(100vh - 65px);
   display: flex;
   align-items: center;
   justify-content: center;

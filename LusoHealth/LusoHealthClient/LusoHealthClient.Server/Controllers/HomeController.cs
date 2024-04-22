@@ -370,6 +370,8 @@ namespace LusoHealthClient.Server.Controllers
             .Include(a => a.Address)
             .ToListAsync();
 
+            List<Professional> professionalsUnfilteredList = professionalsUnfiltered;
+
             var professionals = professionalsUnfiltered.Where(p =>
                 {
                     if (p.AddressId == null || string.IsNullOrEmpty(p.Address.Location)) return false;
@@ -385,6 +387,7 @@ namespace LusoHealthClient.Server.Controllers
                     return lat <= latNE && lat >= latSW && lng <= longNE && lng >= longSW;
                 }).ToList();
 
+            List<Professional> professionalsList = professionals;
 
             if (professionals == null)
             {

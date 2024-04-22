@@ -106,7 +106,7 @@ nav > ul > li > a {
 .sub-menu-parent:hover .sub-menu {
   visibility: visible;
   opacity: 1;
-  z-index: 1;
+  z-index: 2;
   transform: translateY(0%);
   transition-delay: 0s, 0s, 0.3s;
 }

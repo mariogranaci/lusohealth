@@ -16,6 +16,7 @@ using ServiceProfileDto = LusoHealthClient.Server.DTOs.Profile.ServiceDto;
 using LusoHealthClient.Server.DTOs.Appointments;
 using Microsoft.IdentityModel.Tokens;
 using LusoHealthClient.Server.Models.Chat;
+using System.Globalization;
 
 namespace LusoHealthClient.Server.Controllers
 {
@@ -381,8 +382,8 @@ namespace LusoHealthClient.Server.Controllers
                     if (locationParts.Length != 2) return false;
 
                     // Tenta analisar as partes de localização para doubles
-                    if (!double.TryParse(locationParts[0], out var lat)) return false;
-                    if (!double.TryParse(locationParts[1], out var lng)) return false;
+                    if (!double.TryParse(locationParts[0], NumberStyles.Any, CultureInfo.GetCultureInfo("pt-PT"), out double lat)) return false;
+                    if (!double.TryParse(locationParts[1], NumberStyles.Any, CultureInfo.GetCultureInfo("pt-PT"), out double lng)) return false;
 
                     return lat <= latNE && lat >= latSW && lng <= longNE && lng >= longSW;
                 }).ToList();

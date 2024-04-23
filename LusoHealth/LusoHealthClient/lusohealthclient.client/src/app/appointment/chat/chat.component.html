@@ -49,32 +49,36 @@
 
       <div class="chat">
 
-        <!--JAIME TENS QUE POR O IS SENDER PARA TODOS IGUAL OU SEJA [class.sender]="isSender-->
-        <!--E TENS QUE CRIAR NO TYPESCRIPT UMA FORMA DE DAR ASSIGN AO isSender -->
-        <!--O USER PARA PASSAR A CLASS COMO DEVE SER, MESMA COISA COM O NOME DA OUTRA PESSOA-->
-        <div *ngFor="let message of messages" class="container" [class.sender]="userId === message.userId">
+        <div class="chat-header">
+        </div>
+
+        <div *ngFor="let message of messages" class="container" [class.sender]="userId === message.userId" [class.not-sender]="userId !== message.userId">
           <div *ngIf="senderRole === 'Professional'">
             <div *ngIf="userId === message.userId">
-              <p class="name">{{professional?.professionalInfo?.firstName}} {{professional?.professionalInfo?.lastName}}</p>
-              <p class="text">{{message.text}}</p>
-              <span class="time">{{ message.timestamp | date:'shortDate':'UTC +1':'pt-PT'}} {{message.timestamp | date:'shortTime':'UTC +1':'pt-PT' }}</span>
+              <p class="text white-text">{{message.text}}</p>
+              <div class="time-container">
+                <span class="time white-text">{{ message.timestamp | date:'shortDate':'UTC +1':'pt-PT'}} {{message.timestamp | date:'shortTime':'UTC +1':'pt-PT' }}</span>
+              </div>
             </div>
             <div *ngIf="!(userId === message.userId)">
-              <p class="name">{{patient?.firstName}} {{patient?.lastName}}</p>
               <p class="text">{{message.text}}</p>
-              <span class="time">{{message.timestamp | date:'shortDate':'UTC +1':'pt-PT'}} {{message.timestamp | date:'shortTime':'UTC +1':'pt-PT'}}</span>
+              <div class="time-container">
+                <span class="time">{{message.timestamp | date:'shortDate':'UTC +1':'pt-PT'}} {{message.timestamp | date:'shortTime':'UTC +1':'pt-PT'}}</span>
+              </div>
             </div>
           </div>
           <div *ngIf="senderRole === 'Patient'">
             <div *ngIf="userId === message.userId">
-              <p class="name">{{patient?.firstName}} {{patient?.lastName}}</p>
-              <p class="text">{{message.text}}</p>
-              <span class="time">{{message.timestamp | date:'shortDate':'UTC +1':'pt-PT'}} {{message.timestamp | date:'shortTime':'UTC +1':'pt-PT'}}</span>
+              <p class="text white-text">{{message.text}}</p>
+              <div class="time-container">
+                <span class="time white-text">{{ message.timestamp | date:'shortDate':'UTC +1':'pt-PT'}} {{message.timestamp | date:'shortTime':'UTC +1':'pt-PT' }}</span>
+              </div>
             </div>
             <div *ngIf="!(userId === message.userId)">
-              <p class="name">{{professional?.professionalInfo?.firstName}} {{professional?.professionalInfo?.lastName}}</p>
               <p class="text">{{message.text}}</p>
-              <span class="time">{{message.timestamp | date:'shortDate':'UTC +1':'pt-PT'}} {{message.timestamp | date:'shortTime':'UTC +1':'pt-PT'}}</span>
+              <div class="time-container">
+                <span class="time">{{message.timestamp | date:'shortDate':'UTC +1':'pt-PT'}} {{message.timestamp | date:'shortTime':'UTC +1':'pt-PT'}}</span>
+              </div>
             </div>
           </div>
         </div>

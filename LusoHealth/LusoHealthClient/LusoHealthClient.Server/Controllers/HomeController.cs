@@ -117,15 +117,21 @@ namespace LusoHealthClient.Server.Controllers
                     var professional = await _context.Professionals.FirstOrDefaultAsync(x => x.UserID == service.IdProfessional);
                     if (professional == null) return NotFound("Houve um problema a localizar o profissional");
 
-                    if (professional.AddressId == null) return BadRequest("O profissional não tem localização definida.");
-                    var address = await _context.Addresses.FirstOrDefaultAsync(x => x.Id == professional.AddressId);
-                    if (address == null) return NotFound("Não foi possível encontrar a morada do profissional.");
+
+                    Address? address = null;
+                    if (professional.AddressId != null)
+                    {
+                        address = await _context.Addresses.FirstOrDefaultAsync(x => x.Id == professional.AddressId);
+                    }
                     
-                    var addressId = address.Id;
+                    
+                    int? addressId = null;
 
                     if (appointmentDto.Type == "Presential")
                     {
-                        if (address.Location.IsNullOrEmpty() || address.AddressName.IsNullOrEmpty()) return BadRequest("O profissional não tem localização definida.");
+                        if (address == null || address.Location.IsNullOrEmpty() || address.AddressName.IsNullOrEmpty()) return BadRequest("O profissional não tem localização definida.");
+
+                        addressId = address.Id;
 
                         appointmentDto.Location = address.Location;
                         appointmentDto.Address = address.AddressName;

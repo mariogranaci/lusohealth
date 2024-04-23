@@ -49,8 +49,10 @@
             </div>
             <div class="buttons">
               <button class="btn" [routerLink]="['/professional-appointment']" [queryParams]="{ appointment: appointment.id }">Detalhes</button>
-              <button (click)="changeAppointmentScheduled(appointment)" class="icon-btn"><img class="icon" src="/assets/images/Agenda/checked.png" /></button>
-              <button (click)="cancelAppointment(appointment)" class="icon-btn"><img class="icon" src="/assets/images/Agenda/cancel.png" /></button>
+              <div>
+                <button (click)="changeAppointmentScheduled(appointment)" class="icon-btn"><img class="icon" src="/assets/images/Agenda/checked.png" /></button>
+                <button (click)="cancelAppointment(appointment)" class="icon-btn"><img class="icon" src="/assets/images/Agenda/cancel.png" /></button>
+              </div>
             </div>
           </div>
         </div>

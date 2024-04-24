@@ -22,6 +22,11 @@ export class RegistoComponent implements OnInit {
   professionalTypes: ProfessionalType[] = [];
   isProfessionalSelected: boolean = false;
 
+  girlSelected = false;
+  manSelected = false;
+  patientSelected = false;
+  professionalSelected = false;
+
   /**
   * Construtor da classe.
   * @param authenticationService Serviço de autenticação para gerir as operações relacionadas à autenticação do usuário.
@@ -202,5 +207,31 @@ export class RegistoComponent implements OnInit {
     }
 
     return null;
+  }
+
+  clickGirl() {
+    this.manSelected = false;
+    this.girlSelected = true;
+    const femaleRadio = this.elem.nativeElement.querySelector('#female');
+    femaleRadio.checked = true;
+    this.registerForm.get('genero')?.setValue('F');
+  }
+
+  clickMan() {
+    this.manSelected = true;
+    this.girlSelected = false;
+    const maleRadio = this.elem.nativeElement.querySelector('#male');
+    maleRadio.checked = true;
+    this.registerForm.get('genero')?.setValue('M');
+  }
+
+  clickProfessional() {
+    this.professionalSelected = true;
+    this.patientSelected = false;
+  }
+
+  clickPatient() {
+    this.patientSelected = true;
+    this.professionalSelected = false;
   }
 }

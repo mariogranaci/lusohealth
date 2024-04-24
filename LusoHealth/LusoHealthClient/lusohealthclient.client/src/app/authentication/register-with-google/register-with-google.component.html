@@ -78,8 +78,16 @@
         <div class="left">
           <div class="gender">
             <label>Género:</label>
-            <label for="male" class="radio-label"><input formControlName="genero" type="radio" name="genero" value="M" id="male"> Masculino</label>
-            <label for="female" class="radio-label"><input formControlName="genero" type="radio" name="genero" value="F" id="female"> Feminino</label>
+            <label (click)="clickMan()" for="male" class="radio-label hidden-input">
+              <input formControlName="genero" type="radio" name="genero" value="M" id="male">
+              <svg (click)="clickMan()" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" x="0" y="0" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="m421.184 384.96-81.728-20.437-6.955-27.819c21.867-21.653 36.843-51.392 41.28-81.899 12.117-3.413 21.504-13.803 23.125-26.837l5.333-42.667c1.131-9.003-1.643-18.112-7.616-24.939a32.11 32.11 0 0 0-12.8-8.896l1.963-40.171 7.979-8c12.011-12.779 21.973-34.688 1.152-66.475-16-24.425-43.178-36.82-80.81-36.82-14.848 0-49.024 0-80.853 21.376C140.373 23.275 128 65.493 128 106.667c0 9.579 2.325 31.147 3.861 44.16a31.815 31.815 0 0 0-14.336 9.344 32.03 32.03 0 0 0-7.765 25.152l5.333 42.667c1.749 13.909 12.309 24.853 25.664 27.456 4.416 29.333 18.624 58.112 39.232 79.403l-7.424 29.717-81.728 20.437C37.333 398.336 0 446.165 0 501.333 0 507.221 4.779 512 10.667 512h490.667c5.888 0 10.667-4.821 10.667-10.709a119.728 119.728 0 0 0-90.817-116.331z" fill="#5b5b5b" opacity="1" data-original="#000000" [class.blue]="manSelected"></path></g></svg>
+              Masculino
+            </label>
+            <label (click)="clickGirl()" for="female" class="radio-label hidden-input">
+              <input formControlName="genero" type="radio" name="genero" value="F" id="female">
+              <svg (click)="clickGirl()" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" x="0" y="0" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="m421.184 384.96-81.728-20.437-4.715-18.88c56.384-9.493 85.397-26.389 86.677-27.136 3.029-1.771 4.907-4.992 5.163-8.491.235-3.499-1.323-6.933-4.075-9.131C422.123 300.587 384 269.099 384 160c0-92.011-21.525-138.667-64-138.667h-6.293C298.389 6.528 286.891 0 256 0c-40.085 0-128 40.299-128 160 0 109.099-38.123 140.587-38.4 140.8a10.703 10.703 0 0 0-4.267 9.067 10.66 10.66 0 0 0 5.163 8.597c1.28.768 30.016 17.749 86.741 27.221l-4.715 18.837-81.727 20.438C37.333 398.336 0 446.165 0 501.333 0 507.221 4.779 512 10.667 512h490.667c5.888 0 10.667-4.821 10.667-10.709a119.728 119.728 0 0 0-90.817-116.331z" fill="#5b5b5b" opacity="1" data-original="#000000" [class.pink]="girlSelected"></path></g></svg>
+              Feminino
+            </label>
           </div>
           <span class="text-danger" *ngIf="submitted && registerForm.get('genero')?.hasError('required')">
             Selecione um género
@@ -87,9 +95,17 @@
         </div>
         <div class="right">
           <div class="type-acount">
-            <label>Tipo de Conta:</label>
-            <label for="type-radio-pacient" class="radio-label"><input formControlName="tipoUser" id="type-radio-pacient" type="radio" name="tipoUser" value="U" (change)="onUserTypeChange('U')">Paciente</label>
-            <label for="type-radio-professional" class="radio-label"><input formControlName="tipoUser" id="type-radio-professional" type="radio" name="tipoUser" value="P" (change)="onUserTypeChange('P')">Profissional de Saúde</label>
+            <label id="account-type-label">Tipo de Conta:</label>
+            <label (click)="clickPatient()" for="type-radio-pacient" class="radio-label hidden-input">
+              <input formControlName="tipoUser" id="type-radio-pacient" type="radio" name="tipoUser" value="U" (change)="onUserTypeChange('U')">
+              <svg (click)="clickPatient()" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M256 0c-74.439 0-135 60.561-135 135s60.561 135 135 135 135-60.561 135-135S330.439 0 256 0zM423.966 358.195C387.006 320.667 338.009 300 286 300h-60c-52.008 0-101.006 20.667-137.966 58.195C51.255 395.539 31 444.833 31 497c0 8.284 6.716 15 15 15h420c8.284 0 15-6.716 15-15 0-52.167-20.255-101.461-57.034-138.805z" fill="#5b5b5b" opacity="1" data-original="#000000" [class.blue-site]="patientSelected"></path></g></svg>
+              Paciente
+            </label>
+            <label (click)="clickProfessional()" for="type-radio-professional" class="radio-label hidden-input">
+              <input formControlName="tipoUser" id="type-radio-professional" type="radio" name="tipoUser" value="P" (change)="onUserTypeChange('P')">
+              <svg (click)="clickProfessional()" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M384.005 213.344c-47.052 0-85.333 38.281-85.333 85.333 0 38.848 26.253 71.349 61.835 81.63-8.376 27.004-33.625 46.37-62.595 46.37h-9.906c-50.793 0-92.072-39.764-95.367-89.737l26.418-35.223c13.134-14.053 100.949-110.811 100.949-184.374V74.677c0-23.531-19.135-42.667-42.667-42.667h-1.504C271.064 13.656 254.499 0 234.672 0c-23.531 0-42.677 19.146-42.677 42.677s19.146 42.677 42.677 42.677c11.102 0 21.137-4.363 28.736-11.336 1.108.177 2.107.659 3.264.659h10.667v42.667c0 45.656-55.896 117.75-84.073 149.333h-46.5C104.193 228.219 42.672 158.26 42.672 117.344V74.677h10.667c1.155 0 2.151-.48 3.256-.658 7.599 6.971 17.633 11.335 28.733 11.335 23.531 0 42.677-19.146 42.677-42.677S108.859 0 85.328 0C65.501 0 48.936 13.656 44.165 32.01h-1.493C19.141 32.01.005 51.145.005 74.677v42.667c0 73.836 104.833 169.307 122.936 185.245l26.784 35.711c3.993 72.906 64.395 131.044 138.28 131.044h9.906c51.78 0 96.258-37.513 106.001-87.921 37.436-9.023 65.426-42.579 65.426-82.746.001-47.052-38.281-85.333-85.333-85.333zm0 128c-23.531 0-42.667-19.135-42.667-42.667 0-23.531 19.135-42.667 42.667-42.667s42.667 19.135 42.667 42.667c0 23.531-19.136 42.667-42.667 42.667z" fill="#5b5b5b" opacity="1" data-original="#000000" [class.blue-site]="professionalSelected"></path></g></svg>
+              Profissional de Saúde
+            </label>
           </div>
           <span class="text-danger" *ngIf="submitted && registerForm.get('tipoUser')?.hasError('required')">
             Escolha um tipo de conta

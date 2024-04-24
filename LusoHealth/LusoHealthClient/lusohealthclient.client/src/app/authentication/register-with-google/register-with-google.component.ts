@@ -29,6 +29,11 @@ export class RegisterWithGoogleComponent implements OnInit {
   professionalTypes: ProfessionalType[] = [];
   isProfessionalSelected: boolean = false;
 
+  girlSelected = false;
+  manSelected = false;
+  patientSelected = false;
+  professionalSelected = false;
+
   /**
   * Construtor da classe.
   * @param authenticationService Serviço de autenticação para gerenciar as operações relacionadas à autenticação do usuário.
@@ -87,7 +92,7 @@ export class RegisterWithGoogleComponent implements OnInit {
 
     this.registerForm = this.formBuilder.group({
       firstName: [this.givenName, [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
-      lastName: [this.familyName, [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
+      lastName: [this.familyName !== 'undefined' ? this.familyName : '', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
       email: [this.email],
       nif: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(9)]],
       telemovel: ['', [Validators.minLength(9), Validators.maxLength(9)]],
@@ -229,5 +234,31 @@ export class RegisterWithGoogleComponent implements OnInit {
       }
     }
     return null;
+  }
+
+  clickGirl() {
+    this.manSelected = false;
+    this.girlSelected = true;
+    const femaleRadio = this.elem.nativeElement.querySelector('#female');
+    femaleRadio.checked = true;
+    this.registerForm.get('genero')?.setValue('F');
+  }
+
+  clickMan() {
+    this.manSelected = true;
+    this.girlSelected = false;
+    const maleRadio = this.elem.nativeElement.querySelector('#male');
+    maleRadio.checked = true;
+    this.registerForm.get('genero')?.setValue('M');
+  }
+
+  clickProfessional() {
+    this.professionalSelected = true;
+    this.patientSelected = false;
+  }
+
+  clickPatient() {
+    this.patientSelected = true;
+    this.professionalSelected = false;
   }
 }

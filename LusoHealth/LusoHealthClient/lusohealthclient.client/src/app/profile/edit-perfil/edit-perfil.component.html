@@ -6,7 +6,9 @@
 </form>-->
 
 <main>
-
+  <section class="top-left">
+    <button class="btn btn-blue" (click)="goBack()">Voltar</button>
+  </section>
 
   <form id="upload-image-form" [formGroup]="pictureForm" class="perfil">
     <input #fileInput type="file" id="imgupload" (change)="onFileSelected($event)" style="display: none" accept=".jpg, .png" />

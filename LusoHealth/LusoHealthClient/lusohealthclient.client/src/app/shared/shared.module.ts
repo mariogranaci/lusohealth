@@ -8,6 +8,7 @@ import { ValidationMessagesComponent } from './components/errors/validation-mess
 import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
 import { PopUpSuccessComponent } from './components/pop-up-success/pop-up-success.component';
 import { FirstWordPipe } from './pipes/first-word.pipe';
+import { LastWordPipe } from './pipes/last-word.pipe';
 
 
 
@@ -17,7 +18,8 @@ import { FirstWordPipe } from './pipes/first-word.pipe';
     ValidationMessagesComponent,
     LoadingSpinnerComponent,
     PopUpSuccessComponent,
-    FirstWordPipe
+    FirstWordPipe,
+    LastWordPipe
   ],
   imports: [
     CommonModule,
@@ -32,7 +34,8 @@ import { FirstWordPipe } from './pipes/first-word.pipe';
     ValidationMessagesComponent,
     LoadingSpinnerComponent,
     PopUpSuccessComponent,
-    FirstWordPipe
+    FirstWordPipe,
+    LastWordPipe
   ]
 })
 export class SharedModule { }

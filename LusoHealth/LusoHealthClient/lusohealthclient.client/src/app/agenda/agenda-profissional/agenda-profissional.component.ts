@@ -56,7 +56,7 @@ export class AgendaProfissionalComponent {
   changeAppointmentScheduled() {
     if (this.selectedAppointment != null)
     {
-      const appontmentDto = new Appointment(this.selectedAppointment.timestamp, this.selectedAppointment.location, this.selectedAppointment.address, null, null, null, this.selectedAppointment.duration, this.selectedAppointment.idPatient, this.selectedAppointment.id, this.selectedAppointment.idProfessional, this.selectedAppointment.idService);
+      const appontmentDto = new Appointment(this.selectedAppointment.timestamp, this.selectedAppointment.location, null, null, null, this.selectedAppointment.duration, this.selectedAppointment.idPatient, this.selectedAppointment.id, this.selectedAppointment.idProfessional, this.selectedAppointment.idService);
       this.appointmentService.scheduleAppointment(appontmentDto).pipe(
         takeUntil(this.unsubscribe$)
       ).subscribe({
@@ -86,7 +86,7 @@ export class AgendaProfissionalComponent {
   cancelAppointment() {
     if (this.selectedAppointment != null)
     {
-      const appontmentDto = new Appointment(this.selectedAppointment.timestamp, this.selectedAppointment.location, this.selectedAppointment.address, null, null, null, this.selectedAppointment.duration, this.selectedAppointment.idPatient, this.selectedAppointment.id, this.selectedAppointment.idProfessional, this.selectedAppointment.idService);
+      const appontmentDto = new Appointment(this.selectedAppointment.timestamp, this.selectedAppointment.location, null, null, null, this.selectedAppointment.duration, this.selectedAppointment.idPatient, this.selectedAppointment.id, this.selectedAppointment.idProfessional, this.selectedAppointment.idService);
       this.appointmentService.cancelAppointment(appontmentDto).pipe(
         takeUntil(this.unsubscribe$)
       ).subscribe({

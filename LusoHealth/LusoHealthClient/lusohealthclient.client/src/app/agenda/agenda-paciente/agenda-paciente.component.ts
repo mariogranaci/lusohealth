@@ -133,6 +133,8 @@ export class AgendaPacienteComponent {
 
     this.specialtiesFiltered = [];
 
+    this.appointmentsFiltered = this.appointments;
+
     this.updateDisplayedAppointments();
   }
 

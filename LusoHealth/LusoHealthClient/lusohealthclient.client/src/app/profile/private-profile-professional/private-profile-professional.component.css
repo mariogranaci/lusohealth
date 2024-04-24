@@ -33,6 +33,7 @@ main {
   padding: 10px 10px;
   width: 100%;
   background: white;
+  word-wrap: break-word;
 }
 
 .btn-edit {

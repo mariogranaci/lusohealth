@@ -98,7 +98,7 @@ export class PerfilPacienteComponent {
           emailElement.textContent = userData.email;
           telemovelElement.textContent = userData.telemovel;
           nifElement.textContent = userData.nif;
-          genderElement.textContent = userData.genero;
+          genderElement.textContent = (userData.genero === "M") ? "Masculino" : "Feminino";
         },
         error => {
           if (error.error.errors) {

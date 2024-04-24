@@ -14,6 +14,20 @@ namespace LusoHealthClient.Server.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Addresses",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Location = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AddressName = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Addresses", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
                 {
@@ -42,6 +56,7 @@ namespace LusoHealthClient.Server.Migrations
                     UserType = table.Column<string>(type: "nvarchar(1)", nullable: false),
                     BirthDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Provider = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -60,6 +75,20 @@ namespace LusoHealthClient.Server.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Chat",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AppointmentId = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Chat", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -216,17 +245,52 @@ namespace LusoHealthClient.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Message",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Text = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsImage = table.Column<bool>(type: "bit", nullable: false),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Timestamp = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ChatId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Message", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Message_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Message_Chat_ChatId",
+                        column: x => x.ChatId,
+                        principalTable: "Chat",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Professionals",
                 columns: table => new
                 {
                     UserID = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Location = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AddressId = table.Column<int>(type: "int", nullable: true),
                     ProfessionalTypeId = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Professionals", x => x.UserID);
+                    table.ForeignKey(
+                        name: "FK_Professionals_Addresses_AddressId",
+                        column: x => x.AddressId,
+                        principalTable: "Addresses",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Professionals_AspNetUsers_UserID",
                         column: x => x.UserID,
@@ -342,12 +406,12 @@ namespace LusoHealthClient.Server.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Timestamp = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Location = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Type = table.Column<int>(type: "int", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     State = table.Column<int>(type: "int", nullable: true),
                     Duration = table.Column<int>(type: "int", nullable: true),
                     PaymentIntentId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AddressId = table.Column<int>(type: "int", nullable: true),
                     IdProfesional = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     IdPatient = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     IdService = table.Column<int>(type: "int", nullable: true)
@@ -355,6 +419,11 @@ namespace LusoHealthClient.Server.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Appointment", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Appointment_Addresses_AddressId",
+                        column: x => x.AddressId,
+                        principalTable: "Addresses",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Appointment_Patients_IdPatient",
                         column: x => x.IdPatient,
@@ -629,6 +698,11 @@ namespace LusoHealthClient.Server.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Appointment_AddressId",
+                table: "Appointment",
+                column: "AddressId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Appointment_IdPatient",
                 table: "Appointment",
                 column: "IdPatient");
@@ -698,6 +772,21 @@ namespace LusoHealthClient.Server.Migrations
                 column: "IdProfessional");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Message_ChatId",
+                table: "Message",
+                column: "ChatId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Message_UserId",
+                table: "Message",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Professionals_AddressId",
+                table: "Professionals",
+                column: "AddressId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Professionals_ProfessionalTypeId",
                 table: "Professionals",
                 column: "ProfessionalTypeId");
@@ -763,6 +852,9 @@ namespace LusoHealthClient.Server.Migrations
                 name: "Certificates");
 
             migrationBuilder.DropTable(
+                name: "Message");
+
+            migrationBuilder.DropTable(
                 name: "Relatives");
 
             migrationBuilder.DropTable(
@@ -778,6 +870,9 @@ namespace LusoHealthClient.Server.Migrations
                 name: "Appointment");
 
             migrationBuilder.DropTable(
+                name: "Chat");
+
+            migrationBuilder.DropTable(
                 name: "Patients");
 
             migrationBuilder.DropTable(
@@ -788,6 +883,9 @@ namespace LusoHealthClient.Server.Migrations
 
             migrationBuilder.DropTable(
                 name: "Specialties");
+
+            migrationBuilder.DropTable(
+                name: "Addresses");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

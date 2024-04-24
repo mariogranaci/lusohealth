@@ -9,7 +9,9 @@ export class PopUpSuccessComponent {
   @Input() message: string | undefined;
   showAlert: boolean = true;
   
-
+  /**
+   * Fecha o pop-up.
+   */
   closeAlert(): void {
     this.showAlert = false;
   }

@@ -1,4 +1,14 @@
+main {
+  position: relative;
+  margin-bottom: 50px;
+  min-height: calc(100vh - 65px);
+}
 
+.top-left {
+  position: absolute;
+  left: 25px;
+  top: 15px;
+}
 
 .form-row, .form-pass {
   display: flex;
@@ -131,4 +141,24 @@ input[type="radio"] {
 
 .text-danger {
   color: #cc0000;
+}
+
+.btn {
+  margin: auto 0;
+  width: fit-content;
+  align-self: center;
+  height: 50px;
+  border: none;
+  color: #fff;
+  font-size: 1.3rem;
+  border-radius: 30px;
+  padding: 10px 55px;
+  font-weight: 500;
+  background-color: #1875E7;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0s;
+  right: 30px;
+  display: inline-block;
+  box-shadow: inset 2px 2px 2px 0px rgba(37, 80, 209, 0.5), 7px 7px 20px 0px rgba(0, 0, 0, .1), 4px 4px 5px 0px rgba(0, 0, 0, .1);
+  outline: none;
 }

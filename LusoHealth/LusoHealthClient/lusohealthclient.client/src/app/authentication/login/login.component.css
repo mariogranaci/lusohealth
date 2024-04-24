@@ -1,8 +1,13 @@
+main {
+  min-height: calc(100vh - 65px);
+}
+
 .top-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
+
 
 .page-title {
   width: fit-content;
@@ -94,6 +99,7 @@
     border: 1px solid #2b26267a;
     border-radius: 8px;
   }
+  
 
   .login-divider h2 {
     margin: 0 5vh;

@@ -1,11 +1,11 @@
 main {
   padding: 0 7%;
-  margin: 50px 0 10px 0;
+  /*margin: 50px 0 10px 0;*/
   min-width: 1150px;
   max-width: 1800px;
-  padding-bottom: 30px;
-  display:flex;
-  justify-content:space-between;
+  display: flex;
+  min-height: calc(100vh - 164px);
+  justify-content: space-between;
 }
 
 .title {
@@ -218,3 +218,18 @@ main {
   margin-bottom: 10px;
 }
 
+/*------------------------------ Morada ---------------------------*/
+#map {
+  height: 40vh;
+  width: 100%;
+  margin: 20px 0;
+}
+
+#localizacao {
+  margin-bottom: 50px;
+  background-color: #d9d9d9;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+/*-----------------------------------------------------------------*/

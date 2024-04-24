@@ -9,9 +9,16 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="src\app\moderation\" />
-    <Folder Include="src\app\reports\" />
     <Folder Include="src\app\shared\models\agenda\" />
+    <Folder Include="src\app\shared\models\chat\" />
+    <Folder Include="src\app\shared\pipes\" />
     <Folder Include="src\assets\images\login\" />
     <Folder Include="src\assets\images\profile\" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptConfiguration Remove="src\app\reports\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="src\app\reports\**" />
   </ItemGroup>
 </Project>

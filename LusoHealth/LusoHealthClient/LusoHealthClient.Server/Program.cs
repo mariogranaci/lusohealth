@@ -1,8 +1,4 @@
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -12,6 +8,7 @@ using LusoHealthClient.Server.Services;
 using LusoHealthClient.Server.Data;
 using LusoHealthClient.Server.Models.Users;
 using Stripe;
+using LusoHealthClient.Server.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +16,9 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+//builder.Services.AddSignalR().AddAzureSignalR("Endpoint=https://lusohealth.service.signalr.net;AccessKey=PIeBG1eCMojxiAtcrWvBN3UF34b6lawADCyH1MWSEO0=;Version=1.0;");
+builder.Services.AddSignalR();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
@@ -31,7 +31,7 @@ builder.Services.AddScoped<ContextSeedService>();
 
 builder.Services.AddIdentityCore<User>(options =>
 {
-    //configuraï¿½ï¿½es email
+    //configurações email
     options.Password.RequiredLength = 8;
     options.Password.RequireDigit = true;
     options.Password.RequireLowercase = true;
@@ -40,15 +40,19 @@ builder.Services.AddIdentityCore<User>(options =>
 
     //para confirmar email
     options.SignIn.RequireConfirmedEmail = true;
+
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
+    options.Lockout.MaxFailedAccessAttempts = 5;
+    options.Lockout.AllowedForNewUsers = true;
 })
     .AddRoles<IdentityRole>() //para adicionar roles
     .AddRoleManager<RoleManager<IdentityRole>>() //usar o RoleManager
     .AddEntityFrameworkStores<ApplicationDbContext>() //usar o nosso context
     .AddSignInManager<SignInManager<User>>() //usar o SignInManager
     .AddUserManager<UserManager<User>>() //usar o UserManager
-    .AddDefaultTokenProviders(); //Usado para criar os tokens de confirmaï¿½ï¿½o de email
+    .AddDefaultTokenProviders(); //Usado para criar os tokens de confirmação de email
 
-//Permite fazer a autenticaï¿½ï¿½o usando os JWT
+//Permite fazer a autenticação usando os JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -58,7 +62,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuerSigningKey = true,
             //o issuer signing key baseada na JWT:Key
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"])),
-            //o issuer ï¿½ o link do projeto api 
+            //o issuer é o link do projeto api 
             ValidIssuer = builder.Configuration["JWT:Issuer"],
             ValidateIssuer = true,
             ValidateAudience = false,
@@ -92,12 +96,21 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 
 });
 
-builder.Services.AddCors(options =>
+/*builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAllOrigins", builder =>
         builder.AllowAnyOrigin()
                .AllowAnyMethod()
                .AllowAnyHeader());
+});*/
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigins", build =>
+        build.WithOrigins(builder.Configuration["JWT:ClientUrl"], builder.Configuration["JWT:Issuer"])
+               .AllowAnyMethod()
+               .AllowAnyHeader()
+               .AllowCredentials());
 });
 
 builder.Services.AddAuthorization(options =>
@@ -113,7 +126,7 @@ var app = builder.Build();
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
-app.UseCors("AllowAllOrigins");
+app.UseCors("AllowSpecificOrigins");
 
 // Configure the HTTP request pipeline.
 //if (app.Environment.IsDevelopment())
@@ -124,12 +137,26 @@ app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
+app.UseRouting();
+
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseEndpoints
+    (endpoints =>
+    {
+        _ = endpoints.MapHub<ChatHub>("/chathub");
+    });
+
+//app.UseRouting();
 
 app.MapControllers();
 
 app.MapFallbackToFile("/index.html");
+
+//app.MapHub<ChatHub>("/chathub");
+
+
 
 #region ContextSeed
 using var scope = app.Services.CreateScope();
@@ -145,9 +172,6 @@ try
     else if (app.Environment.IsProduction())
     {
         //await contextSeedService.InitializeProductionAsync();
-        await contextSeedService.InitializeContextAsync();
-    } else
-    {
         await contextSeedService.InitializeContextAsync();
     }
 

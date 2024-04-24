@@ -14,24 +14,37 @@ using System.Security.Claims;
 using ServicesDto = LusoHealthClient.Server.DTOs.Services.ServicesDto;
 using ServiceProfileDto = LusoHealthClient.Server.DTOs.Profile.ServiceDto;
 using LusoHealthClient.Server.DTOs.Appointments;
+using Microsoft.IdentityModel.Tokens;
+using LusoHealthClient.Server.Models.Chat;
+using System.Globalization;
 
 namespace LusoHealthClient.Server.Controllers
 {
-    [Route("api/[controller]")]
+	/// <summary>
+	/// Controlador responsável por lidar com a lógica relacionada à página inicial e aos serviços oferecidos.
+	/// </summary>
+	[Route("api/[controller]")]
 	[ApiController]
 	public class HomeController : ControllerBase
 	{
 		private readonly ApplicationDbContext _context;
 		private readonly UserManager<User> _userManager;
-		private readonly ILogger<ProfileController> _logger;
 
-		public HomeController(ApplicationDbContext context, UserManager<User> userManager, ILogger<ProfileController> logger)
+		/// <summary>
+		/// Construtor da classe HomeController.
+		/// </summary>
+		/// <param name="context">Contexto da base de dados.</param>
+		/// <param name="userManager">O usermanager dos utilizadores.</param>
+		/// <param name="logger">O logger para registrar informações de log.</param>
+		public HomeController(ApplicationDbContext context, UserManager<User> userManager)
 		{
 			_context = context;
 			_userManager = userManager;
-			_logger = logger;
 		}
 
+		/// <summary>
+		/// Método para obter informações sobre um serviço específico.
+		/// </summary>
 		[Authorize]
 		[HttpGet("get-service-info/{id}")]
 		public async Task<ActionResult<MakeAppointmentDto>> GetServiceInfo(int id)
@@ -43,74 +56,159 @@ namespace LusoHealthClient.Server.Controllers
 				.ThenInclude(u => u.User)
 				.FirstOrDefaultAsync(x => x.Id == id);
 
-			if(info == null)
-			{
-				return BadRequest("Não foi possível encontrar a informação do serviço.");
-			}
+            if (info == null)
+            {
+                return BadRequest("Não foi possível encontrar a informação do serviço.");
+            }
 
-			MakeAppointmentDto makeAppointmentDto = new MakeAppointmentDto
-			{
-				ServiceId = info.Id,
-				SpecialtyId = info.IdSpecialty,
-				Specialty = info.Specialty.Name,
-				ProfessionalName = info.Professional.User.FirstName + " " + info.Professional.User.LastName,
-				Category = info.Specialty.ProfessionalType.Name,
-				Online = info.Online,
-				Presential = info.Presential,
+            MakeAppointmentDto makeAppointmentDto = new MakeAppointmentDto
+            {
+                ServiceId = info.Id,
+                SpecialtyId = info.IdSpecialty,
+                Specialty = info.Specialty.Name,
+                ProfessionalName = info.Professional.User.FirstName + " " + info.Professional.User.LastName,
+                Category = info.Specialty.ProfessionalType.Name,
+                Online = info.Online,
+                Presential = info.Presential,
                 PricePerHour = info.PricePerHour,
-				Home = info.Home,
-			};
+                Home = info.Home,
+            };
 
-			return makeAppointmentDto;
-		}
-
-
-
-		[HttpPost("add-appointment")]
-		public async Task<ActionResult> AddAppointment(AppointmentDto appointmentDto)
-		{
-			try
-			{
-				var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-				if (string.IsNullOrEmpty(userId)) return BadRequest("Não foi possível encontrar o utilizador.");
-				
-				var user = await _userManager.FindByIdAsync(userId);
-				if (user == null) return NotFound("Não foi possível encontrar o utilizador.");
-
-				var info = await _context.Services
-				.FirstOrDefaultAsync(x => x.Id == appointmentDto.IdService);
+            return makeAppointmentDto;
+        }
 
 
+        /// <summary>
+		/// Método para adicionar uma nova consulta.
+		/// </summary>
+        [HttpPost("add-appointment")]
+        public async Task<ActionResult> AddAppointment(AppointmentDto appointmentDto)
+        {
+            using (var transaction = _context.Database.BeginTransaction())
+            {
+                try
+                {
+                    var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                    if (string.IsNullOrEmpty(userId)) return BadRequest("Não foi possível encontrar o utilizador.");
 
-				var appointmentInfo = new Appointment
-				{
-                    //corrigir -------------------------------------------------------------------------------------------------
-					Timestamp = DateTime.Now,
-                    //-----------------------------------------------------------------------------------------------------------
-					Location = appointmentDto.Location,
-					Type = AppointmentType.Presential,
-					Description = appointmentDto.Description,
-					State = AppointmentState.PaymentPending,
-					Duration = appointmentDto.Duration,	
-					IdPatient = user.Id,
-					IdProfesional = info.IdProfessional,
-					IdService = info.Id,
-				};
+                    var user = await _userManager.FindByIdAsync(userId);
+                    if (user == null) return NotFound("Não foi possível encontrar o utilizador.");
 
-				_context.Appointment.Add(appointmentInfo);
-				await _context.SaveChangesAsync();
+                    var info = await _context.Services
+                    .FirstOrDefaultAsync(x => x.Id == appointmentDto.IdService);
 
-				return Ok(new { message = "A consulta foi marcada com sucesso.", appointmentId = appointmentInfo.Id });
-			}
-			catch (Exception ex)
-			{
-				return StatusCode(StatusCodes.Status500InternalServerError, $"Erro ao marcar consulta: {ex.Message}");
-			}
-		}
-	
-       
+                    if (info == null) return BadRequest("Não foi possível encontrar a informação do serviço.");
 
-        [HttpGet("get-professional-types")]
+                    if (appointmentDto.Timestamp < DateTime.Now) return BadRequest("Não é possível marcar uma consulta para uma data passada.");
+
+                    if (!appointmentDto.Timestamp.HasValue)
+                    {
+                        return BadRequest("Algo correu mal.");
+                    }
+
+                    var slot = await _context.AvailableSlots.FirstOrDefaultAsync(x => x.IdService == appointmentDto.IdService && x.Start == appointmentDto.Timestamp);
+
+                    if (slot == null) return BadRequest("Não foi possível encontrar o slot.");
+
+                    var service = await _context.Services.FirstOrDefaultAsync(x => x.Id == appointmentDto.IdService);
+                    if (service == null) return NotFound("Não foi possível encontrar o serviço.");
+
+
+                    var professional = await _context.Professionals.FirstOrDefaultAsync(x => x.UserID == service.IdProfessional);
+                    if (professional == null) return NotFound("Houve um problema a localizar o profissional");
+
+
+                    Address? address = null;
+                    if (professional.AddressId != null)
+                    {
+                        address = await _context.Addresses.FirstOrDefaultAsync(x => x.Id == professional.AddressId);
+                    }
+                    
+                    
+                    int? addressId = null;
+
+                    if (appointmentDto.Type == "Presential")
+                    {
+                        if (address == null || address.Location.IsNullOrEmpty() || address.AddressName.IsNullOrEmpty()) return BadRequest("O profissional não tem localização definida.");
+
+                        addressId = address.Id;
+
+                        appointmentDto.Location = address.Location;
+                        appointmentDto.Address = address.AddressName;
+                    }
+                    else if (appointmentDto.Type == "Home")
+                    {
+                        var newAddress = new Address
+                        {
+                            AddressName = appointmentDto.Address,
+                            Location = appointmentDto.Location
+                        };
+
+                        _context.Addresses.Add(newAddress);
+                        await _context.SaveChangesAsync();
+
+                        addressId = newAddress.Id;
+                    }
+
+                    if (!Enum.TryParse(appointmentDto.Type, out AppointmentType appointmentType))
+                    {
+                        throw new ArgumentException("Algo correu mal.");
+                    }
+
+                    var appointmentInfo = new Appointment
+                    {
+                        Timestamp = appointmentDto.Timestamp.Value,
+                        AddressId = addressId,
+                        Type = appointmentType,
+                        Description = appointmentDto.Description,
+                        State = AppointmentState.PaymentPending,
+                        Duration = appointmentDto.Duration,
+                        IdPatient = user.Id,
+                        IdProfesional = info.IdProfessional,
+                        IdService = info.Id,
+                    };
+
+                    _context.Appointment.Add(appointmentInfo);
+                    await _context.SaveChangesAsync();
+
+                    // update the slot to be avaliable=false and add the appointment id to the slot
+                    slot.IsAvailable = false;
+                    slot.AppointmentId = appointmentInfo.Id;
+
+                    _context.AvailableSlots.Update(slot);
+
+                    if (appointmentDto.Type == "Online")
+                    {
+                        var newChat = new Chat
+                        {
+                            AppointmentId = appointmentInfo.Id,
+                            IsActive = false
+                        };
+                        _context.Chat.Add(newChat);
+                    }
+
+                    await _context.SaveChangesAsync();
+
+                    // Commit the transaction if all operations succeed
+                    transaction.Commit();
+
+                    return Ok(new { message = "A consulta foi marcada com sucesso.", appointmentId = appointmentInfo.Id });
+                }
+                catch (Exception)
+                {
+                    transaction.Rollback();
+
+                    return StatusCode(StatusCodes.Status500InternalServerError, "Erro ao marcar consulta.");
+                }
+            }
+        }
+
+
+
+		/// <summary>
+		/// Método para obter os tipos de profissionais.
+		/// </summary>
+		[HttpGet("get-professional-types")]
         public async Task<ActionResult<List<ProfessionalType>>> GetProfessionalTypes()
         {
             try
@@ -125,11 +223,15 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpGet("get-professionals")]
+		/// <summary>
+		/// Método para obter informações sobre os profissionais disponíveis.
+		/// </summary>
+		[HttpGet("get-professionals")]
         public async Task<ActionResult<List<ProfessionalDto>>> GetProfessionals()
         {
             var professionals = await _context.Professionals
                 .Include(pt => pt.ProfessionalType)
+                .Include(a => a.Address)
                 .ToListAsync();
 
             if (professionals == null)
@@ -154,14 +256,14 @@ namespace LusoHealthClient.Server.Controllers
                     .Where(r => r.Service.IdProfessional == professional.UserID)
                     .ToListAsync();
                 var reviews = GetReviewDtos(reviewsFromDB);
-             
+
                 var professionalDto = new ProfessionalDto
                 {
-                    ProfessionalInfo = new UserProfileDto {FirstName = user.FirstName, LastName = user.LastName },
+                    ProfessionalInfo = new UserProfileDto { FirstName = user.FirstName, LastName = user.LastName },
                     Services = services,
-                    Certificates = null, 
+                    Certificates = null,
                     Reviews = reviews,
-                    Location = professional.Location,
+                    Location = professional.Address != null ? professional.Address.Location : null,
                     Description = professional.Description,
                     ProfessionalType = professional.ProfessionalType.Name
                 };
@@ -172,9 +274,12 @@ namespace LusoHealthClient.Server.Controllers
             return professionalsDtoList;
         }
 
-        [HttpGet("get-specialties")]
+		/// <summary>
+		/// Método para obter as especialidades disponíveis.
+		/// </summary>
+		[HttpGet("get-specialties")]
         public Task<ActionResult<List<Specialty>>> GetSpecialties()
-        {          
+        {
             try
             {
                 var specialties = _context.Specialties.OrderByDescending(a => a.Name).ToList();
@@ -187,7 +292,10 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpGet("get-services")]
+		/// <summary>
+		/// Método para obter os serviços disponíveis.
+		/// </summary>
+		[HttpGet("get-services")]
         public async Task<List<ServicesDto>> GetServices()
         {
             var servicesFromDB = await _context.Services.Include(s => s.Specialty).Include(d => d.Professional).ThenInclude(a => a.ProfessionalType).ToListAsync();
@@ -253,7 +361,10 @@ namespace LusoHealthClient.Server.Controllers
             return services;
         }
 
-        [HttpPost("get-professionals-on-location")]
+		/// <summary>
+		/// Método para obter profissionais com base na localização fornecida.
+		/// </summary>
+		[HttpPost("get-professionals-on-location")]
         public async Task<ActionResult<List<ProfessionalDto>>> GetProfessionalsOnLocation(BoundsDto locationDto)
         {
             double latNE = locationDto.LatitudeNorthEast;
@@ -263,23 +374,27 @@ namespace LusoHealthClient.Server.Controllers
 
             var professionalsUnfiltered = await _context.Professionals
             .Include(pt => pt.ProfessionalType)
+            .Include(a => a.Address)
             .ToListAsync();
+
+            List<Professional> professionalsUnfilteredList = professionalsUnfiltered;
 
             var professionals = professionalsUnfiltered.Where(p =>
                 {
-                    if (string.IsNullOrEmpty(p.Location)) return false;
+                    if (p.AddressId == null || string.IsNullOrEmpty(p.Address.Location)) return false;
 
-                    var locationParts = p.Location.Split(';');
+                    var locationParts = p.Address.Location.Split(';');
 
                     if (locationParts.Length != 2) return false;
 
                     // Tenta analisar as partes de localização para doubles
-                    if (!double.TryParse(locationParts[0], out var lat)) return false;
-                    if (!double.TryParse(locationParts[1], out var lng)) return false;
+                    if (!double.TryParse(locationParts[0], NumberStyles.Any, CultureInfo.GetCultureInfo("pt-PT"), out double lat)) return false;
+                    if (!double.TryParse(locationParts[1], NumberStyles.Any, CultureInfo.GetCultureInfo("pt-PT"), out double lng)) return false;
 
                     return lat <= latNE && lat >= latSW && lng <= longNE && lng >= longSW;
                 }).ToList();
 
+            List<Professional> professionalsList = professionals;
 
             if (professionals == null)
             {
@@ -306,11 +421,11 @@ namespace LusoHealthClient.Server.Controllers
 
                 var professionalDto = new ProfessionalDto
                 {
-                    ProfessionalInfo = new UserProfileDto {Id = user.Id, FirstName = user.FirstName, LastName = user.LastName, Picture = user.ProfilePicPath },
+                    ProfessionalInfo = new UserProfileDto { Id = user.Id, FirstName = user.FirstName, LastName = user.LastName, Picture = user.ProfilePicPath },
                     Services = services,
                     Certificates = null,
                     Reviews = reviews,
-                    Location = professional.Location,
+                    Location = professional.Address.Location,
                     Description = professional.Description,
                     ProfessionalType = professional.ProfessionalType.Name
                 };
@@ -400,9 +515,9 @@ namespace LusoHealthClient.Server.Controllers
             {
                 ProfessionalInfo = new UserProfileDto { FirstName = user.FirstName, LastName = user.LastName },
                 Services = services,
-                Certificates = null, 
+                Certificates = null,
                 Reviews = reviews,
-                Location = professional.Location,
+                Location = professional.Address != null ? professional.Address.Location : null,
                 Description = professional.Description,
                 ProfessionalType = professional.ProfessionalType.Name
             };

@@ -13,7 +13,7 @@
         <div id="title-data-under">
           <h3>Consulta {{appointment?.type}} </h3>
           <div class="text-appointment">Data e Hora: {{convertToDate()}} às {{convertToHours()}}</div>
-          <div class="text-appointment" *ngIf="appointment?.location && appointment?.type !== 'Online'">Localização: {{appointment?.location}} </div>
+          <div class="text-appointment" *ngIf="appointment?.address && appointment?.type !== 'Online'">Localização: {{appointment?.address}} </div>
         </div>
       </div>
     </div>
@@ -43,9 +43,15 @@
 
   <section class="right-panel" *ngIf="appointment?.state !== 'Canceled'">
     <button class="btn1" (click)="openPopup('remove')">Cancelar Consulta</button>
-    <div *ngIf="appointment?.type === 'Presential' || appointment?.type === 'Home'" id="map"></div>
     <button *ngIf="appointment?.type === 'Online'"
-            [routerLink]="['/chat']" [queryParams]="{ appointment: appointment?.id }" class="btn1">Aceder ao chat</button>
+            [routerLink]="['/chat']" [queryParams]="{ appointment: appointment?.id }" class="btn1">
+      Aceder ao chat
+    </button>
+    <div *ngIf="appointment?.type !== 'Online' && appointment?.state !== 'Canceled'" id="localizacao">
+      <h3>Localização</h3>
+      <div id="map"></div>
+      <p>Localização: {{ address }}</p>
+    </div>
   </section>
 
 </main>

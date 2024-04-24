@@ -1,9 +1,10 @@
 main {
   padding: 0 7%;
-  margin: 50px auto 30px auto;
+  margin: 50px auto 0 auto;
   min-width: 1150px;
   max-width: 1500px;
   padding-bottom: 30px;
+  min-height: calc(100vh - 65px);
 }
 
 .title {
@@ -102,6 +103,7 @@ main {
   display: flex;
   font-size: 18px;
   margin-top: 10px;
+  max-width: 300px;
 }
 
 .hours {

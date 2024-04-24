@@ -1,3 +1,8 @@
+main {
+  min-height: calc(100vh - 65px);
+}
+
+
 h1 {
   text-align: center;
   font-size: 50px;
@@ -55,6 +60,7 @@ input::-webkit-inner-spin-button {
 .radio-label {
   display: flex;
   align-items: center;
+  cursor: pointer;
 }
 
 input[type="radio"] {
@@ -168,3 +174,37 @@ loading-spinner {
     border-right: 5px solid transparent;
     border-left: 5px solid transparent;
   }
+
+.pink {
+  fill: #ed84ca;
+  transition: fill 0.3s ease;
+}
+
+.blue {
+  fill: #5cb2f3;
+  transition: fill 0.3s ease;
+}
+
+.blue-site {
+  fill: #4697fb;
+  transition: fill 0.3s ease;
+}
+
+svg {
+  margin-right: 10px;
+  width: 32px;
+  height: 32px;
+}
+
+.hidden-input input {
+  position: absolute;
+  visibility: hidden;
+}
+
+
+
+@media only screen and (max-width: 1390px) {
+  #account-type-label {
+    width: 80px;
+  }
+}

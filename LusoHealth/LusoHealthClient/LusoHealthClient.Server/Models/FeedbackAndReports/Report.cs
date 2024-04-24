@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LusoHealthClient.Server.Models.FeedbackAndReports
 {
+	/// <summary>
+	/// Classe que representa um report.
+	/// </summary>
 	public class Report
 	{
 		[Key]

@@ -2,7 +2,10 @@
 
 namespace LusoHealthClient.Server.DTOs.Authentication
 {
-    public class LoginDto
+	/// <summary>
+	///(DTO) para informações de login.
+	/// </summary>
+	public class LoginDto
     {
         [Required(ErrorMessage = "Email obrigatório")]
         public string Email { get; set; }

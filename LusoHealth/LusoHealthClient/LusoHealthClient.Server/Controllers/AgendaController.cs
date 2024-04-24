@@ -15,7 +15,10 @@ using System.Security.Claims;
 
 namespace LusoHealthClient.Server.Controllers
 {
-    [Authorize]
+	/// <summary>
+	/// Controlador para lidar com operações relacionadas à agenda de marcações.
+	/// </summary>
+	[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class AgendaController : ControllerBase
@@ -23,13 +26,19 @@ namespace LusoHealthClient.Server.Controllers
         private readonly ApplicationDbContext _context;
         private readonly UserManager<User> _userManager;
 
-        public AgendaController(ApplicationDbContext context, UserManager<User> userManager)
+		/// <summary>
+		/// Construtor para inicializar o controlador AgendaController.
+		/// </summary>
+		public AgendaController(ApplicationDbContext context, UserManager<User> userManager)
         {
             _context = context;
             _userManager = userManager;
         }
 
-        [HttpGet("get-previous-appointments")]
+		/// <summary>
+		/// Obtém as marcações anteriores do paciente.
+		/// </summary>
+		[HttpGet("get-previous-appointments")]
         public async Task<ActionResult<List<Appointment>>> GetPreviousAppointments()
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -60,7 +69,7 @@ namespace LusoHealthClient.Server.Controllers
 
                     if (appointments == null || !appointments.Any()) { return NotFound("Não foi possível encontrar as marcações"); }
 
-                    return appointments;
+                    return (List<Appointment>)appointments.Reverse<Appointment>();
                 }
                 else
                 {
@@ -74,7 +83,10 @@ namespace LusoHealthClient.Server.Controllers
         }
 
 
-        [HttpGet("get-next-appointments")]
+		/// <summary>
+		/// Obtém as próximas marcações do paciente.
+		/// </summary>
+		[HttpGet("get-next-appointments")]
         public async Task<ActionResult<List<Appointment>>> GetNextAppointments()
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -91,6 +103,7 @@ namespace LusoHealthClient.Server.Controllers
                     var currentTime = DateTime.UtcNow;
                     var appointments = _context.Appointment.Include(a => a.Patient).ThenInclude(b => b.User)
                         .Where(p => p.IdPatient == user.Id && p.Timestamp > currentTime && p.State == AppointmentState.Scheduled)
+                        .OrderBy(p => p.Timestamp)
                         .ToList();
 
                     if (appointments == null || !appointments.Any()) { return NotFound("Não foi possível encontrar as marcações"); }
@@ -104,6 +117,7 @@ namespace LusoHealthClient.Server.Controllers
                     var currentTime = DateTime.UtcNow;
                     var appointments = _context.Appointment.Include(a => a.Patient).ThenInclude(b => b.User)
                         .Where(p => p.IdProfesional == user.Id && p.Timestamp > currentTime && p.State == AppointmentState.Scheduled)
+                        .OrderBy(p => p.Timestamp)
                         .ToList();
 
                     if (appointments == null || !appointments.Any()) { return NotFound("Não foi possível encontrar as marcações"); }
@@ -125,7 +139,10 @@ namespace LusoHealthClient.Server.Controllers
         }
 
 
-        [HttpGet("get-pending-appointments")]
+		/// <summary>
+		/// Obtém as marcações pendentes do profissional.
+		/// </summary>s
+		[HttpGet("get-pending-appointments")]
         public async Task<ActionResult<List<Appointment>>> GetPendingAppointments()
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -141,6 +158,7 @@ namespace LusoHealthClient.Server.Controllers
                     var currentTime = DateTime.UtcNow;
                     var appointments = _context.Appointment.Include(a => a.Patient).ThenInclude(b => b.User)
                         .Where(p => p.IdProfesional == user.Id && p.Timestamp > currentTime && p.State == AppointmentState.Pending)
+                        .OrderBy(p => p.Timestamp)
                         .ToList();
 
                     if (appointments == null || !appointments.Any()) { return NotFound("Não foi possível encontrar as marcações"); }
@@ -161,8 +179,10 @@ namespace LusoHealthClient.Server.Controllers
 
         }
 
-
-        [HttpGet("get-specialties")]
+		/// <summary>
+		/// Obtém as especialidades disponíveis.
+		/// </summary>
+		[HttpGet("get-specialties")]
         public async Task<ActionResult<List<Specialty>>> GetSpecialties()
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -183,7 +203,10 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpPost("get-slots")]
+		/// <summary>
+		/// Obtém os slots disponíveis por data.
+		/// </summary>
+		[HttpPost("get-slots")]
         public async Task<ActionResult<List<AvailableSlot>>> GetSlotsByDate(AvailabilityDto slot)
         {
             try
@@ -200,7 +223,10 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpGet("get-all-slots")]
+		/// <summary>
+		/// Obtém todos os slots disponíveis.
+		/// </summary>
+		[HttpGet("get-all-slots")]
         public async Task<ActionResult<List<AvailableSlot>>> GetSlots()
 
         {
@@ -234,8 +260,10 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-
-        [HttpPost("add-availability")]
+		/// <summary>
+		/// Adiciona disponibilidade para um profissional.
+		/// </summary>
+		[HttpPost("add-availability")]
         public async Task<ActionResult> AddAvailability(AvailabilityDto availabilityDto)
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -311,8 +339,10 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-
-        [HttpDelete("delete-availability")]
+		/// <summary>
+		/// Remove disponibilidade de um profissional.
+		/// </summary>
+		[HttpDelete("delete-availability")]
         public async Task<ActionResult> DeleteSlots([FromBody] AvailabilityDto availabilityDto)
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;

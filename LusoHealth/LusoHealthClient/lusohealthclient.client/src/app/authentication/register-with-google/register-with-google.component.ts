@@ -29,6 +29,20 @@ export class RegisterWithGoogleComponent implements OnInit {
   professionalTypes: ProfessionalType[] = [];
   isProfessionalSelected: boolean = false;
 
+  girlSelected = false;
+  manSelected = false;
+  patientSelected = false;
+  professionalSelected = false;
+
+  /**
+  * Construtor da classe.
+  * @param authenticationService Serviço de autenticação para gerenciar as operações relacionadas à autenticação do usuário.
+  * @param formBuilder Construtor de formulários para criar instâncias de FormGroup.
+  * @param router Serviço de roteamento para manipular navegação entre componentes.
+  * @param renderer Renderizador para manipular elementos do DOM.
+  * @param elem Referência para o elemento do DOM.
+  * @param activatedRoute Serviço para acessar informações sobre a rota ativa.
+  */
   constructor(private authenticationService: AuthenticationService,
     private formBuilder: FormBuilder,
     private router: Router,
@@ -44,16 +58,25 @@ export class RegisterWithGoogleComponent implements OnInit {
     });
   }
 
+  /**
+   * Método executado após a inicialização do componente.
+   */
   ngOnInit(): void {
     this.getParams();
     this.getProfessionalTypes();
   }
 
+  /**
+   * Método executado ao destruir o componente.
+   */
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
 
+  /**
+   * Método executado após a renderização do componente.
+   */
   ngAfterViewInit(): void {
     const today = new Date();
     const eighteenYearsAgo = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
@@ -62,11 +85,14 @@ export class RegisterWithGoogleComponent implements OnInit {
     this.renderer.setAttribute(dateInput, 'max', maxDate);
   }
 
+  /**
+   * Inicializa o formulário de registro.
+   */
   initializeForm() {
 
     this.registerForm = this.formBuilder.group({
       firstName: [this.givenName, [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
-      lastName: [this.familyName, [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
+      lastName: [this.familyName !== 'undefined' ? this.familyName : '', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
       email: [this.email],
       nif: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(9)]],
       telemovel: ['', [Validators.minLength(9), Validators.maxLength(9)]],
@@ -77,6 +103,9 @@ export class RegisterWithGoogleComponent implements OnInit {
     })
   }
 
+  /**
+   * Obtém os parâmetros da URL.
+   */
   getParams() {
     this.authenticationService.user$.pipe(take(1)).subscribe({
       next: (user: User | null) => {
@@ -105,7 +134,9 @@ export class RegisterWithGoogleComponent implements OnInit {
     });
   }
 
-
+  /**
+  * Método para registrar o utilizador.
+  */
   register() {
     this.submitted = true;
     this.errorMessages = [];
@@ -141,6 +172,9 @@ export class RegisterWithGoogleComponent implements OnInit {
     }
   }
 
+  /**
+   * Obtém os tipos de profissionais disponíveis.
+   */
   getProfessionalTypes() {
     this.authenticationService.getProfessionalTypes().pipe(takeUntil(this.unsubscribe$)).subscribe({
       next: (response: ProfessionalType[]) => {
@@ -153,6 +187,10 @@ export class RegisterWithGoogleComponent implements OnInit {
     });
   }
 
+  /**
+  * Método executado ao alterar o tipo de utilizador.
+  * @param userType Tipo de utilizador selecionado.
+  */
   onUserTypeChange(userType: string) {
     this.isProfessionalSelected = userType === 'P';
     const professionalTypeControl = this.registerForm.get('professionalTypeId');
@@ -165,6 +203,11 @@ export class RegisterWithGoogleComponent implements OnInit {
     professionalTypeControl?.updateValueAndValidity();
   }
 
+  /**
+   * Valida a idade para o campo de data de nascimento.
+   * @param control Controle do formulário.
+   * @returns Objeto com erro se a validação falhar, caso contrário, null.
+   */
   idadeValidator(control: AbstractControl): { [key: string]: any } | null {
     if (control.value) {
       const dataNascimento = new Date(control.value);
@@ -191,5 +234,31 @@ export class RegisterWithGoogleComponent implements OnInit {
       }
     }
     return null;
+  }
+
+  clickGirl() {
+    this.manSelected = false;
+    this.girlSelected = true;
+    const femaleRadio = this.elem.nativeElement.querySelector('#female');
+    femaleRadio.checked = true;
+    this.registerForm.get('genero')?.setValue('F');
+  }
+
+  clickMan() {
+    this.manSelected = true;
+    this.girlSelected = false;
+    const maleRadio = this.elem.nativeElement.querySelector('#male');
+    maleRadio.checked = true;
+    this.registerForm.get('genero')?.setValue('M');
+  }
+
+  clickProfessional() {
+    this.professionalSelected = true;
+    this.patientSelected = false;
+  }
+
+  clickPatient() {
+    this.patientSelected = true;
+    this.professionalSelected = false;
   }
 }

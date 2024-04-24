@@ -1,6 +1,9 @@
 ﻿namespace LusoHealthClient.Server.DTOs.Profile
 {
-    public class AddReviewDto
+	/// <summary>
+	///(DTO) para adicionar uma avaliação de serviço.
+	/// </summary>
+	public class AddReviewDto
     {
         public int IdService { get; set; }
         public int IdSpecialty { get; set; }

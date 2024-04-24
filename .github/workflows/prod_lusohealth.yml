@@ -1,0 +1,92 @@
+name: Deployment
+
+on:
+  push:
+    branches:
+      - prod
+  workflow_dispatch:
+
+jobs:
+  build_server:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: LusoHealth/LusoHealthClient/LusoHealthClient.Server
+    steps:
+      - uses: actions/checkout@v4.1.1
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4.0.0
+        with:
+          dotnet-version: '8.x'
+      - name: Set up server environment
+        run: |
+          echo '{
+            "Logging": {
+              "LogLevel": {
+                "Default": "Information",
+                "Microsoft.AspNetCore": "Warning"
+              }
+            },
+            "AllowedHosts": "*",
+            "ConnectionStrings": {
+              "DefaultConnection": "${{ secrets.SQL_SERVER_CONNECTION }}"
+            },
+            "JWT": {
+              "Key": "${{ secrets.JWT_KEY }}",
+              "ExpiresInDays": 1,
+              "Issuer": "${{ secrets.ISSUER }}",
+              "ClientUrl": "${{ secrets.CLIENT_URL }}"
+            },
+            "Email": {
+              "From": "${{ secrets.EMAIL_FROM }}",
+              "ApplicationName": "LusoHealth",
+              "ConfirmEmailPath": "confirm-email",
+              "ResetPasswordPath": "reset-password",
+              "RecoverAccountPath": "unlock-account"
+            },
+            "MailJet": {
+              "ApiKey": "${{ secrets.MAILJET_PUBLIC_KEY }}",
+              "SecretKey": "${{ secrets.MAILJET_PRIVATE_KEY }}"
+            },
+            "Google": {
+              "ClientId": "${{ secrets.GOOGLE_CLIENT_ID }}"
+            },
+            "StripeSettings": {
+              "PrivateKey": "${{ secrets.STRIPE_SETTINGS_PRIVATE_KEY }}",
+              "PublicKey": "${{ secrets.STRIPE_SETTINGS_PUBLIC_KEY }}"
+            }
+          }' > ./appsettings.json
+
+      - name: Publish server
+        run: dotnet publish -c Debug -o ./publish --no-dependencies
+
+      - name: Zip artifact for deployment
+        working-directory: LusoHealth/LusoHealthClient/LusoHealthClient.Server/publish
+        run: zip ../release.zip . -r
+
+      - name: Upload server artifact
+        uses: actions/upload-artifact@v4.3.1
+        with:
+          name: server-app
+          path: ./LusoHealth/LusoHealthClient/LusoHealthClient.Server/release.zip
+
+  deploy_server:
+    runs-on: ubuntu-latest
+    needs: build_server
+    environment:
+      name: 'Production'
+    steps:
+      - name: Download server artifact
+        uses: actions/download-artifact@v4.1.4
+        with:
+          name: server-app
+
+      - name: Unzip artifact for deployment
+        run: unzip release.zip
+
+      - name: Deploy server to Azure Web App
+        uses: azure/webapps-deploy@v3.0.0
+        with:
+          app-name: 'lusohealth'
+          slot-name: 'Production'
+          publish-profile: ${{ secrets.SERVER_PUBLISH_PROFILE }}

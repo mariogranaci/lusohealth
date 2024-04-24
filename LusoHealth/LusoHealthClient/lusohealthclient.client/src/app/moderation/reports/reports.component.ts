@@ -39,6 +39,9 @@ export class ReportsComponent {
     this.unsubscribe$.complete();
   }
 
+  /**
+   * Carrega mais relatórios gerais.
+   */
   loadMoreReports() {
     this.moderationService.getReports(this.offsetGeneral, this.limit).subscribe({
       next: (newReports: reportModel[]) => {
@@ -53,6 +56,9 @@ export class ReportsComponent {
     });
   }
 
+  /**
+   * Carrega mais relatórios concluídos.
+   */
   loadMoreReportsConcluded() {
     this.moderationService.getReportsConcluded(this.offsetConcluded, this.limit).subscribe({
       next: (newReports: reportModel[]) => {
@@ -67,6 +73,9 @@ export class ReportsComponent {
     });
   }
 
+  /**
+  * Carrega mais relatórios cancelados.
+  */
   loadMoreReportsCanceled() {
     this.moderationService.getReportsCanceled(this.offsetCanceled, this.limit).subscribe({
       next: (newReports: reportModel[]) => {
@@ -81,6 +90,9 @@ export class ReportsComponent {
     });
   }
 
+  /**
+   * Carrega mais relatórios pendentes.
+   */
   loadMoreReportsPending() {
     this.moderationService.getReportsPending(this.offsetCanceled, this.limit).subscribe({
       next: (newReports: reportModel[]) => {
@@ -95,6 +107,10 @@ export class ReportsComponent {
     });
   }
 
+  /**
+  * Cancela um relatório.
+  * @param report O relatório a ser cancelado.
+  */
   cancelReport(report: reportModel) {
     this.moderationService.cancelReport(report).pipe(
       takeUntil(this.unsubscribe$)
@@ -113,6 +129,10 @@ export class ReportsComponent {
     });
   }
 
+  /**
+   * Suspende uma conta profissional.
+   * @param report O relatório relacionado à conta profissional a ser suspensa.
+   */
   suspendAccount(report: reportModel) {
     this.moderationService.suspendAccountProfessional(report).pipe(
       takeUntil(this.unsubscribe$)
@@ -131,6 +151,10 @@ export class ReportsComponent {
     });
   }
 
+  /**
+  * Bloqueia uma conta profissional.
+  * @param report O relatório relacionado à conta profissional a ser bloqueada.
+  */
   blockAccount(report: reportModel) {
     this.moderationService.blockAccountProfessional(report).pipe(
       takeUntil(this.unsubscribe$)
@@ -149,6 +173,9 @@ export class ReportsComponent {
     });
   }
 
+  /**
+   * Atualiza os relatórios exibidos com base no estado selecionado.
+   */
   updateDisplayedReports() {
     const value = document.getElementById("state") as HTMLSelectElement | null;
 
@@ -180,6 +207,9 @@ export class ReportsComponent {
     }
   }
 
+  /**
+   * Adiciona mais relatórios exibidos com base no estado selecionado.
+   */
   addDisplayedReports() {
     const value = document.getElementById("state") as HTMLSelectElement | null;
 
@@ -203,6 +233,11 @@ export class ReportsComponent {
     }
   }
 
+  /**
+  * Converte uma string de data e hora em apenas hora.
+  * @param dateTimeString A string de data e hora a ser convertida.
+  * @returns A hora formatada.
+  */
   convertToHours(dateTimeString: Date | null): string {
     if (!dateTimeString) {
       return "";
@@ -219,7 +254,11 @@ export class ReportsComponent {
     return formattedHours + ":" + formattedMinutes;
   }
 
-
+  /**
+   * Converte uma string de data e hora em apenas data.
+   * @param dateTimeString A string de data e hora a ser convertida.
+   * @returns A data formatada.
+   */
   convertToDate(dateTimeString: Date | null): string {
     if (!dateTimeString) {
       return ""; 
@@ -241,6 +280,10 @@ export class ReportsComponent {
     return formattedDate;
   }
 
+  /**
+   * Abre o popup de opções para um relatório específico.
+   * @param report O relatório para o qual as opções serão exibidas.
+   */
   openPopup(report: reportModel) {
     const overlay = document.getElementById('overlay');
     const options = document.getElementById('options');
@@ -259,6 +302,9 @@ export class ReportsComponent {
     }
   }
 
+  /**
+   * Fecha o popup de opções.
+   */
   closePopup() {
     const overlay = document.getElementById('overlay');
     const options = document.getElementById('options');
@@ -271,10 +317,17 @@ export class ReportsComponent {
     }
   }
 
+  /**
+   * Impede a propagação de eventos.
+   * @param event O evento a ser tratado.
+   */
   stopPropagation(event: Event) {
     event.stopPropagation();
   }
 
+  /**
+  * Retorna à página anterior.
+  */
   goBack() {
     this.location.back();
   }

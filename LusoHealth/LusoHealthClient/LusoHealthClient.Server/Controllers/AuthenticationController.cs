@@ -12,12 +12,17 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.Text;
+using System.Web;
 
 namespace LusoHealthClient.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthenticationController : ControllerBase
+
+	/// <summary>
+	/// Controlador para autenticação de utilizadores.
+	/// </summary>
+	public class AuthenticationController : ControllerBase
     {
         private readonly JWTService _jwtService;
         private readonly SignInManager<User> _signInManager;
@@ -41,7 +46,10 @@ namespace LusoHealthClient.Server.Controllers
             _context = context;
         }
 
-        [Authorize]
+		/// <summary>
+		/// Método para atualizar o token de um utilizador.
+		/// </summary>
+		[Authorize]
         [HttpGet("refresh-user-token")]
         public async Task<ActionResult<UserDto>> RefreshUserToken()
         {
@@ -49,20 +57,44 @@ namespace LusoHealthClient.Server.Controllers
             return await CreateApplicationUserDto(user);
         }
 
-        [HttpPost("login")]
+		/// <summary>
+		/// Método para fazer login de um utilizador.
+		/// </summary>
+		[HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user == null) return Unauthorized("Email ou password inválidos");
-            if (user.EmailConfirmed == false) return Unauthorized("Necessita confirmar o seu email para efetuar autenticação");
+            if (user.IsBlocked) return Unauthorized("A sua conta encontra-se banida devido a utilizações indevidas");
+            if (!user.EmailConfirmed) return Unauthorized("Necessita confirmar o seu email para efetuar autenticação");
 
-            var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
+            if (!CheckSuspensionValidityAsync(user))
+            {
+                await UnlockUserAsync(user);
+            } else {
+                string dataHora = GetCountdownString(user);
+                return BadRequest($"A sua conta encontra-se suspensa durante {dataHora}");
+            }
+
+            if (await _userManager.IsLockedOutAsync(user))
+            {
+                int minutesNumber = (int) user.LockoutEnd.Value.Subtract(DateTime.UtcNow).TotalMinutes;
+                string minutesString = minutesNumber == 1 ? $"minuto" : "minutos";
+                string minutes = $"{minutesNumber} {minutesString}";
+                if (minutesNumber <= 0) minutes = "menos de 1 minuto";
+                return Unauthorized($"Demasiadas tentativas falhadas. Recupere a sua conta ou então aguarde {minutes}");
+            }
+
+            var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, true);
             if (!result.Succeeded) return Unauthorized("Email ou password inválidos");
 
             return await CreateApplicationUserDto(user);
         }
 
-        [HttpPost("register")]
+		/// <summary>
+		/// Método para registar um novo utilizador.
+		/// </summary>
+		[HttpPost("register")]
         public async Task<ActionResult<UserDto>> Register(RegisterDto model)
         {
             if (await CheckEmailExistsAsync(model.Email))
@@ -94,7 +126,8 @@ namespace LusoHealthClient.Server.Controllers
                 LockoutEnabled = false,
                 AccessFailedCount = 0,
                 UserName = model.Nif.Trim() + '_' + DateTime.Now.Millisecond,
-                BirthDate = model.DataNascimento
+                BirthDate = model.DataNascimento,
+                DateCreated = DateTime.UtcNow
             };
 
             var result = await _userManager.CreateAsync(userToAdd, model.Password);
@@ -141,9 +174,29 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpPost("login-with-google")]
+		/// <summary>
+		/// Método para fazer login com Google.
+		/// </summary>
+		[HttpPost("login-with-google")]
         public async Task<ActionResult<UserDto>> LoginWithGoogle(LoginWithGoogleDto model)
         {
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null) return BadRequest("O email não está registado");
+            if (user.IsBlocked) return Unauthorized("A sua conta encontra-se banida devido a utilizações indevidas");
+
+            if (!CheckSuspensionValidityAsync(user))
+            {
+                if (user.IsSuspended)
+                {
+                    await UnlockUserAsync(user);
+                }
+            }
+            else
+            {
+                string dataHora = GetCountdownString(user);
+                return BadRequest($"A sua conta encontra-se suspensa durante {dataHora}");
+            }
+
             if (model.Provider.Equals("google"))
             {
                 try
@@ -164,13 +217,22 @@ namespace LusoHealthClient.Server.Controllers
                 return BadRequest("Provedor Inválido");
             }
 
-            var user = await _userManager.FindByEmailAsync(model.Email);
-            if (user == null) return BadRequest("O email não está registado");
+            if (await _userManager.IsLockedOutAsync(user))
+            {
+                int minutesNumber = (int) user.LockoutEnd.Value.Subtract(DateTime.Now).TotalMinutes;
+                string minutesString = minutesNumber == 1 ? $"minuto" : "minutos";
+                string minutes = $"{minutesNumber} {minutesString}";
+                if (minutesNumber <= 0) minutes = "menos de 1 minuto";
+                return Unauthorized($"Demasiadas tentativas falhadas. Recupere a sua conta ou então aguarde {minutes}");
+            }
 
             return await CreateApplicationUserDto(user);
         }
 
-        [HttpPost("register-with-google")]
+		/// <summary>
+		/// Método para registar com Google.
+		/// </summary>
+		[HttpPost("register-with-google")]
         public async Task<ActionResult<UserDto>> RegisterWithGoogle(RegisterWithGoogleDto model)
         {
             if (model.Provider.Equals("google"))
@@ -256,7 +318,10 @@ namespace LusoHealthClient.Server.Controllers
             return await CreateApplicationUserDto(userToAdd);
         }
 
-        [HttpPut("confirm-email")]
+		/// <summary>
+		/// Método para confirmar o email do utilizador.
+		/// </summary>
+		[HttpPut("confirm-email")]
         public async Task<ActionResult> ConfirmEmail(ConfirmEmailDto model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
@@ -279,7 +344,10 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpPost("resend-email-confirmation-link/{email}")]
+		/// <summary>
+		/// Método para reenviar o link de confirmação de email.
+		/// </summary>
+		[HttpPost("resend-email-confirmation-link/{email}")]
         public async Task<ActionResult> ResendEmailConfirmationLink(string email)
         {
             if (string.IsNullOrEmpty(email)) return BadRequest("Email inválido");
@@ -303,7 +371,10 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpPost("forgot-password")]
+		/// <summary>
+		/// Método para redefinir a password.
+		/// </summary>
+		[HttpPost("forgot-password")]
         public async Task<ActionResult> ForgotPassword(EmailDto model)
         {
             var email = model.Email;
@@ -328,7 +399,10 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpPut("reset-password")]
+		/// <summary>
+		/// Método para redefinir a password do utilizador.
+		/// </summary>
+		[HttpPut("reset-password")]
         public async Task<ActionResult> ResetPassword(ResetPasswordDto model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
@@ -353,7 +427,73 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpGet("get-professional-types")]
+		/// <summary>
+		/// Inicia o processo de recuperação de conta enviando um email para o utilizador com um link de recuperação.
+		/// </summary>
+		/// <param name="model">O modelo de dados contendo o email do usuário.</param>
+		/// <returns>Um ActionResult representando o resultado da solicitação.</returns>
+		[HttpPost("recover-account")]
+        public async Task<ActionResult> RecoverAccount(EmailDto model)
+        {
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null) return BadRequest("Ocorreu um erro ao tentar iniciar a recuperação da conta");
+
+            if (!user.EmailConfirmed) return BadRequest("O email ainda não foi confirmado. Confirme o seu email para poder recuperar a sua password");
+
+            try
+            {
+                if (await _userManager.IsLockedOutAsync(user))
+                {
+                    string dataHora = GetCountdownString(user);
+                    if (user.IsSuspended) return BadRequest($"A sua conta encontra-se suspensa durante {dataHora}");
+
+
+                    if (await SendRecoverAccountEmail(user))
+                    {
+                        return Ok(new JsonResult(new { title = "Email Enviado", message = "Verifique o seu email" }));
+                    }
+                    return BadRequest("Houve um problema a enviar o email. Tente mais tarde.");
+                }
+                return BadRequest("A sua conta não se encontra suspensa");
+            }
+            catch (Exception)
+            {
+                return BadRequest("Houve um problema a enviar o email. Tente mais tarde.");
+            }
+        }
+
+		/// <summary>
+		/// Desbloqueia a conta do utilizador após confirmar o token.
+		/// </summary>
+		/// <param name="model">O modelo de dados contendo o email do usuário e o token.</param>
+		/// <returns>Um IActionResult representando o resultado da solicitação.</returns>
+		[HttpPut("unlock-account")]
+        public async Task<IActionResult> UnlockAccount(ConfirmEmailDto model)
+        {
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null) return Unauthorized("Este endereço de email ainda não foi registado");
+            if (!user.EmailConfirmed) return BadRequest("O email ainda não foi confirmado. Confirme o seu email para poder recuperar a sua password");
+            if (user.IsSuspended) return BadRequest("A sua conta encontra-se suspensa e não é recuperável");
+
+
+            var decodedTokenBytes = WebEncoders.Base64UrlDecode(model.Token);
+            var decodedToken = Encoding.UTF8.GetString(decodedTokenBytes);
+            var isValidToken = await _userManager.VerifyUserTokenAsync(user, "Default", "UnlockUser", decodedToken);
+            if (!isValidToken)
+            {
+                return BadRequest("Token inválido ou expirado.");
+            }
+
+            await _userManager.ResetAccessFailedCountAsync(user);
+            await _userManager.SetLockoutEndDateAsync(user, DateTimeOffset.UtcNow);
+
+            return Ok(new JsonResult(new { title = "Conta desbloqueada", message = "A sua conta foi desbloquada com sucesso. Já pode fazer login com a sua conta" }));
+        }
+
+        /// <summary>
+		/// Método para obter tipos de profissionais.
+		/// </summary>
+		[HttpGet("get-professional-types")]
         public async Task<ActionResult<List<ProfessionalType>>> GetProfessionalTypes()
         {
             try
@@ -418,6 +558,23 @@ namespace LusoHealthClient.Server.Controllers
             return await _emailService.SendEmailAsync(emailSend);
         }
 
+        private async Task<bool> SendRecoverAccountEmail(User user)
+        {
+            var token = await _userManager.GenerateUserTokenAsync(user, "Default", "UnlockUser");
+            token = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
+            var url = $"{_config["JWT:ClientUrl"]}/{_config["Email:RecoverAccountPath"]}?token={token}&email={user.Email}";
+
+            var body = $"Olá {user.FirstName + " " + user.LastName}, <br/>" +
+                $"Clique no link abaixo para desbloquear a sua conta: <br/>" +
+                $"<a href='{url}'>Recuperar conta</a> <br/>" +
+                "<p>Obrigado,</p> <br/>" +
+                $"{_config["Email:ApplicationName"]}";
+
+            var emailSend = new EmailSendDto(user.Email, "Recuperar Conta", body);
+
+            return await _emailService.SendEmailAsync(emailSend);
+        }
+
         private async Task<bool> GoogleValidatedAsync(string accessToken, string userId)
         {
             var payload = await GoogleJsonWebSignature.ValidateAsync(accessToken);
@@ -444,6 +601,64 @@ namespace LusoHealthClient.Server.Controllers
                 return false;
             }
             return true;
+        }
+
+        private bool CheckSuspensionValidityAsync(User user)
+        {
+            if (user.IsSuspended)
+            {
+                if (user.LockoutEnd > DateTime.UtcNow)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private async Task<bool> UnlockUserAsync(User user)
+        {
+            user.IsSuspended = false;
+            var result = await _userManager.UpdateAsync(user);
+            if (result.Succeeded) return true;
+            return false;
+        }
+
+
+        private string GetCountdownString(User user)
+        {
+            TimeSpan timeRemaining = user.LockoutEnd.Value - DateTime.UtcNow;
+            string dataHora = "";
+
+            // Construir a string condicionalmente
+            List<string> parts = new List<string>();
+            if (timeRemaining.Days > 0)
+            {
+                parts.Add($"{timeRemaining.Days} dias");
+            }
+            if (timeRemaining.Hours > 0 || timeRemaining.Days > 0)
+            {
+                parts.Add($"{timeRemaining.Hours} horas");
+            }
+            if (timeRemaining.Minutes > 0 || timeRemaining.Hours > 0 || timeRemaining.Days > 0)
+            {
+                parts.Add($"{timeRemaining.Minutes} minutos");
+            }
+            if (timeRemaining.TotalSeconds > 0 && parts.Count == 0) // Se não houver dias, horas ou minutos
+            {
+                parts.Add($"menos de 1 minuto");
+            }
+
+
+            dataHora = String.Join(", ", parts);
+            if (parts.Count > 1)
+            {
+                int lastCommaIndex = dataHora.LastIndexOf(", ");
+                if (lastCommaIndex >= 0)
+                {
+                    dataHora = dataHora.Substring(0, lastCommaIndex) + " e " + dataHora.Substring(lastCommaIndex + 2);
+                }
+            }
+            return dataHora;
         }
         #endregion
     }

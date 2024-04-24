@@ -14,6 +14,9 @@ export class ModerationService {
 
   constructor(private http: HttpClient, private router: Router) { }
 
+  /**
+   * Obtém o JWT do armazenamento local.
+   */
   getJWT() {
     const key = localStorage.getItem(environment.userKey);
     if (key) {
@@ -24,6 +27,9 @@ export class ModerationService {
     }
   }
 
+  /**
+   * Decodifica o token JWT.
+   */
   getDecodedToken() {
     const jwt = this.getJWT();
     if (jwt != null) {
@@ -32,6 +38,9 @@ export class ModerationService {
     }
   }
 
+  /**
+  * Obtém os cabeçalhos HTTP com o token de autorização.
+  */
   getHeaders() {
     const jwt = this.getJWT();
 
@@ -43,71 +52,113 @@ export class ModerationService {
     return headers;
   }
 
+  /**
+  * Obtém relatórios gerais.
+  */
   getReports(offset: number, limit: number) {
     const headers = this.getHeaders();
     return this.http.get<reportModel[]>(`${environment.appUrl}/api/manage/get-reports/${offset}/${limit}`, {headers});
   }
 
+  /**
+  * Obtém relatórios concluídos.
+  */
   getReportsConcluded(offset: number, limit: number) {
     const headers = this.getHeaders();
     return this.http.get<reportModel[]>(`${environment.appUrl}/api/manage/get-reports-concluded/${offset}/${limit}`, { headers });
   }
 
+  /**
+  * Obtém relatórios cancelados.
+  */
   getReportsCanceled(offset: number, limit: number) {
     const headers = this.getHeaders();
     return this.http.get<reportModel[]>(`${environment.appUrl}/api/manage/get-reports-canceled/${offset}/${limit}`, { headers });
   }
 
+  /**
+  * Obtém relatórios pendentes.
+  */
   getReportsPending(offset: number, limit: number) {
     const headers = this.getHeaders();
     return this.http.get<reportModel[]>(`${environment.appUrl}/api/manage/get-reports-pending/${offset}/${limit}`, { headers });
   }
 
+  /**
+   * Cancela um relatório.
+   */
   cancelReport(report: reportModel) {
     const headers = this.getHeaders();
     return this.http.patch<reportModel>(`${environment.appUrl}/api/manage/cancel-report`, report, { headers });
   }
 
+  /**
+   * Suspende uma conta profissional.
+   */
   suspendAccountProfessional(report: reportModel) {
     const headers = this.getHeaders();
     return this.http.patch<reportModel>(`${environment.appUrl}/api/manage/suspend-account-professional`, report, { headers });
   }
 
+  /**
+  * Bloqueia uma conta profissional.
+  */
   blockAccountProfessional(report: reportModel) {
     const headers = this.getHeaders();
     return this.http.patch<reportModel>(`${environment.appUrl}/api/manage/block-account-professional`, report, { headers });
   }
 
+  /**
+   * Suspende uma conta de paciente.
+   */
   suspendAccountPatient(review: Review) {
     const headers = this.getHeaders();
     return this.http.patch<Review>(`${environment.appUrl}/api/manage/suspend-account-patient`, review, { headers });
   }
 
+  /**
+  * Bloqueia uma conta de paciente.
+  */
   blockAccountPatient(review: Review) {
     const headers = this.getHeaders();
     return this.http.patch<Review>(`${environment.appUrl}/api/manage/block-account-patient`, review, { headers });
   }
 
+  /**
+  * Obtém avaliações.
+  */
   getReviews(offset: number, limit: number) {
     const headers = this.getHeaders();
     return this.http.get<Review[]>(`${environment.appUrl}/api/manage/get-reviews/${offset}/${limit}`, { headers });
   }
 
+  /**
+   * Obtém avaliações reportadas.
+   */
   getReviewsReported(offset: number, limit: number) {
     const headers = this.getHeaders();
     return this.http.get<Review[]>(`${environment.appUrl}/api/manage/get-reviews-reported/${offset}/${limit}`, { headers });
   }
 
+  /**
+  * Obtém avaliações deletadas.
+  */
   getReviewsDeleted(offset: number, limit: number) {
     const headers = this.getHeaders();
     return this.http.get<Review[]>(`${environment.appUrl}/api/manage/get-reviews-deleted/${offset}/${limit}`, { headers });
   }
 
+  /**
+  * Obtém avaliações normais.
+  */
   getReviewsNormal(offset: number, limit: number) {
     const headers = this.getHeaders();
     return this.http.get<Review[]>(`${environment.appUrl}/api/manage/get-reviews-normal/${offset}/${limit}`, { headers });
   }
 
+  /**
+  * Deleta uma avaliação.
+  */
   deleteReview(review: Review) {
     const headers = this.getHeaders();
     return this.http.patch<Review>(`${environment.appUrl}/api/manage/delete-review`, review, { headers });

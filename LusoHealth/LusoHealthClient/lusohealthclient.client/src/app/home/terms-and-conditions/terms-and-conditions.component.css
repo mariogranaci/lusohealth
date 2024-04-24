@@ -1,0 +1,29 @@
+main {
+  min-height: calc(100vh - 65px);
+  margin-bottom: 50px;
+}
+
+.text {
+  font-size: 19px;
+  margin: 20px 40px;
+}
+
+h2, h3 {
+  margin: 20px 0;
+}
+
+ol {
+  list-style-type: disc;
+  margin-left: 20px;
+  margin-bottom: 15px;
+}
+
+p {
+  margin-bottom: 15px;
+}
+
+a{
+   text-decoration:underline;
+   color:black;
+}
+

@@ -33,6 +33,9 @@ export class PerfilPacienteComponent {
     this.unsubscribe$.complete();
   }
 
+  /**
+   * Obtém informações do perfil do utilizador.
+   */
   getUserProfileInfo() {
     this.profileService.getUserData().subscribe({
       next: (response: UserProfile) => {
@@ -52,6 +55,9 @@ export class PerfilPacienteComponent {
     );
   }
 
+  /**
+   * Inicializa os formulários de adição e edição de parentes.
+   */
   initializeForm() {
 
     this.addRelativeForm = this.formBuilder.group({
@@ -73,7 +79,9 @@ export class PerfilPacienteComponent {
     })
   }
 
-
+  /**
+   * Define os campos do perfil do utilizador.
+   */
   setFields() {
     const nomeElement = document.getElementById('nome');
     const apelidoElement = document.getElementById('apelido');
@@ -90,7 +98,7 @@ export class PerfilPacienteComponent {
           emailElement.textContent = userData.email;
           telemovelElement.textContent = userData.telemovel;
           nifElement.textContent = userData.nif;
-          genderElement.textContent = userData.genero;
+          genderElement.textContent = (userData.genero === "M") ? "Masculino" : "Feminino";
         },
         error => {
           if (error.error.errors) {
@@ -103,6 +111,9 @@ export class PerfilPacienteComponent {
     }
   }
 
+  /**
+   * Define os valores do formulário de edição com base no parente selecionado.
+   */
   setEditForm(relative: Relative)
   {
     this.editRelativeForm.setValue({
@@ -114,6 +125,9 @@ export class PerfilPacienteComponent {
     }) 
   }
 
+  /**
+  * Obtém a lista de parentes do utilizador.
+  */
   getRelatives() {
     this.profileService.getRelatives().pipe(
       takeUntil(this.unsubscribe$)
@@ -134,6 +148,9 @@ export class PerfilPacienteComponent {
     });
   }
 
+  /**
+   * Exclui um parente com o ID fornecido.
+   */
   deleteRelative(relativeId: number | null){
     if (relativeId != null)
     {
@@ -154,6 +171,10 @@ export class PerfilPacienteComponent {
     }
   }
 
+
+  /**
+   * Adiciona um novo parente.
+   */
   addRelative() {
     this.submitted = true;
     if (this.addRelativeForm.valid)
@@ -180,6 +201,9 @@ export class PerfilPacienteComponent {
     }
   }
 
+  /**
+   * Atualiza os dados de um parente.
+   */
   updateRelative(relative: Relative | null) {
     this.submitted = true;
     if (relative != null && this.editRelativeForm.valid)
@@ -204,6 +228,9 @@ export class PerfilPacienteComponent {
     }
   }
 
+  /**
+   * Abre o pop-up para adicionar ou editar parentes.
+   */
   openPopup(opcao: string) {
     const overlay = document.getElementById('overlay');
     const add = document.getElementById('add-speciality-container');
@@ -231,6 +258,9 @@ export class PerfilPacienteComponent {
     }
   }
 
+  /**
+   * Fecha o pop-up de adição ou edição de parentes.
+   */
   closePopup() {
     const overlay = document.getElementById('overlay');
     const add = document.getElementById('add-speciality-container');
@@ -247,16 +277,25 @@ export class PerfilPacienteComponent {
     }
   }
 
+  /**
+  * Chama várias funções para abrir o pop-up de edição e configura o formulário com os dados do parente selecionado.
+  */
   callMultipleFunctions(formType: string, relative: Relative): void {
     this.openPopup(formType);
     this.setEditForm(relative);
     this.selectedRelative = relative;
   }
 
+  /**
+   * Impede a propagação de eventos.
+   */
   stopPropagation(event: Event) {
     event.stopPropagation();
   }
 
+  /**
+   * Validador de idade para garantir que a data de nascimento seja válida.
+   */
   idadeValidator(control: AbstractControl): { [key: string]: any } | null {
     if (control.value) {
       const dataNascimento = new Date(control.value);

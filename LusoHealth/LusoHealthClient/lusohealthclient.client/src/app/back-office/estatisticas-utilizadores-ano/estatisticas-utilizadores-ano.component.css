@@ -1,0 +1,61 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #f2f2f2;
+  padding: 30px;
+  padding-bottom: 270px;
+}
+
+.title {
+  font-size: 32px;
+  margin-bottom: 30px;
+}
+
+.small-title {
+  font-size: 28px;
+  margin-bottom: 20px;
+  padding-left: 20px;
+}
+
+.chart {
+  background-color: #fff;
+  height: 350px;
+  width: 900px;
+  border-radius: 20px;
+  padding: 8px 10px 10px 10px;
+}
+
+.options {
+  margin: 20px;
+}
+
+#client-button {
+    border-top-left-radius: 7px;
+    border-bottom-left-radius: 7px;
+}
+
+#professional-button {
+  border-top-right-radius: 7px;
+  border-bottom-right-radius: 7px;
+}
+
+button {
+  border: 1px black;
+  outline: none;
+  cursor: pointer;
+  padding: 10px 20px;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+  button.active {
+    background-color: #007bff; /* Change to your desired color */
+    color: #fff; /* Change to your desired text color */
+  }
+
+  button:not(.active) {
+    background-color: #fff; /* Change to your desired color */
+    color: #333; /* Change to your desired text color */
+  }

@@ -17,7 +17,7 @@
         </li>
       </ul>
     </li>
-    <li *ngIf="(authenticationService.user$ | async) as user" class="sub-menu-parent">
+    <li *ngIf="userRole === 'Professional' || userRole === 'Patient'" class="sub-menu-parent">
       <a [routerLink]="['/professional-agenda']" *ngIf="userRole === 'Professional'" class="nav-link" routerLinkActive="active">
         <img class="menu-icons" src="assets/images/NavBar/agenda-icon.png" alt="Ícone Agenda" />
         <div id="agenda-text" class="nav-text"> Agenda </div>
@@ -39,16 +39,50 @@
         <div id="login-text" class="nav-text">Login</div>
       </a>
     </li>
+    <li class="sub-menu-parent" [routerLink]="['/reports']" *ngIf="userRole === 'Admin'">
+      <a class="nav-link" routerLinkActive="active">
+        <img class="menu-icons" src="assets/images/NavBar/warning.png" alt="Ícone Reports" />
+        <div id="login-text" class="nav-text">Reports</div>
+      </a>
+    </li>
     <li class="sub-menu-parent" *ngIf="(authenticationService.user$ | async) as user">
       <a [routerLink]="['/edit-professional-profile']" *ngIf="userRole === 'Professional'" class="nav-link" routerLinkActive="active">
         <img class="menu-icons" src="assets/images/NavBar/user-icon.png" alt="Ícone Perfil" />
         <div id="perfil-text" class="nav-text">Perfil</div>
       </a>
+      <a class="nav-link" [routerLink]="['/moderation']" *ngIf="userRole === 'Manager'" routerLinkActive="active">
+        <img class="menu-icons" src="assets/images/NavBar/comment.png" alt="Ícone Comentários" />
+        <div id="login-text" class="nav-text">Comentários</div>
+      </a>
       <a [routerLink]="['/patient-profile']" *ngIf="userRole === 'Patient'" class="nav-link" routerLinkActive="active">
         <img class="menu-icons" src="assets/images/NavBar/user-icon.png" alt="Ícone Perfil" />
         <div id="perfil-text" class="nav-text">Perfil</div>
       </a>
+      <a *ngIf="userRole === 'Admin'" class="nav-link" routerLinkActive="active">
+        <img class="menu-icons" src="assets/images/NavBar/statistics.png" alt="Ícone Estatísticas" />
+        <div id="perfil-text" class="nav-text">Estatísticas</div>
+      </a>
       <ul class="sub-menu" *ngIf="(authenticationService.user$ | async) as user">
+        <li class="dropdown-element" *ngIf="userRole === 'Admin'">
+          <img src="assets/images/NavBar/barchart.png" />
+          <a [routerLink]="['/statistics-users-per-year']" class="nav-link" routerLinkActive="active">Evolução de Registos</a>
+        </li>
+        <li class="dropdown-element" *ngIf="userRole === 'Admin'">
+          <img src="assets/images/NavBar/cards.png" />
+          <a [routerLink]="['/statistics-users-registered']" class="nav-link" routerLinkActive="active">Contas Válidas</a>
+        </li>
+        <li class="dropdown-element" *ngIf="userRole === 'Admin'">
+          <img src="assets/images/NavBar/heatmap.png" />
+          <a [routerLink]="['/statistics-professional-county']" class="nav-link" routerLinkActive="active">Distribuição Geográfica</a>
+        </li>
+        <li class="dropdown-element" *ngIf="userRole === 'Admin'">
+          <img src="assets/images/NavBar/pie-chart.png" />
+          <a [routerLink]="['/statistics-professional-appointments']" class="nav-link" routerLinkActive="active">Maiores Especialidades</a>
+        </li>
+        <li class="dropdown-element" *ngIf="userRole === 'Admin'">
+          <img src="assets/images/NavBar/star-search.png" />
+          <a [routerLink]="['/statistics-professional-classification']" class="nav-link" routerLinkActive="active">Melhores Profissionais</a>
+        </li>
         <li class="dropdown-element" (click)="logout()" *ngIf="user">
           <img src="assets/images/NavBar/logout.png" />
           <a routerLink="" class="nav-link" routerLinkActive="active">Terminar Sessão</a>

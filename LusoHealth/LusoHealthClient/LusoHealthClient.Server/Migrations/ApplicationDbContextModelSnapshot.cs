@@ -57,6 +57,61 @@ namespace LusoHealthClient.Server.Migrations
                     b.ToTable("AvailableSlots");
                 });
 
+            modelBuilder.Entity("LusoHealthClient.Server.Models.Chat.Chat", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AppointmentId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Chat");
+                });
+
+            modelBuilder.Entity("LusoHealthClient.Server.Models.Chat.Message", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ChatId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsImage")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChatId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Message");
+                });
+
             modelBuilder.Entity("LusoHealthClient.Server.Models.FeedbackAndReports.Report", b =>
                 {
                     b.Property<int>("Id")
@@ -128,6 +183,25 @@ namespace LusoHealthClient.Server.Migrations
                     b.HasIndex("ProfessionalUserID");
 
                     b.ToTable("Reviews");
+                });
+
+            modelBuilder.Entity("LusoHealthClient.Server.Models.Professionals.Address", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AddressName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Location")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Addresses");
                 });
 
             modelBuilder.Entity("LusoHealthClient.Server.Models.Professionals.Certificate", b =>
@@ -1464,11 +1538,14 @@ namespace LusoHealthClient.Server.Migrations
 
             modelBuilder.Entity("LusoHealthClient.Server.Models.Services.Appointment", b =>
                 {
-                    b.Property<int?>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("AddressId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -1485,9 +1562,6 @@ namespace LusoHealthClient.Server.Migrations
                     b.Property<int?>("IdService")
                         .HasColumnType("int");
 
-                    b.Property<string>("Location")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("PaymentIntentId")
                         .HasColumnType("nvarchar(max)");
 
@@ -1501,6 +1575,8 @@ namespace LusoHealthClient.Server.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AddressId");
 
                     b.HasIndex("IdPatient");
 
@@ -1526,16 +1602,18 @@ namespace LusoHealthClient.Server.Migrations
                     b.Property<string>("UserID")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("AddressId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Location")
+                    b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ProfessionalTypeId")
                         .HasColumnType("int");
 
                     b.HasKey("UserID");
+
+                    b.HasIndex("AddressId");
 
                     b.HasIndex("ProfessionalTypeId");
 
@@ -1592,6 +1670,9 @@ namespace LusoHealthClient.Server.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -1828,6 +1909,23 @@ namespace LusoHealthClient.Server.Migrations
                     b.Navigation("Service");
                 });
 
+            modelBuilder.Entity("LusoHealthClient.Server.Models.Chat.Message", b =>
+                {
+                    b.HasOne("LusoHealthClient.Server.Models.Chat.Chat", null)
+                        .WithMany("Messages")
+                        .HasForeignKey("ChatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LusoHealthClient.Server.Models.Users.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("LusoHealthClient.Server.Models.FeedbackAndReports.Review", b =>
                 {
                     b.HasOne("LusoHealthClient.Server.Models.Users.Patient", "Patient")
@@ -1837,7 +1935,7 @@ namespace LusoHealthClient.Server.Migrations
                         .IsRequired();
 
                     b.HasOne("LusoHealthClient.Server.Models.Professionals.Service", "Service")
-                        .WithMany()
+                        .WithMany("Reviews")
                         .HasForeignKey("IdService")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1894,6 +1992,10 @@ namespace LusoHealthClient.Server.Migrations
 
             modelBuilder.Entity("LusoHealthClient.Server.Models.Services.Appointment", b =>
                 {
+                    b.HasOne("LusoHealthClient.Server.Models.Professionals.Address", "Address")
+                        .WithMany()
+                        .HasForeignKey("AddressId");
+
                     b.HasOne("LusoHealthClient.Server.Models.Users.Patient", "Patient")
                         .WithMany()
                         .HasForeignKey("IdPatient");
@@ -1905,6 +2007,8 @@ namespace LusoHealthClient.Server.Migrations
                     b.HasOne("LusoHealthClient.Server.Models.Professionals.Service", "Service")
                         .WithMany()
                         .HasForeignKey("IdService");
+
+                    b.Navigation("Address");
 
                     b.Navigation("Patient");
 
@@ -1926,6 +2030,10 @@ namespace LusoHealthClient.Server.Migrations
 
             modelBuilder.Entity("LusoHealthClient.Server.Models.Users.Professional", b =>
                 {
+                    b.HasOne("LusoHealthClient.Server.Models.Professionals.Address", "Address")
+                        .WithMany()
+                        .HasForeignKey("AddressId");
+
                     b.HasOne("LusoHealthClient.Server.Models.Professionals.ProfessionalType", "ProfessionalType")
                         .WithMany()
                         .HasForeignKey("ProfessionalTypeId")
@@ -1937,6 +2045,8 @@ namespace LusoHealthClient.Server.Migrations
                         .HasForeignKey("UserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Address");
 
                     b.Navigation("ProfessionalType");
 
@@ -2003,6 +2113,16 @@ namespace LusoHealthClient.Server.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("LusoHealthClient.Server.Models.Chat.Chat", b =>
+                {
+                    b.Navigation("Messages");
+                });
+
+            modelBuilder.Entity("LusoHealthClient.Server.Models.Professionals.Service", b =>
+                {
+                    b.Navigation("Reviews");
                 });
 
             modelBuilder.Entity("LusoHealthClient.Server.Models.Users.Patient", b =>

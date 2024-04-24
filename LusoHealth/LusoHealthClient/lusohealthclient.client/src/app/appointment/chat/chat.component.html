@@ -14,7 +14,7 @@
 
     <div class="left">
 
-      <div id="title-data" *ngIf="!isSenderPatient">
+      <div id="title-data" *ngIf="senderRole === 'Patient'">
         <figure>
           <img class="image" alt="Imagem de Perfil" src="/assets/images/Perfil/profileImage.jpg" />
         </figure>
@@ -23,7 +23,7 @@
         <div class="text-appointment">Especialidade: {{service?.specialty}}</div>
       </div>
 
-      <div id="title-data" *ngIf="isSenderPatient">
+      <div id="title-data" *ngIf="senderRole === 'Professional'">
         <figure>
           <img class="image" alt="Imagem de Perfil" src="/assets/images/Perfil/profileImage.jpg" />
         </figure>
@@ -36,11 +36,11 @@
         <button class="btn btn-blue" (click)="startChat()">Iniciar Conversa</button>
       </section>
 
-      <section *ngIf="appointment?.state !== 'Done' && appointment?.state !== 'Canceled' && chatEnabled && !isSenderPatient">
+      <section *ngIf="appointment?.state !== 'Done' && appointment?.state !== 'Canceled' && chatEnabled && (senderRole === 'Professional')">
         <button class="btn btn-red" (click)="openPopup('remove')">Terminar Conversa</button>
       </section>
 
-      <section *ngIf="isSenderPatient">
+      <section *ngIf="senderRole === 'Patient'">
         <button class="btn btn-blue" [routerLink]="['/professional-profile']" [queryParams]="{ id: appointment?.idProfessional }">Ver Perfil</button>
       </section>
     </div>
@@ -49,54 +49,55 @@
 
       <div class="chat">
 
-        <!--JAIME TENS QUE POR O IS SENDER PARA TODOS IGUAL OU SEJA [class.sender]="isSender-->
-        <!--E TENS QUE CRIAR NO TYPESCRIPT UMA FORMA DE DAR ASSIGN AO isSender -->
-        <!--O USER PARA PASSAR A CLASS COMO DEVE SER, MESMA COISA COM O NOME DA OUTRA PESSOA-->
-
-        <div class="container" [class.sender]="!isSender">
-          <p *ngIf="isSenderPatient" class="name">{{patient?.firstName}} {{patient?.lastName}}</p>
-          <p *ngIf="!isSenderPatient" class="name">{{professional?.professionalInfo?.firstName}} {{professional?.professionalInfo?.lastName}}</p>
-          <p class="text">Hello. How are you today? asdfasdfadfsasdfasdfasdfasdfasdfasdfasdf</p>
-          <span class="time">11:00</span>
+        <div class="chat-header">
         </div>
 
-        <div class="container" [class.sender]="isSender">
-          <p *ngIf="isSenderPatient" class="name">{{patient?.firstName}} {{patient?.lastName}}</p>
-          <p *ngIf="!isSenderPatient" class="name">{{professional?.professionalInfo?.firstName}} {{professional?.professionalInfo?.lastName}}</p>
-          <p class="text">Hey! I'm fine. Thanks for asking!</p>
-          <span class="time">11:01</span>
+        <div *ngFor="let message of messages" class="container" [class.sender]="userId === message.userId" [class.not-sender]="userId !== message.userId">
+          <div *ngIf="senderRole === 'Professional'">
+            <div *ngIf="userId === message.userId">
+              <p class="text white-text">{{message.text}}</p>
+              <div class="time-container">
+                <span class="time white-text">{{ message.timestamp | date:'shortDate':'UTC +1':'pt-PT'}} {{message.timestamp | date:'shortTime':'UTC +1':'pt-PT' }}</span>
+              </div>
+            </div>
+            <div *ngIf="!(userId === message.userId)">
+              <p class="text">{{message.text}}</p>
+              <div class="time-container">
+                <span class="time">{{message.timestamp | date:'shortDate':'UTC +1':'pt-PT'}} {{message.timestamp | date:'shortTime':'UTC +1':'pt-PT'}}</span>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="senderRole === 'Patient'">
+            <div *ngIf="userId === message.userId">
+              <p class="text white-text">{{message.text}}</p>
+              <div class="time-container">
+                <span class="time white-text">{{ message.timestamp | date:'shortDate':'UTC +1':'pt-PT'}} {{message.timestamp | date:'shortTime':'UTC +1':'pt-PT' }}</span>
+              </div>
+            </div>
+            <div *ngIf="!(userId === message.userId)">
+              <p class="text">{{message.text}}</p>
+              <div class="time-container">
+                <span class="time">{{message.timestamp | date:'shortDate':'UTC +1':'pt-PT'}} {{message.timestamp | date:'shortTime':'UTC +1':'pt-PT'}}</span>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div class="container" [class.sender]="!isSender">
-          <p *ngIf="isSenderPatient" class="name">{{patient?.firstName}} {{patient?.lastName}}</p>
-          <p *ngIf="!isSenderPatient" class="name">{{professional?.professionalInfo?.firstName}} {{professional?.professionalInfo?.lastName}}</p>
-          <p class="text">Sweet! So, what do you wanna do today?</p>
-          <span class="time">11:02</span>
-        </div>
 
-        <div class="container" [class.sender]="isSender">
-          <p *ngIf="isSenderPatient" class="name">{{patient?.firstName}} {{patient?.lastName}}</p>
-          <p *ngIf="!isSenderPatient" class="name">{{professional?.professionalInfo?.firstName}} {{professional?.professionalInfo?.lastName}}</p>
-          <p class="text">Nah, I dunno. Play soccer.. or learn more coding perhaps?</p>
-          <span class="time">11:05</span>
-        </div>
-        <div class="container" [class.sender]="isSender">
-          <p *ngIf="isSenderPatient" class="name">{{patient?.firstName}} {{patient?.lastName}}</p>
-          <p *ngIf="!isSenderPatient" class="name">{{professional?.professionalInfo?.firstName}} {{professional?.professionalInfo?.lastName}}</p>
-          <p class="text">?</p>
-          <span class="time">11:05</span>
-        </div>
       </div>
-
-      <div id="messageDiv">
-        <figure class="message-icon-left">
-          <img src="assets/images/Chat/image-icon.png" alt="Ícone de pesquisa de filtros">
-        </figure>
-        <input class="messageBar" type="text" placeholder="Escreva uma mensagem">
-        <figure class="message-icon-right">
-          <img src="assets/images/Chat/send-icon.png" alt="Ícone de pesquisa de filtros">
-        </figure>
-      </div>
+      <form [formGroup]="sendMessageForm" id="messageDiv" autocomplete="off" (ngSubmit)="sendMessage()">
+        <button class="send-button message-icon-left">
+          <figure class="">
+            <img src="assets/images/Chat/image-icon.png" alt="Butão de submissão de imagens">
+          </figure>
+        </button>
+        <input class="messageBar" type="text" formControlName="message" placeholder="Escreva uma mensagem...">
+        <button type="submit" class="send-button message-icon-right">
+          <figure class="">
+            <img src="assets/images/Chat/send-icon.png" alt="Butão de envio de mensagens">
+          </figure>
+        </button>
+      </form>
     </div>
   </section>
 

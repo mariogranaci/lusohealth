@@ -38,6 +38,9 @@ export class ModerationComponent {
     this.unsubscribe$.complete();
   }
 
+  /**
+   * Carrega mais avaliações gerais.
+   */
   loadMoreReviews() {
     this.moderationService.getReviews(this.offsetGeneral, this.limit).subscribe({
       next: (newReviews: Review[]) => {
@@ -52,6 +55,9 @@ export class ModerationComponent {
     });
   }
 
+  /**
+ * Carrega mais avaliações reportadas.
+ */
   loadMoreReviewsReported() {
     this.moderationService.getReviewsReported(this.offsetReported, this.limit).subscribe({
       next: (newReviews: Review[]) => {
@@ -66,6 +72,9 @@ export class ModerationComponent {
     });
   }
 
+  /**
+ * Carrega mais avaliações excluídas.
+ */
   loadMoreReviewsDeleted() {
     this.moderationService.getReviewsDeleted(this.offsetDeleted, this.limit).subscribe({
       next: (newReviews: Review[]) => {
@@ -80,6 +89,9 @@ export class ModerationComponent {
     });
   }
 
+  /**
+ * Carrega mais avaliações normais.
+ */
   loadMoreReviewsNormal() {
     this.moderationService.getReviewsNormal(this.offsetNormal, this.limit).subscribe({
       next: (newReviews: Review[]) => {
@@ -94,6 +106,10 @@ export class ModerationComponent {
     });
   }
 
+  /**
+   * Remove uma avaliação.
+   * @param review A avaliação a ser removida.
+   */
   deleteReview(review: Review) {
     this.moderationService.deleteReview(review).pipe(
       takeUntil(this.unsubscribe$)
@@ -112,6 +128,10 @@ export class ModerationComponent {
     });
   }
 
+  /**
+ * Suspende a conta de um paciente com base na revisão fornecida.
+ * @param review A revisão que contém informações sobre o paciente a ser suspenso.
+ */
   suspendAccount(review: Review) {
     this.moderationService.suspendAccountPatient(review).pipe(
       takeUntil(this.unsubscribe$)
@@ -130,6 +150,10 @@ export class ModerationComponent {
     });
   }
 
+  /**
+ * Bloqueia a conta de um paciente com base na revisão fornecida.
+ * @param review A revisão que contém informações sobre o paciente a ser bloqueado.
+ */
   blockAccount(review: Review) {
     this.moderationService.blockAccountPatient(review).pipe(
       takeUntil(this.unsubscribe$)
@@ -148,6 +172,9 @@ export class ModerationComponent {
     });
   }
 
+  /**
+   * Atualiza as avaliações exibidas com base no filtro selecionado.
+   */
   updateDisplayedReviews() {
     const value = document.getElementById("state") as HTMLSelectElement | null;
 
@@ -178,6 +205,9 @@ export class ModerationComponent {
     }
   }
 
+  /**
+ * Este método chama os métodos apropriados para carregar mais avaliações, dependendo do estado selecionado.
+ */
   addDisplayedReviews() {
     const value = document.getElementById("state") as HTMLSelectElement | null;
 
@@ -201,6 +231,11 @@ export class ModerationComponent {
     }
   }
 
+  /**
+ * Converte uma string de data e hora em um formato de hora (HH:mm).
+ * @param dateTimeString A string de data e hora a ser convertida.
+ * @returns A string formatada no formato de hora (HH:mm).
+ */
   convertToHours(dateTimeString: Date | null): string {
     if (!dateTimeString) {
       return "";
@@ -217,7 +252,12 @@ export class ModerationComponent {
     return formattedHours + ":" + formattedMinutes;
   }
 
-
+  /**
+ * Converte uma string de data e hora em um formato de data.
+ * A data é formatada como "Dia Mês Ano", por exemplo, "15 Janeiro 2022".
+ * @param dateTimeString A string de data e hora a ser convertida.
+ * @returns A string formatada no formato de data.
+ */
   convertToDate(dateTimeString: Date | null): string {
     if (!dateTimeString) {
       return "";
@@ -239,6 +279,10 @@ export class ModerationComponent {
     return formattedDate;
   }
 
+  /**
+  * Abre o popup de opções para uma avaliação específica.
+  * @param review A avaliação para a qual as opções serão exibidas.
+  */
   openPopup(review: Review) {
     const overlay = document.getElementById('overlay');
     const options = document.getElementById('options');
@@ -257,6 +301,9 @@ export class ModerationComponent {
     }
   }
 
+  /**
+   * Fecha o popup de opções.
+   */
   closePopup() {
     const overlay = document.getElementById('overlay');
     const options = document.getElementById('options');
@@ -269,10 +316,17 @@ export class ModerationComponent {
     }
   }
 
+  /**
+   * Impede a propagação de eventos.
+   * @param event O evento a ser manipulado.
+   */
   stopPropagation(event: Event) {
     event.stopPropagation();
   }
 
+  /**
+   * Retorna para a página anterior.
+   */
   goBack() {
     this.location.back();
   }

@@ -1,0 +1,33 @@
+footer {
+  background-color: white;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  height: 60px;
+}
+
+.footer-section {
+  display: flex;
+  align-items: center;
+  color: black;
+  cursor: pointer;
+  padding: 10px;
+  font-size: 17px;
+  min-width:250px;
+}
+
+  .footer-section a {
+    width:100%;
+    color: black;
+    text-decoration: none;
+    text-align:center;
+  }
+
+    .footer-section a:hover {
+      text-decoration: underline;
+    }
+
+hr {
+  margin-top: 10px;
+  height: 70%;
+}

@@ -1,24 +1,9 @@
-<div class="header">
+<main>
   <!-- <h1 *ngIf="(authenticationService.user$ | async) === null">Bem vindo ao LusoHealth!</h1>
    <h1 *ngIf="(authenticationService.user$ | async) as user">Bem-vindo ao LusoHealth, {{ getFirstAndLastName(user.name) }}</h1>-->
-  <h1>LusoHealth</h1>
+  <div class="header">
 
-  <div id="searchSection">
-    <div id="searchDiv" [class.rounded-bottom]=" searchResults.length > 0">
-      <input class="searchBar" type="text" placeholder="Pesquise por especialidades"
-             (input)="onSearchInput($event)">
-      <figure class="searchIcon">
-        <img src="assets/images/HomePage/search.png" alt="Ícone de pesquisa de filtros">
-      </figure>
-    </div>
-    <ul id="myUL">
-      <li class="option" *ngFor="let specialty of searchResults" (click)="selectSpecialty(specialty)">
-        <a href="#">
-          <p>{{ specialty.name }}</p>
-          <p class="gray" >{{ getProfessionalTypeName(specialty.professionalTypeId) }}</p>
-        </a>
-      </li>
-    </ul>
+    <h1>LusoHealth</h1>
 
 
     <div id="searchSection">
@@ -52,8 +37,6 @@
       </div>
     </div>
   </div>
-</div>
-
 
 
   <section class="categorias" *ngFor="let professionalType of professionalTypes">
@@ -63,11 +46,14 @@
         <ng-container *ngIf="service.professional.professionalType === professionalType.name">
           <div class="tab" [routerLink]="['/make-appointment']" [queryParams]="{ serviceId: service.serviceId }">
             <div id="icons">
-              <figure class="rating">{{ returnStars(service) === 0 ? '-' : returnStars(service)}} <img alt="Estrela" class="star" src="/assets/images/profile/star.png"></figure>
+              <figure class="rating">
+                <p>{{ returnStars(service) === 0 ? '-' : returnStars(service)}}</p>
+                <img alt="Estrela" class="star" src="/assets/images/profile/star.png">
+              </figure>
             </div>
             <div class="content">
               <div class="content-name">
-                <span>{{ service.professional.professionalInfo.firstName  }} {{ service.professional.professionalInfo.lastName }}</span>
+                <span>{{ service.professional.professionalInfo.firstName | firstWord }} {{ service.professional.professionalInfo.lastName | lastWord }}</span>
               </div>
               <div>
                 <span>Especialidade:</span>
@@ -81,4 +67,5 @@
       </div>
     </div>
   </section>
+</main>
 

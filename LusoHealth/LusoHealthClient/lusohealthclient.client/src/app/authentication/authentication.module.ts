@@ -11,6 +11,8 @@ import { RecuperarPassComponent } from './recuperar-pass/recuperar-pass.componen
 import { ConfirmEmailComponent } from './confirm-email/confirm-email.component';
 import { AlterarPassComponent } from './alterar-pass/alterar-pass.component';
 import { RegisterWithGoogleComponent } from './register-with-google/register-with-google.component';
+import { FooterAuthenticationComponent } from './footer-authentication/footer-authentication.component';
+import { UnlockAccountComponent } from './unlock-account/unlock-account.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +22,9 @@ import { RegisterWithGoogleComponent } from './register-with-google/register-wit
     RecuperarPassComponent,
     ConfirmEmailComponent,
     AlterarPassComponent,
-    RegisterWithGoogleComponent
+    RegisterWithGoogleComponent,
+    FooterAuthenticationComponent,
+    UnlockAccountComponent
   ],
   imports: [
     CommonModule,

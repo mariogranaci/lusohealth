@@ -5,17 +5,21 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LusoHealthClient.Server.Models.Services
 {
-    public class Appointment
+	/// <summary>
+	/// Representa um agendamento de serviço, como uma consulta ou exame médico.
+	/// </summary>
+	public class Appointment
     {
         [Key]
-        public int? Id { get; set; }
+        public int Id { get; set; }
         public DateTime Timestamp { get; set; }
-        public string? Location { get; set; }
         public AppointmentType? Type { get; set; }
         public string? Description { get; set; }
         public AppointmentState? State { get; set; }
         public int? Duration { get; set; }
         public string? PaymentIntentId { get; set; }
+        [ForeignKey("Address")]
+        public int? AddressId { get; set; }
 
         [ForeignKey("Professional")]
         public string? IdProfesional { get; set; }
@@ -32,6 +36,7 @@ namespace LusoHealthClient.Server.Models.Services
         public Patient Patient { get; set; }
 
         public Service Service { get; set; }
+        public Address Address { get; set; }
 		#endregion
 	}
 }

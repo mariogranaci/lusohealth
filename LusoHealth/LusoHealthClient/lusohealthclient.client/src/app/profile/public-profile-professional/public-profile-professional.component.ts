@@ -94,6 +94,10 @@ export class PublicProfileProfessionalComponent implements OnInit {
     this.unsubscribe$.complete();
   }
 
+  /**
+ * Atualiza as variáveis de controle das estrelas de classificação com base no valor recebido.
+ * @param value O valor da classificação (de 1 a 5).
+ */
   checkInput(value: number): void {
 
 
@@ -136,6 +140,9 @@ export class PublicProfileProfessionalComponent implements OnInit {
     }
   }
 
+  /**
+ * Inicializa os formulários da aplicação.
+ */
   initializeForm() {
 
     this.addSpecialityForm = this.formBuilder.group({
@@ -156,6 +163,11 @@ export class PublicProfileProfessionalComponent implements OnInit {
     });
   }
 
+  /**
+ * Obtém informações do profissional com base no ID fornecido.
+ * @param id O ID do profissional.
+ * @returns Uma promessa que será resolvida quando as informações do profissional forem obtidas.
+ */
   getProfessionalInfo(id: string): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       this.profileService.getProfessionalInfoById(id).pipe(takeUntil(this.unsubscribe$)).subscribe(
@@ -187,6 +199,9 @@ export class PublicProfileProfessionalComponent implements OnInit {
     }
   }*/
 
+  /**
+ * Preenche os campos do utilizador com as informações do profissional.
+ */
   setUserFields() {
     const nomeElement = document.getElementById('nome');
     const emailElement = document.getElementById('email');
@@ -208,6 +223,11 @@ export class PublicProfileProfessionalComponent implements OnInit {
     }
   }
 
+  /**
+ * Converte os tipos de consulta de um serviço em uma string formatada.
+ * @param service O serviço.
+ * @returns Uma string contendo os tipos de consulta formatados.
+ */
   appointmentTypesToString(service: Service): string {
     const types: string[] = [];
 
@@ -227,6 +247,10 @@ export class PublicProfileProfessionalComponent implements OnInit {
     return types.join(", ");
   }
 
+  /**
+ * Manipula o evento de seleção de arquivo.
+ * @param event O evento de seleção de arquivo.
+ */
   onFileSelected(event: any) {
     const file = event.target.files[0];
 
@@ -249,6 +273,10 @@ export class PublicProfileProfessionalComponent implements OnInit {
       this.errorMessages.push('Ficheiro não é um pdf.');
     }
   }
+
+  /**
+ * Obtém os arquivos PDF relacionados ao profissional.
+ */
   getPdfs() {
     if (this.professionalId)
     this.profileService.getPdfsById(this.professionalId).subscribe(
@@ -262,6 +290,10 @@ export class PublicProfileProfessionalComponent implements OnInit {
     );
   }
 
+  /**
+ * Exclui um arquivo PDF pelo ID do certificado.
+ * @param certificateId O ID do certificado.
+ */
   deletePdf(certificateId: number) {
     this.profileService.deletePdf(certificateId).subscribe(
       response => {
@@ -275,6 +307,10 @@ export class PublicProfileProfessionalComponent implements OnInit {
     );
   }
 
+  /**
+ * Abre um arquivo PDF para visualização no navegador.
+ * @param pdfFilename O nome do arquivo PDF.
+ */
   openPdf(pdfFilename: string): void {
     this.profileService.downloadPdf(pdfFilename).subscribe(
       (blob: Blob) => {
@@ -292,6 +328,9 @@ export class PublicProfileProfessionalComponent implements OnInit {
     );
   }
 
+  /**
+ * Exibe a animação de marcação de verificação.
+ */
   showCheckAnimation() {
     const checkmark = document.querySelector('.container-animation');
 
@@ -300,6 +339,9 @@ export class PublicProfileProfessionalComponent implements OnInit {
     }
   }
 
+ /**
+ * Oculta a animação de marcação de verificação.
+ */
   hideCheckAnimation() {
 
     const checkmark = document.querySelector('.container-animation');
@@ -316,6 +358,9 @@ export class PublicProfileProfessionalComponent implements OnInit {
 
   }
 
+  /**
+ * Oculta a animação de marcação de verificação em caso de erro.
+ */
   errorHideCheckAnimation() {
     const checkmark = document.querySelector('.container-animation');
 
@@ -324,6 +369,9 @@ export class PublicProfileProfessionalComponent implements OnInit {
     }
   }
 
+  /**
+ * Adiciona uma especialidade ao perfil do profissional.
+ */
   addSpeciality() {
     this.submittedAdd = true;
     this.errorMessages = [];
@@ -378,6 +426,9 @@ export class PublicProfileProfessionalComponent implements OnInit {
     }
   }
 
+  /**
+ * Edita uma especialidade do perfil do profissional.
+ */
   editSpeciality() {
     this.submittedEdit = true;
     this.errorMessages = [];
@@ -417,6 +468,10 @@ export class PublicProfileProfessionalComponent implements OnInit {
     }
   }
 
+  /**
+ * Exibe a edição de uma especialidade.
+ * @param service A especialidade a ser editada.
+ */
   showSpecialtyEdit(service: Service) {
 
     this.selectEditService = service;
@@ -426,6 +481,9 @@ export class PublicProfileProfessionalComponent implements OnInit {
     this.setEditFormFields();
   }
 
+ /**
+ * Define os campos do formulário de edição com os valores da especialidade selecionada.
+ */
   setEditFormFields() {
 
     const nome = document.getElementById('speciality-name');
@@ -456,7 +514,10 @@ export class PublicProfileProfessionalComponent implements OnInit {
 
 
 
-
+  /**
+ * Recebe o evento de seleção de revisão.
+ * @param event O evento de seleção.
+ */
   selectReviewEventReceiver(event: Event) {
     const target = event.target as HTMLSelectElement;
     if (target) {
@@ -466,6 +527,10 @@ export class PublicProfileProfessionalComponent implements OnInit {
     }
   }
 
+  /**
+ * Altera a revisão da especialidade selecionada.
+ * @param value O valor da especialidade selecionada.
+ */
   changeSpecialtyReview(value: string) {
 
     const selectedValue = parseInt(value);
@@ -487,6 +552,10 @@ export class PublicProfileProfessionalComponent implements OnInit {
     }
   }
 
+  /**
+ * Filtra as revisões pela especialidade.
+ * @param serviceId O ID da especialidade.
+ */
   filterReviews(serviceId: number) {
 
     if (this.professionalId) {
@@ -509,6 +578,9 @@ export class PublicProfileProfessionalComponent implements OnInit {
     }
   }
 
+  /**
+ * Calcula a média das estrelas das revisões.
+ */
   private getAverageStars() {
     var sum = 0;
     for (let i = 0; i < this.reviews.length; i++) {
@@ -520,8 +592,10 @@ export class PublicProfileProfessionalComponent implements OnInit {
   /* ------------------------  Popups  -------------------------*/
 
 
-
-
+  /**
+ * Abre um popup específico.
+ * @param opcao A opção do popup a ser aberto.
+ */
   openPopup(opcao: string) {
     const overlay = document.getElementById('overlay');
     const add = document.getElementById('add-speciality-container');
@@ -549,6 +623,9 @@ export class PublicProfileProfessionalComponent implements OnInit {
     }
   }
 
+ /**
+ * Fecha o popup atualmente aberto.
+ */
   closePopup() {
     const overlay = document.getElementById('overlay');
     const add = document.getElementById('add-speciality-container');
@@ -565,6 +642,10 @@ export class PublicProfileProfessionalComponent implements OnInit {
     }
   }
 
+ /**
+ * Impede a propagação do evento.
+ * @param event O evento a ser interrompido.
+ */
   stopPropagation(event: Event) {
     event.stopPropagation();
   }

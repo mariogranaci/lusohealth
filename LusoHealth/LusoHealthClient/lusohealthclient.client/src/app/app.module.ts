@@ -6,9 +6,10 @@ import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { FormsModule } from '@angular/forms';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { FooterComponent } from './footer/footer.component';
 import { ModerationComponent } from './moderation/moderation/moderation.component';
 import { ReportsComponent } from './moderation/reports/reports.component';
-
+import { SharedModule } from './shared/shared.module';
 
 
 
@@ -16,10 +17,12 @@ import { ReportsComponent } from './moderation/reports/reports.component';
   declarations: [
     AppComponent,
     NavbarComponent,
+    FooterComponent,
   ],
   imports: [
     BrowserModule, HttpClientModule,
-    AppRoutingModule, FormsModule
+    AppRoutingModule, FormsModule,
+    SharedModule
   ],
   providers: [
     provideAnimationsAsync()

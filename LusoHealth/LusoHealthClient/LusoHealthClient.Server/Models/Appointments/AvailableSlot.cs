@@ -3,9 +3,12 @@ using LusoHealthClient.Server.Models.Services;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace LusoHealthClient.Server.Models.Appointments
-{
-    public class AvailableSlot
+namespace LusoHealthClient.Server.Models.Appointments { 
+
+	 /// <summary>
+	 /// Classe que representa um slot de horário disponível para agendamento de consulta.
+	 /// </summary>
+	public class AvailableSlot
     {
         [Key]
         public int Id { get; set; }

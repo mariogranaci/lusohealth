@@ -2,7 +2,10 @@
 
 namespace LusoHealthClient.Server.DTOs.Authentication
 {
-    public class ConfirmEmailDto
+	/// <summary>
+	///(DTO) para confirmar o email do utilizador.
+	/// </summary>
+	public class ConfirmEmailDto
     {
         [Required]
         public string Token { get; set; }

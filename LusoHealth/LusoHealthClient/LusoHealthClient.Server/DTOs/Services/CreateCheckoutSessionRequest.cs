@@ -2,7 +2,10 @@
 
 namespace LusoHealthClient.Server.DTOs.Services
 {
-    public class CreateCheckoutSessionRequest
+	// <summary>
+	///(DTO) que representa um pedido para criar uma sessão de checkout.
+	/// </summary>
+	public class CreateCheckoutSessionRequest
     {
         public decimal Amount { get; set; }
         public int AppointmentId { get; set; }

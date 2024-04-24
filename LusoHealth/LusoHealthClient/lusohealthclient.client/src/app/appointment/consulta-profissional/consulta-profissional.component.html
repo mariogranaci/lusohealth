@@ -14,7 +14,7 @@
           <h3>Consulta {{appointment?.type}} </h3>
           <div class="text-appointment" *ngIf="!updatedSlot">Data e Hora: {{convertToDate()}} às {{convertToHours()}}</div>
           <div class="text-appointment" *ngIf="updatedSlot">Data e Hora: {{updatedSlot.start | date:'longDate':'':'pt-PT'}} {{updatedSlot.start | date:'shortTime':'':'pt-PT'}}</div>
-          <div class="text-appointment" *ngIf="appointment?.location && appointment?.type !== 'Online'">Localização: {{appointment?.location}} </div>
+          <div class="text-appointment" *ngIf="appointment?.address && appointment?.type !== 'Online'">Localização: {{appointment?.address}} </div>
         </div>
       </div>
     </div>
@@ -49,11 +49,16 @@
     <div class="buttons" *ngIf="appointment?.state !== 'Canceled'">
       <button class="btn1" (click)="openPopup('edit')">Alterar Consulta</button>
       <button class="btn1" (click)="changeAppointmentScheduled()" *ngIf="appointment?.state !== 'Scheduled'">Aceitar Consulta</button>
-      <button class="btn1" (click)="openPopup('remove')">Cancelar Consulta</button>
+      <button class="btn1 btn-red" (click)="openPopup('remove')">Cancelar Consulta</button>
     </div>
-    <div *ngIf="(appointment?.type === 'Presential' || appointment?.type === 'Home') && appointment?.state !== 'Canceled'" id="map"></div>
+    <div *ngIf="(appointment?.type === 'Presential' || appointment?.type === 'Home') && appointment?.state !== 'Canceled'"></div>
     <button *ngIf="appointment?.type === 'Online' && appointment?.state !== 'Canceled'"
             [routerLink]="['/chat']" [queryParams]="{ appointment: appointment?.id }" class="btn1">Aceder ao chat</button>
+    <div *ngIf="appointment?.type !== 'Online' && appointment?.state !== 'Canceled'" id="localizacao">
+      <h3>Localização</h3>
+      <div id="map"></div>
+      <p>Localização: {{ address }}</p>
+    </div>
   </section>
 
 </main>

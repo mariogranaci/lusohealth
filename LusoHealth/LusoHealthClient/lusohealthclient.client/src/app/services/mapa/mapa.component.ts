@@ -2,13 +2,14 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ProfessionalType } from '../../shared/models/authentication/professionalType';
 import { Specialty } from '../../shared/models/profile/specialty';
 import { } from '@angular/google-maps';
-import { Loader } from '@googlemaps/js-api-loader';
-import { environment } from '../../../environments/environment.development';
-import { Marker } from '@googlemaps/adv-markers-utils';
 import { ServicesService } from '../services.service';
 import { Professional } from '../../shared/models/profile/professional';
 import { Subject, takeUntil } from 'rxjs';
-import { Bounds } from '../../shared/models/services/bounds';
+
+import { Loader } from '@googlemaps/js-api-loader';
+import { environment } from '../../../environments/environment.development';
+import { Marker } from '@googlemaps/adv-markers-utils';
+import { Bounds } from '../../shared/models/servic/bounds';
 
 declare var google: any;
 
@@ -53,7 +54,6 @@ export class MapaComponent implements OnInit {
     loader.load().then(async () => {
       this.initMap();
       this.initAutocomplete();
-      
     });
   }
 
@@ -62,16 +62,29 @@ export class MapaComponent implements OnInit {
     this.unsubscribe$.complete();
   }
 
-
+ /**
+ * Inicializa o mapa e seus componentes.
+ */
   async initMap(){
     await google.maps.importLibrary('marker');
 
     const domElement = document.querySelector('#map');
-    // create the map
+
+    const strictBounds = {
+      north: 43.083333,  // Norte até incluir Açores
+      south: 30.030199,  // Sul até incluir Ilhas Selvagens
+      west: -35.268639,  // Oeste até incluir Açores
+      east: -4.089159    // Leste até incluir parte continental e Madeira
+    };
+
     this.map = new google.maps.Map(domElement, {
       center: { lat: 38.7074, lng: -9.1368 },
       zoom: this.zoom,
-      mapId: 'lusohealth'
+      mapId: 'lusohealth',
+      restriction: {
+        latLngBounds: strictBounds,
+        strictBounds: true
+      }
     });
     if (this.map) {
       this.map.addListener('dragend', () => {
@@ -84,6 +97,9 @@ export class MapaComponent implements OnInit {
     }
   }
 
+ /**
+ * Inicializa a funcionalidade de autocompletar no campo de busca.
+ */
   initAutocomplete(): void {
     if (this.searchBox) {
       const autocomplete = new google.maps.places.Autocomplete(this.searchBox.nativeElement);
@@ -106,6 +122,9 @@ export class MapaComponent implements OnInit {
     }
   }
 
+ /**
+ * Obtém a localização atual do utilizador.
+ */
   getCurrentLocation(): void {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -147,6 +166,9 @@ export class MapaComponent implements OnInit {
     }
   }
 
+ /**
+ * Obtém os profissionais dentro dos limites do mapa.
+ */
   getProfessionalsOnBounds(): void {
     this.clearMarkers();
     if (this.map) {
@@ -163,10 +185,11 @@ export class MapaComponent implements OnInit {
           longitudeSouthWest: sw.lng()
         };
 
+        console.log('boundsMap', boundsMap);
 
         this.servicesService.getProfessionalsOnLocation(boundsMap).pipe(takeUntil(this.unsubscribe$)).subscribe(
           (professionals: Professional[]) => {
-
+            console.log("Professionals", professionals);
 
             this.updateProfessionalsWithConcelho(professionals).then(() => {
               this.professionals = professionals;
@@ -181,6 +204,10 @@ export class MapaComponent implements OnInit {
     }
   }
 
+ /**
+ * Obtém os limites do mapa.
+ * @returns Um objeto contendo os limites do mapa.
+ */
   getBoundsMap(): any {
     if (this.map) {
       const bounds = this.map.getBounds();
@@ -197,6 +224,7 @@ export class MapaComponent implements OnInit {
     }
   }
 
+ 
   fetchProfessionalsBasedOnMapBounds(): void {
     this.clearMarkers();
     if (this.map) {
@@ -241,6 +269,10 @@ export class MapaComponent implements OnInit {
     return professional.professionalType;
   }
 
+  /**
+ * Atualiza os profissionais com o nome do concelho.
+ * @param professionals A lista de profissionais.
+ */
   async updateProfessionalsWithConcelho(professionals: Professional[]): Promise<void> {
     const geocoder = new google.maps.Geocoder();
     for (const professional of professionals) {
@@ -256,7 +288,12 @@ export class MapaComponent implements OnInit {
     }
   }
 
-
+  /**
+ * Obtém o nome do concelho com base nas coordenadas.
+ * @param latlng As coordenadas (latitude e longitude).
+ * @param geocoder O objeto Geocoder do Google Maps.
+ * @returns O nome do concelho.
+ */
   getConcelho(latlng: { lat: number, lng: number }, geocoder: any): Promise<string> {
     return new Promise((resolve, reject) => {
       geocoder.geocode({ 'location': latlng }, (results: { address_components: any[]; }[], status: any) => {
@@ -271,6 +308,9 @@ export class MapaComponent implements OnInit {
     });
   }
 
+ /**
+ * Ordena os profissionais com base na classificação.
+ */
   orderBy() {
     const option = document.getElementById("order-select") as HTMLSelectElement | null;
     if (option && option.value === 'rank') {
@@ -293,6 +333,9 @@ export class MapaComponent implements OnInit {
     }
   }
 
+ /**
+ * Filtra os profissionais com base nas opções selecionadas.
+ */
   filterProfessionals(): void {
     const selectedCategory = document.getElementById("category") as HTMLSelectElement;
     const selectedSpecialty = document.getElementById("specialty") as HTMLSelectElement;
@@ -332,7 +375,9 @@ export class MapaComponent implements OnInit {
   }
 
 
-
+  /**
+  * Filtra os tipos de profissionais.
+  */
   filterProfessionalsType(): void {
     const selectedCategory = document.getElementById("category") as HTMLSelectElement;
     const professionalType = this.professionalTypes.find(type => type.id === parseInt(selectedCategory.value));
@@ -341,6 +386,9 @@ export class MapaComponent implements OnInit {
     }
   }
 
+  /**
+  * Atualiza o mapa com os profissionais filtrados.
+  */
   updateMapWithFilteredProfessionals(): void {
     // Limpa os marcadores antigos
     this.clearMarkers();
@@ -356,6 +404,9 @@ export class MapaComponent implements OnInit {
 
   }
 
+  /**
+  * Filtra as especialidades com base na categoria selecionada.
+  */
   filterSpecialties(): void {
     const selectedCategory = document.getElementById("category") as HTMLSelectElement;
     const professionalType = this.professionalTypes.find(type => type.id === parseInt(selectedCategory.value));
@@ -367,6 +418,9 @@ export class MapaComponent implements OnInit {
     }
   }
 
+  /**
+ * Calcula a classificação média dos profissionais.
+ */
   calculateStarsForProfessionals() {
     this.professionals.forEach(professional => {
       professional.averageStars = this.calculateStars(professional);
@@ -374,6 +428,11 @@ export class MapaComponent implements OnInit {
     });
   }
 
+  /**
+ * Calcula a classificação de um profissional.
+ * @param professional O profissional.
+ * @returns A classificação do profissional.
+ */
   calculateStars(professional: Professional): number {
     if (professional.reviews.length === 0) return 0;
 
@@ -381,6 +440,9 @@ export class MapaComponent implements OnInit {
     return totalStars / professional.reviews.length;
   }
 
+  /**
+  * Obtém os tipos de profissionais.
+  */
   getProfessionalTypes() {
     this.servicesService.getProfessionalTypes().pipe(takeUntil(this.unsubscribe$)).subscribe({
       next: (professionalTypes: ProfessionalType[]) => {
@@ -392,6 +454,9 @@ export class MapaComponent implements OnInit {
     });
   }
 
+  /**
+  * Obtém as especialidades.
+  */
   getSpecialties() {
     this.servicesService.getSpecialties().pipe(
       takeUntil(this.unsubscribe$)

@@ -23,7 +23,10 @@ using ReviewDto = LusoHealthClient.Server.DTOs.Profile.ReviewDto;
 
 namespace LusoHealthClient.Server.Controllers
 {
-    [Authorize]
+	/// <summary>
+	/// Controlador responsável por lidar com as operações relacionadas aos perfis de utilizadores.
+	/// </summary>
+	[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ProfileController : ControllerBase
@@ -32,13 +35,21 @@ namespace LusoHealthClient.Server.Controllers
         private readonly ApplicationDbContext _context;
         private readonly UserManager<User> _userManager;
 
-        public ProfileController(ApplicationDbContext context, UserManager<User> userManager)
+		/// <summary>
+		/// Construtor da classe ProfileController.
+		/// </summary>
+		/// <param name="context">Contexto da base de dados.</param>
+		/// <param name="userManager">O usermanager dos utilizadores.</param>
+		public ProfileController(ApplicationDbContext context, UserManager<User> userManager)
         {
             _context = context;
             _userManager = userManager;
         }
 
-        [HttpGet("get-user")]
+		/// <summary>
+		/// Obtém o perfil do utilizador atual.
+		/// </summary>
+		[HttpGet("get-user")]
         public async Task<ActionResult<UserProfileDto>> GetUser()
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -71,7 +82,11 @@ namespace LusoHealthClient.Server.Controllers
             return userProfileDto;
         }
 
-        [HttpGet("get-user/{id}")]
+		/// <summary>
+		/// Obtém o perfil de um utilizador pelo ID.
+		/// </summary>
+		/// <param name="id">O ID do utilizador.</param>
+		[HttpGet("get-user/{id}")]
         public async Task<ActionResult<UserProfileDto>> GetUserById(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
@@ -97,7 +112,10 @@ namespace LusoHealthClient.Server.Controllers
             return userProfileDto;
         }
 
-        [HttpGet("get-professional-info")]
+		/// <summary>
+		/// Obtém o perfil profissional do utilizador atual.
+		/// </summary>
+		[HttpGet("get-professional-info")]
         public async Task<ActionResult<ProfessionalDto>> GetProfessionalProfile()
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -107,7 +125,11 @@ namespace LusoHealthClient.Server.Controllers
             return await GetProfessionalInfo(userIdClaim);
         }
 
-        [HttpGet("get-professional-info/{id}")]
+		/// <summary>
+		/// Obtém o perfil profissional de um utilizador pelo ID.
+		/// </summary>
+		/// <param name="id">O ID do utilizador.</param>
+		[HttpGet("get-professional-info/{id}")]
         public async Task<ActionResult<ProfessionalDto>> GetProfessionalProfile(string id)
         {
             var response = await GetProfessionalInfo(id);
@@ -117,7 +139,11 @@ namespace LusoHealthClient.Server.Controllers
             return response.Value;
         }
 
-        private async Task<ActionResult<ProfessionalDto>> GetProfessionalInfo(string id)
+		/// <summary>
+		/// Obtém informações detalhadas do perfil profissional.
+		/// </summary>
+		/// <param name="id">O ID do utilizador.</param>
+		private async Task<ActionResult<ProfessionalDto>> GetProfessionalInfo(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
 
@@ -151,7 +177,7 @@ namespace LusoHealthClient.Server.Controllers
                 .ToListAsync();
             var reviews = GetReviewDtos(reviewsFromDB);
 
-            var professional = await _context.Professionals.Include(pt => pt.ProfessionalType).FirstOrDefaultAsync(p => p.UserID == user.Id);
+            var professional = await _context.Professionals.Include(pt => pt.ProfessionalType).Include(a => a.Address).FirstOrDefaultAsync(p => p.UserID == user.Id);
             //var certificates = GetCertificateDtos(professional.Certificates);
             //var professionalType = await _context.ProfessionalTypes.FirstOrDefaultAsync(pt => pt.Id == professional.ProfessionalTypeId);
 
@@ -163,12 +189,84 @@ namespace LusoHealthClient.Server.Controllers
                 Services = services,
                 Certificates = certificates,
                 Reviews = reviews,
-                Location = professional.Location,
+                Location = professional.Address != null ? professional.Address.Location : null,
+                Address = professional.Address != null ? professional.Address.AddressName : null,
                 Description = professional.Description,
                 ProfessionalType = professional.ProfessionalType.Name
             };
 
             return professionalDto;
+        }
+
+        /// <summary>
+		/// Atualiza a descrição do perfil profissional.
+		/// </summary>
+        [HttpPatch("update-address")]
+        public async Task<ActionResult> UpdateAddress(LocationDto model)
+        {
+
+            try
+            {
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
+
+                var user = await _userManager.FindByIdAsync(userIdClaim);
+                if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
+
+                var professional = await _context.Professionals.Include(a => a.Address).FirstOrDefaultAsync(p => p.UserID == user.Id);
+                if (professional == null) { return NotFound("Não foi possível encontrar o profissional"); }
+
+                if (model.Location.IsNullOrEmpty() || model.Address.IsNullOrEmpty())
+                {
+                    return BadRequest("A localização não é válida");
+                }
+                else
+                {
+                    string[] latLon = model.Location.Split(";");
+                    if (latLon.Length != 2)
+                    {
+                        return BadRequest("A localização não é válida");
+                    }
+                    else
+                    {
+                        if (!double.TryParse(latLon[0], out double lat) || !double.TryParse(latLon[1], out double lon))
+                        {
+                            return BadRequest("A localização não é válida");
+                        }
+                    }
+                }
+                
+                if (professional.AddressId != null)
+                {
+                    var address = await _context.Addresses.FirstOrDefaultAsync(a => a.Id == professional.AddressId);
+                    if (address == null) { return NotFound("Não foi possível encontrar a morada"); }
+
+                    address.Location = model.Location;
+                    address.AddressName = model.Address;
+
+                    _context.Addresses.Update(address);
+                }
+                else
+                {
+                    var newAddress = new Address
+                    {
+                        Location = model.Location,
+                        AddressName = model.Address
+                    };
+
+                    await _context.Addresses.AddAsync(newAddress);
+                    professional.AddressId = newAddress.Id;
+                    _context.Professionals.Update(professional);
+                }
+
+                await _context.SaveChangesAsync();
+
+                return Ok(new JsonResult(new { title = "Morada Alterada", message = "A sua morada foi alterada com sucesso." }));
+            }
+            catch (Exception)
+            {
+                return BadRequest("Não foi possivel alterar a morada. Tente Novamente.");
+            }
         }
 
         [HttpPatch("update-description")]
@@ -197,7 +295,10 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpPut("update-user-info")]
+		/// <summary>
+		/// Atualiza as informações do perfil do utilizador.
+		/// </summary>
+		[HttpPut("update-user-info")]
         public async Task<ActionResult> UpdateUserInfo(UserProfileDto model)
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -248,7 +349,10 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpPut("update-password")]
+		/// <summary>
+		/// Atualiza a password do utilizador.
+		/// </summary>
+		[HttpPut("update-password")]
         public async Task<ActionResult> UpdatePassword(UpdatePasswordDto model)
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -291,7 +395,10 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpPost("add-service")]
+		/// <summary>
+		/// Adiciona um novo serviço ao perfil profissional do utilizador.
+		/// </summary>
+		[HttpPost("add-service")]
         public async Task<ActionResult> AddService(ServiceDto model)
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -332,7 +439,10 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpPut("update-service")]
+		/// <summary>
+		/// Atualiza um serviço existente no perfil profissional do utilizador.
+		/// </summary>
+		[HttpPut("update-service")]
         public async Task<ActionResult> UpdateService(ServiceDto model)
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -369,7 +479,10 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpDelete("delete-service/{id}")]
+		/// <summary>
+		/// Remove um serviço do perfil profissional do utilizador.
+		/// </summary>
+		[HttpDelete("delete-service/{id}")]
         public async Task<ActionResult> DeleteService(int id)
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -397,7 +510,10 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpGet("filter-reviews-by-service/{id}")]
+		/// <summary>
+		/// Filtra as avaliações por um serviço específico.
+		/// </summary>
+		[HttpGet("filter-reviews-by-service/{id}")]
         public async Task<ActionResult<List<ReviewDto>>> FilterReviewsByService(int id)
         {
             try
@@ -425,7 +541,10 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpGet("filter-reviews-by-service/{idSpecialty}/{idProfessional}")]
+		/// <summary>
+		/// Filtra as avaliações por um serviço específico.
+		/// </summary>
+		[HttpGet("filter-reviews-by-service/{idSpecialty}/{idProfessional}")]
         public async Task<ActionResult<List<ReviewDto>>> FilterReviewsByService(int idSpecialty, string idProfessional)
         {
             try
@@ -446,7 +565,10 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        private async Task<ActionResult<List<ReviewDto>>> GetFilteredReviewsByService(int idSpecialty, string idProfessional)
+		/// <summary>
+		/// Obtém as avaliações filtradas por um serviço específico.
+		/// </summary>
+		private async Task<ActionResult<List<ReviewDto>>> GetFilteredReviewsByService(int idSpecialty, string idProfessional)
         {
             if (idSpecialty <= 0)
             {
@@ -476,7 +598,10 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpGet("get-relatives")]
+		/// <summary>
+		/// Obtém os familiares associados ao utilizador.
+		/// </summary>
+		[HttpGet("get-relatives")]
         public async Task<ActionResult<List<RelativeDto>>> GetRelatives()
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -509,7 +634,10 @@ namespace LusoHealthClient.Server.Controllers
             return relativeDtos;
         }
 
-        [HttpDelete("delete-relative/{relativeId}")]
+		/// <summary>
+		/// Exclui um familiar associado ao utilizador.
+		/// </summary>
+		[HttpDelete("delete-relative/{relativeId}")]
         public async Task<ActionResult> DeleteRelative(int relativeId)
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -533,8 +661,10 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-
-        [HttpPost("add-relative")]
+		/// <summary>
+		/// Adiciona um familiar associado ao utilizador.
+		/// </summary>
+		[HttpPost("add-relative")]
         public async Task<ActionResult> AddRelative(RelativeDto relativeDto)
         {
             try
@@ -566,7 +696,10 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpPut("update-relative/{relativeId}")]
+		/// <summary>
+		/// Atualiza um familiar associado ao utilizador.
+		/// </summary>
+		[HttpPut("update-relative/{relativeId}")]
         public async Task<ActionResult> UpdateRelative(RelativeDto relativeDto)
         {
             try
@@ -597,7 +730,10 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpPut("update-picture")]
+		/// <summary>
+		/// Atualiza a foto de perfil do utilizador.
+		/// </summary>
+		[HttpPut("update-picture")]
         [DisableRequestSizeLimit]
         public async Task<ActionResult> UpdatePicture()
         {
@@ -649,7 +785,10 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpGet("get-profile-picture")]
+		/// <summary>
+		/// Obtém a foto de perfil do utilizador.
+		/// </summary>
+		[HttpGet("get-profile-picture")]
         public async Task<IActionResult> GetProfilePicture()
 
         {
@@ -719,8 +858,10 @@ namespace LusoHealthClient.Server.Controllers
 
 
 
-
-        [HttpPost("add-report")]
+		/// <summary>
+		/// Adiciona um relatório de profissional pelo utilizador.
+		/// </summary>
+		[HttpPost("add-report")]
         public async Task<ActionResult> AddReport(ReportDto reportDto)
         {
 
@@ -750,7 +891,10 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpGet("get-specialties")]
+		/// <summary>
+		/// Obtém as especialidades associadas ao profissional logado.
+		/// </summary>
+		[HttpGet("get-specialties")]
         public async Task<ActionResult<List<Specialty>>> GetSpecialties()
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -774,7 +918,10 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpPost("add-review")]
+		/// <summary>
+		/// Adiciona uma review para um serviço.
+		/// </summary>
+		[HttpPost("add-review")]
         public async Task<ActionResult> AddReview(AddReviewDto reviewDto)
         {
             try
@@ -808,7 +955,10 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpPost("upload-pdf")]
+		/// <summary>
+		/// Faz upload de um arquivo PDF.
+		/// </summary>
+		[HttpPost("upload-pdf")]
         [DisableRequestSizeLimit]
         public async Task<ActionResult> UploadPdf()
         {
@@ -855,7 +1005,11 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpGet("get-pdfs")]
+		/// <summary>
+		/// Obtém os certificados do profissional logado.
+		/// </summary>
+		/// <returns>Uma lista de CertificateDto que contém os certificados do profissional logado.</returns>
+		[HttpGet("get-pdfs")]
         public async Task<ActionResult<List<CertificateDto>>> GetPdfs()
         {
             try
@@ -875,7 +1029,12 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpGet("get-pdfs/{id}")]
+		/// <summary>
+		/// Obtém os certificados de um profissional específico pelo seu ID.
+		/// </summary>
+		/// <param name="id">O ID do profissional.</param>
+		/// <returns>Uma lista de CertificateDto que contém os certificados do profissional especificado pelo ID.</returns>
+		[HttpGet("get-pdfs/{id}")]
         public async Task<ActionResult<List<CertificateDto>>> GetPdfsById(string id)
         {
             try
@@ -892,7 +1051,12 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        private async Task<ActionResult<List<CertificateDto>>> GetPdfs(string id) 
+		/// <summary>
+		/// Obtém os certificados de um profissional pelo seu ID.
+		/// </summary>
+		/// <param name="id">O ID do profissional.</param>
+		/// <returns>Uma lista de CertificateDto contendo os certificados do profissional.</returns>
+		private async Task<ActionResult<List<CertificateDto>>> GetPdfs(string id) 
         {
             var user = await _userManager.FindByIdAsync(id);
             if (user == null) return NotFound("Não foi possível encontrar o utilizador");
@@ -916,7 +1080,12 @@ namespace LusoHealthClient.Server.Controllers
             return certificateDtos;
         }
 
-        [HttpDelete("delete-pdf/{id}")]
+		/// <summary>
+		/// Exclui um certificado pelo seu ID.
+		/// </summary>
+		/// <param name="id">O ID do certificado a ser excluído.</param>
+		/// <returns>Um ActionResult indicando o resultado da exclusão.</returns>
+		[HttpDelete("delete-pdf/{id}")]
         public async Task<ActionResult> DeletePdf(int id)
         {
             try
@@ -946,7 +1115,12 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpGet("download-pdf")]
+		/// <summary>
+		/// Faz o download de um PDF com base no caminho do arquivo.
+		/// </summary>
+		/// <param name="filePath">O caminho do arquivo PDF.</param>
+		/// <returns>Um IActionResult representando o arquivo PDF para download.</returns>
+		[HttpGet("download-pdf")]
         public async Task<IActionResult> DownloadPdf(string filePath)
         {
             try

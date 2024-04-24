@@ -3,7 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace LusoHealthClient.Server.DTOs.Authentication
 {
-    public class RegisterWithGoogleDto
+	/// <summary>
+	///(DTO) para o registo de novos utilizadores através do Google.
+	/// </summary>
+	public class RegisterWithGoogleDto
     {
         [Required(ErrorMessage = "Introduza o seu nome")]
         [MaxLength(50, ErrorMessage = "Não pode introduzir mais de {1} caracteres")]

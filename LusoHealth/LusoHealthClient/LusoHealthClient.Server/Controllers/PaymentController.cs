@@ -13,7 +13,10 @@ using Stripe.Checkout;
 
 namespace LusoHealthClient.Server.Controllers
 {
-    [Authorize(Roles="Patient")]
+    /// <summary>
+	/// Controlador responsável por lidar com as operações relacionadas ao pagamento.
+	/// </summary>
+    [Authorize(Roles = "Patient,Professional")]
     [Route("api/[controller]")]
     [ApiController]
     public class PaymentController : ControllerBase
@@ -22,14 +25,23 @@ namespace LusoHealthClient.Server.Controllers
         private readonly UserManager<User> _userManager;
         private readonly IConfiguration _config;
 
-        public PaymentController(ApplicationDbContext context, UserManager<User> userManager, IConfiguration config)
+		/// <summary>
+		/// Construtor da classe PaymentController.
+		/// </summary>
+		/// <param name="context">Contexto da base de dados.</param>
+		/// <param name="userManager">O usermanager dos utilizadores.</param>
+		/// <param name="config">O logger para registrar informações de log.</param>
+		public PaymentController(ApplicationDbContext context, UserManager<User> userManager, IConfiguration config)
         {
             _context = context;
             _userManager = userManager;
             _config = config;
         }
 
-        [HttpPost("create-checkout-session")]
+		/// <summary>
+		/// Método para criar uma sessão de checkout do Stripe.
+		/// </summary>
+		[HttpPost("create-checkout-session")]
         public async Task<IActionResult> CreateCheckoutSession([FromBody] CreateCheckoutSessionRequest req)
         {
             string? userId;
@@ -105,7 +117,10 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpGet("get-session-details/{sessionId}")]
+		/// <summary>
+		/// Método para obter detalhes de uma sessão do Stripe.
+		/// </summary>
+		[HttpGet("get-session-details/{sessionId}")]
         public async Task<ActionResult> GetStripeSession(string sessionId)
         {
             try
@@ -134,7 +149,10 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-        [HttpPost("update-appointment-to-pending")]
+		/// <summary>
+		/// Método para alterar o estado de uma consulta para pendente após o pagamento.
+		/// </summary>
+		[HttpPost("update-appointment-to-pending")]
         public async Task<ActionResult> ChangeAppointmentState(UpdateAppointmentToPaidDto dto)
         {
             try
@@ -168,7 +186,10 @@ namespace LusoHealthClient.Server.Controllers
             
         }
 
-        [HttpDelete("cancel-appointment/{appointmentId}")]
+		/// <summary>
+		/// Método para cancelar uma consulta.
+		/// </summary>
+		[HttpDelete("cancel-appointment/{appointmentId}")]
         public async Task<ActionResult> CancelAppointment(int appointmentId)
         {
             try
@@ -188,6 +209,21 @@ namespace LusoHealthClient.Server.Controllers
                     return Unauthorized("Não tem permissões para cancelar esta consulta.");
 
                 _context.Appointment.Remove(appointment);
+
+                // find the slot of the appointment and set it to available and set the appointmentid to null
+                var slot = await _context.AvailableSlots.FirstOrDefaultAsync(s => s.AppointmentId == appointmentId);
+
+                if (slot != null && slot.AppointmentId == appointmentId)
+                {
+                    slot.IsAvailable = true;
+                    slot.AppointmentId = null;
+                    _context.AvailableSlots.Update(slot);
+                }
+                else
+                {
+                    return BadRequest("Erro ao cancelar consulta: não foi possível encontrar o slot da consulta.");
+                }
+
                 await _context.SaveChangesAsync();
 
                 return Ok(new { message = "Consulta cancelada com sucesso." });
@@ -195,6 +231,44 @@ namespace LusoHealthClient.Server.Controllers
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Erro ao cancelar consulta: {ex.Message}");
+            }
+        }
+
+		/// <summary>
+		/// Efetua o reembolso de uma consulta cancelada, utilizando o ID da consulta para encontrar o pagamento associado.
+		/// </summary>
+		/// <param name="dto">Os dados necessários para o pedido de reembolso, incluindo o ID da consulta.</param>
+		/// <returns>Um ActionResult representando o resultado da operação de reembolso.</returns>
+		[HttpPost("refund-appointment")]
+        public async Task<ActionResult> RefundAppointment(RefundRequestDto dto)
+        {
+            try
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(userId)) return BadRequest("Não foi possível encontrar o utilizador.");
+
+                var user = await _userManager.FindByIdAsync(userId);
+                if (user == null) return NotFound("Não foi possível encontrar o utilizador.");
+
+                var appointment = await _context.Appointment.FirstOrDefaultAsync(a => a.Id == dto.AppointmentId);
+                if (appointment == null) return NotFound("Consulta não encontrada.");
+
+                var paymentIntentId = appointment.PaymentIntentId;
+                if (string.IsNullOrEmpty(paymentIntentId)) return BadRequest("Não foi possível encontrar o pagamento associado a esta consulta.");
+
+                var service = new RefundService();
+                var refundOptions = new RefundCreateOptions
+                {
+                    PaymentIntent = paymentIntentId,
+                };
+
+                var refund = await service.CreateAsync(refundOptions);
+
+                return Ok(new { message = "Reembolso efetuado com sucesso." });
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Erro ao reembolsar consulta, contacte o apoio ao cliente.");
             }
         }
 

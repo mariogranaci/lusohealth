@@ -54,6 +54,7 @@ namespace LusoHealthClient.Server.Services
 					Nif = "123456798",
 					UserType = 'A',
 					PhoneNumber = null,
+					EmailConfirmed = true,
 					PhoneNumberConfirmed = false,
 					IsSuspended = false,
 					IsBlocked = false,
@@ -63,6 +64,7 @@ namespace LusoHealthClient.Server.Services
 					AccessFailedCount = 0,
 					UserName = "123456798_" + DateTime.Now.Millisecond,
 					BirthDate = new DateTime(1990, 1, 1),
+					DateCreated = DateTime.Now
 				};
 				await _userManager.CreateAsync(admin, "Pass1234");
 				await _userManager.AddToRoleAsync(admin, SD.AdminRole);
@@ -84,6 +86,7 @@ namespace LusoHealthClient.Server.Services
 					UserType = 'M',
 					PhoneNumber = null,
 					PhoneNumberConfirmed = false,
+					EmailConfirmed = true,
 					IsSuspended = false,
 					IsBlocked = false,
 					ProfilePicPath = null,
@@ -92,7 +95,8 @@ namespace LusoHealthClient.Server.Services
 					AccessFailedCount = 0,
 					UserName = "123456798_" + DateTime.Now.Millisecond,
 					BirthDate = new DateTime(1990, 1, 1),
-				};
+                    DateCreated = DateTime.Now
+                };
 				await _userManager.CreateAsync(manager, "Pass1234");
 				await _userManager.AddToRoleAsync(manager, SD.ManagerRole);
 				await _userManager.AddClaimsAsync(manager,
@@ -134,6 +138,7 @@ namespace LusoHealthClient.Server.Services
 					UserType = 'A',
 					PhoneNumber = null,
 					PhoneNumberConfirmed = false,
+					EmailConfirmed = true,
 					IsSuspended = false,
 					IsBlocked = false,
 					ProfilePicPath = null,
@@ -142,7 +147,8 @@ namespace LusoHealthClient.Server.Services
 					AccessFailedCount = 0,
 					UserName = "123456798_" + DateTime.Now.Millisecond,
 					BirthDate = new DateTime(1990, 1, 1),
-				};
+                    DateCreated = DateTime.Now
+                };
 				await _userManager.CreateAsync(admin, "Pass1234");
 				await _userManager.AddToRoleAsync(admin, SD.AdminRole);
 				await _userManager.AddClaimsAsync(admin,
@@ -163,6 +169,7 @@ namespace LusoHealthClient.Server.Services
 					UserType = 'M',
 					PhoneNumber = null,
 					PhoneNumberConfirmed = false,
+					EmailConfirmed = true,
 					IsSuspended = false,
 					IsBlocked = false,
 					ProfilePicPath = null,
@@ -171,7 +178,8 @@ namespace LusoHealthClient.Server.Services
 					AccessFailedCount = 0,
 					UserName = "123456798_" + DateTime.Now.Millisecond,
 					BirthDate = new DateTime(1990, 1, 1),
-				};
+                    DateCreated = DateTime.Now
+                };
 				await _userManager.CreateAsync(manager, "Pass1234");
 				await _userManager.AddToRoleAsync(manager, SD.ManagerRole);
 				await _userManager.AddClaimsAsync(manager,
@@ -207,13 +215,14 @@ namespace LusoHealthClient.Server.Services
 						LockoutEnabled = false,
 						AccessFailedCount = 0,
 						UserName = ("12345678" + i) + '_' + DateTime.Now.Millisecond,
-						BirthDate = DateTime.Now.AddYears(-18 - random.Next(1, 15)),
+						BirthDate = DateTime.UtcNow.AddYears(-18 - random.Next(1, 15)),
+						DateCreated = DateTime.UtcNow.AddYears(- random.Next(0, 5)).AddDays(- random.Next(0, DateTime.UtcNow.Day))
 					};
 					users.Add(patientUser);
 				}
 
 
-				for (int i = 16; i <= 71; i++)
+				for (int i = 16; i <= 40; i++)
 				{
 
 					var professionalUser = new User
@@ -237,14 +246,44 @@ namespace LusoHealthClient.Server.Services
 						AccessFailedCount = 0,
 						UserName = ("12345678" + i) + '_' + DateTime.Now.Millisecond,
 						BirthDate = DateTime.Now.AddYears(-18 - random.Next(1, 15)),
-					};
+                        DateCreated = DateTime.UtcNow.AddYears(-random.Next(0, 5)).AddMonths(-random.Next(0, DateTime.UtcNow.Month)).AddDays(-random.Next(0, DateTime.UtcNow.Day))
+                    };
 					users.Add(professionalUser);
 				}
 
+                for (int i = 41; i <= 71; i++)
+                {
+
+                    var professionalUser = new User
+                    {
+                        Id = i.ToString(),
+                        FirstName = $"Professional{i}",
+                        LastName = "User",
+                        Email = $"professional{i}@mail.com",
+                        NormalizedEmail = $"professional{i}@mail.com",
+                        Gender = i % 2 == 0 ? 'M' : 'F',
+                        Nif = (12345678 + i).ToString(),
+                        UserType = 'P',
+                        PhoneNumber = null,
+                        PhoneNumberConfirmed = false,
+                        EmailConfirmed = true,
+                        IsSuspended = false,
+                        IsBlocked = false,
+                        ProfilePicPath = null,
+                        TwoFactorEnabled = false,
+                        LockoutEnabled = false,
+                        AccessFailedCount = 0,
+                        UserName = ("12345678" + i) + '_' + DateTime.Now.Millisecond,
+                        BirthDate = DateTime.Now.AddYears(-18 - random.Next(1, 15)),
+                        DateCreated = DateTime.UtcNow.AddDays(-random.Next(0, DateTime.UtcNow.Day))
+                    };
+                    users.Add(professionalUser);
+                }
 
 
 
-				List<Professional> usersProfessionals = new List<Professional>();
+
+                List<Professional> usersProfessionals = new List<Professional>();
 				List<Patient> usersPatients = new List<Patient>();
 				List<Service> services = new List<Service>();
 
@@ -279,7 +318,7 @@ namespace LusoHealthClient.Server.Services
 						{
 							UserID = user.Id,
 							ProfessionalTypeId = counter++,
-							Location = null,
+							AddressId = null,
 							Services = new List<Service>(),
 							Reviews = new List<Review>(),
 						};
@@ -383,10 +422,18 @@ namespace LusoHealthClient.Server.Services
 					double newLatitude = portugalLatitude + latOffset;
 					double newLongitude = portugalLongitude + lonOffset;
 
+                    var newAddress = new Address
+                    {
+                        Location = $"{newLatitude};{newLongitude}",
+                        AddressName = null
+                    };
 
-					if (counterLocations <= 15)
+                    await _context.Addresses.AddAsync(newAddress);
+                    await _context.SaveChangesAsync(); // Salva as mudanças e gera o Id
+
+                    if (counterLocations <= 15)
 					{
-						professional.Location = $"{newLatitude};{newLongitude}";
+						professional.AddressId = newAddress.Id;
 					}
 
 

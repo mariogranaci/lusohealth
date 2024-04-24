@@ -1,0 +1,44 @@
+<div class="container">
+  <div class="title"> <b>ESTATÍSTICAS</b></div>
+
+  <div class="row-container">
+    <div class="row">
+      <div class="small-title">Clientes</div>
+      <div class="card">
+        <img *ngIf="compareRegistrationClients === 'up'" class="icon-comparison" src="assets/images/Estatisticas/up.png" />
+        <img *ngIf="compareRegistrationClients === 'down'" class="icon-comparison" src="assets/images/Estatisticas/down.png" />
+        <img *ngIf="compareRegistrationClients === 'same'" class="icon-comparison" src="assets/images/Estatisticas/equal.png" />
+        <div class="card-header">Número de Registados</div>
+        <div class="card-body">
+          {{userCount}}
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">Contas Verificadas</div>
+        <div class="card-body">
+          {{userEmailCount}}
+        </div>
+      </div>
+    </div>
+
+
+    <div class="row">
+      <div class="small-title">Profissionais</div>
+      <div class="card">
+        <img *ngIf="compareRegistrationProfessionals === 'up'" class="icon-comparison" src="assets/images/Estatisticas/up.png" />
+        <img *ngIf="compareRegistrationProfessionals === 'down'" class="icon-comparison" src="assets/images/Estatisticas/down.png" />
+        <img *ngIf="compareRegistrationProfessionals === 'same'" class="icon-comparison" src="assets/images/Estatisticas/equal.png" />
+        <div class="card-header">Número de Registados</div>
+        <div class="card-body">
+          {{professionalCount}}
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">Contas Verificadas</div>
+        <div class="card-body">
+          {{professionalEmailCount}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

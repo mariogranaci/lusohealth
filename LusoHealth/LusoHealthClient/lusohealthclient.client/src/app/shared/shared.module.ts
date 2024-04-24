@@ -7,6 +7,7 @@ import { NotFoundComponent } from './components/errors/not-found/not-found.compo
 import { ValidationMessagesComponent } from './components/errors/validation-messages/validation-messages.component';
 import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
 import { PopUpSuccessComponent } from './components/pop-up-success/pop-up-success.component';
+import { FirstWordPipe } from './pipes/first-word.pipe';
 
 
 
@@ -15,7 +16,8 @@ import { PopUpSuccessComponent } from './components/pop-up-success/pop-up-succes
     NotFoundComponent,
     ValidationMessagesComponent,
     LoadingSpinnerComponent,
-    PopUpSuccessComponent
+    PopUpSuccessComponent,
+    FirstWordPipe
   ],
   imports: [
     CommonModule,
@@ -29,7 +31,8 @@ import { PopUpSuccessComponent } from './components/pop-up-success/pop-up-succes
     RouterModule,
     ValidationMessagesComponent,
     LoadingSpinnerComponent,
-    PopUpSuccessComponent
+    PopUpSuccessComponent,
+    FirstWordPipe
   ]
 })
 export class SharedModule { }

@@ -283,6 +283,7 @@ tbody {
   height: fit-content;
   word-break: break-word;
   width: 80%;
+  box-shadow: 0 12px 6px -4px rgba(0, 0, 0, 0.21);
 }
 
 #edit-morada {

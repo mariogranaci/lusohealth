@@ -147,6 +147,7 @@ h1 {
   min-height: 230px;
   width: 300px;
   cursor: pointer;
+  box-shadow: 0 12px 6px -4px rgba(0, 0, 0, 0.21);
 }
 
 .categorias {
@@ -346,3 +347,17 @@ h1 {
     display: none;
   }
 
+  .rating {
+      display: flex;
+      align-items: flex-end;
+      height: 30px;
+  }
+
+  .rating > p {
+      margin-right: 5px;
+  }
+
+  .rating > img {
+      display: block;
+      margin-bottom: 2px;
+  }

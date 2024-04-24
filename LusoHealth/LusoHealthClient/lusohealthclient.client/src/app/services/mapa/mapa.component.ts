@@ -69,11 +69,22 @@ export class MapaComponent implements OnInit {
     await google.maps.importLibrary('marker');
 
     const domElement = document.querySelector('#map');
-    // create the map
+
+    const strictBounds = {
+      north: 43.083333,  // Norte até incluir Açores
+      south: 30.030199,  // Sul até incluir Ilhas Selvagens
+      west: -35.268639,  // Oeste até incluir Açores
+      east: -4.089159    // Leste até incluir parte continental e Madeira
+    };
+
     this.map = new google.maps.Map(domElement, {
       center: { lat: 38.7074, lng: -9.1368 },
       zoom: this.zoom,
-      mapId: 'lusohealth'
+      mapId: 'lusohealth',
+      restriction: {
+        latLngBounds: strictBounds,
+        strictBounds: true
+      }
     });
     if (this.map) {
       this.map.addListener('dragend', () => {

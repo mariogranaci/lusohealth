@@ -33,6 +33,17 @@ export class DisponibilidadeComponent {
   isSelecting: boolean = false;
   services: any;
 
+  phrases: string[] = [
+    "Para adicionar a sua disponibilidade, clique no botão com o sinal de mais e preencha os campos.",
+    "Para remover a sua disponibilidade, basta selecionar no calendário os dias que pretende apagar."
+  ];
+  gifs: string[][] = [
+    ["assets/images/Agenda/add-gif.gif"], 
+    ["caminho-para-gif2-1.gif"], 
+  ];
+  currentPhraseIndex: number = 0;
+  currentPhrase: string = this.phrases[0];
+
   calendarOptions: CalendarOptions = {
     plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
     initialView: 'dayGridMonth',
@@ -341,6 +352,7 @@ export class DisponibilidadeComponent {
     const overlay = document.getElementById('overlay');
     const add = document.getElementById('add-slots-container');
     const remove = document.getElementById('confirm-review-container');
+    const tool = document.getElementById('tooltips'); 
 
     if (add) {
       add.style.display = "none";
@@ -361,6 +373,11 @@ export class DisponibilidadeComponent {
           remove.style.display = "block";
         }
       }
+      if (option == "tool") {
+        if (tool) {
+          tool.style.display = "block";
+        }
+      }
     }
   }
 
@@ -371,6 +388,7 @@ export class DisponibilidadeComponent {
     const overlay = document.getElementById('overlay');
     const add = document.getElementById('add-speciality-container');
     const edit = document.getElementById('edit-speciality-container');
+    const tool = document.getElementById('tooltips'); 
 
     if (overlay) {
       overlay.style.display = 'none';
@@ -380,8 +398,25 @@ export class DisponibilidadeComponent {
       if (add) {
         add.style.display = "none";
       }
+      if (tool) {
+        tool.style.display = "none";
+      }
     }
   }
+
+
+
+nextPhrase() {
+  this.currentPhraseIndex++;
+  if (this.currentPhraseIndex < this.phrases.length) {
+    this.currentPhrase = this.phrases[this.currentPhraseIndex];
+  } else {    
+    this.currentPhraseIndex = 0;
+    this.currentPhrase = this.phrases[this.currentPhraseIndex];
+    this.closePopup();
+  }
+}
+
 
   /**
  * Impede a propagação do evento.

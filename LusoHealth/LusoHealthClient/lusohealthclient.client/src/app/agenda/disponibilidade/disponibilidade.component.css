@@ -6,7 +6,9 @@ main {
   align-items: center;
   min-height: calc(100vh - 65px);
   margin-bottom: 50px;
+  position:relative;
 }
+
 
 h1 {
   text-align: center;
@@ -27,6 +29,16 @@ form {
   top: 50%;
   left: 50%;
   background-color: white;
+}
+
+#question-btn {
+  position: absolute;
+  top: 25px;
+  left:25px;
+  width:32px;
+  height:auto;
+  cursor: pointer;
+  user-select: none;
 }
 
 #action-btn {
@@ -112,16 +124,34 @@ form {
   display: none;
 }
 
-  .overlay-container > h2 {
+.overlay-container-tool {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  width: 800px;
+  height: fit-content;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  background-color: #ECEEF0;
+  padding: 20px 20px;
+  display: none;
+}
+
+  .overlay-container > h2, .overlay-container-tool > h2, .text-tool{
     text-align: center;
     margin-bottom: 20px;
   }
 
-  .overlay-container label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: 600;
-  }
+    .text-tool{
+        font-size:20px;
+    }
+
+    .overlay-container label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 600;
+    }
 
 .form-row {
   display: flex;
@@ -176,3 +206,18 @@ form {
   .btn-red:hover {
     background-color: #c31414;
   }
+
+.btn-tool { 
+  display: block;
+  background-color: #1875e7;
+}
+
+.btn-tool:hover {
+  background-color: #1b69c8;
+}
+
+.img-gif{
+    width:750px;
+    height:auto;
+    border-radius:10px;
+}

@@ -3,7 +3,9 @@
 
   <full-calendar [options]="calendarOptions"></full-calendar>
 
+  <img class="action-btn-img" id="question-btn" (click)="openPopup('tool')" src="assets/images/Agenda/question-mark.png" />
   <button id="action-btn" (click)="openPopup('add')"><img class="action-btn-img" src="assets/images/Agenda/add.png" /> </button>
+
 
   <div class="overlay" id="overlay" (click)="closePopup()">
     <a class="close-button" (click)="closePopup()">
@@ -62,12 +64,12 @@
           <label for="duration-select">Duração das Consultas</label>
           <div class="select-dropdown" id="duration-select-div" [class.is-invalid]="submittedAddSlots && addSlotsForm.get('selectDuration')?.errors">
             <select formControlName="selectDuration" id="duration-select" required>
-              <option value="10" >10 min</option>
-              <option value="20" >20 min</option>
-              <option value="30" >30 min</option>
-              <option value="40" >40 min</option>
-              <option value="50" >50 min</option>
-              <option value="60" >60 min</option>
+              <option value="10">10 min</option>
+              <option value="20">20 min</option>
+              <option value="30">30 min</option>
+              <option value="40">40 min</option>
+              <option value="50">50 min</option>
+              <option value="60">60 min</option>
             </select>
           </div>
         </div>
@@ -95,6 +97,19 @@
 
     </form>
 
+
+    <div id="tooltips" class="overlay-container-tool" (click)="stopPropagation($event)">
+
+      <h2>ToolTips</h2>
+      <div class="text-tool">
+        <div class="text-tool">{{ currentPhrase }}</div>
+        <img class="img-gif" *ngFor="let gif of gifs[currentPhraseIndex]" [src]="gif" alt="Gif {{ currentPhraseIndex + 1 }}">
+      </div>
+      <button (click)="nextPhrase()" type="button" class="btn btn-tool">Continuar</button>
+    </div>
+
+
+
     <div id="confirm-review-container" class="overlay-container" (click)="stopPropagation($event)">
       <h2>Tem a certeza que deseja apagar esta disponibilidade?</h2>
       <div class="form-row" id="form-row-buttons">
@@ -104,6 +119,8 @@
     </div>
 
   </div>
+
+
   <div *ngIf="errorMessages.length > 0">
     <app-validation-messages [errorMessages]="errorMessages"></app-validation-messages>
   </div>

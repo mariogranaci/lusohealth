@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using LusoHealthClient.Server.Models.FeedbackAndReports;
+using System.ComponentModel.DataAnnotations;
 
 namespace LusoHealthClient.Server.DTOs.Profile
 {
@@ -15,5 +16,8 @@ namespace LusoHealthClient.Server.DTOs.Profile
         public string ServiceName { get; set; }
         public int Stars { get; set; }
         public string Description { get; set; }
+        public int? Id {  get; set; }
+
+        public ReviewState? State { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject, take, takeUntil } from 'rxjs';
 import { Service } from '../../shared/models/profile/service';
@@ -42,6 +42,8 @@ export class PublicProfileProfessionalComponent implements OnInit {
   radioStar3 = false;
   radioStar4 = false;
   radioStar5 = false;
+
+  openPopupIndex: number | null = null;
 
   constructor(private authenticationService: AuthenticationService,
     private formBuilder: FormBuilder,
@@ -578,6 +580,19 @@ export class PublicProfileProfessionalComponent implements OnInit {
     }
   }
 
+  reportComment(comment: Review): void {
+    this.profileService.reportReview(comment).subscribe({
+      next: (responseId) => {
+        console.log('Review reported successfully, response ID:', responseId);
+        this.filterReviews(this.selectedSpecialtyReview);
+      },
+      error: (error) => {
+        console.error('Failed to report review:', error);
+      }
+    });
+  }
+
+
   /**
  * Calcula a média das estrelas das revisões.
  */
@@ -649,4 +664,26 @@ export class PublicProfileProfessionalComponent implements OnInit {
   stopPropagation(event: Event) {
     event.stopPropagation();
   }
+
+
+
+  /* ------------------------  Popups comentarios  -------------------------*/
+
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    // Cast the target to an HTMLElement for the contains method
+    const target = event.target as HTMLElement;
+
+    // Close the popup if the click is outside of the popup element
+    if (!target.closest('.options-icon')) {
+      this.openPopupIndex = null;
+    }
+  }
+
+  togglePopup(event: MouseEvent, index: number): void {
+    event.stopPropagation();
+    this.openPopupIndex = this.openPopupIndex === index ? null : index;
+  }
+
 }

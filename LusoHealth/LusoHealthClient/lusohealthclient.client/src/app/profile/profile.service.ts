@@ -383,4 +383,14 @@ export class ProfileService {
       })
     );
   }
+
+  /**
+* Reporta uma review.
+* @param id Id da review a ser reportada.
+* @returns Um Observable contendo a resposta da requisição.
+*/
+  reportReview(model: Review) {
+    const headers = this.getHeaders();
+    return this.http.patch<Review>(`${environment.appUrl}/api/profile/report-review`, model, { headers });
+  }
 }

@@ -180,7 +180,7 @@
         <img src="assets/images/profile/star.png" alt="Estrela" class="star">
       </div>
 
-      <div class="review-container" *ngFor="let review of this.reviews">
+      <div class="review-container" *ngFor="let review of this.reviews; let i = index">
         <hr>
         <div class="review-top-row">
           <div class="left-review-top-row">
@@ -195,7 +195,18 @@
             <b>{{ review.serviceName }}</b>
           </div>
         </div>
-        <div class="comment">{{ review.description }}</div>
+        <div class="review-comment-row">
+          <div class="comment">{{ review.description }}</div>
+          <div>
+            <div class="comment-popup" *ngIf="openPopupIndex === i" (click)="reportComment(review)">
+              <img src="assets/images/profile/red-flag.png" class="red-flag-icon">
+              <span class="report-text">Denunciar</span>
+            </div>
+            <div *ngIf="review?.state?.toString() === '0'">
+              <img src="assets/images/Reports/options.png" class="options-icon" (click)="togglePopup($event, i)">
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="no-review" *ngIf="!(reviews && reviews.length > 0)">

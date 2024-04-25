@@ -1149,6 +1149,31 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
+        [HttpPatch("report-review")]
+        public async Task<ActionResult> DeleteReview(ReviewDto model)
+        {
+            var review = await _context.Reviews.FirstOrDefaultAsync(r => r.Id == model.Id);
+
+            if (review == null)
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                review.State = ReviewState.Reported;
+                _context.Reviews.Update(review);
+                await _context.SaveChangesAsync();
+
+                return Ok(new { message = "Review reportada." });
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Erro ao reportar review 🧀.");
+            }
+
+        }
+
         #region private helper methods
         private List<ServiceDto> GetServiceDtos(List<Service> services)
         {
@@ -1200,7 +1225,9 @@ namespace LusoHealthClient.Server.Controllers
                     IdService = review.IdService,
                     ServiceName = review.Service.Specialty.Name,
                     Stars = review.Stars,
-                    Description = review.Description
+                    Description = review.Description,
+                    Id = review.Id,
+                    State = review.State
                 };
                 reviewDtos.Add(reviewDto);
             }

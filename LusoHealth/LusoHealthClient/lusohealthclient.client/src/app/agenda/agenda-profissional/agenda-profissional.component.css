@@ -1,6 +1,6 @@
 main {
   padding: 0 7%;
-  margin: 50px auto 30px auto;
+  margin: 0 auto 30px auto;
   min-width: 1150px;
   max-width: 1500px;
   padding-bottom: 30px;
@@ -95,7 +95,7 @@ main {
   display:flex;
   flex-direction:row;
   justify-content:center;
-  margin: 25px auto;
+  padding: 25px 0;
   font-size: 20px;
   text-align: center;
 }

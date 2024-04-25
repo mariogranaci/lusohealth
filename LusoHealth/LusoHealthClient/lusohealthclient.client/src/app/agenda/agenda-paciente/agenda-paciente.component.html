@@ -1,8 +1,10 @@
-<div class="title">
-  <h1>Próximas Consultas</h1>
-</div>
 
 <main>
+  <img id="question-btn" (click)="openPopup('tool')" src="assets/images/Agenda/question-mark.png" />
+  <div class="title">
+    <h1>Próximas Consultas</h1>
+  </div>
+
   <div class="firstRow">
     <div class="dropdown">
       <select id="category" (change)="filterSpecialties();filterProfessionalsCategory()">
@@ -45,5 +47,20 @@
   <div class="more-container" *ngIf="appointmentsFiltered.length > displayedAppointments.length">
     <button class="btn" id="more" (click)="loadMoreAppointments()"><img class="arrow" src="/assets/images/Agenda/arrow-down.png" /></button>
   </div>
+
+  <div class="overlay" id="overlay" (click)="closePopup()">
+    <a class="close-button" (click)="closePopup()">
+      <img src="assets/images/login/close.png" alt="Close button" class="close-image">
+    </a>
+
+    <div id="tooltips" class="overlay-container-tool" (click)="stopPropagation($event)">
+      <h2>ToolTips</h2>
+      <div class="text-tool">
+        <div class="text-tool">{{ currentPhrase }}</div>
+      </div>
+      <button (click)="nextPhrase()" type="button" class="btn-tool">Continuar</button>
+    </div>
+  </div>
+
 </main>
 

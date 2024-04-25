@@ -50,6 +50,15 @@ export class ConsultaProfissionalComponent {
   map: google.maps.Map | undefined;
   address: string = '';
 
+  phrases: string[] = [
+    "Poderá ver ao pormenor toda a informação da consulta.",
+    "Poderá aceitar ou cancelar a consulta.",
+    "Poderá ver a localização da consulta."
+  ];
+  currentPhraseIndex: number = 0;
+  currentPhrase: string = this.phrases[0];
+
+
   constructor(public servicesService: ServicesService,
     public appointmentService: AppointmentService,
     public agendaService: AgendaService,
@@ -392,6 +401,7 @@ export class ConsultaProfissionalComponent {
     const overlay = document.getElementById('overlay');
     const remove = document.getElementById('remove-appointment-container');
     const edit = document.getElementById('edit-appointment-container');
+    const tool = document.getElementById('tooltips'); 
 
     if (edit) {
       edit.style.display = "none";
@@ -412,6 +422,11 @@ export class ConsultaProfissionalComponent {
           edit.style.display = "block";
         }
       }
+      else if (opcao == "tool") {
+        if (tool) {
+          tool.style.display = "block";
+        }
+      }
     }
   }
 
@@ -422,6 +437,7 @@ export class ConsultaProfissionalComponent {
     const overlay = document.getElementById('overlay');
     const add = document.getElementById('add-appointment-container');
     const edit = document.getElementById('edit-appointment-container');
+    const tool = document.getElementById('tooltips'); 
 
     if (overlay) {
       overlay.style.display = 'none';
@@ -431,8 +447,23 @@ export class ConsultaProfissionalComponent {
       if (add) {
         add.style.display = "none";
       }
+      if (tool) {
+        tool.style.display = "none";
+      }
     }
   }
+
+  nextPhrase() {
+    this.currentPhraseIndex++;
+    if (this.currentPhraseIndex < this.phrases.length) {
+      this.currentPhrase = this.phrases[this.currentPhraseIndex];
+    } else {
+      this.currentPhraseIndex = 0;
+      this.currentPhrase = this.phrases[this.currentPhraseIndex];
+      this.closePopup();
+    }
+  }
+
 
   /**
    * Cancela a consulta

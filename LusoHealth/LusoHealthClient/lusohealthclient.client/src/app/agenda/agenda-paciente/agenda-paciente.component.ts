@@ -37,6 +37,14 @@ export class AgendaPacienteComponent {
   displayedAppointments: Appointment[] = [];
   initialAppointmentCount = 3;
 
+  phrases: string[] = [
+    "Poderá ver a sua disponibiliadade ao clicar no botão Ver Disponibilidade.",
+    "Poderá aceitar ou rejeitar os pedidos de consultas.",
+    "Poderá clicar em ver detalhes, para ver mais detalhadamente as informações da consulta."
+  ];
+  currentPhraseIndex: number = 0;
+  currentPhrase: string = this.phrases[0];
+
   constructor(public servicesService: ServicesService, public agendaService: AgendaService) {}
 
   /**
@@ -328,6 +336,62 @@ export class AgendaPacienteComponent {
   /// Atualiza os agendamentos exibidos
   updateDisplayedAppointments() {
     this.displayedAppointments = this.appointmentsFiltered.slice(0, this.initialAppointmentCount);
+  }
+
+  /**
+* Abre o popup especificado.
+* @param option A opção do popup a ser aberto.
+*/
+  openPopup(option: string) {
+    const overlay = document.getElementById('overlay');
+    const tool = document.getElementById('tooltips');
+
+    if (overlay) {
+      overlay.style.display = 'flex';
+
+      if (option == "tool") {
+        if (tool) {
+          tool.style.display = "block";
+        }
+      }
+    }
+  }
+
+  /**
+ * Fecha o popup.
+ */
+  closePopup() {
+    const overlay = document.getElementById('overlay');
+    const tool = document.getElementById('tooltips');
+
+    if (overlay) {
+      overlay.style.display = 'none';
+      if (tool) {
+        tool.style.display = "none";
+      }
+    }
+  }
+
+
+
+  nextPhrase() {
+    this.currentPhraseIndex++;
+    if (this.currentPhraseIndex < this.phrases.length) {
+      this.currentPhrase = this.phrases[this.currentPhraseIndex];
+    } else {
+      this.currentPhraseIndex = 0;
+      this.currentPhrase = this.phrases[this.currentPhraseIndex];
+      this.closePopup();
+    }
+  }
+
+
+  /**
+ * Impede a propagação do evento.
+ * @param event O evento a ser interrompido.
+ */
+  stopPropagation(event: Event) {
+    event.stopPropagation();
   }
 
 }

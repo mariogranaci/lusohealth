@@ -7,6 +7,7 @@
 </div>
 
 <main>
+  <img id="question-btn" (click)="openPopup('tool')" src="assets/images/Agenda/question-mark.png" />
   <div class="appointments">
     <div class="appointment">
       <div id="info">
@@ -64,6 +65,18 @@
       <button type="reset" (click)="closePopup()" class="btn btn-blue">Cancelar</button>
       <button type="submit" (click)="cancelAppointment()" class="btn btn-red">Remover</button>
     </div>
+  </div>
+
+  <a class="close-button" (click)="closePopup()">
+    <img src="assets/images/login/close.png" alt="Close button" class="close-image">
+  </a>
+
+  <div id="tooltips" class="overlay-container-tool" (click)="stopPropagation($event)">
+    <h2>ToolTips</h2>
+    <div class="text-tool">
+      <div class="text-tool">{{ currentPhrase }}</div>
+    </div>
+    <button (click)="nextPhrase()" type="button" class="btn-tool">Continuar</button>
   </div>
 </div>
 

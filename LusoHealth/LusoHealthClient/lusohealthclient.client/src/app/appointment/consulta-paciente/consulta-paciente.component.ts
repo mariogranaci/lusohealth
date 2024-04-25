@@ -36,6 +36,14 @@ export class ConsultaPacienteComponent {
   map: google.maps.Map | undefined;
   address: string = '';
 
+  phrases: string[] = [
+    "Poderá ver ao pormenor toda a informação da consulta.",
+    "Poderá cancelar a consulta.",
+    "Poderá aceder ao chat da consulta."
+  ];
+  currentPhraseIndex: number = 0;
+  currentPhrase: string = this.phrases[0];
+
   constructor(public servicesService: ServicesService,
     public appointmentService: AppointmentService,
     private route: ActivatedRoute,
@@ -269,6 +277,7 @@ export class ConsultaPacienteComponent {
   openPopup(opcao: string) {
     const overlay = document.getElementById('overlay');
     const remove = document.getElementById('remove-appointment-container');
+    const tool = document.getElementById('tooltips'); 
 
     if (remove) {
       remove.style.display = "none";
@@ -281,6 +290,11 @@ export class ConsultaPacienteComponent {
           remove.style.display = "block";
         }
       }
+      else if (opcao == "tool") {
+        if (tool) {
+          tool.style.display = "block";
+        }
+      }
     }
   }
 
@@ -291,6 +305,7 @@ export class ConsultaPacienteComponent {
     const overlay = document.getElementById('overlay');
     const add = document.getElementById('add-appointment-container');
     const edit = document.getElementById('edit-appointment-container');
+    const tool = document.getElementById('tooltips');
 
     if (overlay) {
       overlay.style.display = 'none';
@@ -300,6 +315,20 @@ export class ConsultaPacienteComponent {
       if (add) {
         add.style.display = "none";
       }
+      if (tool) {
+        tool.style.display = "none";
+      }
+    }
+  }
+
+  nextPhrase() {
+    this.currentPhraseIndex++;
+    if (this.currentPhraseIndex < this.phrases.length) {
+      this.currentPhrase = this.phrases[this.currentPhraseIndex];
+    } else {
+      this.currentPhraseIndex = 0;
+      this.currentPhrase = this.phrases[this.currentPhraseIndex];
+      this.closePopup();
     }
   }
 

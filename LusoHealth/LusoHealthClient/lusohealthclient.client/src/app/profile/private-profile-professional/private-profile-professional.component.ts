@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { User } from '../../shared/models/authentication/user';
 import { AuthenticationService } from '../../authentication/authentication.service';
 import { take } from 'rxjs';
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { ProfileService } from '../profile.service';
 import { Subject, takeUntil } from 'rxjs';
 import { Professional } from '../../shared/models/profile/professional';
@@ -52,6 +52,8 @@ export class PrivateProfileProfessionalComponent implements OnInit {
   isInPortugal = false;
   hasStreetNumber = false;
   address: string | undefined;
+
+  openPopupIndex: number | null = null;
 
   constructor(private authenticationService: AuthenticationService,
     private formBuilder: FormBuilder,
@@ -583,6 +585,19 @@ export class PrivateProfileProfessionalComponent implements OnInit {
     });
   }
 
+  reportComment(comment: Review): void {
+    this.profileService.reportReview(comment).subscribe({
+      next: (responseId) => {
+        console.log('Review reported successfully, response ID:', responseId);
+        this.filterReviews(this.selectedSpecialtyReview);
+      },
+      error: (error) => {
+        console.error('Failed to report review:', error);
+      }
+    });
+    
+  }
+
  /**
  * Calcula a média das estrelas nas revisões.
  */
@@ -666,6 +681,28 @@ export class PrivateProfileProfessionalComponent implements OnInit {
   stopPropagation(event: Event) {
     event.stopPropagation();
   }
+
+
+  /* ------------------------  Popups comentarios  -------------------------*/
+
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    // Cast the target to an HTMLElement for the contains method
+    const target = event.target as HTMLElement;
+
+    // Close the popup if the click is outside of the popup element
+    if (!target.closest('.options-icon')) {
+      this.openPopupIndex = null;
+    }
+  }
+
+  togglePopup(event: MouseEvent, index: number): void {
+    event.stopPropagation();
+    this.openPopupIndex = this.openPopupIndex === index ? null : index;
+  }
+
+
 
  /**
  * Inicializa o mapa do Google Maps.

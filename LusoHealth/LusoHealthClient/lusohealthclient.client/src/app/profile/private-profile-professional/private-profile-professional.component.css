@@ -688,11 +688,84 @@ hr {
   user-select: none;
 }
 
+.review-comment-row {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  margin-bottom: 35px;
+  justify-content: space-between;
+}
+
 .comment {
   width: 100%;
   text-align: justify;
   text-justify: inter-word;
 }
+
+.options-icon {
+  cursor: pointer;
+  width: 25px;
+  height: 25px;
+}
+
+  .options-icon:active {
+    transform: translateY(2px);
+  }
+
+.comment-popup {
+  display: flex;
+  position: absolute;
+  z-index: 5;
+  margin-top: 35px;
+  margin-left: -136px;
+  background-color: white;
+  padding: 5px;
+  border-radius: 7px;
+  box-shadow: 0 12px 6px -4px rgba(0, 0, 0, 0.21);
+  transition: background-color 0.3s ease, transform 0s;
+}
+
+  .comment-popup::after {
+    content: "";
+    position: absolute;
+    bottom: 100%; /* Set the bottom of the arrow to be at the top of the popup */
+    right: 7px; /* Adjust this value to move the arrow left or right */
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent white transparent;
+    transition: background-color 0.3s ease, transform 0s;
+  }
+
+  .comment-popup:hover::after {
+    content: "";
+    border-color: transparent transparent #e9e9e9 transparent; /* This will change the color of the arrow */
+  }
+
+  .comment-popup:hover {
+    cursor: pointer;
+    background-color: #e9e9e9;
+  }
+
+  .comment-popup:active {
+    transform: translateY(2px);
+  }
+
+
+
+.red-flag-icon {
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+}
+
+.report-text {
+  margin: auto 0;
+  font-size: 23px;
+  color: #ff0000;
+  user-select: none;
+}
+
 
 /*-----------------------------------------------------------------*/
 

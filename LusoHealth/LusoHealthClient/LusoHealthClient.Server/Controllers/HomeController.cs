@@ -292,6 +292,55 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
+        [HttpGet("get-best-services")]
+        public async Task<ActionResult<Dictionary<int, List<BestServicesDto>>>> GetBestServices()
+        {
+            try
+            {
+                var groupedServices = await _context.Services
+                .Include(s => s.Specialty)
+                .ThenInclude(pt => pt.ProfessionalType)
+                .Include(s => s.Reviews)
+                .Include(s => s.Professional)
+                .ThenInclude(u => u.User)
+                .GroupBy(p => p.Specialty.ProfessionalTypeId)
+                .ToListAsync();
+
+                var bestServices = new Dictionary<int, List<BestServicesDto>>();
+
+                foreach (var group in groupedServices)
+                {
+                    var bestCategoryServices = group.OrderByDescending(s => s.Reviews.Select(r => r.Stars).DefaultIfEmpty(0).Average()).Take(5);
+                    var services = bestCategoryServices.Select(bs => new BestServicesDto
+                    {
+                        ServiceId = bs.Id,
+                        SpecialtyId = bs.IdSpecialty,
+                        ProfessionalTypeId = bs.Specialty.ProfessionalTypeId,
+                        Specialty = bs.Specialty.Name,
+                        PricePerHour = bs.PricePerHour,
+                        Professional = new ProfessionalDto
+                        {
+                            ProfessionalInfo = new UserProfileDto
+                            {
+                                FirstName = bs.Professional.User.FirstName,
+                                LastName = bs.Professional.User.LastName
+                            }
+                        },
+                        Rating = bs.Reviews.Select(r => r.Stars).DefaultIfEmpty(0).Average()
+                    }).ToList();
+                    if (services.Count == 0) continue;
+
+                    bestServices.Add(group.Key, services);
+                }
+
+                return Ok(bestServices);
+
+            } catch (Exception)
+            {
+                return StatusCode(500, "Não foi possível encontrar os serviços.");
+            }
+        }
+
 		/// <summary>
 		/// Método para obter os serviços disponíveis.
 		/// </summary>

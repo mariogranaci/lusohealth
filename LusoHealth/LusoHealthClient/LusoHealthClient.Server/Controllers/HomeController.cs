@@ -293,7 +293,7 @@ namespace LusoHealthClient.Server.Controllers
         }
 
         [HttpGet("get-best-services")]
-        public async Task<ActionResult<Dictionary<int, List<BestServicesDto>>>> GetBestServices()
+        public async Task<ActionResult<List<BestServicesDto>>> GetBestServices()
         {
             try
             {
@@ -306,7 +306,7 @@ namespace LusoHealthClient.Server.Controllers
                 .GroupBy(p => p.Specialty.ProfessionalTypeId)
                 .ToListAsync();
 
-                var bestServices = new Dictionary<int, List<BestServicesDto>>();
+                var bestServices = new List<BestServicesDto>();
 
                 foreach (var group in groupedServices)
                 {
@@ -330,7 +330,7 @@ namespace LusoHealthClient.Server.Controllers
                     }).ToList();
                     if (services.Count == 0) continue;
 
-                    bestServices.Add(group.Key, services);
+                    bestServices.AddRange(services);
                 }
 
                 return Ok(bestServices);

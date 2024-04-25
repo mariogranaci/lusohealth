@@ -6,6 +6,7 @@ import { Professional } from '../shared/models/profile/professional';
 import { Specialty } from '../shared/models/profile/specialty';
 import { Service } from '../shared/models/servic/service';
 import { ProfessionalType } from '../shared/models/authentication/professionalType';
+import { BestServices } from '../shared/models/profile/bestServices';
 
 
 
@@ -46,6 +47,6 @@ export class HomeService {
    * @returns Um Observable contendo os serviços.
    */
   getServices() {
-    return this.http.get<Service[]>(`${environment.appUrl}/api/home/get-services`);
+    return this.http.get<BestServices[]>(`${environment.appUrl}/api/home/get-best-services`);
   }
 }

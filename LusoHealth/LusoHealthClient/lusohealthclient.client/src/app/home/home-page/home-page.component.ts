@@ -4,6 +4,7 @@ import { HomeService } from '../home.service';
 import { Service } from '../../shared/models/servic/service';
 import { Specialty } from '../../shared/models/profile/specialty';
 import { ProfessionalType } from '../../shared/models/authentication/professionalType';
+import { BestServices } from '../../shared/models/profile/bestServices';
 
 
 @Component({
@@ -15,17 +16,21 @@ export class HomePageComponent {
   private unsubscribe$ = new Subject<void>();
   errorMessages: string[] = [];
   professionalTypes: ProfessionalType[] = [];
-  services: Service[] = [];
+  services: BestServices[] = [];
   specialties: Specialty[] = [];
   searchResults: Specialty[] = [];
   searchTerm: string = '';
   public topSpecialties: Specialty[] = [];
+  servicesByProfessionalType: { [key: number]: BestServices[] } = {};
 
   constructor(public homeService: HomeService) { }
 
   ngOnInit() {
-    this.getProfessionalTypes();
-    this.getServices();
+    this.getProfessionalTypes().then(() => {
+      this.getServices().then(() => {
+        this.populateServicesByProfessionalType();
+      });
+    });
     this.getSpecialties().then(() => {
       this.getSpecialtiesByTimesScheduled();
     });
@@ -37,55 +42,15 @@ export class HomePageComponent {
   }
 
   /**
-   * Retorna o primeiro e último nome a partir do nome completo.
-   * @param fullName O nome completo do utilizador.
-   * @returns O primeiro e último nome do utilizador.
-   */
-  getFirstAndLastName(fullName: string): string {
-    const names = fullName.split(' ');
-    if (names.length > 2) {
-      return `${names[0]} ${names[names.length - 1]}`;
-    } else {
-      return fullName;
-    }
-  }
-
-  /**
    * Obtém os tipos de profissional.
    */
-  getProfessionalTypes() {
-    this.homeService.getProfessionalTypes().pipe(
-      takeUntil(this.unsubscribe$)
-    ).subscribe({
-      next: (professionalTypes: ProfessionalType[]) => {
-        this.professionalTypes = professionalTypes;
-      },
-      error: (error) => {
-        console.log(error);
-        if (error.error.errors) {
-          this.errorMessages = error.error.errors;
-        } else {
-          this.errorMessages.push(error.error);
-        }
-      }
-    });
-  }
-
-  /**
-  * Obtém os serviços.
-  * @returns Uma Promise que resolve quando os serviços são obtidos.
-  */
-  getServices(): Promise<void> {
+  getProfessionalTypes(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
-      this.homeService.getServices().pipe(
+      this.homeService.getProfessionalTypes().pipe(
         takeUntil(this.unsubscribe$)
       ).subscribe({
-        next: (services: any) => {
-          this.services = services;
-          this.services.sort((a, b) => {
-
-            return this.returnStars(b) - this.returnStars(a);
-          });
+        next: (professionalTypes: ProfessionalType[]) => {
+          this.professionalTypes = professionalTypes;
           resolve();
         },
         error: (error) => {
@@ -102,12 +67,34 @@ export class HomePageComponent {
   }
 
   /**
-   * Retorna os quatro primeiros serviços de um tipo específico.
-   * @param type O tipo de serviço.
-   * @returns Um array contendo os quatro primeiros serviços do tipo especificado.
-   */
-  fourServices(type: String): Service[] {
-    const services = this.services.filter(service => service.professional.professionalType === type).slice(0, 4);
+  * Obtém os serviços.
+  * @returns Uma Promise que resolve quando os serviços são obtidos.
+  */
+  getServices(): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      this.homeService.getServices().pipe(
+        takeUntil(this.unsubscribe$)
+      ).subscribe({
+        next: (services: BestServices[]) => {
+          this.services = services;
+          resolve();
+        },
+        error: (error) => {
+          console.log(error);
+          if (error.error.errors) {
+            this.errorMessages = error.error.errors;
+          } else {
+            this.errorMessages.push(error.error);
+          }
+          reject(error);
+        }
+      });
+    });
+  }
+
+  getServicesByProfessionalType(professionalTypeId: number): BestServices[] {
+    const services = this.services.filter(service => service.professionalTypeId === professionalTypeId);
+    console.log('filtered services', services);
     return services;
   }
 
@@ -136,6 +123,12 @@ export class HomePageComponent {
   getProfessionalTypeName(professionalTypeID: number): string | undefined {
     const professionalType = this.professionalTypes.find(pt => pt.id === professionalTypeID);
     return professionalType ? professionalType.name : undefined;
+  }
+
+  populateServicesByProfessionalType() {
+    this.professionalTypes.forEach((professionalType) => {
+      this.servicesByProfessionalType[professionalType.id] = this.getServicesByProfessionalType(professionalType.id);
+    });
   }
 
   /**
@@ -174,18 +167,6 @@ export class HomePageComponent {
       return b.timesScheduled - a.timesScheduled;
     });
     this.topSpecialties = sortedSpecialties.slice(0, 3);
-  }
-
-  /**
-   * Fecha os resultados de busca ao clicar fora do campo de busca.
-   * @param event O evento de clique.
-   */
-  @HostListener('document:click', ['$event'])
-  onClick(event: any) {
-    if (!event.target.closest('#searchDiv')) {
-      this.searchTerm = '';
-      this.searchResults = [];
-    }
   }
 
   /**

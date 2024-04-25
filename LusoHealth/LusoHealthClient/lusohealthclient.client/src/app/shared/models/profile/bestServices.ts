@@ -1,5 +1,5 @@
 import { Professional } from "./professional";
-interface BestServices {
+export interface BestServices {
   serviceId: number;
   specialtyId: number;
   professionalTypeId: number;

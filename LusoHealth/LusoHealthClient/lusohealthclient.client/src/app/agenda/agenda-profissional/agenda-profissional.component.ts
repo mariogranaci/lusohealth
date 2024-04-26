@@ -472,7 +472,38 @@ export class AgendaProfissionalComponent {
     }
     
   }
-  
+
+  openPopupToolTip(opcao: string) {
+    const overlay = document.getElementById('overlay');
+    const remove = document.getElementById('remove-appointment-container');
+    const accept = document.getElementById('accept-appointment-container');
+    const tool = document.getElementById('tooltips');
+
+
+    if (remove) {
+      remove.style.display = "none";
+    }
+
+    if (overlay) {
+      overlay.style.display = 'flex';
+      if (opcao == "remove") {
+        if (remove) {
+          remove.style.display = "block";
+        }
+      }
+      else if (opcao == "accept") {
+        if (accept) {
+          accept.style.display = "block";
+        }
+      }
+      else if (opcao == "tool") {
+        if (tool) {
+          tool.style.display = "block";
+        }
+      }
+    }
+  }
+
 
 
 

@@ -3,6 +3,7 @@ import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from
 import { CalendarOptions, EventInput, EventSourceInput } from '@fullcalendar/core'; // useful for typechecking
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
+import listPlugin from '@fullcalendar/list';
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
 import { Subject, take, takeUntil } from 'rxjs';
 import { AuthenticationService } from '../../authentication/authentication.service';
@@ -37,19 +38,34 @@ export class DisponibilidadeComponent {
   todayDate = new Date();
 
   calendarOptions: CalendarOptions = {
-    plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
+    plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin, timeGridPlugin],
     initialView: 'dayGridMonth',
     headerToolbar: {
       left: 'prev,next today',
       center: 'title',
-      right: 'dayGridMonth,timeGridDay'
+      right: 'dayGridMonth,timeGridDay,listWeek,timeGridWeek'
     },
     locale: 'pt',
     selectable: true,
+    allDaySlot: false,
+    slotEventOverlap: false,
+    slotDuration: '00:10:00',
+    nowIndicator: true,
+    navLinks: true,
+    slotLabelFormat: {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: false,
+    },
+    validRange: {
+      start: this.today,
+    },
     select: this.handleDateSelect.bind(this),
     dateClick: this.dateClick.bind(this),
     events: [],
-    eventDidMount: this.hideEventsInMonthView.bind(this),
+    dayMaxEvents: true,
+    moreLinkClick: 'day',
+    /*eventDidMount: this.hideEventsInMonthView.bind(this),*/
   }
 
   /**
@@ -355,6 +371,7 @@ export class DisponibilidadeComponent {
           this.errorMessages.push(error.error);
         }
         this.submittedDeleteSlots = false;
+        this.closePopup();
       }
     });
     this.selectedDates = null;

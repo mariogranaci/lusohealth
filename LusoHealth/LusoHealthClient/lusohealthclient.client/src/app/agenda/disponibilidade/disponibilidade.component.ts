@@ -56,6 +56,13 @@ export class DisponibilidadeComponent {
       center: 'title',
       right: 'dayGridMonth,timeGridDay,listWeek,timeGridWeek'
     },
+    buttonText: {
+      today: 'Hoje',
+      month: 'Mês',
+      week: 'Semana',
+      day: 'Dia',
+      list: 'Lista'
+    },
     locale: 'pt',
     selectable: true,
     allDaySlot: false,
@@ -63,6 +70,7 @@ export class DisponibilidadeComponent {
     slotDuration: '00:10:00',
     nowIndicator: true,
     navLinks: true,
+    windowResizeDelay: 0,
     slotLabelFormat: {
       hour: 'numeric',
       minute: '2-digit',

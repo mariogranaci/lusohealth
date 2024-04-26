@@ -38,9 +38,9 @@ export class AgendaPacienteComponent {
   initialAppointmentCount = 3;
 
   phrases: string[] = [
-    "Poderá ver a sua disponibiliadade ao clicar no botão Ver Disponibilidade.",
-    "Poderá aceitar ou rejeitar os pedidos de consultas.",
-    "Poderá clicar em ver detalhes, para ver mais detalhadamente as informações da consulta."
+    "Poderá clicar em ver detalhes, para ver mais detalhadamente as informações da consulta.",
+    "Poderá filtrar o seu tipo de consulta para a consulta que pretende.",
+    "Pode limpar todo o seu histórico de próximas consultas."
   ];
   currentPhraseIndex: number = 0;
   currentPhrase: string = this.phrases[0];

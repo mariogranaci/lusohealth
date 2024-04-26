@@ -5,6 +5,7 @@ import { Specialty } from '../../shared/models/profile/specialty';
 import { ServicesService } from '../services.service';
 import { Service } from '../../shared/models/servic/service';
 import { ProfessionalType } from '../../shared/models/authentication/professionalType';
+import { Location } from '@angular/common';
 
 
 @Component({
@@ -35,9 +36,7 @@ export class MarcacoesComponent {
   selectedType: string = '';
   selectedOrder: string = 'Rank';
 
-  constructor(public servicesService: ServicesService,
-  private route: ActivatedRoute,
-  private router: Router) { }
+  constructor(public servicesService: ServicesService, private route: ActivatedRoute, private router: Router, private location: Location) { }
 
   ngOnInit() {
     Promise.all([
@@ -101,6 +100,7 @@ export class MarcacoesComponent {
       queryParams: queryParams,
       queryParamsHandling: 'merge'
     });
+
   }
 
   getProfessionalTypes(): Promise<void> {

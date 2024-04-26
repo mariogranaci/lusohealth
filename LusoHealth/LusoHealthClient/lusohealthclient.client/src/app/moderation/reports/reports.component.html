@@ -1,5 +1,5 @@
 <main>
-
+  <img id="question-btn" (click)="openPopupToolTip('tool')" src="assets/images/Agenda/question-mark.png" />
   <div class="row">
     <section class="top-left">
       <button class="btn btn-blue" (click)="goBack()">Voltar</button>
@@ -10,7 +10,7 @@
     </div>
   </div>
 
- 
+
 
   <div class="reports-container">
     <div class="dropdown">
@@ -48,6 +48,21 @@
             <button type="button" (click)="blockAccount(currentReport); closePopup()" class="no-btn">Bloquear Conta</button>
           </div>
         </div>
+
+        <a class="close-button" (click)="closePopup()">
+          <img src="assets/images/login/close.png" alt="Close button" class="close-image">
+        </a>
+
+        <div id="tooltips" class="overlay-container-tool" (click)="stopPropagation($event)">
+          <h2>ToolTips</h2>
+          <div class="text-tool">
+            <div class="text-tool">{{ currentPhrase }}</div>
+            <ng-container *ngIf="gifs[currentPhraseIndex] && gifs[currentPhraseIndex].length > 0">
+              <img class="img-gif" [src]="gifs[currentPhraseIndex][0]" alt="Gif {{ currentPhraseIndex + 1 }}">
+            </ng-container>
+          </div>
+          <button (click)="nextPhrase()" type="button" class="btn btn-tool">Continuar</button>
+        </div>
       </div>
     </ng-container>
     <div class="more-container">
@@ -57,5 +72,6 @@
     </div>
   </div>
 </main>
+
 
 

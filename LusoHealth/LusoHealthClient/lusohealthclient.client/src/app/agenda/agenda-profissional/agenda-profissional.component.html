@@ -17,9 +17,9 @@
           <div class="appointment">
             <div id="info">
               <div id="title-data">
-                <h3>Consulta de {{ findSpecialtyByServiceId(appointment.idService) }}</h3>
+                <h3>Consulta de {{ appointment.speciality }}</h3>
                 <div class="text-appointment">{{ convertToDate(appointment.timestamp) }}</div>
-                <div class="text-appointment">{{getPatientNameById(appointment.idPatient)}}</div>
+                <div class="text-appointment">{{appointment.patient?.user?.firstName | firstWord}} {{appointment.patient?.user?.lastName | lastWord}}</div>
                 <div class="text-appointment">{{ getAppointmentType(appointment.type + "") }}</div>
               </div>
               <div class="hours"><b>{{ convertToHours(appointment.timestamp) }}</b></div>
@@ -43,9 +43,9 @@
           <div class="appointment">
             <div id="info">
               <div id="title-data">
-                <h3>Consulta de {{ findSpecialtyByServiceId(appointment.idService) }}</h3>
+                <h3>Consulta de {{ appointment.speciality }}</h3>
                 <div class="text-appointment">{{ convertToDate(appointment.timestamp) }}</div>
-                <div class="text-appointment">{{ getPatientNamePendingById(appointment.idPatient)}}</div>
+                <div class="text-appointment">{{appointment.patient?.user?.firstName | firstWord}} {{appointment.patient?.user?.lastName | lastWord}}</div>
                 <div class="text-appointment">{{ getAppointmentType(appointment.type + "") }}</div>
               </div>
               <div class="hours"><b>{{ convertToHours(appointment.timestamp) }}</b></div>

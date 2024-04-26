@@ -101,6 +101,7 @@ export class AgendaPacienteComponent {
       next: (appointments: Appointment[]) => {
         this.appointments = appointments;
         this.appointmentsFiltered = appointments;
+        console.log(appointments);
         this.updateDisplayedAppointments();
       },
       error: (error) => {
@@ -267,13 +268,6 @@ export class AgendaPacienteComponent {
       return service.specialty;
     }
     return null;
-  }
-
-  /// Obtém o nome do profissional pelo ID do serviço
-  getProfessionalNameById(serviceId: number | null): string {
-    const professional = this.services.find(s => s.professional.services.find(p => p.serviceId === serviceId))?.professional;
-
-    return professional?.professionalInfo.firstName + " " + professional?.professionalInfo.lastName;
   }
 
   /// Obtém o profissional pelo ID do serviço

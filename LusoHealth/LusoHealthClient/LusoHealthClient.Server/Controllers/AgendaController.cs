@@ -1,5 +1,6 @@
 ﻿using LusoHealthClient.Server.Data;
 using LusoHealthClient.Server.DTOs.Agenda;
+using LusoHealthClient.Server.DTOs.Appointments;
 using LusoHealthClient.Server.DTOs.Profile;
 using LusoHealthClient.Server.DTOs.Services;
 using LusoHealthClient.Server.Models.Appointments;
@@ -87,7 +88,7 @@ namespace LusoHealthClient.Server.Controllers
         /// Obtém as próximas marcações do paciente.
         /// </summary>
         [HttpGet("get-next-appointments")]
-        public async Task<ActionResult<List<Appointment>>> GetNextAppointments()
+        public async Task<ActionResult<List<AppointmentDto>>> GetNextAppointments()
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
@@ -101,9 +102,34 @@ namespace LusoHealthClient.Server.Controllers
                 {
 
                     var currentTime = DateTime.UtcNow;
-                    var appointments = _context.Appointment.Include(a => a.Patient).ThenInclude(b => b.User)
+                    var appointments = _context.Appointment.Include(c => c.Professional).Include(a => a.Patient).ThenInclude(b => b.User)
                         .Where(p => p.IdPatient == user.Id && p.Timestamp > currentTime && p.State == AppointmentState.Scheduled)
                         .OrderBy(p => p.Timestamp)
+                        .Select(ap => new AppointmentDto
+                        {
+                            Id = ap.Id,
+                            Timestamp = ap.Timestamp,
+                            Location = null,
+                            Address = null,
+                            Type = ap.Type.ToString(),
+                            Description = ap.Description,
+                            State = ap.State.ToString(),
+                            Duration = ap.Duration,
+                            IdPatient = ap.IdPatient,
+                            IdProfessional = ap.IdProfesional,
+                            IdService = ap.IdService,
+                            Professional = new ProfessionalDto
+                            {
+                                ProfessionalInfo = new UserProfileDto
+                                {
+                                    Id = ap.Professional.User.Id,
+                                    FirstName = ap.Professional.User.FirstName,
+                                    LastName = ap.Professional.User.LastName,
+                                    Email = ap.Professional.User.Email,
+                                }
+                            },
+                            Speciality = ap.Service.Specialty.Name
+                        })
                         .ToList();
 
                     if (appointments == null || !appointments.Any()) { return NotFound("Não foi possível encontrar as marcações"); }
@@ -115,9 +141,36 @@ namespace LusoHealthClient.Server.Controllers
                 else if (User.IsInRole("Professional"))
                 {
                     var currentTime = DateTime.UtcNow;
-                    var appointments = _context.Appointment.Include(a => a.Patient).ThenInclude(b => b.User)
+                    var appointments = _context.Appointment.Include(s => s.Service).ThenInclude(s => s.Specialty)
+                        .Include(c => c.Professional).Include(a => a.Patient).ThenInclude(b => b.User)
                         .Where(p => p.IdProfesional == user.Id && p.Timestamp > currentTime && p.State == AppointmentState.Scheduled)
                         .OrderBy(p => p.Timestamp)
+                        .Select(ap => new AppointmentDto
+                        {
+                            Id = ap.Id,
+                            Timestamp = ap.Timestamp,
+                            Location = null,
+                            Address = null,
+                            Type = ap.Type.ToString(),
+                            Description = ap.Description,
+                            State = ap.State.ToString(),
+                            Duration = ap.Duration,
+                            IdPatient = ap.IdPatient,
+                            IdProfessional = ap.IdProfesional,
+                            IdService = ap.IdService,
+                            Patient = new PatientDto
+                            {
+                                UserId = ap.Patient.User.Id,
+                                User = new UserProfileDto
+                                {
+                                    Id = ap.Patient.User.Id,
+                                    FirstName = ap.Patient.User.FirstName,
+                                    LastName = ap.Patient.User.LastName,
+                                    Email = ap.Patient.User.Email,
+                                }
+                            },
+                            Speciality = ap.Service.Specialty.Name
+                        })
                         .ToList();
 
                     if (appointments == null || !appointments.Any()) { return NotFound("Não foi possível encontrar as marcações"); }
@@ -143,7 +196,7 @@ namespace LusoHealthClient.Server.Controllers
         /// Obtém as marcações pendentes do profissional.
         /// </summary>s
         [HttpGet("get-pending-appointments")]
-        public async Task<ActionResult<List<Appointment>>> GetPendingAppointments()
+        public async Task<ActionResult<List<AppointmentDto>>> GetPendingAppointments()
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
@@ -156,9 +209,35 @@ namespace LusoHealthClient.Server.Controllers
                 if (User.IsInRole("Professional"))
                 {
                     var currentTime = DateTime.UtcNow;
-                    var appointments = _context.Appointment.Include(a => a.Patient).ThenInclude(b => b.User)
+                    var appointments = _context.Appointment.Include(s => s.Service).ThenInclude(s => s.Specialty).Include(a => a.Patient).ThenInclude(b => b.User)
                         .Where(p => p.IdProfesional == user.Id && p.Timestamp > currentTime && p.State == AppointmentState.Pending)
                         .OrderBy(p => p.Timestamp)
+                        .Select(ap => new AppointmentDto
+                        {
+                            Id = ap.Id,
+                            Timestamp = ap.Timestamp,
+                            Location = null,
+                            Address = null,
+                            Type = ap.Type.ToString(),
+                            Description = ap.Description,
+                            State = ap.State.ToString(),
+                            Duration = ap.Duration,
+                            IdPatient = ap.IdPatient,
+                            IdProfessional = ap.IdProfesional,
+                            IdService = ap.IdService,
+                            Patient = new PatientDto
+                            {
+                                UserId = ap.Patient.User.Id,
+                                User = new UserProfileDto
+                                {
+                                    Id = ap.Patient.User.Id,
+                                    FirstName = ap.Patient.User.FirstName,
+                                    LastName = ap.Patient.User.LastName,
+                                    Email = ap.Patient.User.Email,
+                                }
+                            },
+                            Speciality = ap.Service.Specialty.Name
+                        })
                         .ToList();
 
                     if (appointments == null || !appointments.Any()) { return NotFound("Não foi possível encontrar as marcações"); }

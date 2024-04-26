@@ -1,11 +1,11 @@
 main {
   padding: 0 7%;
-  margin: 0 auto 30px auto;
+  margin-bottom: 30px;
   min-width: 1150px;
-  max-width: 1500px;
   padding-bottom: 30px;
   min-height: calc(100vh - 65px);
   position:relative;
+  width: 100%;
 }
 
 #question-btn {

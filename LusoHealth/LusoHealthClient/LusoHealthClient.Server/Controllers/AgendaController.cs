@@ -240,7 +240,7 @@ namespace LusoHealthClient.Server.Controllers
             try
             {
                 var slots = await _context.AvailableSlots
-                .Where(s => s.Service.IdProfessional == user.Id && s.IsAvailable)
+                .Where(s => s.Service.IdProfessional == user.Id && s.IsAvailable && s.Start >= DateTime.UtcNow)
                 .Select(s => new
                 {
                     s.Id,

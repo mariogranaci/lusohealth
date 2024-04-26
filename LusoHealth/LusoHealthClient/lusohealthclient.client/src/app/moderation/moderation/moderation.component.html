@@ -1,5 +1,5 @@
 <main>
-
+  <img id="question-btn" (click)="openPopupToolTip('tool')" src="assets/images/Agenda/question-mark.png"/>
   <div class="row">
     <section class="top-left">
       <button class="btn btn-blue" (click)="goBack()">Voltar</button>
@@ -21,10 +21,10 @@
     </div>
     <ng-container *ngFor="let review of reviews">
       <div class="review-item">
-        <img class="review-profile-image" alt="Imagem de Perfil" src="/assets/images/Perfil/profileImage.jpg"/>
+        <img class="review-profile-image" alt="Imagem de Perfil" src="/assets/images/Perfil/profileImage.jpg" />
         <div class="review-details">
           <div class="review-info">
-            <div class="review-title"><p>{{review.stars}}</p><img class="review-star-image" alt="Stars" src="/assets/images/profile/star.png"/></div>
+            <div class="review-title"><p>{{review.stars}}</p><img class="review-star-image" alt="Stars" src="/assets/images/profile/star.png" /></div>
             <div class="review-title" *ngIf="review?.state?.toString() == '1'">REPORTADO</div>
             <div class="review-title" *ngIf="review?.state?.toString() == '2'">REMOVIDO</div>
             <div class="review-date-time">
@@ -44,6 +44,17 @@
             <button type="button" (click)="suspendAccount(currentReview); closePopup()" class="no-btn">Suspender Conta</button>
             <button type="button" (click)="blockAccount(currentReview); closePopup()" class="no-btn">Bloquear Conta</button>
           </div>
+        </div>
+
+        <div id="tooltips" class="overlay-container-tool" (click)="stopPropagation($event)">
+          <h2>ToolTips</h2>
+          <div class="text-tool">
+            <div class="text-tool">{{ currentPhrase }}</div>
+            <ng-container *ngIf="gifs[currentPhraseIndex] && gifs[currentPhraseIndex].length > 0">
+              <img class="img-gif" [src]="gifs[currentPhraseIndex][0]" alt="Gif {{ currentPhraseIndex + 1 }}">
+            </ng-container>
+          </div>
+          <button (click)="nextPhrase()" type="button" class="btn btn-tool">Continuar</button>
         </div>
       </div>
     </ng-container>

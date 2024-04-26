@@ -27,6 +27,20 @@ export class ModerationComponent {
 
   currentReview: any;
 
+  phrases: string[] = [
+    "Poderá ver todos os reports efetuados no website.",
+    "Poderá também filtrar os comentários da forma que pretende.",
+    "Ao clicar nos 3 pontos será possivel rejeitar comentário, suspender conta, bloquear conta.",
+  ];
+  gifs: string[][] = [
+    [],
+    [],
+    ["assets/images/Reports/points-gif.gif"],
+  ];
+  currentPhraseIndex: number = 0;
+  currentPhrase: string = this.phrases[0];
+
+
   constructor(public moderationService: ModerationService, private location: Location) { }
 
   ngOnInit() {
@@ -301,6 +315,37 @@ export class ModerationComponent {
     }
   }
 
+  openPopupToolTip(opcao: string) {
+    const overlay = document.getElementById('overlay');
+    const remove = document.getElementById('remove-appointment-container');
+    const accept = document.getElementById('accept-appointment-container');
+    const tool = document.getElementById('tooltips');
+
+
+    if (remove) {
+      remove.style.display = "none";
+    }
+
+    if (overlay) {
+      overlay.style.display = 'flex';
+      if (opcao == "remove") {
+        if (remove) {
+          remove.style.display = "block";
+        }
+      }
+      else if (opcao == "accept") {
+        if (accept) {
+          accept.style.display = "block";
+        }
+      }
+      else if (opcao == "tool") {
+        if (tool) {
+          tool.style.display = "block";
+        }
+      }
+    }
+  }
+
   /**
    * Fecha o popup de opções.
    */
@@ -313,6 +358,17 @@ export class ModerationComponent {
       if (options) {
         options.style.display = "none";
       }
+    }
+  }
+
+  nextPhrase() {
+    this.currentPhraseIndex++;
+    if (this.currentPhraseIndex < this.phrases.length) {
+      this.currentPhrase = this.phrases[this.currentPhraseIndex];
+    } else {
+      this.currentPhraseIndex = 0;
+      this.currentPhrase = this.phrases[this.currentPhraseIndex];
+      this.closePopup();
     }
   }
 

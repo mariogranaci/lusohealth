@@ -6,7 +6,6 @@ main {
   min-height: calc(100vh - 164px);
   display: flex;
   justify-content: space-between;
-  position:relative;
 }
 
 #question-btn {
@@ -22,7 +21,8 @@ main {
 .title {
   margin: 25px auto;
   font-size: 20px;
-  text-align: center
+  text-align: center;
+  position:relative;
 }
 
 #title-data {

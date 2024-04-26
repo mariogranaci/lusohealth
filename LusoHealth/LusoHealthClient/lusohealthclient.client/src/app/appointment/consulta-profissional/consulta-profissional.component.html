@@ -1,13 +1,15 @@
 <div class="title" *ngIf="appointment?.state === 'Canceled'">
+  <img id="question-btn" (click)="openPopup('tool')" src="assets/images/Agenda/question-mark.png" />
   <h1>Consulta cancelada</h1>
 </div>
 
 <div class="title">
+  <img id="question-btn" (click)="openPopup('tool')" src="assets/images/Agenda/question-mark.png" />
   <h1 *ngIf="service?.specialty && appointment?.state !== 'Canceled'">Consulta de {{ service?.specialty}}</h1>
 </div>
 
 <main>
-  <img id="question-btn" (click)="openPopup('tool')" src="assets/images/Agenda/question-mark.png" />
+  
   <div class="appointments">
     <div class="appointment">
       <div id="info">

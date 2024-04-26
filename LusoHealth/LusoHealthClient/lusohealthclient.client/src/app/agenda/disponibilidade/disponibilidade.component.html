@@ -12,23 +12,29 @@
       <img src="assets/images/login/close.png" alt="Close button" class="close-image">
     </a>
 
-    <form [formGroup]="addSlotsForm" id="add-slots-container" class="overlay-container" autocomplete="off" (click)="stopPropagation($event)">
+    <form [formGroup]="addSlotsForm" id="add-slots-container" class="overlay-container" autocomplete="off" (ngSubmit)="addAvailability()" (click)="stopPropagation($event)">
 
       <h2>Adicionar Disponibilidade</h2>
 
       <div class="form-row">
         <div class="input-box">
           <label for="start-date">Data de Início</label>
-          <input type="date" formControlName="startDate" id="start-date" name="startDate" required [class.is-invalid]="submittedAddSlots && addSlotsForm.get('startDate')?.errors">
+          <input type="date" [min]="today" formControlName="startDate" id="start-date" name="startDate" required [class.is-invalid]="submittedAddSlots && addSlotsForm.get('startDate')?.errors">
+          <span class="text-danger" *ngIf="submittedAddSlots && addSlotsForm.get('startDate')?.errors">
+            Preencha com uma data válida
+          </span>
         </div>
 
-        <div>
+        <p class="middle-text">
           Até
-        </div>
+        </p>
 
         <div class="input-box">
           <label for="end-date">Data de Fim</label>
-          <input type="date" formControlName="endDate" id="end-date" name="endDate" required [class.is-invalid]="submittedAddSlots && addSlotsForm.get('endDate')?.errors">
+          <input type="date" [min]="today" formControlName="endDate" id="end-date" name="endDate" required [class.is-invalid]="submittedAddSlots && addSlotsForm.get('endDate')?.errors">
+          <span class="text-danger" *ngIf="submittedAddSlots && addSlotsForm.get('endDate')?.errors">
+            Preencha com uma data válida
+          </span>
         </div>
       </div>
 
@@ -36,15 +42,21 @@
         <div class="input-box">
           <label for="start-time">Hora de Início</label>
           <input type="time" formControlName="startTime" id="start-time" name="startTime" required [class.is-invalid]="submittedAddSlots && addSlotsForm.get('startTime')?.errors">
+          <span class="text-danger" *ngIf="submittedAddSlots && addSlotsForm.get('startTime')?.errors">
+            Campo <p>obrigatório</p> 
+          </span>
         </div>
 
-        <div>
+        <p class="middle-text">
           Até
-        </div>
+        </p>
 
         <div class="input-box">
           <label for="end-time">Hora de Fim</label>
           <input type="time" formControlName="endTime" id="end-time" name="endTime" required [class.is-invalid]="submittedAddSlots && addSlotsForm.get('endTime')?.errors">
+          <span class="text-danger" *ngIf="submittedAddSlots && addSlotsForm.get('endTime')?.errors">
+            Campo <p>obrigatório</p>
+          </span>
         </div>
       </div>
 
@@ -58,6 +70,9 @@
               <option value="2" select>Domicílio</option>
             </select>
           </div>
+          <span class="text-danger" *ngIf="submittedAddSlots && addSlotsForm.get('selectType')?.hasError('required')">
+            Escoha uma opção
+          </span>
         </div>
 
         <div class="input-box">
@@ -72,6 +87,9 @@
               <option value="60">60 min</option>
             </select>
           </div>
+          <span class="text-danger" *ngIf="submittedAddSlots && addSlotsForm.get('selectDuration')?.hasError('required')">
+            Escoha uma opção
+          </span>
         </div>
       </div>
 
@@ -84,14 +102,17 @@
               <option *ngFor="let service of services" value="{{ service.serviceId }}">{{ service.specialty }}</option>
             </select>
           </div>
+          <span class="text-danger" *ngIf="submittedAddSlots && addSlotsForm.get('selectSpeciality')?.hasError('required')">
+            Escoha uma opção
+          </span>
         </div>
       </div>
 
       <div class="form-row" id="form-row-buttons">
 
-        <button type="reset" class="btn btn-red" (click)="closePopup()">Cancelar</button>
+        <button type="button" class="btn btn-red" (click)="resetAddAailabilityForm()">Cancelar</button>
 
-        <button type="button" class="btn btn-blue" (click)="addAvailability()">Adicionar</button>
+        <button type="submit" class="btn btn-blue">Adicionar</button>
 
       </div>
 

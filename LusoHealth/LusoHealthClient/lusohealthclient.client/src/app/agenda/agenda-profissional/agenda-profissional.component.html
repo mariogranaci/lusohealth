@@ -53,8 +53,8 @@
             <div class="buttons">
               <button class="btn" [routerLink]="['/professional-appointment']" [queryParams]="{ appointment: appointment.id }">Detalhes</button>
               <div>
-                <button (click)="changeAppointmentScheduled(appointment)" class="icon-btn"><img class="icon" src="/assets/images/Agenda/checked.png" /></button>
-                <button (click)="cancelAppointment(appointment)" class="icon-btn"><img class="icon" src="/assets/images/Agenda/cancel.png" /></button>
+                <button (click)="openPopup('accept', appointment)" class="icon-btn"><img class="icon" src="/assets/images/Agenda/checked.png" /></button>
+                <button (click)="openPopup('remove', appointment)" class="icon-btn"><img class="icon" src="/assets/images/Agenda/cancel.png" /></button>
               </div>
             </div>
           </div>
@@ -84,3 +84,20 @@
 
 </main>
 
+<div class="overlay" id="overlay" (click)="closePopup()">
+  <div id="remove-appointment-container" class="overlay-container" autocomplete="off" (click)="stopPropagation($event)">
+    <h2>Tem a certeza que deseja cancelar a consulta?</h2>
+    <div class="form-buttons-row">
+      <button type="reset" (click)="closePopup()" class="btns btns-blue">Voltar</button>
+      <button type="submit" (click)="cancelAppointment()" class="btns btns-red">Cancelar</button>
+    </div>
+  </div>
+
+  <div id="accept-appointment-container" class="overlay-container" autocomplete="off" (click)="stopPropagation($event)">
+    <h2>Tem a certeza que deseja aceitar a consulta?</h2>
+    <div class="form-buttons-row">
+      <button type="reset" (click)="closePopup()" class="btns btns-red">Voltar</button>
+      <button type="submit" (click)="changeAppointmentScheduled()" class="btns btns-blue">Aceitar</button>
+    </div>
+  </div>
+</div>

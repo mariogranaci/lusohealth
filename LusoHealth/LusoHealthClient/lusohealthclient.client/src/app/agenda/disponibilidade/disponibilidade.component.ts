@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { CalendarOptions, EventInput, EventSourceInput } from '@fullcalendar/core'; // useful for typechecking
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
@@ -32,6 +32,9 @@ export class DisponibilidadeComponent {
   selectedDates: any;
   isSelecting: boolean = false;
   services: any;
+  formValues: any;
+  today = new Date().toISOString().split('T')[0];
+  todayDate = new Date();
 
   phrases: string[] = [
     "Para adicionar a sua disponibilidade, clique no botão com o sinal de mais e preencha os campos.",
@@ -115,16 +118,34 @@ export class DisponibilidadeComponent {
   }
 
   initializeForm() {
-
     this.addSlotsForm = this.formBuilder.group({
       selectDuration: ['10', [Validators.required]],
-      startDate: ['', [Validators.required]],
-      endDate: ['', [Validators.required]],
+      startDate: ['', [Validators.required, this.minDateValidator()]],
+      endDate: ['', [Validators.required, this.minDateValidator()]],
       startTime: ['', [Validators.required]],
       endTime: ['', [Validators.required]],
       selectType: ['0', [Validators.required]],
       selectSpeciality: ['', [Validators.required]],
     });
+    this.formValues = this.addSlotsForm.value;
+  }
+
+  minDateValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      if (!control.value) {
+        return null; // if no date is entered, return null (consider whether you want to handle it as optional)
+      }
+
+      const minDate = new Date(); // Subtract one day
+      minDate.setHours(0, 0, 0, 0); // Set the time to midnight
+
+      // Parse the input date and also reset the time to midnight to only compare dates
+      const inputDate = new Date(control.value);
+      inputDate.setHours(0, 0, 0, 0);
+
+      // Check if the input date is not before the minimum date
+      return inputDate >= minDate ? null : { 'minDate': { value: control.value } };
+    };
   }
 
   /**
@@ -220,7 +241,6 @@ export class DisponibilidadeComponent {
     this.errorMessages = [];
 
     if (this.addSlotsForm.invalid) {
-      this.submittedAddSlots = false;
       return;
     }
 
@@ -275,6 +295,7 @@ export class DisponibilidadeComponent {
         this.closePopup();
         this.getSlots();
         this.addSlotsForm.reset();
+        this.addSlotsForm.setValue(this.formValues);
       },
       error: (error) => {
         if (error.error.errors) {
@@ -285,6 +306,12 @@ export class DisponibilidadeComponent {
         this.submittedAddSlots = false;
       }
     });
+  }
+
+  resetAddAailabilityForm() {
+    this.closePopup();
+    this.addSlotsForm.reset();
+    this.addSlotsForm.setValue(this.formValues);
   }
 
   /**

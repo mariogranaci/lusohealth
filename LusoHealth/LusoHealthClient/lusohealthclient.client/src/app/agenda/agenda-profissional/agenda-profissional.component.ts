@@ -43,6 +43,7 @@ export class AgendaProfissionalComponent {
   ];
   currentPhraseIndex: number = 0;
   currentPhrase: string = this.phrases[0];
+  selectedAppointment: Appointment | null = null;
 
   constructor(private servicesService: ServicesService, private agendaService: AgendaService,
     private appointmentService: AppointmentService) { }
@@ -70,59 +71,69 @@ export class AgendaProfissionalComponent {
   * Método para alterar o estado de um agendamento para "agendado"
   * @param appointment - O agendamento a ser marcado como agendado
   */
-  changeAppointmentScheduled(appointment: Appointment) {
-    const appontmentDto = new Appointment(appointment.timestamp, appointment.location, appointment.address, null, null, null, appointment.duration, appointment.idPatient, appointment.id, appointment.idProfessional, appointment.idService);
-    this.appointmentService.scheduleAppointment(appontmentDto).pipe(
-      takeUntil(this.unsubscribe$)
-    ).subscribe({
-      next: (response: any) => {
-        console.log("Appointment scheduled successfully:", response);
-        this.getServices().then(() => {
-          this.getProfessionalTypes();
-          this.getSpecialties();
-          this.getNextAppointments();
-          this.getPendingAppointments();
-        });
-      },
-      error: (error) => {
-        console.error("Error scheduling appointment:", error);
-        if (error.error.errors) {
-          this.errorMessages = error.error.errors;
-        } else {
-          this.errorMessages.push(error.error);
+  changeAppointmentScheduled() {
+    if (this.selectedAppointment != null) {
+      const appontmentDto = new Appointment(this.selectedAppointment.timestamp, this.selectedAppointment.location, this.selectedAppointment.address, null, null, null,
+        this.selectedAppointment.duration, this.selectedAppointment.idPatient, this.selectedAppointment.id, this.selectedAppointment.idProfessional, this.selectedAppointment.idService);
+      this.appointmentService.scheduleAppointment(appontmentDto).pipe(
+        takeUntil(this.unsubscribe$)
+      ).subscribe({
+        next: (response: any) => {
+          console.log("Appointment scheduled successfully:", response);
+          this.getServices().then(() => {
+            this.getProfessionalTypes();
+            this.getSpecialties();
+            this.getNextAppointments();
+            this.getPendingAppointments();
+          });
+          this.closePopup();
+        },
+        error: (error) => {
+          console.error("Error scheduling appointment:", error);
+          if (error.error.errors) {
+            this.errorMessages = error.error.errors;
+          } else {
+            this.errorMessages.push(error.error);
+          }
+          this.closePopup();
         }
-      }
-    });
+      });
+    }
   }
 
   /*
   * Método para cancelar um agendamento
   * @param appointment - O agendamento a ser cancelado
   */
-  cancelAppointment(appointment: Appointment) {
-    const appontmentDto = new Appointment(appointment.timestamp, appointment.location, appointment.address, null, null, null, appointment.duration, appointment.idPatient, appointment.id, appointment.idProfessional, appointment.idService);
-    this.appointmentService.cancelAppointment(appontmentDto).pipe(
-      takeUntil(this.unsubscribe$)
-    ).subscribe({
-      next: (response: any) => {
-        console.log("Appointment canceled successfully:", response);
-        this.getServices().then(() => {
-          this.getProfessionalTypes();
-          this.getSpecialties();
-          this.getNextAppointments();
-          this.getPendingAppointments();
-        });
-        this.refundAppointment(response.id);
-      },
-      error: (error) => {
-        console.error("Error scheduling appointment:", error);
-        if (error.error.errors) {
-          this.errorMessages = error.error.errors;
-        } else {
-          this.errorMessages.push(error.error);
+  cancelAppointment() {
+    if (this.selectedAppointment != null) {
+      const appontmentDto = new Appointment(this.selectedAppointment.timestamp, this.selectedAppointment.location, this.selectedAppointment.address, null, null, null,
+        this.selectedAppointment.duration, this.selectedAppointment.idPatient, this.selectedAppointment.id, this.selectedAppointment.idProfessional, this.selectedAppointment.idService);
+      this.appointmentService.cancelAppointment(appontmentDto).pipe(
+        takeUntil(this.unsubscribe$)
+      ).subscribe({
+        next: (response: any) => {
+          console.log("Appointment canceled successfully:", response);
+          this.getServices().then(() => {
+            this.getProfessionalTypes();
+            this.getSpecialties();
+            this.getNextAppointments();
+            this.getPendingAppointments();
+          });
+          this.closePopup();
+          this.refundAppointment(response.id);
+        },
+        error: (error) => {
+          console.error("Error scheduling appointment:", error);
+          if (error.error.errors) {
+            this.errorMessages = error.error.errors;
+          } else {
+            this.errorMessages.push(error.error);
+          }
+          this.closePopup();
         }
-      }
-    });
+      });
+    }
   }
 
   /*
@@ -406,18 +417,32 @@ export class AgendaProfissionalComponent {
     this.displayedAppointmentsPending = this.appointmentsPending.slice(0, this.initialAppointmentPendingCount);
   }
 
-  /**
-* Abre o popup especificado.
-* @param option A opção do popup a ser aberto.
-*/
-  openPopup(option: string) {
+
+  openPopup(opcao: string, appointment: Appointment) {
     const overlay = document.getElementById('overlay');
+    const remove = document.getElementById('remove-appointment-container');
+    const accept = document.getElementById('accept-appointment-container');
     const tool = document.getElementById('tooltips');
+
+    this.selectedAppointment = appointment;
+
+    if (remove) {
+      remove.style.display = "none";
+    }
 
     if (overlay) {
       overlay.style.display = 'flex';
-
-      if (option == "tool") {
+      if (opcao == "remove") {
+        if (remove) {
+          remove.style.display = "block";
+        }
+      }
+      else if (opcao == "accept") {
+        if (accept) {
+          accept.style.display = "block";
+        }
+      }
+      else if (opcao == "tool") {
         if (tool) {
           tool.style.display = "block";
         }
@@ -425,20 +450,29 @@ export class AgendaProfissionalComponent {
     }
   }
 
-  /**
- * Fecha o popup.
- */
-  closePopup() {
+  closePopup(){
     const overlay = document.getElementById('overlay');
+    const accept = document.getElementById('accept-appointment-container');
+    const remove = document.getElementById('remove-appointment-container');
     const tool = document.getElementById('tooltips');
+    
+    this.selectedAppointment = null;
 
     if (overlay) {
       overlay.style.display = 'none';
+      if (remove) {
+        remove.style.display = "none";
+      }
+      if (accept) {
+        accept.style.display = "none";
+      }
       if (tool) {
         tool.style.display = "none";
       }
     }
+    
   }
+  
 
 
 
@@ -461,4 +495,7 @@ export class AgendaProfissionalComponent {
   stopPropagation(event: Event) {
     event.stopPropagation();
   }
+
 }
+
+

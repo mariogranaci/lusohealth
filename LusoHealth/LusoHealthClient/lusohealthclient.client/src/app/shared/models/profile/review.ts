@@ -1,3 +1,9 @@
+export enum ReviewState {
+  Pending = 'Pending',
+  Concluded = 'Concluded',
+  Cancelled = 'Cancelled'
+}
+
 export interface Review {
   idPatient: string;
   patientName: string;
@@ -6,4 +12,6 @@ export interface Review {
   serviceName: string;
   stars: number;
   description: string;
+  id: number;
+  state?: ReviewState;
 }

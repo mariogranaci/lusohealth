@@ -4,6 +4,7 @@ import { ProfileService } from '../profile.service';
 import { UserProfile } from '../../shared/models/profile/userProfile';
 import { Observable, Subject, never, takeUntil } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { Location } from '@angular/common';
 
 
 @Component({
@@ -36,7 +37,8 @@ export class EditPerfilComponent implements OnInit {
     
 
   constructor(private fb: FormBuilder,
-    private profileService: ProfileService) { }
+    private profileService: ProfileService,
+    private location: Location) { }
 
 
   /**
@@ -322,6 +324,11 @@ export class EditPerfilComponent implements OnInit {
     };
   }
 
- 
+  /**
+   * Retorna à página anterior.
+   */
+  goBack() {
+    this.location.back();
+  }
 }
 

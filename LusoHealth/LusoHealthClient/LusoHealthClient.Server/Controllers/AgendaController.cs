@@ -15,10 +15,10 @@ using System.Security.Claims;
 
 namespace LusoHealthClient.Server.Controllers
 {
-	/// <summary>
-	/// Controlador para lidar com operações relacionadas à agenda de marcações.
-	/// </summary>
-	[Authorize]
+    /// <summary>
+    /// Controlador para lidar com operações relacionadas à agenda de marcações.
+    /// </summary>
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class AgendaController : ControllerBase
@@ -26,19 +26,19 @@ namespace LusoHealthClient.Server.Controllers
         private readonly ApplicationDbContext _context;
         private readonly UserManager<User> _userManager;
 
-		/// <summary>
-		/// Construtor para inicializar o controlador AgendaController.
-		/// </summary>
-		public AgendaController(ApplicationDbContext context, UserManager<User> userManager)
+        /// <summary>
+        /// Construtor para inicializar o controlador AgendaController.
+        /// </summary>
+        public AgendaController(ApplicationDbContext context, UserManager<User> userManager)
         {
             _context = context;
             _userManager = userManager;
         }
 
-		/// <summary>
-		/// Obtém as marcações anteriores do paciente.
-		/// </summary>
-		[HttpGet("get-previous-appointments")]
+        /// <summary>
+        /// Obtém as marcações anteriores do paciente.
+        /// </summary>
+        [HttpGet("get-previous-appointments")]
         public async Task<ActionResult<List<Appointment>>> GetPreviousAppointments()
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -83,10 +83,10 @@ namespace LusoHealthClient.Server.Controllers
         }
 
 
-		/// <summary>
-		/// Obtém as próximas marcações do paciente.
-		/// </summary>
-		[HttpGet("get-next-appointments")]
+        /// <summary>
+        /// Obtém as próximas marcações do paciente.
+        /// </summary>
+        [HttpGet("get-next-appointments")]
         public async Task<ActionResult<List<Appointment>>> GetNextAppointments()
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -139,10 +139,10 @@ namespace LusoHealthClient.Server.Controllers
         }
 
 
-		/// <summary>
-		/// Obtém as marcações pendentes do profissional.
-		/// </summary>s
-		[HttpGet("get-pending-appointments")]
+        /// <summary>
+        /// Obtém as marcações pendentes do profissional.
+        /// </summary>s
+        [HttpGet("get-pending-appointments")]
         public async Task<ActionResult<List<Appointment>>> GetPendingAppointments()
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -179,10 +179,10 @@ namespace LusoHealthClient.Server.Controllers
 
         }
 
-		/// <summary>
-		/// Obtém as especialidades disponíveis.
-		/// </summary>
-		[HttpGet("get-specialties")]
+        /// <summary>
+        /// Obtém as especialidades disponíveis.
+        /// </summary>
+        [HttpGet("get-specialties")]
         public async Task<ActionResult<List<Specialty>>> GetSpecialties()
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -203,10 +203,10 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-		/// <summary>
-		/// Obtém os slots disponíveis por data.
-		/// </summary>
-		[HttpPost("get-slots")]
+        /// <summary>
+        /// Obtém os slots disponíveis por data.
+        /// </summary>
+        [HttpPost("get-slots")]
         public async Task<ActionResult<List<AvailableSlot>>> GetSlotsByDate(AvailabilityDto slot)
         {
             try
@@ -223,12 +223,11 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-		/// <summary>
-		/// Obtém todos os slots disponíveis.
-		/// </summary>
-		[HttpGet("get-all-slots")]
+        /// <summary>
+        /// Obtém todos os slots disponíveis.
+        /// </summary>
+        [HttpGet("get-all-slots")]
         public async Task<ActionResult<List<AvailableSlot>>> GetSlots()
-
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
@@ -236,18 +235,20 @@ namespace LusoHealthClient.Server.Controllers
             var user = await _userManager.FindByIdAsync(userIdClaim);
             if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
 
+            TimeZoneInfo portugueseZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Lisbon");
+
             try
             {
                 var slots = await _context.AvailableSlots
-                .Where(s => s.Service.IdProfessional == user.Id)
+                .Where(s => s.Service.IdProfessional == user.Id && s.IsAvailable)
                 .Select(s => new
                 {
                     s.Id,
                     s.IdService,
                     s.IsAvailable,
                     s.SlotDuration,
-                    s.Start,
-                    End = s.Start.AddMinutes(s.SlotDuration),
+                    Start = TimeZoneInfo.ConvertTimeFromUtc(s.Start, portugueseZone),
+                    End = TimeZoneInfo.ConvertTimeFromUtc(s.Start.AddMinutes(s.SlotDuration), portugueseZone),
                     Title = s.Service.Specialty.Name
                 })
                 .ToListAsync();
@@ -260,10 +261,10 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-		/// <summary>
-		/// Adiciona disponibilidade para um profissional.
-		/// </summary>
-		[HttpPost("add-availability")]
+        /// <summary>
+        /// Adiciona disponibilidade para um profissional.
+        /// </summary>
+        [HttpPost("add-availability")]
         public async Task<ActionResult> AddAvailability(AvailabilityDto availabilityDto)
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -272,24 +273,61 @@ namespace LusoHealthClient.Server.Controllers
             var user = await _userManager.FindByIdAsync(userIdClaim);
             if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
 
-            if (availabilityDto.StartDate == null || availabilityDto.EndDate == null || availabilityDto.StartTime == null ||
-                availabilityDto.EndTime == null || availabilityDto.ServiceId == null || availabilityDto.SlotDuration == null || availabilityDto.Type == null)
-            {
-                return BadRequest("Por favor preencha todos os campos.");
-            }
-
-            if (availabilityDto.StartDate > availabilityDto.EndDate)
-            {
-                return BadRequest("A data de início não pode ser superior à data de fim.");
-            }
-
-            if (availabilityDto.StartTime > availabilityDto.EndTime)
-            {
-                return BadRequest("A hora de início não pode ser superior à hora de fim.");
-            }
-
             try
             {
+
+                if (availabilityDto.StartDate == null || availabilityDto.EndDate == null || availabilityDto.StartTime == null ||
+                availabilityDto.EndTime == null || availabilityDto.ServiceId == null || availabilityDto.SlotDuration == null || availabilityDto.Type == null)
+                {
+                    return BadRequest("Por favor preencha todos os campos.");
+                }
+
+                if (availabilityDto.StartDate > availabilityDto.EndDate)
+                {
+                    return BadRequest("A data de início não pode ser superior à data de fim.");
+                }
+
+                //check if start and end date are not before today
+                if (availabilityDto.StartDate < DateTime.UtcNow.Date || availabilityDto.EndDate < DateTime.UtcNow.Date)
+                {
+                    return BadRequest("A data de início e de fim não podem ser anteriores à data de hoje.");
+                }
+
+                if (availabilityDto.StartTime > availabilityDto.EndTime)
+                {
+                    return BadRequest("A hora de início não pode ser superior à hora de fim.");
+                }
+
+                var startDateTime = availabilityDto.StartDate.Value.Add(availabilityDto.StartTime.Value.TimeOfDay);
+
+                if (startDateTime < DateTime.UtcNow.AddHours(1))
+                {
+                    return BadRequest("Só pode adicionar disponibilidade que comece daqui a 1 hora.");
+                }
+
+
+                //create a variable to store the service data of the service id provided in the dto
+                var service = await _context.Services.FirstOrDefaultAsync(s => s.Id == availabilityDto.ServiceId);
+
+                if (service == null || service.Id != availabilityDto.ServiceId)
+                {
+                    return BadRequest("Algo correu mal");
+                }
+
+                if (service.Online == false && availabilityDto.Type == "Online")
+                {
+                    //return bad request if the service is not available online and tell the profesional to go to their profile page and chnage that possibility
+                    return BadRequest("Este serviço não está definido para permitir consultas online.");
+                }
+                if (service.Home == false && availabilityDto.Type == "Home")
+                {
+                    return BadRequest("Este serviço não está definido para permitir consultas domicílio.");
+                }
+                if (service.Presential == false && availabilityDto.Type == "Presential")
+                {
+                    return BadRequest("Este serviço não está definido para permitir consultas presencialmente.");
+                }
+
                 var slots = await _context.AvailableSlots
                 .Where(s => s.IdService == availabilityDto.ServiceId
                 && s.Start.Date >= availabilityDto.StartDate
@@ -339,10 +377,10 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-		/// <summary>
-		/// Remove disponibilidade de um profissional.
-		/// </summary>
-		[HttpDelete("delete-availability")]
+        /// <summary>
+        /// Remove disponibilidade de um profissional.
+        /// </summary>
+        [HttpDelete("delete-availability")]
         public async Task<ActionResult> DeleteSlots([FromBody] AvailabilityDto availabilityDto)
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -367,7 +405,8 @@ namespace LusoHealthClient.Server.Controllers
                 .Include(s => s.Service)
                 .Where(s => s.Service.IdProfessional == user.Id
                 && s.Start >= availabilityDto.StartDate
-                && s.Start <= availabilityDto.EndDate.Value.AddSeconds(-1))
+                && s.Start <= availabilityDto.EndDate.Value.AddSeconds(-1)
+                && s.IsAvailable)
                 .ToListAsync();
 
                 if (slots == null || slots.Count == 0) { return BadRequest("Não existem slots para o período selecionado."); }

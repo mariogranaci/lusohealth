@@ -165,7 +165,23 @@ form {
 }
 
 .input-box {
+  
+}
 
+input[type="time"], input[type="date"] {
+  min-height: 40px;
+  border: none;
+  border-radius: 7px;
+  font-size: 1.1rem;
+  padding: 0 10px 0 10px;
+  width: fit-content;
+}
+
+.middle-text {
+  height: 50px;
+  margin: 0 10px;
+  display: flex;
+  align-items: flex-end;
 }
 
 
@@ -220,4 +236,62 @@ form {
     width:750px;
     height:auto;
     border-radius:10px;
+}
+
+.select-dropdown,
+.select-dropdown * {
+  position: relative;
+}
+
+.select-dropdown {
+  position: relative;
+  background-color: #fff;
+  border-radius: 7px;
+}
+
+  .select-dropdown select {
+    font-size: 1.1rem;
+    font-weight: normal;
+    width: 100%;
+    padding: 8px 24px 8px 10px;
+    border: none;
+    background-color: transparent;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    user-select: none;
+  }
+
+    .select-dropdown select option {
+      height: fit-content;
+    }
+
+    .select-dropdown select:active, .select-dropdown select:focus {
+      outline: none;
+      box-shadow: none;
+    }
+
+  .select-dropdown:after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 8px;
+    width: 0;
+    height: 0;
+    margin-top: -2px;
+    border-top: 5px solid #aaa;
+    border-right: 5px solid transparent;
+    border-left: 5px solid transparent;
+  }
+
+
+.text-danger {
+  color: #cc0000;
+  display: block;
+}
+
+.is-invalid {
+  border: 2px solid #cc0000 !important;
 }

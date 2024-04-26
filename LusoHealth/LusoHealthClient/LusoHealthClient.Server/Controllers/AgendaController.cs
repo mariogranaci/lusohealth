@@ -300,7 +300,7 @@ namespace LusoHealthClient.Server.Controllers
 
                 var startDateTime = availabilityDto.StartDate.Value.Add(availabilityDto.StartTime.Value.TimeOfDay);
 
-                if (startDateTime < DateTime.UtcNow)
+                if (startDateTime < DateTime.UtcNow.AddHours(1))
                 {
                     return BadRequest("Só pode adicionar disponibilidade que comece daqui a 1 hora.");
                 }

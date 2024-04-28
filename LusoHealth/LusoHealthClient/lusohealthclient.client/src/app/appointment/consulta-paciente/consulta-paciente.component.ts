@@ -185,9 +185,29 @@ export class ConsultaPacienteComponent {
       next: (appointment: any) => {
         console.log("Appointment canceled successfully:", appointment);
         this.appointment = appointment;
+        this.refundAppointment(appointment.id);
       },
       error: (error) => {
-        console.log("Error canceling appointment:", error);
+        console.error("Error canceling appointment:", error);
+        if (error.error.errors) {
+          this.errorMessages = error.error.errors;
+        } else {
+          this.errorMessages.push(error.error);
+        }
+      }
+    });
+  }
+
+  /*
+  * Método para reembolsar um agendamento cancelado
+  * @param appointmentId - O ID do agendamento a ser reembolsado
+  */
+  refundAppointment(appointmentId: number) {
+    this.servicesService.refundPayment(appointmentId).subscribe({
+      next: (response: any) => {
+        console.log(response);
+      },
+      error: (error) => {
         if (error.error.errors) {
           this.errorMessages = error.error.errors;
         } else {

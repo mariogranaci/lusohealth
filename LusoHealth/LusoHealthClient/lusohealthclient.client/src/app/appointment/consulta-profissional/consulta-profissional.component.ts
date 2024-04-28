@@ -137,6 +137,7 @@ export class ConsultaProfissionalComponent {
       next: (appointment: any) => {
         console.log("Appointment canceled successfully:", appointment);
         this.appointment = appointment;
+        this.refundAppointment(appointment.id);
       },
       error: (error) => {
         console.log("Error canceling appointment:", error);

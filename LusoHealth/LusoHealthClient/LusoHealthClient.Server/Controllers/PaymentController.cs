@@ -254,7 +254,7 @@ namespace LusoHealthClient.Server.Controllers
                 if (appointment == null) return NotFound("Consulta não encontrada.");
 
                 var paymentIntentId = appointment.PaymentIntentId;
-                if (string.IsNullOrEmpty(paymentIntentId)) return BadRequest("Não foi possível encontrar o pagamento associado a esta consulta.");
+                if (string.IsNullOrEmpty(paymentIntentId)) return BadRequest("Não foi possível encontrar o pagamento associado a esta consulta, contacte o apoio ao cliente através de lusohealth@gmail.com .");
 
                 var service = new RefundService();
                 var refundOptions = new RefundCreateOptions
@@ -268,7 +268,7 @@ namespace LusoHealthClient.Server.Controllers
             }
             catch (Exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Erro ao reembolsar consulta, contacte o apoio ao cliente.");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Erro ao reembolsar consulta, contacte o apoio ao cliente através de lusohealth@gmail.com .");
             }
         }
 

@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 import { AgendaService } from '../agenda.service';
 import { Availability } from '../../shared/models/servic/availability';
 import { Professional } from '../../shared/models/profile/professional';
+import { C } from '@fullcalendar/core/internal-common';
 
 /**
  * Componente Angular responsável pela gestão da disponibilidade de um profissional.
@@ -42,8 +43,8 @@ export class DisponibilidadeComponent {
     "Para remover a sua disponibilidade, basta selecionar no calendário os dias que pretende apagar."
   ];
   gifs: string[][] = [
-    ["assets/images/Agenda/add-gif.gif"], 
-    ["caminho-para-gif2-1.gif"], 
+    ["assets/images/Agenda/add-gif.gif"],
+    ["caminho-para-gif2-1.gif"],
   ];
   currentPhraseIndex: number = 0;
   currentPhrase: string = this.phrases[0];
@@ -102,6 +103,7 @@ export class DisponibilidadeComponent {
       next: (user: User | null) => {
         if (!user) {
           this.router.navigateByUrl('/');
+          console.error("User not logged in");
         }
         else {
           const decodedToken = this.profileService.getDecodedToken();
@@ -109,6 +111,7 @@ export class DisponibilidadeComponent {
           if (decodedToken) {
             if (decodedToken.role !== "Professional") {
               this.router.navigateByUrl('/');
+              console.error("User not authorized!");
             }
           }
         }
@@ -122,8 +125,18 @@ export class DisponibilidadeComponent {
    */
   ngOnInit(): void {
     this.initializeForm();
-    this.getSlots();
-    this.geSpecialties();
+    /*this.getSlots();
+    this.getSpecialties();*/
+    this.getSlots().then((response) => {
+
+      this.calendarOptions.events = response;
+      console.log(this.calendarOptions.events);
+
+      this.getSpecialties();
+    }).catch((error) => {
+      // Handle errors if needed
+      console.error('Error fetching slots: ', error);
+    });
   }
 
   /**
@@ -209,7 +222,7 @@ export class DisponibilidadeComponent {
  * Obtém as especialidades do profissional.
  * @returns Uma Promise resolvida quando as especialidades são obtidas com sucesso.
  */
-  geSpecialties(): Promise<void> {
+  getSpecialties(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       this.profileService.getProfessionalInfo().pipe(takeUntil(this.unsubscribe$)).subscribe(
         (userData: Professional) => {
@@ -233,27 +246,22 @@ export class DisponibilidadeComponent {
   /**
  * Obtém os slots de disponibilidade do profissional.
  */
-  getSlots() {
-
-    var slots;
-
-    this.agendaService.getAllSlots().pipe().subscribe({
-      next: (response: any) => {
-        this.submittedAddSlots = false;
-
-        this.calendarOptions.events = response;
-        console.log(this.calendarOptions.events);
-
-        //this.addSlotsForm.reset();
-      },
-      error: (error) => {
-        if (error.error.errors) {
-          this.errorMessages = error.error.errors;
-        } else {
-          this.errorMessages.push(error.error);
+  getSlots(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.agendaService.getAllSlots().subscribe({
+        next: (response: any) => {
+          
+          resolve(response);
+        },
+        error: (error) => {
+          if (error.error.errors) {
+            this.errorMessages = error.error.errors;
+          } else {
+            this.errorMessages.push(error.error);
+          }
+          reject(error);
         }
-        this.submittedAddSlots = false;
-      }
+      });
     });
   }
 
@@ -286,7 +294,7 @@ export class DisponibilidadeComponent {
     );*/
 
     const form = this.addSlotsForm.value;
-    
+
     let start = new Date();
     const [startHours, startMinutes] = form.startTime.split(':');
     start.setHours(startHours, startMinutes, 0, 0);
@@ -306,7 +314,7 @@ export class DisponibilidadeComponent {
       null       // id
     );
     console.log(availability);
-    
+
     /*endDate: this.addSlotsForm.controls.endDate.value,
     startTime: this.addSlotsForm.controls.startTime.value,
     endTime: this.addSlotsForm.controls.endTime.value,
@@ -404,7 +412,7 @@ export class DisponibilidadeComponent {
     const overlay = document.getElementById('overlay');
     const add = document.getElementById('add-slots-container');
     const remove = document.getElementById('confirm-review-container');
-    const tool = document.getElementById('tooltips'); 
+    const tool = document.getElementById('tooltips');
 
     if (add) {
       add.style.display = "none";
@@ -440,7 +448,7 @@ export class DisponibilidadeComponent {
     const overlay = document.getElementById('overlay');
     const add = document.getElementById('add-speciality-container');
     const edit = document.getElementById('edit-speciality-container');
-    const tool = document.getElementById('tooltips'); 
+    const tool = document.getElementById('tooltips');
 
     if (overlay) {
       overlay.style.display = 'none';
@@ -458,16 +466,16 @@ export class DisponibilidadeComponent {
 
 
 
-nextPhrase() {
-  this.currentPhraseIndex++;
-  if (this.currentPhraseIndex < this.phrases.length) {
-    this.currentPhrase = this.phrases[this.currentPhraseIndex];
-  } else {    
-    this.currentPhraseIndex = 0;
-    this.currentPhrase = this.phrases[this.currentPhraseIndex];
-    this.closePopup();
+  nextPhrase() {
+    this.currentPhraseIndex++;
+    if (this.currentPhraseIndex < this.phrases.length) {
+      this.currentPhrase = this.phrases[this.currentPhraseIndex];
+    } else {
+      this.currentPhraseIndex = 0;
+      this.currentPhrase = this.phrases[this.currentPhraseIndex];
+      this.closePopup();
+    }
   }
-}
 
 
   /**

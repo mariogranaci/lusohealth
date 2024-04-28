@@ -352,11 +352,15 @@ export class ModerationComponent {
   closePopup() {
     const overlay = document.getElementById('overlay');
     const options = document.getElementById('options');
+    const tool = document.getElementById('tooltips');
 
     if (overlay) {
       overlay.style.display = 'none';
       if (options) {
         options.style.display = "none";
+      }
+      if (tool) {
+        tool.style.display = "none";
       }
     }
   }

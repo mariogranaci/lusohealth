@@ -81,7 +81,7 @@ select-dropdown,
 }
 
 #title-data {
-  width: 40%;
+  width: 30%;
 }
 
 #title-data p {
@@ -171,6 +171,12 @@ input[type="checkbox"] {
   max-width: 400px;
 }
 
+.price {
+  margin-right: 20px;
+  font-size: 25px;
+  align-self: center;
+}
+
 .name {
   font-size: 25px;
 }
@@ -207,6 +213,7 @@ hr {
 .hours {
   align-self: center;
   font-size: 40px;
+  margin-left: 20px;
 }
 
 

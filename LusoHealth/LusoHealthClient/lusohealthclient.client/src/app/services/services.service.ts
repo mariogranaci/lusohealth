@@ -203,5 +203,14 @@ export class ServicesService {
     const headers = this.getHeaders();
     return this.http.post<any>(`${environment.appUrl}/api/payment/refund-appointment`, { appointmentId: appointmentId }, { headers });
   }
-  
+
+ /**
+ * Obtém a consulta sugerida com base no dia mais preenchido do profissional.
+ * @param serviceId O ID do profissional
+ * @returns Um Observable contendo a resposta da operação
+ */
+  getAppointmentSugestion(serviceId: number): Observable<any> {
+    const headers = this.getHeaders();
+    return this.http.get<any>(`${environment.appUrl}/api/appointment/get-appointment-sugestion/${serviceId}`, { headers });
+  }
 }

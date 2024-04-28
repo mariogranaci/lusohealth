@@ -1,13 +1,18 @@
 <div class="container">
   <div class="title"> <b>ESTATÍSTICAS</b></div>
-  <div class="small-title">Número de consultas por especialidade</div>
 
-  <div class="filters">
-    <label for="filter">Filtrar:</label>
-    <select id="filter" [(ngModel)]="selectedOption" (change)="applyFilter($event)" >
-      <option *ngFor="let option of filterOptions" [value]="option.id">{{ option.name }}</option>
-    </select>
+  <div class="left-div">
+    <div class="small-title">Número de consultas por especialidade</div>
+    <div class="filters">
+      <label for="filter" class="filter-title"><b>Filtrar:</b></label>
+      <select id="filter" [(ngModel)]="selectedOption" (change)="applyFilter($event)">
+        <option *ngFor="let option of filterOptions" [value]="option.id">{{ option.name }}</option>
+      </select>
+    </div>
   </div>
+  
+
+ 
 
   <div class="chart">
     <ng-container *ngIf="dataLoaded">

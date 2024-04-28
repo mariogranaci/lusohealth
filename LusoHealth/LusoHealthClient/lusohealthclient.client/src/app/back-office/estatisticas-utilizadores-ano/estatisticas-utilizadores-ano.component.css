@@ -4,39 +4,56 @@
   justify-content: center;
   align-items: center;
   background-color: #f2f2f2;
-  padding: 30px;
-  padding-bottom: 270px;
+  padding: 50px 50px 109px 50px;
 }
 
 .title {
   font-size: 32px;
-  margin-bottom: 30px;
-}
-
-.small-title {
-  font-size: 28px;
-  margin-bottom: 20px;
-  padding-left: 20px;
+  margin: 30px;
 }
 
 .chart {
   background-color: #fff;
-  height: 350px;
-  width: 900px;
+  height: 500px;
+  width: 1300px;
+  margin-top: 5px;
   border-radius: 20px;
-  padding: 8px 10px 10px 10px;
+  padding: 5px;
 }
 
 .options {
-  margin: 20px;
+  margin: 30px 0px 10px 0px;
+  display: flex;
+  flex-flow: row;
+  justify-content: space-between;
+}
+
+.type-user {
+    height: 50px;
+    margin-right: 100px;
+}
+
+.date-time {
+  height: 50px;
+  margin-left: 100px;
 }
 
 #client-button {
-    border-top-left-radius: 7px;
-    border-bottom-left-radius: 7px;
+  border-top-left-radius: 7px;
+  border-bottom-left-radius: 7px;
 }
 
 #professional-button {
+  border-top-right-radius: 7px;
+  border-bottom-right-radius: 7px;
+}
+
+#day-button {
+  border-top-left-radius: 7px;
+  border-bottom-left-radius: 7px;
+}
+
+#year-button {
   border-top-right-radius: 7px;
   border-bottom-right-radius: 7px;
 }
@@ -51,11 +68,11 @@ button {
 }
 
   button.active {
-    background-color: #007bff; /* Change to your desired color */
-    color: #fff; /* Change to your desired text color */
+    background-color: #007bff; 
+    color: #fff; 
   }
 
   button:not(.active) {
-    background-color: #fff; /* Change to your desired color */
-    color: #333; /* Change to your desired text color */
+    background-color: #fff; 
+    color: #333; 
   }

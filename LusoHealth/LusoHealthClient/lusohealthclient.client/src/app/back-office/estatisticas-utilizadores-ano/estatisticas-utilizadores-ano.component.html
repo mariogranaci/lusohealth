@@ -1,12 +1,18 @@
 
 <div class="container">
   <div class="title"> <b>ESTATÍSTICAS</b></div>
-  <div class="small-title">Número de utilizadores registados por ano</div>
-
   <div class="options">
-    <button id="client-button" [class.active]="selectedOption === 'Client'" (click)="selectOption('Client')">Cliente</button>
-    <button id="professional-button" [class.active]="selectedOption === 'Professional'" (click)="selectOption('Professional')">Profissional</button>
+    <div class="type-user">
+      <button id="client-button" [class.active]="selectedOption === 'Client'" (click)="selectOption('Client')">Cliente</button>
+      <button id="professional-button" [class.active]="selectedOption === 'Professional'" (click)="selectOption('Professional')">Profissional</button>
+    </div>
+    <div class="date-time">
+      <button id="day-button" [class.active]="selectedDateOption === 'Day'" (click)="selectDateOption('Day')">Dia</button>
+      <button id="month-button" [class.active]="selectedDateOption === 'Month'" (click)="selectDateOption('Month')">Mês</button>
+      <button id="year-button" [class.active]="selectedDateOption === 'Year'" (click)="selectDateOption('Year')">Ano</button>
+    </div>
   </div>
+  
 
   <div class="chart">
     <ng-container *ngIf="dataLoaded">

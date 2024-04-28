@@ -35,7 +35,7 @@ export class ModerationComponent {
   gifs: string[][] = [
     [],
     [],
-    ["assets/images/Reports/points-gif.gif"],
+    ["assets/images/Reports/comentario-gif.gif"],
   ];
   currentPhraseIndex: number = 0;
   currentPhrase: string = this.phrases[0];

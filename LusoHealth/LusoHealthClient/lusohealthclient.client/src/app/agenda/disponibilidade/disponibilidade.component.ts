@@ -68,7 +68,7 @@ export class DisponibilidadeComponent {
     selectable: true,
     allDaySlot: false,
     slotEventOverlap: false,
-    slotDuration: '00:10:00',
+    slotDuration: '00:05:00',
     nowIndicator: true,
     navLinks: true,
     windowResizeDelay: 0,
@@ -325,7 +325,12 @@ export class DisponibilidadeComponent {
       next: () => {
         this.submittedAddSlots = false;
         this.closePopup();
-        this.getSlots();
+        this.getSlots().then((response) => {
+          this.calendarOptions.events = response;
+          console.log(this.calendarOptions.events);
+        }).catch((error) => {
+          console.error('Error fetching slots: ', error);
+        });
         this.addSlotsForm.reset();
         this.addSlotsForm.setValue(this.formValues);
       },
@@ -388,7 +393,12 @@ export class DisponibilidadeComponent {
       next: () => {
         this.submittedDeleteSlots = false;
         this.closePopup();
-        this.getSlots();
+        this.getSlots().then((response) => {
+          this.calendarOptions.events = response;
+          console.log(this.calendarOptions.events);
+        }).catch((error) => {
+          console.error('Error fetching slots: ', error);
+        });
         //this.addSlotsForm.reset();
       },
       error: (error) => {

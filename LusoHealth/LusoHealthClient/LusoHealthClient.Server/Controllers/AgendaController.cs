@@ -54,6 +54,7 @@ namespace LusoHealthClient.Server.Controllers
                     var currentTime = DateTime.UtcNow;
                     var appointments = _context.Appointment
                     .Where(p => p.IdPatient == user.Id && p.Timestamp < currentTime)
+                    .OrderByDescending(p => p.Timestamp)
                     .ToList();
 
                     if (appointments == null || !appointments.Any()) { return NotFound("Não foi possível encontrar as marcações"); }
@@ -65,11 +66,12 @@ namespace LusoHealthClient.Server.Controllers
                     var currentTime = DateTime.UtcNow;
                     var appointments = _context.Appointment
                     .Where(p => p.IdProfesional == user.Id && p.Timestamp < currentTime)
+                    .OrderByDescending(p => p.Timestamp)
                     .ToList();
 
                     if (appointments == null || !appointments.Any()) { return NotFound("Não foi possível encontrar as marcações"); }
 
-                    return (List<Appointment>)appointments.Reverse<Appointment>();
+                    return Ok(appointments);
                 }
                 else
                 {

@@ -31,6 +31,8 @@ export class MarcacoesComponent {
   pageButtons: number[] = [];
   hasMorePages: boolean = true;
 
+  loading: boolean = false;
+
   selectedCategory: string = '';
   selectedSpecialty: string = '';
   selectedType: string = '';
@@ -39,6 +41,7 @@ export class MarcacoesComponent {
   constructor(public servicesService: ServicesService, private route: ActivatedRoute, private router: Router, private location: Location) { }
 
   ngOnInit() {
+    this.loading = true;
     Promise.all([
       this.getProfessionalTypes(),
       this.getSpecialties()
@@ -86,6 +89,7 @@ export class MarcacoesComponent {
         this.errorMessages = [error.message || "An error occurred while fetching services."];
       }
     });
+    this.loading = false;
   }
 
   updateUrlParams() {

@@ -37,6 +37,8 @@ export class MapaComponent implements OnInit {
   specialtyId: number = -1;
   professionalTypeId: number = -1;
 
+  loading = false;
+
   constructor(private servicesService: ServicesService) { }
 
   ngOnInit() {
@@ -185,16 +187,13 @@ export class MapaComponent implements OnInit {
           longitudeSouthWest: sw.lng()
         };
 
-        console.log('boundsMap', boundsMap);
-
         this.servicesService.getProfessionalsOnLocation(boundsMap).pipe(takeUntil(this.unsubscribe$)).subscribe(
           (professionals: Professional[]) => {
-            console.log("Professionals", professionals);
-
             this.updateProfessionalsWithConcelho(professionals).then(() => {
               this.professionals = professionals;
               this.calculateStarsForProfessionals();
               this.filterProfessionals();
+              this.loading = false;
             });
           }, (error) => {
             console.error(error);
@@ -274,6 +273,7 @@ export class MapaComponent implements OnInit {
  * @param professionals A lista de profissionais.
  */
   async updateProfessionalsWithConcelho(professionals: Professional[]): Promise<void> {
+    this.loading = true;
     const geocoder = new google.maps.Geocoder();
     for (const professional of professionals) {
       const location = professional.location?.replace(/,/g, '.').split(';');

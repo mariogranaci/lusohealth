@@ -255,10 +255,10 @@ namespace LusoHealthClient.Server.Controllers
                     };
 
                     await _context.Addresses.AddAsync(newAddress);
+                    await _context.SaveChangesAsync();
                     professional.AddressId = newAddress.Id;
                     _context.Professionals.Update(professional);
                 }
-
                 await _context.SaveChangesAsync();
 
                 return Ok(new JsonResult(new { title = "Morada Alterada", message = "A sua morada foi alterada com sucesso." }));

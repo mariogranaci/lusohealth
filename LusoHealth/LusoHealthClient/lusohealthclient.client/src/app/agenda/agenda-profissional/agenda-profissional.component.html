@@ -1,87 +1,91 @@
 
 <main>
   <img id="question-btn" (click)="openPopupToolTip('tool')" src="assets/images/Agenda/question-mark.png" />
-  <div class="title">
-    <h1>Próximas Consultas</h1>
-    <button class="btn" id="disponibility" [routerLink]="['/availability']">Ver Disponibilidade</button>
+  <div *ngIf="loading">
+    <loading-spinner></loading-spinner>
   </div>
+  <div *ngIf="!loading">
+    <div class="title">
+      <h1>Próximas Consultas</h1>
+      <button class="btn" id="disponibility" [routerLink]="['/availability']">Ver Disponibilidade</button>
+    </div>
 
 
 
 
-  <div class="page">
-    <div class="left">
-      <div class="schedules">
-        <h2>Próximos Agendamentos</h2>
-        <div *ngFor="let appointment of displayedAppointments">
-          <div class="appointment">
-            <div id="info">
-              <div id="title-data">
-                <h3>Consulta de {{ appointment.speciality }}</h3>
-                <div class="text-appointment">{{ convertToDate(appointment.timestamp) }}</div>
-                <div class="text-appointment">{{appointment.patient?.user?.firstName | firstWord}} {{appointment.patient?.user?.lastName | lastWord}}</div>
-                <div class="text-appointment">{{ getAppointmentType(appointment.type + "") }}</div>
+    <div class="page">
+      <div class="left">
+        <div class="schedules">
+          <h2>Próximos Agendamentos</h2>
+          <div *ngFor="let appointment of displayedAppointments">
+            <div class="appointment">
+              <div id="info">
+                <div id="title-data">
+                  <h3>Consulta de {{ appointment.speciality }}</h3>
+                  <div class="text-appointment">{{ convertToDate(appointment.timestamp) }}</div>
+                  <div class="text-appointment">{{appointment.patient?.user?.firstName | firstWord}} {{appointment.patient?.user?.lastName | lastWord}}</div>
+                  <div *ngIf="appointment.type" class="text-appointment">{{ appointment.type | tipoConsulta }}</div>
+                </div>
+                <div class="hours"><b>{{ convertToHours(appointment.timestamp) }}</b></div>
               </div>
-              <div class="hours"><b>{{ convertToHours(appointment.timestamp) }}</b></div>
+              <button class="btn" [routerLink]="['/professional-appointment']" [queryParams]="{ appointment: appointment.id }">Ver Detalhes</button>
             </div>
-            <button class="btn" [routerLink]="['/professional-appointment']" [queryParams]="{ appointment: appointment.id }">Ver Detalhes</button>
+          </div>
+
+          <div class="more-container" *ngIf="appointments.length > displayedAppointments.length">
+            <button class="btn" id="more" (click)="loadMoreAppointments()"><img class="arrow" src="/assets/images/Agenda/arrow-down.png" /></button>
           </div>
         </div>
 
-        <div class="more-container" *ngIf="appointments.length > displayedAppointments.length">
-          <button class="btn" id="more" (click)="loadMoreAppointments()"><img class="arrow" src="/assets/images/Agenda/arrow-down.png" /></button>
-        </div>
       </div>
 
-    </div>
+      <div class="right">
 
-    <div class="right">
-
-      <div class="schedules">
-        <h2>Pedidos de Consultas</h2>
-        <div *ngFor="let appointment of displayedAppointmentsPending">
-          <div class="appointment">
-            <div id="info">
-              <div id="title-data">
-                <h3>Consulta de {{ appointment.speciality }}</h3>
-                <div class="text-appointment">{{ convertToDate(appointment.timestamp) }}</div>
-                <div class="text-appointment">{{appointment.patient?.user?.firstName | firstWord}} {{appointment.patient?.user?.lastName | lastWord}}</div>
-                <div class="text-appointment">{{ getAppointmentType(appointment.type + "") }}</div>
+        <div class="schedules">
+          <h2>Pedidos de Consultas</h2>
+          <div *ngFor="let appointment of displayedAppointmentsPending">
+            <div class="appointment">
+              <div id="info">
+                <div id="title-data">
+                  <h3>Consulta de {{ appointment.speciality }}</h3>
+                  <div class="text-appointment">{{ convertToDate(appointment.timestamp) }}</div>
+                  <div class="text-appointment">{{appointment.patient?.user?.firstName | firstWord}} {{appointment.patient?.user?.lastName | lastWord}}</div>
+                  <div *ngIf="appointment.type" class="text-appointment">{{ appointment.type | tipoConsulta }}</div>
+                </div>
+                <div class="hours"><b>{{ convertToHours(appointment.timestamp) }}</b></div>
               </div>
-              <div class="hours"><b>{{ convertToHours(appointment.timestamp) }}</b></div>
-            </div>
-            <div class="buttons">
-              <button class="btn" [routerLink]="['/professional-appointment']" [queryParams]="{ appointment: appointment.id }">Detalhes</button>
-              <div>
-                <button (click)="openPopup('accept', appointment)" class="icon-btn"><img class="icon" src="/assets/images/Agenda/checked.png" /></button>
-                <button (click)="openPopup('remove', appointment)" class="icon-btn"><img class="icon" src="/assets/images/Agenda/cancel.png" /></button>
+              <div class="buttons">
+                <button class="btn" [routerLink]="['/professional-appointment']" [queryParams]="{ appointment: appointment.id }">Detalhes</button>
+                <div>
+                  <button (click)="openPopup('accept', appointment)" class="icon-btn"><img class="icon" src="/assets/images/Agenda/checked.png" /></button>
+                  <button (click)="openPopup('remove', appointment)" class="icon-btn"><img class="icon" src="/assets/images/Agenda/cancel.png" /></button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
 
-        <div class="more-container" *ngIf="appointmentsPending.length > displayedAppointmentsPending.length">
-          <button class="btn" id="more" (click)="loadMoreAppointmentsPending()"><img class="arrow" src="/assets/images/Agenda/arrow-down.png" /></button>
+          <div class="more-container" *ngIf="appointmentsPending.length > displayedAppointmentsPending.length">
+            <button class="btn" id="more" (click)="loadMoreAppointmentsPending()"><img class="arrow" src="/assets/images/Agenda/arrow-down.png" /></button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="overlay" id="overlay" (click)="closePopup()">
-    <a class="close-button" (click)="closePopup()">
-      <img src="assets/images/login/close.png" alt="Close button" class="close-image">
-    </a>
+    <div class="overlay" id="overlay" (click)="closePopup()">
+      <a class="close-button" (click)="closePopup()">
+        <img src="assets/images/login/close.png" alt="Close button" class="close-image">
+      </a>
 
-    <div id="tooltips" class="overlay-container-tool" (click)="stopPropagation($event)">
-      <h2>ToolTips</h2>
-      <div class="text-tool">
-        <div class="text-tool">{{ currentPhrase }}</div>
+      <div id="tooltips" class="overlay-container-tool" (click)="stopPropagation($event)">
+        <h2>ToolTips</h2>
+        <div class="text-tool">
+          <div class="text-tool">{{ currentPhrase }}</div>
+        </div>
+        <button (click)="nextPhrase()" type="button" class="btn-tool">Continuar</button>
       </div>
-      <button (click)="nextPhrase()" type="button" class="btn-tool">Continuar</button>
     </div>
   </div>
-
 </main>
 
 <div class="overlay" id="overlay" (click)="closePopup()">

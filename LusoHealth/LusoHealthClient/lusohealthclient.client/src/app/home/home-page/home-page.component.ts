@@ -22,13 +22,16 @@ export class HomePageComponent {
   searchTerm: string = '';
   public topSpecialties: Specialty[] = [];
   servicesByProfessionalType: { [key: number]: BestServices[] } = {};
+  loading = false;
 
   constructor(public homeService: HomeService) { }
 
   ngOnInit() {
+    this.loading = true;
     this.getProfessionalTypes().then(() => {
       this.getServices().then(() => {
         this.populateServicesByProfessionalType();
+        this.loading = false;
       });
     });
     this.getSpecialties().then(() => {

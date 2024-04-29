@@ -19,6 +19,7 @@ import { Appointment } from '../../shared/models/servic/appointment';
 export class AgendaProfissionalComponent {
   private unsubscribe$ = new Subject<void>();
   errorMessages: string[] = [];
+  loading: boolean = false;
 
   // Arrays para armazenar os dados obtidos dos serviços
   professionalTypes: ProfessionalType[] = [];
@@ -53,11 +54,13 @@ export class AgendaProfissionalComponent {
   */
 
   ngOnInit() {
+    this.loading = true;
     this.getServices().then(() => {
       this.getProfessionalTypes();
       this.getSpecialties();
       this.getNextAppointments();
       this.getPendingAppointments();
+      this.loading = false;
     });
   }
 

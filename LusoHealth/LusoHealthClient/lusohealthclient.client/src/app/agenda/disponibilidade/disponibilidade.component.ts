@@ -23,6 +23,8 @@ import { Professional } from '../../shared/models/profile/professional';
   styleUrl: './disponibilidade.component.css'
 })
 export class DisponibilidadeComponent {
+  loading = false;
+
   private unsubscribe$ = new Subject<void>();
   currentEvents: EventInput[] = [];
   errorMessages: string[] = [];
@@ -97,6 +99,7 @@ export class DisponibilidadeComponent {
    * Inicializa o formulário e obtém os slots de disponibilidade.
    */
   ngOnInit(): void {
+    this.loading = true;
     this.initializeForm();
     this.getSlots();
     this.geSpecialties();
@@ -219,7 +222,7 @@ export class DisponibilidadeComponent {
 
         this.calendarOptions.events = response;
         console.log(this.calendarOptions.events);
-
+        this.loading = false;
         //this.addSlotsForm.reset();
       },
       error: (error) => {
@@ -229,6 +232,7 @@ export class DisponibilidadeComponent {
           this.errorMessages.push(error.error);
         }
         this.submittedAddSlots = false;
+        this.loading = false;
       }
     });
   }

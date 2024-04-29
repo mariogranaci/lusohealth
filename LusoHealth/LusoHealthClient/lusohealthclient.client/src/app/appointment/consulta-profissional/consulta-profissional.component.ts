@@ -29,6 +29,7 @@ export class ConsultaProfissionalComponent {
   private unsubscribe$ = new Subject<void>();
   errorMessages: string[] = [];
   responseText: string = "";
+  loading: boolean = false;
 
   service: Service | undefined;
 
@@ -73,6 +74,7 @@ export class ConsultaProfissionalComponent {
    * Método executado ao inicializar o componente
    */
   ngOnInit() {
+    this.loading = true;
     const loader = new Loader({
       apiKey: environment.googleMapsApiKey,
       version: "weekly",
@@ -90,6 +92,7 @@ export class ConsultaProfissionalComponent {
       this.getServiceInfo();
       this.getProfessional();
       this.getUser();
+      this.loading = false;
     });
   }
 
@@ -110,9 +113,10 @@ export class ConsultaProfissionalComponent {
       this.appointmentService.getAppointmentInfo(this.appointmentId).pipe(
         takeUntil(this.unsubscribe$)
       ).subscribe({
-        next: (appointment: any) => {
+        next: (appointment: Appointment) => {
           this.appointment = appointment;
-          this.address = appointment.address;
+          console.log(appointment);
+          this.address = appointment.address ? appointment.address : '';
           resolve();
         },
         error: (error) => {

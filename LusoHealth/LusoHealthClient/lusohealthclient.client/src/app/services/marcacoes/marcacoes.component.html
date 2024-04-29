@@ -49,7 +49,10 @@
       </div>
     </div>
 
-    <section class="categorias">
+    <div *ngIf="loading">
+      <loading-spinner></loading-spinner>
+    </div>
+    <section *ngIf="!loading" class="categorias">
       <div class="categoria" *ngFor="let service of services">
         <div class="tab" [routerLink]="['/make-appointment']" [queryParams]="{ serviceId: service.serviceId }">
           <div id="icons">

@@ -102,7 +102,11 @@ namespace LusoHealthClient.Server.Controllers
                 {
 
                     var currentTime = DateTime.UtcNow;
-                    var appointments = _context.Appointment.Include(c => c.Professional).Include(a => a.Patient).ThenInclude(b => b.User)
+                    var appointments = _context.Appointment
+                        .Include(c => c.Professional)
+                        .ThenInclude(b => b.User)
+                        .Include(a => a.Patient)
+                        .ThenInclude(b => b.User)
                         .Where(p => p.IdPatient == user.Id && p.Timestamp > currentTime && p.State == AppointmentState.Scheduled)
                         .OrderBy(p => p.Timestamp)
                         .Select(ap => new AppointmentDto
@@ -141,8 +145,12 @@ namespace LusoHealthClient.Server.Controllers
                 else if (User.IsInRole("Professional"))
                 {
                     var currentTime = DateTime.UtcNow;
-                    var appointments = _context.Appointment.Include(s => s.Service).ThenInclude(s => s.Specialty)
-                        .Include(c => c.Professional).Include(a => a.Patient).ThenInclude(b => b.User)
+                    var appointments = _context.Appointment.Include(s => s.Service)
+                        .ThenInclude(s => s.Specialty)
+                        .Include(c => c.Professional)
+                        .ThenInclude(b => b.User)
+                        .Include(a => a.Patient)
+                        .ThenInclude(b => b.User)
                         .Where(p => p.IdProfesional == user.Id && p.Timestamp > currentTime && p.State == AppointmentState.Scheduled)
                         .OrderBy(p => p.Timestamp)
                         .Select(ap => new AppointmentDto

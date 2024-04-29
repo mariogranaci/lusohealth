@@ -21,6 +21,7 @@ export class AgendaPacienteComponent {
   private unsubscribe$ = new Subject<void>();
   /** Lista de mensagens de erro ocorridas durante operações do componente. */
   errorMessages: string[] = [];
+  loading: boolean = false;
 
   /** Lista de tipos de profissionais disponíveis. */
   professionalTypes: ProfessionalType[] = [];
@@ -52,10 +53,12 @@ export class AgendaPacienteComponent {
    * Realiza as operações de inicialização, incluindo a obtenção de serviços, tipos de profissionais, especialidades e agendamentos.
    */
   ngOnInit() {
+    this.loading = true;
     this.getServices().then(() => {
       this.getProfessionalTypes();
       this.getSpecialties();
       this.getNextAppointments();
+      this.loading = false;
     }); 
   }
 

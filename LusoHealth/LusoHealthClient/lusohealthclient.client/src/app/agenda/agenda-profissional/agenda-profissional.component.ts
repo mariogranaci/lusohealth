@@ -124,7 +124,7 @@ export class AgendaProfissionalComponent {
           this.refundAppointment(response.id);
         },
         error: (error) => {
-          console.error("Error scheduling appointment:", error);
+          console.error("Error canceling appointment:", error);
           if (error.error.errors) {
             this.errorMessages = error.error.errors;
           } else {

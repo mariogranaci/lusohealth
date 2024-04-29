@@ -68,20 +68,6 @@
     </div>
   </div>
 
-  <div class="overlay" id="overlay" (click)="closePopup()">
-    <a class="close-button" (click)="closePopup()">
-      <img src="assets/images/login/close.png" alt="Close button" class="close-image">
-    </a>
-
-    <div id="tooltips" class="overlay-container-tool" (click)="stopPropagation($event)">
-      <h2>ToolTips</h2>
-      <div class="text-tool">
-        <div class="text-tool">{{ currentPhrase }}</div>
-      </div>
-      <button (click)="nextPhrase()" type="button" class="btn-tool">Continuar</button>
-    </div>
-  </div>
-
 </main>
 
 <div class="overlay" id="overlay" (click)="closePopup()">
@@ -100,4 +86,13 @@
       <button type="submit" (click)="changeAppointmentScheduled()" class="btns btns-blue">Aceitar</button>
     </div>
   </div>
+
+  <div id="tooltips" class="overlay-container-tool" (click)="stopPropagation($event)">
+    <h2>ToolTips</h2>
+    <div class="text-tool">
+      <div class="text-tool">{{ currentPhrase }}</div>
+    </div>
+    <button (click)="nextPhrase()" type="button" class="btn-tool">Continuar</button>
+  </div>
+
 </div>

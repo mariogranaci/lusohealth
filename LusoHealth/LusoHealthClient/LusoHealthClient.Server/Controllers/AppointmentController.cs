@@ -260,7 +260,7 @@ namespace LusoHealthClient.Server.Controllers
 		[HttpGet("get-available-slots/{serviceId}")]
         public async Task<ActionResult<List<AvailableSlotDto>>> GetAvailableSlots(int serviceId)
         {
-            var slots = await _context.AvailableSlots.Where(x => x.IdService == serviceId).ToListAsync();
+            var slots = await _context.AvailableSlots.Where(x => x.IdService == serviceId && x.IsAvailable && x.Start > DateTime.UtcNow).ToListAsync();
 
             if (slots == null) return BadRequest("Não foi possível encontrar os slots disponíveis.");
 

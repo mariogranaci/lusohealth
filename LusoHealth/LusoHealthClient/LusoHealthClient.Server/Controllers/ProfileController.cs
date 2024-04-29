@@ -255,6 +255,7 @@ namespace LusoHealthClient.Server.Controllers
                     };
 
                     await _context.Addresses.AddAsync(newAddress);
+                    await _context.SaveChangesAsync();
                     professional.AddressId = newAddress.Id;
                     _context.Professionals.Update(professional);
                 }

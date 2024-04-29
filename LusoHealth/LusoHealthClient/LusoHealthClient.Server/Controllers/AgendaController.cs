@@ -240,7 +240,7 @@ namespace LusoHealthClient.Server.Controllers
             try
             {
                 var slots = await _context.AvailableSlots
-                .Where(s => s.Service.IdProfessional == user.Id && s.IsAvailable)
+                .Where(s => s.Service.IdProfessional == user.Id && s.IsAvailable && s.Start >= DateTime.UtcNow)
                 .Select(s => new
                 {
                     s.Id,
@@ -249,7 +249,9 @@ namespace LusoHealthClient.Server.Controllers
                     s.SlotDuration,
                     Start = TimeZoneInfo.ConvertTimeFromUtc(s.Start, portugueseZone),
                     End = TimeZoneInfo.ConvertTimeFromUtc(s.Start.AddMinutes(s.SlotDuration), portugueseZone),
-                    Title = s.Service.Specialty.Name
+                    //Title = s.Service.Specialty.Name,
+                    //create title that merges the specialty name and the appointment type
+                    Title = s.Service.Specialty.Name + " - " + s.AppointmentType.ToString()
                 })
                 .ToListAsync();
 
@@ -258,6 +260,21 @@ namespace LusoHealthClient.Server.Controllers
             catch (Exception)
             {
                 return BadRequest("Não foi possível encontrar os slots. Tente novamente.");
+            }
+        }
+
+        private string GetAppointmentType(AppointmentType type)
+        {
+            switch (type)
+            {
+                case AppointmentType.Online:
+                    return "Online";
+                case AppointmentType.Home:
+                    return "Domicílio";
+                case AppointmentType.Presential:
+                    return "Presencial";
+                default:
+                    return "Online";
             }
         }
 
@@ -397,6 +414,11 @@ namespace LusoHealthClient.Server.Controllers
             if (availabilityDto.StartDate > availabilityDto.EndDate)
             {
                 return BadRequest("A data de início não pode ser superior à data de fim.");
+            }
+
+            if (availabilityDto.StartDate < DateTime.UtcNow || availabilityDto.EndDate < DateTime.UtcNow)
+            {
+                return BadRequest("Não é possível remover disponibilidades passadas.");
             }
 
             try

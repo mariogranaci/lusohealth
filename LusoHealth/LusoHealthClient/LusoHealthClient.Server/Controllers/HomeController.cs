@@ -108,7 +108,9 @@ namespace LusoHealthClient.Server.Controllers
 
                     var slot = await _context.AvailableSlots.FirstOrDefaultAsync(x => x.IdService == appointmentDto.IdService && x.Start == appointmentDto.Timestamp);
 
-                    if (slot == null) return BadRequest("Não foi possível encontrar o slot.");
+                    if (slot == null) return BadRequest("Não foi possível encontrar a vaga.");
+
+                    if (!slot.IsAvailable) return BadRequest("A vaga já não está disponível.");
 
                     var service = await _context.Services.FirstOrDefaultAsync(x => x.Id == appointmentDto.IdService);
                     if (service == null) return NotFound("Não foi possível encontrar o serviço.");

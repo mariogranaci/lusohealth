@@ -17,7 +17,7 @@ h1 {
 }
 
 full-calendar {
-  width: 80%;
+  width: 85%;
   background-color: white;
   padding: 20px;
   border-radius: 15px;
@@ -45,7 +45,7 @@ form {
   position: fixed;
   background-color: #1875E7;
   bottom: 30px;
-  right: 30px;
+  right: 15px;
   color: white;
   border: none;
   padding: 10px 12px;

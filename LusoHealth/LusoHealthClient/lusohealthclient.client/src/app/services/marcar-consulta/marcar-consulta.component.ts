@@ -177,8 +177,12 @@ export class MarcarConsultaComponent {
           this.payment(response.appointmentId, newAppointment.duration);
         },
         error: (error) => {
-          console.error('Erro ao adicionar o appointment: ', error);
-          this.errorMessages.push("Erro ao marcar consulta.");
+          if (error.error.errors) {
+            this.errorMessages = error.error.errors;
+          } else {
+            this.errorMessages.push(error.error);
+          }
+          console.error(error);
         }
       });
 

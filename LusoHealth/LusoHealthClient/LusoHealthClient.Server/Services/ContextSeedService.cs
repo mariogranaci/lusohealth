@@ -15,8 +15,15 @@ namespace LusoHealthClient.Server.Services
 		private readonly UserManager<User> _userManager;
 		private readonly RoleManager<IdentityRole> _roleManager;
 		private readonly ApplicationDbContext _context;
+        private readonly string[] primeirosNomes = { "Ana", "João", "Miguel", "Sara", "Luís", "Paula", "Ricardo", "Marta" };
+        private readonly string[] segundosNomes = { "Maria", "Pedro", "António", "Leonor", "Filipe", "Isabel", "Gustavo", "Alice" };
+		private readonly string[] primeirosApelidos = { "Silva", "Santos", "Ferreira", "Pereira", "Oliveira", "Costa", "Martins", "Jesus" };
+		private readonly string[] ultimosApelidos = { "Souza", "Rodrigues", "Almeida", "Nascimento", "Lima", "Araújo", "Tavares", "Barros" };
 
-		public ContextSeedService(ApplicationDbContext context,
+
+
+
+        public ContextSeedService(ApplicationDbContext context,
 			UserManager<User> userManager,
 			RoleManager<IdentityRole> roleManager)
 		{
@@ -198,8 +205,8 @@ namespace LusoHealthClient.Server.Services
 					var patientUser = new User
 					{
 						Id = i.ToString(),
-						FirstName = $"User{i}",
-						LastName = "Family",
+						FirstName = $"{primeirosNomes[random.Next(0, primeirosNomes.Length)]} {segundosNomes[random.Next(0, segundosNomes.Length)]}",
+						LastName = $"{primeirosApelidos[random.Next(0, primeirosApelidos.Length)]} {ultimosApelidos[random.Next(0, ultimosApelidos.Length)]}",
 						Email = $"user{i}@mail.com",
 						NormalizedEmail = $"user{i}@mail.com",
 						Gender = i % 2 == 0 ? 'M' : 'F',
@@ -214,23 +221,23 @@ namespace LusoHealthClient.Server.Services
 						TwoFactorEnabled = false,
 						LockoutEnabled = false,
 						AccessFailedCount = 0,
-						UserName = ("12345678" + i) + '_' + DateTime.Now.Millisecond,
+						UserName = ("123456789" + i) + '_' + DateTime.Now.Millisecond,
 						BirthDate = DateTime.UtcNow.AddYears(-18 - random.Next(1, 15)),
-						DateCreated = DateTime.UtcNow.AddYears(- random.Next(0, 5)).AddDays(- random.Next(0, DateTime.UtcNow.Day))
+						DateCreated = DateTime.UtcNow.AddYears(- random.Next(0, 6)).AddDays(- random.Next(0, DateTime.UtcNow.Day))
 					};
 					users.Add(patientUser);
 				}
 
 
-				for (int i = 16; i <= 40; i++)
+				for (int i = 16; i <= 50; i++)
 				{
 
 					var professionalUser = new User
 					{
 						Id = i.ToString(),
-						FirstName = $"Professional{i}",
-						LastName = "User",
-						Email = $"professional{i}@mail.com",
+                        FirstName = $"{primeirosNomes[random.Next(0, primeirosNomes.Length)]} {segundosNomes[random.Next(0, segundosNomes.Length)]}",
+                        LastName = $"{primeirosApelidos[random.Next(0, primeirosApelidos.Length)]} {ultimosApelidos[random.Next(0, ultimosApelidos.Length)]}",
+                        Email = $"professional{i}@mail.com",
 						NormalizedEmail = $"professional{i}@mail.com",
 						Gender = i % 2 == 0 ? 'M' : 'F',
 						Nif = (12345678 + i).ToString(),
@@ -244,21 +251,21 @@ namespace LusoHealthClient.Server.Services
 						TwoFactorEnabled = false,
 						LockoutEnabled = false,
 						AccessFailedCount = 0,
-						UserName = ("12345678" + i) + '_' + DateTime.Now.Millisecond,
+						UserName = ("123456789" + i) + '_' + DateTime.Now.Millisecond,
 						BirthDate = DateTime.Now.AddYears(-18 - random.Next(1, 15)),
                         DateCreated = DateTime.UtcNow.AddYears(-random.Next(0, 5)).AddMonths(-random.Next(0, DateTime.UtcNow.Month)).AddDays(-random.Next(0, DateTime.UtcNow.Day))
                     };
 					users.Add(professionalUser);
 				}
 
-                for (int i = 41; i <= 71; i++)
+                for (int i = 51; i <= 81; i++)
                 {
 
                     var professionalUser = new User
                     {
                         Id = i.ToString(),
-                        FirstName = $"Professional{i}",
-                        LastName = "User",
+                        FirstName = $"{primeirosNomes[random.Next(0, primeirosNomes.Length)]} {segundosNomes[random.Next(0, segundosNomes.Length)]}",
+                        LastName = $"{primeirosApelidos[random.Next(0, primeirosApelidos.Length)]} {ultimosApelidos[random.Next(0, ultimosApelidos.Length)]}",
                         Email = $"professional{i}@mail.com",
                         NormalizedEmail = $"professional{i}@mail.com",
                         Gender = i % 2 == 0 ? 'M' : 'F',
@@ -307,7 +314,7 @@ namespace LusoHealthClient.Server.Services
 						var relative2 = new Relative { IdPatient = patientToAdd.UserID, Name = "Jaime Vieira", Gender = 'F', BirthDate = new DateTime(2002, 9, 24) };
 						var relative3 = new Relative { IdPatient = patientToAdd.UserID, Name = "Marta Silva", Gender = 'F', BirthDate = new DateTime(1998, 12, 15) };
 
-						if (user.Id == "4" || user.Id == "7" || user.Id == "12")
+						if (user.Id == "5" || user.Id == "7" || user.Id == "12")
 							await _context.Relatives.AddRangeAsync(relative1, relative2, relative3);
 
 
@@ -466,18 +473,30 @@ namespace LusoHealthClient.Server.Services
 					.ThenInclude(o => o.ProfessionalType)
 					.Include(p => p.Professional)
 					.ThenInclude(u => u.User)
+					.Include(p => p.Professional)
+					.ThenInclude(a => a.Address)
 					.ToListAsync();
 
 				//3 Reviews para todos os profissionais
 				List<AvailableSlot> availableSlots = new List<AvailableSlot>();
 				List<Review> reviews = new List<Review>();
 				List<Appointment> appointments = new List<Appointment>();
+				int counterServices = 1;
+				int[] appointmentDurations = { 1, 2, 3 };
 				foreach (var service in infoService)
 				{
-					Review review1 = new Review { IdPatient = random.Next(1, 16).ToString(), IdService = service.Id, State = ReviewState.Normal, Timestamp = DateTime.Now , Stars = random.Next(1, 5), Description = "Serviço Bom!" };
-					Review review2 = new Review { IdPatient = random.Next(1, 16).ToString(), IdService = service.Id, State = ReviewState.Normal, Timestamp = DateTime.Now, Stars = random.Next(1, 5), Description = "Cumpriu." };
-					Review review3 = new Review { IdPatient = random.Next(1, 16).ToString(), IdService = service.Id, State = ReviewState.Normal, Timestamp = DateTime.Now, Stars = random.Next(1, 5), Description = "Ladrão..." };
-					reviews.AddRange(new List<Review> { review1, review2, review3 });
+					Review review1 = new Review { IdPatient = random.Next(1, 16).ToString(), IdService = service.Id, State = ReviewState.Normal, Timestamp = DateTime.Now , Stars = random.Next(4, 6), Description = "Serviço Excelente!" };
+					Review review4 = new Review { IdPatient = random.Next(1, 16).ToString(), IdService = service.Id, State = ReviewState.Normal, Timestamp = DateTime.Now , Stars = random.Next(3, 6), Description = "Adorei o atendimento!" };
+					Review review2 = new Review { IdPatient = random.Next(1, 16).ToString(), IdService = service.Id, State = ReviewState.Normal, Timestamp = DateTime.Now, Stars = random.Next(1, 6), Description = "De acordo com o esperado." };
+					Review review3 = new Review { IdPatient = random.Next(1, 16).ToString(), IdService = service.Id, State = ReviewState.Normal, Timestamp = DateTime.Now, Stars = random.Next(1, 3), Description = "Ladrão..." };
+					if (counterServices % 2 == 0)
+					{
+						reviews.AddRange(new List<Review> { review1, review2, review3 });
+                    }else
+					{
+						reviews.AddRange(new List<Review> { review1, review2, review3, review4 });
+
+					}
 
 					DateTime dataAtual = DateTime.Now;
 
@@ -487,17 +506,17 @@ namespace LusoHealthClient.Server.Services
 
 					for (int i = 0; i < 5; i++)
                     {
-                        AvailableSlot slot = new AvailableSlot { IdService = service.Id, Start = new DateTime(2024, 5, 15, 9, i * 10, 0), SlotDuration = 10, AppointmentType = AppointmentType.Presential, IsAvailable = true };
+                        AvailableSlot slot = new AvailableSlot { IdService = service.Id, Start = new DateTime(2024, 5, random.Next(8, 12), 9, i * 10, 0), SlotDuration = 10, AppointmentType = AppointmentType.Presential, IsAvailable = true };
                         availableSlots.Add(slot);
                     }
                     for (int i = 0; i < 5; i++)
                     {
-                        AvailableSlot slot = new AvailableSlot { IdService = service.Id, Start = new DateTime(2024, 5, 15, 10, i * 10, 0), SlotDuration = 10, AppointmentType = AppointmentType.Online, IsAvailable = true };
+                        AvailableSlot slot = new AvailableSlot { IdService = service.Id, Start = new DateTime(2024, 5, random.Next(12, 14), 10, i * 10, 0), SlotDuration = 10, AppointmentType = AppointmentType.Online, IsAvailable = true };
                         availableSlots.Add(slot);
                     }
                     for (int i = 0; i < 5; i++)
                     {
-                        AvailableSlot slot = new AvailableSlot { IdService = service.Id, Start = new DateTime(2024, 5, 15, 11 + i, 0, 0), SlotDuration = 10, AppointmentType = AppointmentType.Home, IsAvailable = true };
+                        AvailableSlot slot = new AvailableSlot { IdService = service.Id, Start = new DateTime(2024, 5, random.Next(14, 16), 11 + i, 0, 0), SlotDuration = 10, AppointmentType = AppointmentType.Home, IsAvailable = true };
                         availableSlots.Add(slot);
                     }
 
@@ -505,98 +524,12 @@ namespace LusoHealthClient.Server.Services
 					{
 						Timestamp = DateTime.Now,
 						Type = AppointmentType.Online,
-						State = AppointmentState.Scheduled,
+						State = AppointmentState.Done,
 						Duration = random.Next(1, 3),
 						IdProfesional = service.IdProfessional,
 						IdPatient = random.Next(1, 16).ToString(),
 						IdService = service.Id
-					};
-
-					Appointment appointment4 = new Appointment
-					{
-						Timestamp = dataAtual.AddDays(diasAleatoriosFuturos),
-						Type = AppointmentType.Online,
-						State = AppointmentState.Scheduled,
-						Duration = random.Next(1, 3),
-						IdProfesional = service.IdProfessional,
-						IdPatient = random.Next(1, 16).ToString(),
-						IdService = service.Id
-					};
-					Appointment appointment5 = new Appointment
-					{
-						Timestamp = dataAtual.AddDays(diasAleatoriosFuturos),
-						Type = AppointmentType.Online,
-						State = AppointmentState.Scheduled,
-						Duration = random.Next(1, 3),
-						IdProfesional = service.IdProfessional,
-						IdPatient = random.Next(1, 16).ToString(),
-						IdService = service.Id
-					};
-
-					Appointment appointment6 = new Appointment
-					{
-						Timestamp = dataAtual.AddDays(diasAleatoriosFuturos),
-						Type = AppointmentType.Online,
-						State = AppointmentState.Scheduled,
-						Duration = random.Next(1, 3),
-						IdProfesional = service.IdProfessional,
-						IdPatient = random.Next(1, 16).ToString(),
-						IdService = service.Id
-					};
-
-					Appointment appointment7 = new Appointment
-					{
-						Timestamp = dataAtual.AddDays(diasAleatoriosFuturos),
-						Type = AppointmentType.Online,
-						State = AppointmentState.Scheduled,
-						Duration = random.Next(1, 3),
-						IdProfesional = service.IdProfessional,
-						IdPatient = random.Next(1, 16).ToString(),
-						IdService = service.Id
-					};
-
-					Appointment appointment2 = new Appointment
-					{
-						Timestamp = dataAtual.AddDays(diasAleatoriosFuturos),
-						Type = AppointmentType.Presential,
-						State = AppointmentState.Pending,
-						Duration = random.Next(1, 3),
-						IdProfesional = service.IdProfessional,
-						IdPatient = random.Next(1, 16).ToString(),
-						IdService = service.Id
-					};
-
-					Appointment appointment8 = new Appointment
-					{
-						Timestamp = dataAtual.AddDays(diasAleatoriosFuturos),
-						Type = AppointmentType.Presential,
-						State = AppointmentState.Pending,
-						Duration = random.Next(1, 3),
-						IdProfesional = service.IdProfessional,
-						IdPatient = random.Next(1, 16).ToString(),
-						IdService = service.Id
-					};
-
-					Appointment appointment12 = new Appointment
-					{
-						Timestamp = dataAtual.AddDays(diasAleatoriosFuturos),
-						Type = AppointmentType.Presential,
-						State = AppointmentState.Pending,
-						Duration = random.Next(1, 3),
-						IdProfesional = service.IdProfessional,
-						IdPatient = random.Next(1, 16).ToString(),
-						IdService = service.Id
-					};
-
-					Appointment appointment13 = new Appointment
-					{
-						Timestamp = dataAtual.AddDays(diasAleatoriosFuturos),
-						Type = AppointmentType.Presential,
-						State = AppointmentState.Pending,
-						Duration = random.Next(1, 3),
-						IdProfesional = service.IdProfessional,
-						IdPatient = random.Next(1, 16).ToString(),
-						IdService = service.Id
+						
 					};
 
 					Appointment appointment3 = new Appointment
@@ -643,9 +576,98 @@ namespace LusoHealthClient.Server.Services
 						IdService = service.Id
 					};
 
-					appointments.AddRange(new List<Appointment> { appointment1, appointment2 , appointment3, appointment4 , appointment5 , appointment6 ,
-						appointment7, appointment8 , appointment9, appointment10, appointment11, appointment12, appointment13 });
+                    Appointment appointment4 = new Appointment
+                    {
+                        Timestamp = dataAtual.AddDays(diasAleatoriosFuturos),
+                        Type = AppointmentType.Online,
+                        State = AppointmentState.Scheduled,
+                        Duration = random.Next(1, 3),
+                        IdProfesional = service.IdProfessional,
+                        IdPatient = random.Next(1, 16).ToString(),
+                        IdService = service.Id
+                    };
+                    Appointment appointment5 = new Appointment
+                    {
+                        Timestamp = dataAtual.AddDays(diasAleatoriosFuturos),
+                        Type = AppointmentType.Online,
+                        State = AppointmentState.Scheduled,
+                        Duration = random.Next(1, 3),
+                        IdProfesional = service.IdProfessional,
+                        IdPatient = random.Next(1, 16).ToString(),
+                        IdService = service.Id
+                    };
 
+                    Appointment appointment6 = new Appointment
+                    {
+                        Timestamp = dataAtual.AddDays(diasAleatoriosFuturos),
+                        Type = AppointmentType.Online,
+                        State = AppointmentState.Scheduled,
+                        Duration = random.Next(1, 3),
+                        IdProfesional = service.IdProfessional,
+                        IdPatient = random.Next(1, 16).ToString(),
+                        IdService = service.Id
+                    };
+
+                    Appointment appointment7 = new Appointment
+                    {
+                        Timestamp = dataAtual.AddDays(diasAleatoriosFuturos),
+                        Type = AppointmentType.Online,
+                        State = AppointmentState.Scheduled,
+                        Duration = random.Next(1, 3),
+                        IdProfesional = service.IdProfessional,
+                        IdPatient = random.Next(1, 16).ToString(),
+                        IdService = service.Id
+                    };
+
+                    Appointment appointment2 = new Appointment
+                    {
+                        Timestamp = dataAtual.AddDays(diasAleatoriosFuturos),
+                        Type = AppointmentType.Presential,
+                        State = AppointmentState.Pending,
+                        Duration = random.Next(1, 3),
+                        IdProfesional = service.IdProfessional,
+                        IdPatient = random.Next(1, 16).ToString(),
+                        IdService = service.Id
+                    };
+
+                    Appointment appointment8 = new Appointment
+                    {
+                        Timestamp = dataAtual.AddDays(diasAleatoriosFuturos),
+                        Type = AppointmentType.Presential,
+                        State = AppointmentState.Pending,
+                        Duration = random.Next(1, 3),
+                        IdProfesional = service.IdProfessional,
+                        IdPatient = random.Next(1, 16).ToString(),
+                        IdService = service.Id
+                    };
+
+                    Appointment appointment12 = new Appointment
+                    {
+                        Timestamp = dataAtual.AddDays(diasAleatoriosFuturos),
+                        Type = AppointmentType.Presential,
+                        State = AppointmentState.Pending,
+                        Duration = random.Next(1, 3),
+                        IdProfesional = service.IdProfessional,
+                        IdPatient = random.Next(1, 16).ToString(),
+                        IdService = service.Id
+                    };
+
+                    Appointment appointment13 = new Appointment
+                    {
+                        Timestamp = dataAtual.AddDays(diasAleatoriosFuturos),
+                        Type = AppointmentType.Presential,
+                        State = AppointmentState.Pending,
+                        Duration = random.Next(1, 3),
+                        IdProfesional = service.IdProfessional,
+                        IdPatient = random.Next(1, 16).ToString(),
+                        IdService = service.Id
+
+                    };
+
+                    appointments.AddRange(new List<Appointment> { appointment1, appointment2 , appointment3, appointment4 , appointment5 , appointment6 ,
+                        appointment7, appointment8 , appointment9, appointment10, appointment11, appointment12, appointment13 });
+
+                    counterServices++;
 				}
 
 

@@ -1,5 +1,8 @@
+<div id="loading-div" *ngIf="loading">
+  <loading-spinner></loading-spinner>
+</div>
 
-<main>
+<main *ngIf="!loading">
   <img id="question-btn" (click)="openPopup('tool')" src="assets/images/Agenda/question-mark.png" />
   <div class="title">
     <h1>Próximas Consultas</h1>
@@ -31,13 +34,14 @@
     <div class="appointment">
       <div id="info">
         <div id="title-data">
-          <h3>Consulta de {{ findSpecialtyByServiceId(appointment.idService) }}</h3>
+          <h3>Consulta de {{ appointment.speciality }}</h3>
           <div class="text-appointment">{{ convertToDate(appointment.timestamp) }}</div>
           <div class="text-appointment">{{ appointment.address }}</div>
+          <div class="">{{ appointment.type | tipoConsulta }}</div>
         </div>
         <div id="name-button">
           <div class="hours"><b>{{ convertToHours(appointment.timestamp) }}</b></div>
-          <div class="name" id="name-title">{{ getProfessionalNameById(appointment.idService) }}</div>
+          <div class="name" id="name-title">{{ appointment.professional?.professionalInfo?.firstName | firstWord}} {{ appointment.professional?.professionalInfo?.lastName | lastWord}}</div>
           <div class="type-appointment">{{ getAppointmentType(appointment.type + "") }}</div>
         </div>
       </div>

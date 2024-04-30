@@ -5,7 +5,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class FirstWordPipe implements PipeTransform {
 
-  transform(value: string | null): string {
+  transform(value: string | null | undefined): string {
     if (!value) {
       return '';
     }

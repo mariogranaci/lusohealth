@@ -1,3 +1,6 @@
+import { Patient } from "../profile/patient";
+import { Professional } from "../profile/professional";
+
 export class Appointment {
     id: number | null;
     timestamp: Date | null;
@@ -9,12 +12,16 @@ export class Appointment {
     duration: number | null;
     idPatient: string | null;
     idProfessional: string | null;
-    idService: number | null;   
+    idService: number | null;
+    professional: Professional | null;
+    patient: Patient | null;
+    speciality: string | null;
     
 
   constructor(timestamp: Date | null, location: string | null, address: string | null, type: string | null, description: string | null,
     state: string | null, duration: number | null, idPatient: string | null,
-    id: number | null, idProfessional: string | null, idService: number | null) {
+    id: number | null, idProfessional: string | null, idService: number | null, professional: Professional | null, patient: Patient | null,
+    speciality: string | null) {
     this.timestamp = timestamp;
     this.location = location;
     this.address = address;
@@ -26,5 +33,8 @@ export class Appointment {
     this.idProfessional = idProfessional;
     this.idService = idService;
     this.id = id;
+    this.professional = professional;
+    this.patient = patient;
+    this.speciality = speciality;
   }
 }

@@ -19,6 +19,7 @@ import { Appointment } from '../../shared/models/servic/appointment';
 export class AgendaProfissionalComponent {
   private unsubscribe$ = new Subject<void>();
   errorMessages: string[] = [];
+  loading: boolean = false;
 
   // Arrays para armazenar os dados obtidos dos serviços
   professionalTypes: ProfessionalType[] = [];
@@ -53,11 +54,13 @@ export class AgendaProfissionalComponent {
   */
 
   ngOnInit() {
+    this.loading = true;
     this.getServices().then(() => {
       this.getProfessionalTypes();
       this.getSpecialties();
       this.getNextAppointments();
       this.getPendingAppointments();
+      this.loading = false;
     });
   }
 
@@ -74,7 +77,8 @@ export class AgendaProfissionalComponent {
   changeAppointmentScheduled() {
     if (this.selectedAppointment != null) {
       const appontmentDto = new Appointment(this.selectedAppointment.timestamp, this.selectedAppointment.location, this.selectedAppointment.address, null, null, null,
-        this.selectedAppointment.duration, this.selectedAppointment.idPatient, this.selectedAppointment.id, this.selectedAppointment.idProfessional, this.selectedAppointment.idService);
+        this.selectedAppointment.duration, this.selectedAppointment.idPatient, this.selectedAppointment.id, this.selectedAppointment.idProfessional,
+        this.selectedAppointment.idService, null, null, null);
       this.appointmentService.scheduleAppointment(appontmentDto).pipe(
         takeUntil(this.unsubscribe$)
       ).subscribe({
@@ -108,7 +112,8 @@ export class AgendaProfissionalComponent {
   cancelAppointment() {
     if (this.selectedAppointment != null) {
       const appontmentDto = new Appointment(this.selectedAppointment.timestamp, this.selectedAppointment.location, this.selectedAppointment.address, null, null, null,
-        this.selectedAppointment.duration, this.selectedAppointment.idPatient, this.selectedAppointment.id, this.selectedAppointment.idProfessional, this.selectedAppointment.idService);
+        this.selectedAppointment.duration, this.selectedAppointment.idPatient, this.selectedAppointment.id, this.selectedAppointment.idProfessional,
+        this.selectedAppointment.idService, null, null, null);
       this.appointmentService.cancelAppointment(appontmentDto).pipe(
         takeUntil(this.unsubscribe$)
       ).subscribe({

@@ -138,17 +138,19 @@ export class EditPerfilComponent implements OnInit {
   * Obtém informações do perfil do utilizador.
   */
   getUserProfileInfo() {
+    this.loading = true;
     this.profileService.getUserData().subscribe({
       next: (response: UserProfile) => {
+        this.loading = false;
         return response;
       },
       error: (error) => {
-        console.log(error);
         if (error.error.errors) {
           this.errorMessages = error.error.errors;
         } else {
           this.errorMessages.push(error.error);
         }
+        this.loading = false;
         return error;
       }
     },

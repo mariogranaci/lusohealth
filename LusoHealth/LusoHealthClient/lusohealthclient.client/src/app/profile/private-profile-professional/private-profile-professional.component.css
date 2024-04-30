@@ -904,3 +904,14 @@ input[type="radio"] {
 .is-invalid {
   border: 2px solid #cc0000 !important;
 }
+
+#loading-div {
+  height: calc(100vh - 65px);
+}
+
+loading-spinner {
+  position: absolute;
+  top: 50%; /* Centraliza verticalmente */
+  left: 50%; /* Centraliza horizontalmente */
+  transform: translate(-50%, -50%); /* Corrige o deslocamento pela metade da largura e altura */
+}

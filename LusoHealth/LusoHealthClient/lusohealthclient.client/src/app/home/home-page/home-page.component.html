@@ -1,4 +1,7 @@
-<main>
+<div *ngIf="loading">
+  <loading-spinner></loading-spinner>
+</div>
+<main *ngIf="!loading">
   <div class="header">
 
     <h1>LusoHealth</h1>
@@ -41,24 +44,24 @@
     <p class="categoria-texto">{{ professionalType.name }}</p>
     <div class="categoria">
       <div *ngFor="let service of servicesByProfessionalType[professionalType.id]">
-          <div class="tab" [routerLink]="['/make-appointment']" [queryParams]="{ serviceId: service.serviceId }">
-            <div id="icons">
-              <figure class="rating">
-                <p>{{ service.rating === 0 ? '-' : service.rating.toFixed(1) }}</p>
-                <img alt="Estrela" class="star" src="/assets/images/profile/star.png">
-              </figure>
-            </div>
-            <div class="content">
-              <div class="content-name">
-                <span>{{ service.professional.professionalInfo.firstName | firstWord }} {{ service.professional.professionalInfo.lastName | lastWord }}</span>
-              </div>
-              <div>
-                <span>Especialidade:</span>
-                <p>{{service.specialty}}</p>
-              </div>
-              <p>Preço por hora: {{service.pricePerHour}}€</p>
-            </div>
+        <div class="tab" [routerLink]="['/make-appointment']" [queryParams]="{ serviceId: service.serviceId }">
+          <div id="icons">
+            <figure class="rating">
+              <p>{{ service.rating === 0 ? '-' : service.rating.toFixed(1) }}</p>
+              <img alt="Estrela" class="star" src="/assets/images/profile/star.png">
+            </figure>
           </div>
+          <div class="content">
+            <div class="content-name">
+              <span>{{ service.professional.professionalInfo.firstName | firstWord }} {{ service.professional.professionalInfo.lastName | lastWord }}</span>
+            </div>
+            <div>
+              <span>Especialidade:</span>
+              <p>{{service.specialty}}</p>
+            </div>
+            <p>Preço por hora: {{service.pricePerHour}}€</p>
+          </div>
+        </div>
 
       </div>
     </div>

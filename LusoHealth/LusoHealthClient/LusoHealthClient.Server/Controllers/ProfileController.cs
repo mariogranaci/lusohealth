@@ -259,7 +259,6 @@ namespace LusoHealthClient.Server.Controllers
                     professional.AddressId = newAddress.Id;
                     _context.Professionals.Update(professional);
                 }
-
                 await _context.SaveChangesAsync();
 
                 return Ok(new JsonResult(new { title = "Morada Alterada", message = "A sua morada foi alterada com sucesso." }));

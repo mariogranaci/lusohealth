@@ -162,3 +162,14 @@ input[type="radio"] {
   box-shadow: inset 2px 2px 2px 0px rgba(37, 80, 209, 0.5), 7px 7px 20px 0px rgba(0, 0, 0, .1), 4px 4px 5px 0px rgba(0, 0, 0, .1);
   outline: none;
 }
+
+#loading-div {
+  height: calc(100vh - 65px);
+}
+
+loading-spinner {
+  position: absolute;
+  top: 50%; /* Centraliza verticalmente */
+  left: 50%; /* Centraliza horizontalmente */
+  transform: translate(-50%, -50%); /* Corrige o deslocamento pela metade da largura e altura */
+}

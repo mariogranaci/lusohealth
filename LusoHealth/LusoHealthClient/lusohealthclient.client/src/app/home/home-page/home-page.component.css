@@ -238,3 +238,10 @@ h1 {
     display: block;
     margin-bottom: 2px;
   }
+
+loading-spinner {
+  position: absolute;
+  top: 50%; /* Centraliza verticalmente */
+  left: 50%; /* Centraliza horizontalmente */
+  transform: translate(-50%, -50%); /* Corrige o deslocamento pela metade da largura e altura */
+}

@@ -1,4 +1,5 @@
-﻿using LusoHealthClient.Server.Models.Services;
+﻿using LusoHealthClient.Server.DTOs.Profile;
+using LusoHealthClient.Server.Models.Services;
 
 namespace LusoHealthClient.Server.DTOs.Appointments
 {
@@ -18,6 +19,9 @@ namespace LusoHealthClient.Server.DTOs.Appointments
         public string? IdPatient { get; set; }
         public string? IdProfessional { get; set; }
         public int? IdService { get; set; }
+        public ProfessionalDto? Professional { get; set; }
+        public PatientDto? Patient { get; set; }
+        public string? Speciality { get; set; }
 
     }
 }

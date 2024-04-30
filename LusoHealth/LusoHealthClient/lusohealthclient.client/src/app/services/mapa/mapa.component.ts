@@ -37,6 +37,14 @@ export class MapaComponent implements OnInit {
   specialtyId: number = -1;
   professionalTypeId: number = -1;
 
+  phrases: string[] = [
+    "Para procurar por uma Categoria e/ou Especialidade específica, aceda aos filtros disponíveis no canto superior esquerdo da página.",
+    "Para procurar por profissionais numa determinada aréa, utilize o mapa, procurando pelo nome da localidade ou aproximando o mapa, e clique no botão 'Pesquisar nesta área'.",
+    "Para obter mais informações sobre o Profissional, clique sobre o mesmo para aceder ao perfil do profissional."
+  ];
+  currentPhraseIndex: number = 0;
+  currentPhrase: string = this.phrases[0];
+
   constructor(private servicesService: ServicesService) { }
 
   ngOnInit() {
@@ -469,5 +477,62 @@ export class MapaComponent implements OnInit {
       }
     });
   }
+
+  /**
+   * Abre a janela popup para recuperar a senha ou a conta.
+   * @param option Opção selecionada ('pass' para recuperar a senha, 'conta' para recuperar a conta).
+   */
+  openPopup(option: string) {
+    const overlay = document.getElementById('overlay');
+    const tool = document.getElementById('tooltips');
+    const searchBar = document.getElementById('pac-input');
+
+    if (overlay) {
+      overlay.style.display = 'flex';
+      if (option == "tool") {
+        if (tool && searchBar) {
+          tool.style.display = "block";
+          searchBar.style.display = "none";
+        }
+      }
+    }
+  }
+
+  /**
+   * Fecha a janela popup.
+   */
+  closePopup() {
+    const overlay = document.getElementById('overlay');
+    const tool = document.getElementById('tooltips');
+    const searchBar = document.getElementById('pac-input');
+
+    if (overlay) {
+      overlay.style.display = 'none';
+      if (tool && searchBar) {
+        tool.style.display = "none";
+        searchBar.style.display = "block"; 
+      }
+    }
+  }
+
+  nextPhrase() {
+    this.currentPhraseIndex++;
+    if (this.currentPhraseIndex < this.phrases.length) {
+      this.currentPhrase = this.phrases[this.currentPhraseIndex];
+    } else {
+      this.currentPhraseIndex = 0;
+      this.currentPhrase = this.phrases[this.currentPhraseIndex];
+      this.closePopup();
+    }
+  }
+
+  /**
+   * Impede a propagação do evento.
+   * @param event Evento de clique.
+   */
+  stopPropagation(event: Event) {
+    event.stopPropagation();
+  }
+
 
 }

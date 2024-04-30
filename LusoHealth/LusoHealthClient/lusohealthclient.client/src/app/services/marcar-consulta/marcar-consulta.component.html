@@ -1,4 +1,5 @@
 <main>
+  <img id="question-btn" (click)="openPopup('tool')" src="assets/images/Agenda/question-mark.png" />
   <div class="title">
     <h1>Marcar Consulta</h1>
     <figure><img id="img-perfil" src="/assets/images/Perfil/profileImage.jpg" /></figure>
@@ -82,6 +83,14 @@
         <button class="btn btn-blue" (click)="submitAddress()">Salvar Endereço</button>
       </section>
     </form>
+
+    <div id="tooltips" class="overlay-container-tool" (click)="stopPropagation($event)">
+      <h2>ToolTips</h2>
+      <div class="text-tool">
+        <div class="text-tool">{{ currentPhrase }}</div>
+      </div>
+      <button (click)="nextPhrase()" type="button" class="btn-tool">Continuar</button>
+    </div>
   </div>
   <div *ngIf="errorMessages.length > 0">
     <app-validation-messages [errorMessages]="errorMessages"></app-validation-messages>

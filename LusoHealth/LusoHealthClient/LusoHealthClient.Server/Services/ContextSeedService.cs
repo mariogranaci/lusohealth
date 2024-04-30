@@ -482,7 +482,7 @@ namespace LusoHealthClient.Server.Services
 				List<Review> reviews = new List<Review>();
 				List<Appointment> appointments = new List<Appointment>();
 				int counterServices = 1;
-				int[] appointmentDurations = { 1, 2, 3 };
+				int[] appointmentDurations = [10, 20, 30, 40, 50];
 				foreach (var service in infoService)
 				{
 					Review review1 = new Review { IdPatient = random.Next(1, 16).ToString(), IdService = service.Id, State = ReviewState.Normal, Timestamp = DateTime.Now , Stars = random.Next(4, 6), Description = "Serviço Excelente!" };
@@ -525,7 +525,7 @@ namespace LusoHealthClient.Server.Services
 						Timestamp = DateTime.Now,
 						Type = AppointmentType.Online,
 						State = AppointmentState.Done,
-						Duration = random.Next(1, 3),
+						Duration = appointmentDurations[random.Next(0, appointmentDurations.Length)],
 						IdProfesional = service.IdProfessional,
 						IdPatient = random.Next(1, 16).ToString(),
 						IdService = service.Id
@@ -537,8 +537,8 @@ namespace LusoHealthClient.Server.Services
 						Timestamp = dataAtual.AddDays(-diasAleatorios),
 						Type = AppointmentType.Home,
 						State = AppointmentState.Done,
-						Duration = random.Next(1, 3),
-						IdProfesional = service.IdProfessional,
+                        Duration = appointmentDurations[random.Next(0, appointmentDurations.Length)],
+                        IdProfesional = service.IdProfessional,
 						IdPatient = random.Next(1, 16).ToString(),
 						IdService = service.Id
 					};
@@ -548,8 +548,8 @@ namespace LusoHealthClient.Server.Services
 						Timestamp = dataAtual.AddDays(-diasAleatorios),
 						Type = AppointmentType.Home,
 						State = AppointmentState.Done,
-						Duration = random.Next(1, 3),
-						IdProfesional = service.IdProfessional,
+                        Duration = appointmentDurations[random.Next(0, appointmentDurations.Length)],
+                        IdProfesional = service.IdProfessional,
 						IdPatient = random.Next(1, 16).ToString(),
 						IdService = service.Id
 					};
@@ -559,8 +559,8 @@ namespace LusoHealthClient.Server.Services
 						Timestamp = dataAtual.AddDays(-diasAleatorios),
 						Type = AppointmentType.Home,
 						State = AppointmentState.Done,
-						Duration = random.Next(1, 3),
-						IdProfesional = service.IdProfessional,
+                        Duration = appointmentDurations[random.Next(0, appointmentDurations.Length)],
+                        IdProfesional = service.IdProfessional,
 						IdPatient = random.Next(1, 16).ToString(),
 						IdService = service.Id
 					};
@@ -570,8 +570,8 @@ namespace LusoHealthClient.Server.Services
 						Timestamp = dataAtual.AddDays(-diasAleatorios),
 						Type = AppointmentType.Home,
 						State = AppointmentState.Done,
-						Duration = random.Next(1, 3),
-						IdProfesional = service.IdProfessional,
+                        Duration = appointmentDurations[random.Next(0, appointmentDurations.Length)],
+                        IdProfesional = service.IdProfessional,
 						IdPatient = random.Next(1, 16).ToString(),
 						IdService = service.Id
 					};
@@ -581,7 +581,7 @@ namespace LusoHealthClient.Server.Services
                         Timestamp = dataAtual.AddDays(diasAleatoriosFuturos),
                         Type = AppointmentType.Online,
                         State = AppointmentState.Scheduled,
-                        Duration = random.Next(1, 3),
+                        Duration = appointmentDurations[random.Next(0, appointmentDurations.Length)],
                         IdProfesional = service.IdProfessional,
                         IdPatient = random.Next(1, 16).ToString(),
                         IdService = service.Id
@@ -591,7 +591,7 @@ namespace LusoHealthClient.Server.Services
                         Timestamp = dataAtual.AddDays(diasAleatoriosFuturos),
                         Type = AppointmentType.Online,
                         State = AppointmentState.Scheduled,
-                        Duration = random.Next(1, 3),
+                        Duration = appointmentDurations[random.Next(0, appointmentDurations.Length)],
                         IdProfesional = service.IdProfessional,
                         IdPatient = random.Next(1, 16).ToString(),
                         IdService = service.Id
@@ -602,7 +602,7 @@ namespace LusoHealthClient.Server.Services
                         Timestamp = dataAtual.AddDays(diasAleatoriosFuturos),
                         Type = AppointmentType.Online,
                         State = AppointmentState.Scheduled,
-                        Duration = random.Next(1, 3),
+                        Duration = appointmentDurations[random.Next(0, appointmentDurations.Length)],
                         IdProfesional = service.IdProfessional,
                         IdPatient = random.Next(1, 16).ToString(),
                         IdService = service.Id
@@ -613,7 +613,7 @@ namespace LusoHealthClient.Server.Services
                         Timestamp = dataAtual.AddDays(diasAleatoriosFuturos),
                         Type = AppointmentType.Online,
                         State = AppointmentState.Scheduled,
-                        Duration = random.Next(1, 3),
+                        Duration = appointmentDurations[random.Next(0, appointmentDurations.Length)],
                         IdProfesional = service.IdProfessional,
                         IdPatient = random.Next(1, 16).ToString(),
                         IdService = service.Id
@@ -624,7 +624,7 @@ namespace LusoHealthClient.Server.Services
                         Timestamp = dataAtual.AddDays(diasAleatoriosFuturos),
                         Type = AppointmentType.Presential,
                         State = AppointmentState.Pending,
-                        Duration = random.Next(1, 3),
+                        Duration = appointmentDurations[random.Next(0, appointmentDurations.Length)],
                         IdProfesional = service.IdProfessional,
                         IdPatient = random.Next(1, 16).ToString(),
                         IdService = service.Id
@@ -635,7 +635,7 @@ namespace LusoHealthClient.Server.Services
                         Timestamp = dataAtual.AddDays(diasAleatoriosFuturos),
                         Type = AppointmentType.Presential,
                         State = AppointmentState.Pending,
-                        Duration = random.Next(1, 3),
+                        Duration = appointmentDurations[random.Next(0, appointmentDurations.Length)],
                         IdProfesional = service.IdProfessional,
                         IdPatient = random.Next(1, 16).ToString(),
                         IdService = service.Id
@@ -646,7 +646,7 @@ namespace LusoHealthClient.Server.Services
                         Timestamp = dataAtual.AddDays(diasAleatoriosFuturos),
                         Type = AppointmentType.Presential,
                         State = AppointmentState.Pending,
-                        Duration = random.Next(1, 3),
+                        Duration = appointmentDurations[random.Next(0, appointmentDurations.Length)],
                         IdProfesional = service.IdProfessional,
                         IdPatient = random.Next(1, 16).ToString(),
                         IdService = service.Id
@@ -657,7 +657,7 @@ namespace LusoHealthClient.Server.Services
                         Timestamp = dataAtual.AddDays(diasAleatoriosFuturos),
                         Type = AppointmentType.Presential,
                         State = AppointmentState.Pending,
-                        Duration = random.Next(1, 3),
+                        Duration = appointmentDurations[random.Next(0, appointmentDurations.Length)],
                         IdProfesional = service.IdProfessional,
                         IdPatient = random.Next(1, 16).ToString(),
                         IdService = service.Id

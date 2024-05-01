@@ -96,7 +96,6 @@ export class MarcarConsultaComponent {
     this.getServiceId().then(() => {
       this.getServiceInfo();
       this.getAppointmentSugestion();
-      
     });
   }
 
@@ -156,7 +155,7 @@ export class MarcarConsultaComponent {
    */
   marcarClick(appointmentId: number, location: string | null, address: string | null) {
     if (this.serviceInfo) {
-
+      console.log('slots', this.slots, 'appointment ID', appointmentId);
       const slot = this.slots.find((s: AvailableSlot) => s.id === appointmentId);
       if (!slot || slot.start === undefined || slot.appointmentType === undefined || slot.slotDuration === undefined) {
         // Handle the case where the slot is not found or start is undefined
@@ -224,7 +223,8 @@ export class MarcarConsultaComponent {
   * Manipula a mudança de data.
   */
   handleDateChange(selectedDate: Date): void {
-    this.selectedDate = selectedDate;;
+    this.selectedDate = selectedDate;
+    console.log('selectedDate calendar', selectedDate);
 
     this.getAvailability();
   }
@@ -250,11 +250,11 @@ export class MarcarConsultaComponent {
           const slotDate = new Date(s.start);
 
           if (s.appointmentType === this.selectedOption || !this.selectedOption) {
+            console.log('selected option: ', this.selectedOption);
             if (slotDate.toDateString() === this.selectedDate.toDateString()) {
               const slotTime = slotDate.getTime();
               const selectedTime = this.selectedDate.getTime();
-              return slotTime > selectedTime;
-
+              return slotTime >= selectedTime;
             } else {
               return false;
             }
@@ -291,6 +291,10 @@ export class MarcarConsultaComponent {
         this.suggestionPrice = this.serviceInfo ? this.suggestedAppointment.slotDuration * this.serviceInfo.pricePerHour / 60 : 0;
 
         this.isSuggestionLoaded = true;
+
+        this.selectedDate = new Date(this.suggestedAppointment.start);
+        console.log('selectedDate Sugestion', this.selectedDate);
+        this.getAvailability();
       },
       error => {
         console.error('Erro: ', error);

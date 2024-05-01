@@ -318,7 +318,7 @@ namespace LusoHealthClient.Server.Controllers
 		/// <param name="professionalId">ID do profissional.</param>
 		/// <returns>Os slots de horário disponíveis.</returns>
 		[HttpGet("get-appointment-sugestion/{serviceId}")]
-        public async Task<ActionResult<AvailableSlot>> GetAppointmentSugestion(int serviceId)
+        public async Task<ActionResult<AvailableSlotDto>> GetAppointmentSugestion(int serviceId)
         {
             DateTime currentDate = DateTime.Now.Date;
             DateTime endDate = currentDate.AddDays(7).Date; // End date is one week from today
@@ -344,7 +344,26 @@ namespace LusoHealthClient.Server.Controllers
                             x.IsAvailable)
                 .OrderBy(x => x.Start).ToListAsync();
 
-            return suggestedAppointment.FirstOrDefault();
+            var suggested = suggestedAppointment.FirstOrDefault();
+
+            if(suggested == null)
+            {
+                return BadRequest("Não foi possível encontrar um slot disponível.");
+            } else
+            {
+                AvailableSlotDto suggestedSlot = new AvailableSlotDto
+                {
+                    Id = suggested.Id,
+                    Start = suggested.Start,
+                    SlotDuration = suggested.SlotDuration,
+                    IdService = suggested.IdService,
+                    AppointmentType = suggested.AppointmentType.ToString(),
+                    IsAvailable = suggested.IsAvailable,
+                    AppointmentId = suggested.AppointmentId
+                };
+                return suggestedSlot;
+            }
+
         }
         
         private async Task<bool> SendAppointmentChangedEmail(User patient, User professional, AvailableSlot availableSlot)

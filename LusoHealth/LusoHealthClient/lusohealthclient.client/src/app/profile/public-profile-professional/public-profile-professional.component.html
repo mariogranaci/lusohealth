@@ -42,7 +42,7 @@
         <td>{{ appointmentTypesToString(service) }}</td>
         <td *ngIf="(isPatient)">
           <div class="buttons-container">
-            <button class="btn btn-blue">Marcar</button>
+            <button class="btn btn-blue" [routerLink]="['/make-appointment']" [queryParams]="{ serviceId: service.serviceId }">Marcar</button>
           </div>
         </td>
       </tr>

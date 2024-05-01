@@ -25,9 +25,10 @@
       </div>
       <div id="name-button">
         <div class="hours"><b>{{convertToHours(suggestedAppointment.start)}}</b></div>
-        <div class="type-appointment">{{getAppointmentTypeByNumber(suggestedAppointment.appointmentType)}}</div>
+        <div class="type-appointment">{{suggestedAppointment.appointmentType | tipoConsulta}}</div>
         <div class="price">{{suggestionPrice  | number: '1.2-2' }}€</div>
-        <button class="btn-edit">Marcar</button>
+        <button *ngIf="suggestedAppointment.appointmentType !== 'Home'" class="btn-edit" (click)="marcarClick(suggestedAppointment.id, null, null)">Marcar</button>
+        <button *ngIf="suggestedAppointment.appointmentType === 'Home'" class="btn-edit" (click)="openPopupAndDefineAppointmentId('address', suggestedAppointment.id)">Marcar</button>
       </div>
     </div>
   </div>

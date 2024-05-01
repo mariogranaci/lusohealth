@@ -1,4 +1,5 @@
 <main>
+  <img id="question-btn" (click)="openPopup('tool')" src="assets/images/Agenda/question-mark.png" />
   <section id="left-panel">
     <section id="filter-section">
       <div id="filters-div">
@@ -24,7 +25,7 @@
           </div>
           <div style="display:none;" class="select-form-box">
             <div class="select-dropdown">
-              <select id="consulta-tipo" >
+              <select id="consulta-tipo">
                 <option value="0" selected disabled hidden>Tipo de Consulta</option>
                 <option value="0">Qualquer</option>
                 <option value="P">Presencial</option>
@@ -49,8 +50,7 @@
       </div>
     </section>
     <section id="service-section" *ngIf="professionals.length > 0">
-      <div class="service-tab" *ngFor="let professional of filteredProfessionals" [routerLink]="['/professional-profile']" [queryParams]="{ id: professional.professionalInfo.id }"
->
+      <div class="service-tab" *ngFor="let professional of filteredProfessionals" [routerLink]="['/professional-profile']" [queryParams]="{ id: professional.professionalInfo.id }">
         <figure>
           <img src="/assets/images/Perfil/profileImage.jpg" alt="Foto de Perfil" />
         </figure>
@@ -83,4 +83,18 @@
     <div id="map"></div>
     <button *ngIf="mapMoved" (click)="getProfessionalsOnBounds()" class="button-over-map">Pesquisar nesta área</button>
   </section>
+
+  <div class="overlay" id="overlay" (click)="closePopup()">
+    <a class="close-button" (click)="closePopup()">
+      <img src="assets/images/login/close.png" alt="Close button" class="close-image">
+    </a>
+
+    <div id="tooltips" class="overlay-container-tool" (click)="stopPropagation($event)">
+      <h2>ToolTips</h2>
+      <div class="text-tool">
+        <div class="text-tool">{{ currentPhrase }}</div>
+      </div>
+      <button (click)="nextPhrase()" type="button" class="btn-tool">Continuar</button>
+    </div>
+  </div>
 </main>

@@ -50,6 +50,14 @@ export class MarcarConsultaComponent {
   suggestionPrice: number = 0;
   isSuggestionLoaded: boolean = false;
 
+  phrases: string[] = [
+    "A sugestão de consulta é dada com base na disponibilidade do profissional, de forma a garantir uma melhor alocação das vagas.",
+    "Para procurar por um Tipo de Consulta específico, aceda à opção 'Tipo de Consulta' e selecione o tipo pretendido, seja Online, Presencial ou Domicílio.",
+    "Se pretender escolher a data da consulta, clique na opção 'Quero marcar para outra data', e será fornecido um calendário, onde após selecionada a data, serão apresentadas as disponibilidades para a mesma."
+  ];
+  currentPhraseIndex: number = 0;
+  currentPhrase: string = this.phrases[0];
+
   constructor(private authenticationService: AuthenticationService,
     private profileService: ProfileService,
     private router: Router,
@@ -507,9 +515,10 @@ export class MarcarConsultaComponent {
     this.openPopup(opcao);
   }
 
-  openPopup(opcao: string) {
+  openPopup(option: string) {
     const overlay = document.getElementById('overlay');
     const editAddress = document.getElementById('edit-address-container');
+    const tool = document.getElementById('tooltips');
 
     if (editAddress) {
       editAddress.style.display = "none";
@@ -517,9 +526,14 @@ export class MarcarConsultaComponent {
 
     if (overlay) {
       overlay.style.display = 'flex';
-      if (opcao == "address") {
+      if (option == "address") {
         if (editAddress) {
           editAddress.style.display = "block";
+        }
+      }
+      if (option == "tool") {
+        if (tool) {
+          tool.style.display = "block";
         }
       }
     }
@@ -528,17 +542,32 @@ export class MarcarConsultaComponent {
   closePopup() {
     const overlay = document.getElementById('overlay');
     const address = document.getElementById('edit-address-container');
+    const tool = document.getElementById('tooltips');
 
     if (overlay) {
       overlay.style.display = 'none';
       if (address) {
         address.style.display = "none";
       }
+      if (tool) {
+        tool.style.display = "none";
+      }
     }
   }
 
   stopPropagation(event: Event) {
     event.stopPropagation();
+  }
+
+  nextPhrase() {
+    this.currentPhraseIndex++;
+    if (this.currentPhraseIndex < this.phrases.length) {
+      this.currentPhrase = this.phrases[this.currentPhraseIndex];
+    } else {
+      this.currentPhraseIndex = 0;
+      this.currentPhrase = this.phrases[this.currentPhraseIndex];
+      this.closePopup();
+    }
   }
 
 }

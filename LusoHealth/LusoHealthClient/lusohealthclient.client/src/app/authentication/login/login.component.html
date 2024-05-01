@@ -1,12 +1,13 @@
 <main>
-  <div class="top-row"*ngIf="!loading">
+  <img id="question-btn" (click)="openPopup('tool')" src="assets/images/Agenda/question-mark.png" />
+  <div class="top-row" *ngIf="!loading">
     <div class="page-title">
       <h1>Login</h1>
     </div>
     <button class="recover-account-button" name="recover-account" id="recover-account" (click)="openPopup('conta')">Recuperar Conta</button>
   </div>
-  <div class="login-form"*ngIf="!loading">
-    <form [formGroup]="loginForm" (ngSubmit)="login()" >
+  <div class="login-form" *ngIf="!loading">
+    <form [formGroup]="loginForm" (ngSubmit)="login()">
       <div class="box">
         <input formControlName="email" type="email" class="textbox" placeholder=" " name="email" id="email" [class.is-invalid]="submitted && loginForm.get('email')?.errors" required>
         <label for="email">Email</label>
@@ -59,10 +60,21 @@
     </a>
     <app-recuperar-pass (click)="stopPropagation($event)" id="recuperar-pass"></app-recuperar-pass>
     <app-recuperar-conta (click)="stopPropagation($event)" id="recuperar-conta"></app-recuperar-conta>
+
+    <div id="tooltips" class="overlay-container-tool" (click)="stopPropagation($event)">
+      <h2>ToolTips</h2>
+      <h3>{{ currentPhrase.title }}</h3>
+      <div class="text-tool">
+        <div class="text-tool">{{ currentPhrase.description }}</div>
+      </div>
+      <button (click)="nextPhrase()" type="button" class="btn-tool">Continuar</button>
+    </div>
   </div>
+
   <div *ngIf="loading">
     <loading-spinner></loading-spinner>
   </div>
+
 
 </main>
 <app-footer-authentication></app-footer-authentication>

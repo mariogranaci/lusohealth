@@ -40,6 +40,7 @@ export class MapaComponent implements OnInit {
   phrases: string[] = [
     "Para procurar por uma Categoria e/ou Especialidade específica, aceda aos filtros disponíveis no canto superior esquerdo da página.",
     "Para procurar por profissionais numa determinada aréa, utilize o mapa, procurando pelo nome da localidade ou aproximando o mapa, e clique no botão 'Pesquisar nesta área'.",
+    "Se o botão 'Pesquisar nesta área' não aparecer, mova o mapa arrastando, aumentando ou diminuindo a vista do mapa.",
     "Para obter mais informações sobre o Profissional, clique sobre o mesmo para aceder ao perfil do profissional."
   ];
   currentPhraseIndex: number = 0;

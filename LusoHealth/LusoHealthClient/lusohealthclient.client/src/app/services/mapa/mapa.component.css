@@ -5,7 +5,6 @@ main {
 }
 
 #left-panel {
-  margin-top: 45px;
   width: 45%;
   height: 100%;
   position: relative;
@@ -285,13 +284,12 @@ loading-spinner {
 /* tooltips */
 #question-btn {
   position: absolute;
-  top: 75px;
-  left: 25px;
-  width: 32px;
+  top: 7px;
+  right: 7px;
+  width: 24px;
   height: auto;
   cursor: pointer;
   user-select: none;
-  margin-bottom: 20px
 }
 
 .overlay-container-tool {

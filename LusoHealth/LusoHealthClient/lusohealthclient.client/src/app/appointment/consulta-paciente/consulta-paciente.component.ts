@@ -24,6 +24,7 @@ export class ConsultaPacienteComponent {
 
   private unsubscribe$ = new Subject<void>();
   errorMessages: string[] = [];
+  loading: boolean = false;
 
   service: Service | undefined;
 
@@ -44,6 +45,7 @@ export class ConsultaPacienteComponent {
   currentPhraseIndex: number = 0;
   currentPhrase: string = this.phrases[0];
 
+
   constructor(public servicesService: ServicesService,
     public appointmentService: AppointmentService,
     private route: ActivatedRoute,
@@ -53,6 +55,7 @@ export class ConsultaPacienteComponent {
   * Método Angular que é executado quando o componente é inicializado.
    */
   ngOnInit() {
+    this.loading = true;
     const loader = new Loader({
       apiKey: environment.googleMapsApiKey,
       version: "weekly",
@@ -69,6 +72,7 @@ export class ConsultaPacienteComponent {
       this.getServiceInfo();
       this.getProfessional();
       this.getUser();
+      this.loading = false;
     });
   }
 

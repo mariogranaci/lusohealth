@@ -1,6 +1,7 @@
 ﻿using LusoHealthClient.Server.Data;
 using LusoHealthClient.Server.DTOs.Appointments;
 using LusoHealthClient.Server.DTOs.Authentication;
+using LusoHealthClient.Server.DTOs.Profile;
 using LusoHealthClient.Server.Models.Appointments;
 using LusoHealthClient.Server.Models.Services;
 using LusoHealthClient.Server.Models.Users;
@@ -44,7 +45,12 @@ namespace LusoHealthClient.Server.Controllers
 		[HttpGet("get-appointment-info/{id}")]
         public async Task<ActionResult<AppointmentDto>> GetAppointment(int id)
         {
-            var info = await _context.Appointment.Include(a => a.Address).FirstOrDefaultAsync(x => x.Id == id);
+            var info = await _context.Appointment.Include(a => a.Address)
+                .Include(p => p.Professional)
+                .ThenInclude(u => u.User)
+                .Include(p => p.Patient)
+                .ThenInclude(u => u.User)
+                .FirstOrDefaultAsync(x => x.Id == id);
 
             if (info == null) return BadRequest("Não foi possível encontrar a informação da consulta.");
 
@@ -61,6 +67,25 @@ namespace LusoHealthClient.Server.Controllers
                 IdProfessional = info.IdProfesional,
                 IdService = info.IdService,
                 Id = info.Id,
+                Professional = new ProfessionalDto
+                {    
+                    ProfessionalInfo = new UserProfileDto
+                    {
+                        FirstName = info.Professional.User.FirstName,
+                        LastName = info.Professional.User.LastName,
+                    }
+                },
+                Patient = new PatientDto
+                {
+                    User = new UserProfileDto
+                    {
+                        FirstName = info.Patient.User.FirstName,
+                        LastName = info.Patient.User.LastName,
+                        Email = info.Patient.User.Email,
+                        Telemovel = info.Patient.User.PhoneNumber,
+                        DataNascimento = info.Patient.User.BirthDate,
+                    }
+                },
             };
 
             return appointmentDto;

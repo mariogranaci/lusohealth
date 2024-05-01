@@ -33,16 +33,20 @@ export class HistoricoConsultasComponent {
   displayedAppointments: Appointment[] = [];
   initialAppointmentCount = 3;
 
+  loading = false;
+
   constructor(public servicesService: ServicesService, public agendaService: AgendaService) { }
 
   /**
    * Método executado ao inicializar o componente.
    */
   ngOnInit() {
+    this.loading = true;
     this.getServices().then(() => {
       this.getProfessionalTypes();
       this.getSpecialties();
       this.getPreviousAppointments();
+      this.loading = false;
     });
   }
 

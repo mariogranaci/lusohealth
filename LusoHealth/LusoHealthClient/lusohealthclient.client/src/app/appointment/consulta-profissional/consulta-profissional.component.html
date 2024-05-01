@@ -3,69 +3,78 @@
   <h1>Consulta cancelada</h1>
 </div>
 
-<div class="title">
+<div class="title" *ngIf="appointment?.state !== 'Canceled'">
   <img id="question-btn" (click)="openPopup('tool')" src="assets/images/Agenda/question-mark.png" />
   <h1 *ngIf="service?.specialty && appointment?.state !== 'Canceled'">Consulta de {{ service?.specialty}}</h1>
 </div>
 
-<main>
-  
-  <div class="appointments">
-    <div class="appointment">
-      <div id="info">
-        <div id="title-data-under">
-          <h3>Consulta {{appointment?.type}} </h3>
-          <div class="text-appointment" *ngIf="!updatedSlot">Data e Hora: {{convertToDate()}} às {{convertToHours()}}</div>
-          <div class="text-appointment" *ngIf="updatedSlot">Data e Hora: {{updatedSlot.start | date:'longDate':'':'pt-PT'}} {{updatedSlot.start | date:'shortTime':'':'pt-PT'}}</div>
-          <div class="text-appointment" *ngIf="appointment?.address && appointment?.type !== 'Online'">Localização: {{appointment?.address}} </div>
-        </div>
-      </div>
-    </div>
-    <div class="appointment">
-      <div id="info">
-        <div id="title-data-under">
-          <h3>Consulta para: </h3>
-          <div class="text-appointment">{{patient?.firstName}} {{patient?.lastName}}</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="appointment">
-      <div id="info">
-        <div id="title-data">
-          <h3>Informações do Paciente </h3>
-          <figure>
-            <img class="image" alt="Imagem de Perfil" src="/assets/images/Perfil/profileImage.jpg" />
-          </figure>
-          <h4>Nome: </h4>
-          <div class="text-appointment">{{patient?.firstName}} {{patient?.lastName}}</div>
-        </div>
-        <div id="title-data-under">
-          <h4>Género: </h4>
-          <div class="text-appointment"> {{patient?.genero === 'F' ? 'Feminino' : 'Masculino'}}</div>
-        </div>
-      </div>
-    </div>
+  <div *ngIf="loading">
+    <loading-spinner></loading-spinner>
   </div>
+<main *ngIf="!loading">
+    <div class="appointments">
+      <div class="appointment">
+        <div id="info">
+          <div id="title-data-under">
+            <h3 *ngIf="appointment?.type">Consulta {{ appointment?.type | tipoConsulta }} </h3>
+            <div class="text-appointment" *ngIf="!updatedSlot">Data e Hora: {{convertToDate()}} às {{convertToHours()}}</div>
+            <div class="text-appointment" *ngIf="updatedSlot">Data e Hora: {{updatedSlot.start | date:'longDate':'':'pt-PT'}} {{updatedSlot.start | date:'shortTime':'':'pt-PT'}}</div>
+          </div>
+        </div>
+      </div>
 
-  <section class="right-panel">
-    <div class="buttons" *ngIf="appointment?.state !== 'Canceled'">
-      <button class="btn1" (click)="openPopup('edit')">Alterar Consulta</button>
-      <button class="btn1" (click)="changeAppointmentScheduled()" *ngIf="appointment?.state !== 'Scheduled'">Aceitar Consulta</button>
-      <button class="btn1 btn-red" (click)="openPopup('remove')">Cancelar Consulta</button>
+      <div class="appointment">
+        <div id="info">
+          <div id="title-data">
+            <h3>Informações do Paciente </h3>
+            <figure>
+              <img class="image" alt="Imagem de Perfil" src="/assets/images/Perfil/profileImage.jpg" />
+            </figure>
+            <div class="title-data-under">
+              <h4>Nome: </h4>
+              <div class="text-appointment">{{patient?.firstName}} {{patient?.lastName}}</div>
+            </div>
+            <div class="title-data-under">
+              <h4>Género: </h4>
+              <div class="text-appointment"> {{patient?.genero === 'F' ? 'Feminino' : 'Masculino'}}</div>
+            </div>
+            <div class="title-data-under">
+              <h4>E-mail: </h4>
+              <div class="text-appointment"> {{patient?.email }}</div>
+            </div>
+            <div class="title-data-under">
+              <h4>Idade: </h4>
+              <div class="text-appointment"> {{patient?.dataNascimento | idade}}</div>
+            </div>
+            <div class="title-data-under">
+              <h4>Telemóvel: </h4>
+              <div class="text-appointment"> {{patient?.telemovel ? patient?.telemovel : 'Telemóvel não registado' }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div *ngIf="(appointment?.type === 'Presential' || appointment?.type === 'Home') && appointment?.state !== 'Canceled'"></div>
-    <button *ngIf="appointment?.type === 'Online' && appointment?.state !== 'Canceled'"
-            [routerLink]="['/chat']" [queryParams]="{ appointment: appointment?.id }" class="btn1">
-      Aceder ao chat
-    </button>
-    <div *ngIf="appointment?.type !== 'Online' && appointment?.state !== 'Canceled'" id="localizacao">
-      <h3>Localização</h3>
-      <div id="map"></div>
-      <p>Localização: {{ address }}</p>
-    </div>
-  </section>
 
+    <section class="right-panel">
+      <div class="buttons" *ngIf="appointment?.state !== 'Canceled'">
+        <button class="btn1" (click)="openPopup('edit')">Alterar Consulta</button>
+        <button class="btn1 btn-green" (click)="changeAppointmentScheduled()" *ngIf="appointment?.state !== 'Scheduled'">Aceitar Consulta</button>
+        <button class="btn1 btn-red" (click)="openPopup('remove')">Cancelar Consulta</button>
+      </div>
+      <div *ngIf="(appointment?.type === 'Presential' || appointment?.type === 'Home') && appointment?.state !== 'Canceled'"></div>
+      <button *ngIf="appointment?.type === 'Online' && appointment?.state !== 'Canceled'"
+              [routerLink]="['/chat']" [queryParams]="{ appointment: appointment?.id }" class="btn1">
+        Aceder ao chat
+      </button>
+      <figure id="chat-image" *ngIf="appointment?.type === 'Online' && appointment?.state !== 'Canceled'">
+        <img class="image" alt="Imagem de Perfil" src="/assets/images/Appointment/chat.png" />
+      </figure>
+      <div *ngIf="appointment?.type !== 'Online' && appointment?.state !== 'Canceled'" id="localizacao">
+        <h3>Localização</h3>
+        <div id="map"></div>
+        <p>Localização: {{ address }}</p>
+      </div>
+    </section>
 </main>
 
 
@@ -109,19 +118,19 @@
     </div>
   </form>
 
-  
-    <a class="close-button" (click)="closePopup()">
-      <img src="assets/images/login/close.png" alt="Close button" class="close-image">
-    </a>
 
-    <div id="tooltips" class="overlay-container-tool" (click)="stopPropagation($event)">
-      <h2>ToolTips</h2>
-      <div class="text-tool">
-        <div class="text-tool">{{ currentPhrase }}</div>
-      </div>
-      <button (click)="nextPhrase()" type="button" class="btn-tool">Continuar</button>
+  <a class="close-button" (click)="closePopup()">
+    <img src="assets/images/login/close.png" alt="Close button" class="close-image">
+  </a>
+
+  <div id="tooltips" class="overlay-container-tool" (click)="stopPropagation($event)">
+    <h2>ToolTips</h2>
+    <div class="text-tool">
+      <div class="text-tool">{{ currentPhrase }}</div>
     </div>
-  
+    <button (click)="nextPhrase()" type="button" class="btn-tool">Continuar</button>
+  </div>
+
 </div>
 
 <div *ngIf="errorMessages.length > 0">

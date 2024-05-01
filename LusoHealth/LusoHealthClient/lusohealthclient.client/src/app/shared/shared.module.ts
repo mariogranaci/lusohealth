@@ -9,6 +9,8 @@ import { LoadingSpinnerComponent } from './components/loading-spinner/loading-sp
 import { PopUpSuccessComponent } from './components/pop-up-success/pop-up-success.component';
 import { FirstWordPipe } from './pipes/first-word.pipe';
 import { LastWordPipe } from './pipes/last-word.pipe';
+import { IdadePipe } from './pipes/idade.pipe';
+import { TipoConsultaPipe } from './pipes/tipo-consulta.pipe';
 
 
 
@@ -19,7 +21,9 @@ import { LastWordPipe } from './pipes/last-word.pipe';
     LoadingSpinnerComponent,
     PopUpSuccessComponent,
     FirstWordPipe,
-    LastWordPipe
+    LastWordPipe,
+    IdadePipe,
+    TipoConsultaPipe
   ],
   imports: [
     CommonModule,
@@ -35,7 +39,9 @@ import { LastWordPipe } from './pipes/last-word.pipe';
     LoadingSpinnerComponent,
     PopUpSuccessComponent,
     FirstWordPipe,
-    LastWordPipe
+    LastWordPipe,
+    IdadePipe,
+    TipoConsultaPipe
   ]
 })
 export class SharedModule { }

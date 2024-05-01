@@ -8,6 +8,7 @@ main {
   margin-top: 45px;
   width: 45%;
   height: 100%;
+  position: relative;
 }
 
 #right-panel {
@@ -241,6 +242,13 @@ main {
 #no-professionals {
   text-align: center;
   font-weight: bold;
+}
+
+loading-spinner {
+  position: absolute;
+  top: 50%; /* Centraliza verticalmente */
+  left: 50%; /* Centraliza horizontalmente */
+  transform: translate(-50%, -50%); /* Corrige o deslocamento pela metade da largura e altura */
 }
 
 @media only screen and (max-width: 1200px) {

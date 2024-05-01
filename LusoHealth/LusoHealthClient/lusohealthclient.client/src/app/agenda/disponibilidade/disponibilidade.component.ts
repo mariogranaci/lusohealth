@@ -25,6 +25,8 @@ import { C } from '@fullcalendar/core/internal-common';
   styleUrl: './disponibilidade.component.css'
 })
 export class DisponibilidadeComponent {
+  loading = false;
+
   private unsubscribe$ = new Subject<void>();
   currentEvents: EventInput[] = [];
   errorMessages: string[] = [];
@@ -124,6 +126,7 @@ export class DisponibilidadeComponent {
    * Inicializa o formulário e obtém os slots de disponibilidade.
    */
   ngOnInit(): void {
+    this.loading = true;
     this.initializeForm();
     /*this.getSlots();
     this.getSpecialties();*/
@@ -250,7 +253,7 @@ export class DisponibilidadeComponent {
     return new Promise((resolve, reject) => {
       this.agendaService.getAllSlots().subscribe({
         next: (response: any) => {
-          
+          this.loading = false;
           resolve(response);
         },
         error: (error) => {
@@ -259,6 +262,7 @@ export class DisponibilidadeComponent {
           } else {
             this.errorMessages.push(error.error);
           }
+          this.loading = false;
           reject(error);
         }
       });

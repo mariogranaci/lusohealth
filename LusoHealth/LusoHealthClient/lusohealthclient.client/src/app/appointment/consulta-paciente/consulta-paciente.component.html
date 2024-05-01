@@ -3,18 +3,20 @@
   <h1>Consulta cancelada</h1>
 </div>
 
-<div class="title">
+<div class="title" *ngIf="appointment?.state !== 'Canceled'">
   <img id="question-btn" (click)="openPopup('tool')" src="assets/images/Agenda/question-mark.png" />
   <h1 *ngIf="service?.specialty && appointment?.state !== 'Canceled'">Consulta de {{ service?.specialty}}</h1>
 </div>
 
-<main>
-  
+<div id="loading-div" *ngIf="loading">
+  <loading-spinner></loading-spinner>
+</div>
+<main *ngIf="!loading">
   <div class="appointments">
     <div class="appointment">
       <div id="info">
         <div id="title-data-under">
-          <h3>Consulta {{appointment?.type}} </h3>
+          <h3 *ngIf="appointment?.type">Consulta {{appointment?.type | tipoConsulta}} </h3>
           <div class="text-appointment">Data e Hora: {{convertToDate()}} às {{convertToHours()}}</div>
           <div class="text-appointment" *ngIf="appointment?.address && appointment?.type !== 'Online'">Localização: {{appointment?.address}} </div>
         </div>
@@ -45,11 +47,14 @@
   </div>
 
   <section class="right-panel" *ngIf="appointment?.state !== 'Canceled'">
-    <button class="btn1" (click)="openPopup('remove')">Cancelar Consulta</button>
+    <button class="btn1 btn-red red-shadow" (click)="openPopup('remove')">Cancelar Consulta</button>
     <button *ngIf="appointment?.type === 'Online'"
             [routerLink]="['/chat']" [queryParams]="{ appointment: appointment?.id }" class="btn1">
       Aceder ao chat
     </button>
+    <figure id="chat-image" *ngIf="appointment?.type === 'Online' && appointment?.state !== 'Canceled'">
+      <img class="image" alt="Imagem de Perfil" src="/assets/images/Appointment/chat.png" />
+    </figure>
     <div *ngIf="appointment?.type !== 'Online' && appointment?.state !== 'Canceled'" id="localizacao">
       <h3>Localização</h3>
       <div id="map"></div>

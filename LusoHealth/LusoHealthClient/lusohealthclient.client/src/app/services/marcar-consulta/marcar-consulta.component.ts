@@ -183,7 +183,10 @@ export class MarcarConsultaComponent {
         null,                     // string | null for idPatient
         null,                     // number | null for id
         null,                     // string | null for idProfessional
-        parseInt(this.serviceId)  // number | null for idService
+        parseInt(this.serviceId), // number | null for idService
+        null,                     // Professional | null for Professional
+        null,                     // Patiente | null for Patiente
+        null,                     // Specialty | null for Service
       );
 
       this.service.addAppointment(newAppointment).subscribe({

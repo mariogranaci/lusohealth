@@ -49,34 +49,39 @@
         </div>
       </div>
     </section>
-    <section id="service-section" *ngIf="professionals.length > 0">
-      <div class="service-tab" *ngFor="let professional of filteredProfessionals" [routerLink]="['/professional-profile']" [queryParams]="{ id: professional.professionalInfo.id }">
-        <figure>
-          <img src="/assets/images/Perfil/profileImage.jpg" alt="Foto de Perfil" />
-        </figure>
-        <div class="service-info">
-          <div class="row">
-            <h3>{{ getProfessionalName(professional) }}</h3>
-            <div class="row center-height">
-              <img class="placeholder" src="/assets/images/Mapa/placeholder.png" alt="Localização" />
-              <p>{{ professional.concelho }}</p>
+    <div *ngIf="loading">
+      <loading-spinner></loading-spinner>
+    </div>
+    <div *ngIf="!loading">
+      <section id="service-section" *ngIf="professionals.length > 0">
+        <div class="service-tab" *ngFor="let professional of filteredProfessionals" [routerLink]="['/professional-profile']" [queryParams]="{ id: professional.professionalInfo.id }">
+          <figure>
+            <img src="/assets/images/Perfil/profileImage.jpg" alt="Foto de Perfil" />
+          </figure>
+          <div class="service-info">
+            <div class="row">
+              <h3>{{ professional.professionalInfo?.firstName | firstWord }} {{ professional.professionalInfo?.lastName | lastWord }}</h3>
+              <div class="row center-height">
+                <img class="placeholder" src="/assets/images/Mapa/placeholder.png" alt="Localização" />
+                <p>{{ professional.concelho }}</p>
+              </div>
             </div>
-          </div>
-          <div class="row center-height">
             <div class="row center-height">
-              <span class="small-right-margin">{{ (professional.reviews.length !== 0 && professional.averageStars) ? professional.averageStars.toFixed(1).replace('.', ',') : '-' }}</span>
-              <img src="assets/images/profile/star.png" alt="Estrela" class="star display-block" />
+              <div class="row center-height">
+                <span class="small-right-margin">{{ (professional.reviews.length !== 0 && professional.averageStars) ? professional.averageStars.toFixed(1).replace('.', ',') : '-' }}</span>
+                <img src="assets/images/profile/star.png" alt="Estrela" class="star display-block" />
+              </div>
+              <p>{{ getProfessionalCategory(professional) }}</p>
             </div>
-            <p>{{ getProfessionalCategory(professional) }}</p>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
     <section id="service-section" *ngIf="professionals.length === 0">
       <div id="no-professionals-div">
         <p id="no-professionals">Não existem profissionais neste local</p>
       </div>
     </section>
+    </div>
   </section>
   <section id="right-panel">
     <input id="pac-input" #searchBox class="controls" type="text" placeholder="Pesquise por localizações" />

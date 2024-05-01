@@ -70,6 +70,14 @@ main {
   display: none;
 }
 
+.close-button {
+  position: absolute;
+  top: 70px;
+  right: 60px;
+  cursor: pointer;
+  user-select: none;
+}
+
 .close-image {
   height: 50px;
 }
@@ -168,7 +176,6 @@ main {
 .chat-header {
     position: absolute;
     background-color: white;
-    z-index: 1;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     width: 51%;

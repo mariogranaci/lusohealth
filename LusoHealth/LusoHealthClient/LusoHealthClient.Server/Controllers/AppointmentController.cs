@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
+using System.Security.Claims;
 using System.Text;
 using static System.Reflection.Metadata.BlobBuilder;
 
@@ -22,27 +23,28 @@ namespace LusoHealthClient.Server.Controllers
     [Route("api/[controller]")]
     [ApiController]
 
-	/// <summary>
-	/// Controller responsável pela gestão de consultas (appointments).
-	/// </summary>
-	public class AppointmentController : ControllerBase
+    /// <summary>
+    /// Controller responsável pela gestão de consultas (appointments).
+    /// </summary>
+    public class AppointmentController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
         private EmailService _emailService;
-         
+        private readonly UserManager<User> _userManager;
 
-        public AppointmentController(ApplicationDbContext context, EmailService emailService)
+        public AppointmentController(ApplicationDbContext context, EmailService emailService, UserManager<User> userManager)
         {
             _context = context;
             _emailService = emailService;
+            _userManager = userManager;
         }
 
-		/// <summary>
-		/// Obtém as informações de uma consulta pelo ID.
-		/// </summary>
-		/// <param name="id">ID da consulta.</param>
-		/// <returns>As informações da consulta.</returns>
-		[HttpGet("get-appointment-info/{id}")]
+        /// <summary>
+        /// Obtém as informações de uma consulta pelo ID.
+        /// </summary>
+        /// <param name="id">ID da consulta.</param>
+        /// <returns>As informações da consulta.</returns>
+        [HttpGet("get-appointment-info/{id}")]
         public async Task<ActionResult<AppointmentDto>> GetAppointment(int id)
         {
             var info = await _context.Appointment.Include(a => a.Address)
@@ -91,12 +93,12 @@ namespace LusoHealthClient.Server.Controllers
             return appointmentDto;
         }
 
-		/// <summary>
-		/// Cancela uma consulta.
-		/// </summary>
-		/// <param name="model">As informações da consulta a ser cancelada.</param>
-		/// <returns>A consulta cancelada.</returns>
-		[HttpPatch("cancel-appointment")]
+        /// <summary>
+        /// Cancela uma consulta.
+        /// </summary>
+        /// <param name="model">As informações da consulta a ser cancelada.</param>
+        /// <returns>A consulta cancelada.</returns>
+        [HttpPatch("cancel-appointment")]
         public async Task<ActionResult<AppointmentDto>> CancelAppointment(AppointmentDto model)
         {
             if (model == null) return BadRequest("Não foi possível cancelar a consulta.");
@@ -137,76 +139,126 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-		/// <summary>
-		/// Termina uma consulta.
-		/// </summary>
-		/// <param name="model">As informações da consulta a ser terminada.</param>
-		/// <returns>A consulta terminada.</returns>
-		[HttpPatch("finish-appointment")]
+        /// <summary>
+        /// Termina uma consulta.
+        /// </summary>
+        /// <param name="model">As informações da consulta a ser terminada.</param>
+        /// <returns>A consulta terminada.</returns>
+        [HttpPatch("finish-appointment")]
         public async Task<ActionResult<AppointmentDto>> FinishAppointment(AppointmentDto model)
         {
-            if (model == null) return BadRequest("Não foi possível acabar a consulta.");
-            var appointment = await _context.Appointment.FindAsync(model.Id);
-
-            if (appointment == null)
-            {
-                return NotFound("Consulta não encontrada.");
-            }
+            if (model == null) return BadRequest("Não foi possível começar a consulta.");
 
             try
             {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(userId)) return BadRequest("Não foi possível encontrar o utilizador.");
+
+                var user = await _userManager.FindByIdAsync(userId);
+                if (user == null) return NotFound("Não foi possível encontrar o utilizador.");
+
+                var appointment = await _context.Appointment.FirstOrDefaultAsync(a => a.Id == model.Id);
+                if (appointment == null) return NotFound("Não foi possível encontrar a consulta.");
+
+                var isUserInAppointment = appointment.IdPatient == user.Id || appointment.IdProfesional == user.Id;
+                if (!isUserInAppointment) return BadRequest("Não tem permissão para aceder a esta consulta.");
+
+                var chat = await _context.Chat.FirstOrDefaultAsync(c => c.AppointmentId == model.Id);
+                if (chat == null) return NotFound("Não foi possível encontrar a conversa.");
+
                 appointment.State = AppointmentState.Done;
-                model.State = "Done";
+                chat.IsActive = false;
 
                 _context.Appointment.Update(appointment);
+                _context.Chat.Update(chat);
                 await _context.SaveChangesAsync();
 
-                return model;
+                var appointmentDto = new AppointmentDto
+                {
+                    Id = appointment.Id,
+                    Timestamp = appointment.Timestamp,
+                    Location = appointment.Address != null ? appointment.Address.Location : null,
+                    Address = appointment.Address != null ? appointment.Address.AddressName : null,
+                    Type = appointment.Type.ToString(),
+                    Description = appointment.Description,
+                    State = appointment.State.ToString(),
+                    Duration = appointment.Duration,
+                    IdPatient = appointment.IdPatient,
+                    IdProfessional = appointment.IdProfesional,
+                    IdService = appointment.IdService,
+                };
+
+                return Ok(appointmentDto);
             }
             catch (Exception)
             {
-                return BadRequest("Ocorreu um erro ao atualizar o estado da consulta.");
+                return BadRequest("Ocorreu um erro ao concluir a consulta.");
             }
         }
 
-		/// <summary>
-		/// Começa uma consulta.
-		/// </summary>
-		/// <param name="model">As informações da consulta a ser iniciada.</param>
-		/// <returns>A consulta iniciada.</returns>
-		[HttpPatch("begin-appointment")]
+        /// <summary>
+        /// Começa uma consulta.
+        /// </summary>
+        /// <param name="model">As informações da consulta a ser iniciada.</param>
+        /// <returns>A consulta iniciada.</returns>
+        [HttpPatch("begin-appointment")]
         public async Task<ActionResult<AppointmentDto>> BeginAppointment(AppointmentDto model)
         {
             if (model == null) return BadRequest("Não foi possível começar a consulta.");
-            var appointment = await _context.Appointment.FindAsync(model.Id);
-
-            if (appointment == null)
-            {
-                return NotFound("Consulta não encontrada.");
-            }
 
             try
             {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(userId)) return BadRequest("Não foi possível encontrar o utilizador.");
+
+                var user = await _userManager.FindByIdAsync(userId);
+                if (user == null) return NotFound("Não foi possível encontrar o utilizador.");
+
+                var appointment = await _context.Appointment.FirstOrDefaultAsync(a => a.Id == model.Id);
+                if (appointment == null) return NotFound("Não foi possível encontrar a consulta.");
+
+                var isUserInAppointment = appointment.IdPatient == user.Id || appointment.IdProfesional == user.Id;
+                if (!isUserInAppointment) return BadRequest("Não tem permissão para aceder a esta consulta.");
+
+                var chat = await _context.Chat.FirstOrDefaultAsync(c => c.AppointmentId == model.Id);
+                if (chat == null) return NotFound("Não foi possível encontrar a conversa.");
+
                 appointment.State = AppointmentState.InProgress;
-                model.State = "InProgress";
+                chat.IsActive = true;
 
                 _context.Appointment.Update(appointment);
+                _context.Chat.Update(chat);
                 await _context.SaveChangesAsync();
 
-                return model;
+                var appointmentDto = new AppointmentDto
+                {
+                    Id = appointment.Id,
+                    Timestamp = appointment.Timestamp,
+                    Location = appointment.Address != null ? appointment.Address.Location : null,
+                    Address = appointment.Address != null ? appointment.Address.AddressName : null,
+                    Type = appointment.Type.ToString(),
+                    Description = appointment.Description,
+                    State = appointment.State.ToString(),
+                    Duration = appointment.Duration,
+                    IdPatient = appointment.IdPatient,
+                    IdProfessional = appointment.IdProfesional,
+                    IdService = appointment.IdService,
+                };
+
+                return Ok(appointmentDto);
             }
             catch (Exception)
             {
-                return BadRequest("Ocorreu um erro ao atualizar o estado da consulta.");
+                return BadRequest("Ocorreu um erro ao começar a consulta.");
             }
         }
 
-		/// <summary>
-		/// Atualiza o estado de uma consulta para agendada.
-		/// </summary>
-		/// <param name="model">As informações da consulta a ser agendada.</param>
-		/// <returns>A consulta agendada.</returns>
-		[HttpPatch("schedule-appointment")]
+        /// <summary>
+        /// Atualiza o estado de uma consulta para agendada.
+        /// </summary>
+        /// <param name="model">As informações da consulta a ser agendada.</param>
+        /// <returns>A consulta agendada.</returns>
+        [HttpPatch("schedule-appointment")]
         public async Task<ActionResult<AppointmentDto>> AcceptAppointment(AppointmentDto model)
         {
             if (model == null) return BadRequest("Não foi possível atualizar o estado da consulta.");
@@ -233,12 +285,12 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-		/// <summary>
-		/// Altera a consulta para um novo slot de horário.
-		/// </summary>
-		/// <param name="model">As informações da consulta e do novo slot de horário.</param>
-		/// <returns>O novo slot de horário.</returns>
-		[HttpPatch("change-appointment")]
+        /// <summary>
+        /// Altera a consulta para um novo slot de horário.
+        /// </summary>
+        /// <param name="model">As informações da consulta e do novo slot de horário.</param>
+        /// <returns>O novo slot de horário.</returns>
+        [HttpPatch("change-appointment")]
         public async Task<ActionResult<AvailableSlot>> ChangeAppointment(AvailableSlotDto model)
         {
             if (model == null) return BadRequest("Consulta não encontrada.");
@@ -279,15 +331,29 @@ namespace LusoHealthClient.Server.Controllers
             }
         }
 
-		/// <summary>
-		/// Obtém os slots de horário disponíveis para um determinado serviço.
-		/// </summary>
-		/// <param name="serviceId">ID do serviço.</param>
-		/// <returns>Os slots de horário disponíveis.</returns>
-		[HttpGet("get-available-slots/{serviceId}")]
+        /// <summary>
+        /// Obtém os slots de horário disponíveis para um determinado serviço.
+        /// </summary>
+        /// <param name="serviceId">ID do serviço.</param>
+        /// <returns>Os slots de horário disponíveis.</returns>
+        [HttpGet("get-available-slots/{serviceId}")]
         public async Task<ActionResult<List<AvailableSlotDto>>> GetAvailableSlots(int serviceId)
         {
-            var slots = await _context.AvailableSlots.Where(x => x.IdService == serviceId && x.IsAvailable && x.Start > DateTime.UtcNow).ToListAsync();
+            TimeZoneInfo portugueseZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Lisbon");
+
+            var slots = await _context.AvailableSlots
+                .Where(x => x.IdService == serviceId && x.IsAvailable && x.Start > DateTime.UtcNow)
+                .Select(s => new
+                {
+                    s.Id,
+                    s.IdService,
+                    s.IsAvailable,
+                    s.SlotDuration,
+                    s.AppointmentType,
+                    s.AppointmentId,
+                    Start = TimeZoneInfo.ConvertTimeFromUtc(s.Start, portugueseZone),
+                })
+                .ToListAsync();
 
             if (slots == null) return BadRequest("Não foi possível encontrar os slots disponíveis.");
 

@@ -38,8 +38,6 @@ export class ChatComponent {
   professional: Professional | undefined;
   patient: UserProfile | undefined;
 
-  chatEnabled = false;
-
   //isSender = true;
 
   senderRole: string | undefined;
@@ -90,8 +88,18 @@ export class ChatComponent {
       this.getServiceInfo();
       this.getProfessional();
       this.getPatient();
-      this.getChatByAppointmentId();
-      this.chatEnabled = (this.appointment?.state != 'Done' && this.appointment?.state != 'Canceled');
+      this.getChatByAppointmentId().then((chat) => {
+
+        this.chat = chat;
+        console.log("Chat fetched successfully:", chat);
+        if (this.chat && this.chat.id)
+          this.loadMessages(this.chat.id);
+
+      }).catch((error) => {
+        console.error('Error fetching slots: ', error);
+      });
+      //this.chatEnabled = (this.appointment?.state != 'Done' && this.appointment?.state != 'Canceled');
+
       //this.chatService.startConnection("34");
       //this.startConnection();
       /*this.messages= [{
@@ -255,6 +263,15 @@ export class ChatComponent {
       next: (appointment: any) => {
         console.log("Appointment finished successfully:", appointment);
         this.appointment = appointment;
+
+        this.getChatByAppointmentId().then((chat) => {
+
+          this.chat = chat;
+          console.log("Chat fetched successfully:", chat);
+
+        }).catch((error) => {
+          console.error('Error fetching slots: ', error);
+        });
       },
       error: (error) => {
         console.log("Error finishing appointment:", error);
@@ -274,6 +291,16 @@ export class ChatComponent {
       next: (appointment: any) => {
         console.log("Appointment started successfully:", appointment);
         this.appointment = appointment;
+
+        this.getChatByAppointmentId().then((chat) => {
+
+          this.chat = chat;
+          console.log("Chat fetched successfully:", chat);
+
+        }).catch((error) => {
+          console.error('Error fetching slots: ', error);
+        });
+
       },
       error: (error) => {
         console.log("Error starting appointment:", error);
@@ -297,12 +324,12 @@ export class ChatComponent {
     return this.service?.professional;
   }
 
-  getChatByAppointmentId() {
-    this.chatService.getChatByAppointmentId(this.appointmentId).pipe(takeUntil(this.unsubscribe$)).subscribe({
+  getChatByAppointmentId(): Promise<any> {
+    /*this.chatService.getChatByAppointmentId(this.appointmentId).pipe(takeUntil(this.unsubscribe$)).subscribe({
       next: (chat) => {
         this.chat = chat;
         console.log("Chat fetched successfully:", chat);
-        if(this.chat && this.chat.id)
+        if (this.chat && this.chat.id)
           this.loadMessages(this.chat.id);
       },
       error: (error) => {
@@ -313,6 +340,23 @@ export class ChatComponent {
           this.errorMessages.push(error.error);
         }
       }
+    });*/
+
+    return new Promise<any>((resolve, reject) => {
+      this.chatService.getChatByAppointmentId(this.appointmentId).pipe(takeUntil(this.unsubscribe$)).subscribe({
+        next: (chat) => {
+          resolve(chat);
+        },
+        error: (error) => {
+          console.log(error);
+          if (error.error.errors) {
+            this.errorMessages = error.error.errors;
+          } else {
+            this.errorMessages.push(error.error);
+          }
+          reject(error);
+        }
+      });
     });
   }
 
@@ -359,13 +403,11 @@ export class ChatComponent {
   }
 
   endChat() {
-    this.chatEnabled = false;
     this.changeAppointmentDone();
     this.closePopup();
   }
 
   startChat() {
-    this.chatEnabled = true;
     this.changeAppointmentBegin();
 
     //this.startConnection();
@@ -373,31 +415,31 @@ export class ChatComponent {
 
   /*startConnection(): void {
     *//*this.connection.start().then(() => {
-  console.log("oi");
-  //this.hubConnection!.on('ReceiveMessage', this.)
-  console.log("Conexão");
+console.log("oi");
+//this.hubConnection!.on('ReceiveMessage', this.)
+console.log("Conexão");
 }).catch(err => console.error('Error while starting connection: ', err));*//*
-
-  this.connection.on("newMessage", (userId: string, message: string) => {
-    console.log("newMessage", userId, message);
-    this.messages.push({
-      id: 5,
-      userId: userId,
-      text: message,
-      isImage: false,
-      imageUrl: null,
-      timestamp: new Date('04/11/2024 19:50'),
-      chatId: 1
+  
+    this.connection.on("newMessage", (userId: string, message: string) => {
+      console.log("newMessage", userId, message);
+      this.messages.push({
+        id: 5,
+        userId: userId,
+        text: message,
+        isImage: false,
+        imageUrl: null,
+        timestamp: new Date('04/11/2024 19:50'),
+        chatId: 1
+      });
     });
-  });
-
-  this.connection.start();
-}
-
-sendMessage(): void {
-  this.connection.send("newMessage", this.userId, "Oi gato " + this.userId)
-    .then(() => { console.log("Mensagem enviada") })
-}*/
+  
+    this.connection.start();
+  }
+  
+  sendMessage(): void {
+    this.connection.send("newMessage", this.userId, "Oi gato " + this.userId)
+      .then(() => { console.log("Mensagem enviada") })
+  }*/
 
   loadMessages(chatId: number) {
     this.chatService.getMessages(chatId).pipe(takeUntil(this.unsubscribe$)).subscribe({
@@ -472,7 +514,7 @@ sendMessage(): void {
 .start()
 .then(() => console.log('Connection started'))
 .catch(err => console.log('Error while starting connection: ' + err));*//*
-  };*/
+    };*/
 
   /*sendMessage(): void {
     if (this.appointmentService.hubConnection.state === HubConnectionState.Connected) {

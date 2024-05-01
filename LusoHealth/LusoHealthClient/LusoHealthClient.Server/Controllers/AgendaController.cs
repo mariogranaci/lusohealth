@@ -11,7 +11,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Security.Claims;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace LusoHealthClient.Server.Controllers
 {
@@ -124,7 +126,7 @@ namespace LusoHealthClient.Server.Controllers
 
                     if (appointments == null || !appointments.Any()) { return NotFound("Não foi possível encontrar as marcações"); }
 
-                    return appointments;
+                    return Ok(appointments);
                 }
                 else
                 {
@@ -253,7 +255,8 @@ namespace LusoHealthClient.Server.Controllers
                     End = TimeZoneInfo.ConvertTimeFromUtc(s.Start.AddMinutes(s.SlotDuration), portugueseZone),
                     //Title = s.Service.Specialty.Name,
                     //create title that merges the specialty name and the appointment type
-                    Title = s.Service.Specialty.Name + " - " + s.AppointmentType.ToString()
+                    Title = s.Service.Specialty.Name + " - " + s.AppointmentType.ToString(),
+                    IsAppointment = false,
                 })
                 .ToListAsync();
 
@@ -277,6 +280,47 @@ namespace LusoHealthClient.Server.Controllers
                     return "Presencial";
                 default:
                     return "Online";
+            }
+        }
+
+        [HttpGet("get-next-appointments-calendar")]
+        public async Task<ActionResult<List<Appointment>>> GetNextAppointmentsCalendar()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
+
+            var user = await _userManager.FindByIdAsync(userIdClaim);
+            if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
+
+            TimeZoneInfo portugueseZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Lisbon");
+
+            try
+            {
+                var appointments = _context.Appointment.Include(a => a.Patient).ThenInclude(b => b.User)
+                        .Where(p => p.IdProfesional == user.Id && p.Timestamp > DateTime.UtcNow && p.State == AppointmentState.Scheduled)
+                        .Select(a => new
+                        {
+                            a.Id,
+                            a.IdService,
+                            a.State,
+                            a.Timestamp,
+                            a.Duration,
+                            a.IdProfesional,
+                            a.IdPatient,
+                            a.AddressId,
+                            Start = TimeZoneInfo.ConvertTimeFromUtc(a.Timestamp, portugueseZone),
+                            End = TimeZoneInfo.ConvertTimeFromUtc(a.Timestamp.AddMinutes(a.Duration.Value), portugueseZone),
+                            Title = "Consulta de " + a.Service.Specialty.Name + " - " + a.Type.ToString(),
+                            IsAppointment = true,
+                        })
+                        .OrderBy(p => p.Timestamp)
+                        .ToList();
+
+                return Ok(appointments);
+            }
+            catch (Exception)
+            {
+                return BadRequest("Não foi possível encontrar as consultas. Tente novamente.");
             }
         }
 

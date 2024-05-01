@@ -151,8 +151,11 @@ export class MarcarConsultaComponent {
         return;
       }
 
+      const startDate = new Date(slot.start);
+
+
       const newAppointment = new Appointment(
-        slot.start,               // Date | null for timestamp
+        startDate,               // Date | null for timestamp
         location,                 // string | null for location
         address,                  // string | null for address
         slot.appointmentType,     // string | null for type

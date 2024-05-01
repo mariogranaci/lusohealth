@@ -136,4 +136,9 @@ export class AgendaService {
     return this.http.get<any>(`${environment.appUrl}/api/agenda/get-all-slots`, { headers });
   }
 
+  getAllScheduledAppointments(): Observable<any> {
+    const headers = this.getHeaders();
+    return this.http.get<any>(`${environment.appUrl}/api/agenda/get-next-appointments-calendar`, { headers });
+  }
+
 }

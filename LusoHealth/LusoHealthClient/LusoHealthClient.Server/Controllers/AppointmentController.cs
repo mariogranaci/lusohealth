@@ -387,7 +387,7 @@ namespace LusoHealthClient.Server.Controllers
         public async Task<ActionResult<AvailableSlotDto>> GetAppointmentSugestion(int serviceId)
         {
             DateTime currentDate = DateTime.Now.Date;
-            DateTime endDate = currentDate.AddDays(7).Date; // End date is one week from today
+            DateTime endDate = currentDate.AddDays(30).Date; // End date is one week from today
 
             var appointmentCounts = await _context.AvailableSlots
                 .Where(x => x.IdService == serviceId && x.Start > currentDate && x.Start < endDate && !x.IsAvailable) // Filter appointments for the next week

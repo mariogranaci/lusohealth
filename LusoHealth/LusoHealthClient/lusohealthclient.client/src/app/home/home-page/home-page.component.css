@@ -239,6 +239,10 @@ h1 {
     margin-bottom: 2px;
   }
 
+#loading-div {
+  height: calc(100vh - 65px);
+}
+
 loading-spinner {
   position: absolute;
   top: 50%; /* Centraliza verticalmente */

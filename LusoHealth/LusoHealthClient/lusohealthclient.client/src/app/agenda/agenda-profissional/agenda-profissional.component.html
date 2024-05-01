@@ -1,7 +1,7 @@
 
 <main>
   <img id="question-btn" (click)="openPopupToolTip('tool')" src="assets/images/Agenda/question-mark.png" />
-  <div *ngIf="loading">
+  <div id="loading-div" *ngIf="loading">
     <loading-spinner></loading-spinner>
   </div>
   <div *ngIf="!loading">
@@ -9,7 +9,7 @@
       <h1>Próximas Consultas</h1>
       <button class="btn" id="disponibility" [routerLink]="['/availability']">Ver Disponibilidade</button>
     </div>
-
+  </div>
 
 
 

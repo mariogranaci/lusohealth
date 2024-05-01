@@ -17,15 +17,15 @@
 
   <div>
     <h3>Consulta de {{especialidade}} - {{categoria}} </h3>
-    <div class="appointement">
+    <div class="appointement" *ngIf="isSuggestionLoaded">
       <div id="title-data">
         <div><h3 id="">Sugestão de Marcação</h3></div>
-        <div class="text-appointement">4 janeiro 2024 </div>
+        <div class="text-appointement">{{convertToDate(suggestedAppointment.start)}} </div>
       </div>
       <div id="name-button">
-        <div class="hours"><b>18:00</b></div>
-        <div class="type-appointment">Presencial</div>
-        <button class="btn-edit">Marcar</button>
+        <div class="hours"><b>{{convertToHours(suggestedAppointment.start)}}</b></div>
+        <div class="type-appointment">{{getAppointmentTypeByNumber(suggestedAppointment.appointmentType)}}</div>
+        <div class="price">{{suggestionPrice}}€</div>
       </div>
     </div>
   </div>
@@ -48,6 +48,7 @@
               <div class="data-slots">{{convertToDate(slot.start)}} </div>
             </div>
             <div class="right center-height">
+              <div class="price">{{slot.price}}€</div>
               <div class="type-appointment">{{getAppointmentType(slot.appointmentType)}}</div>
               <div *ngIf="slot.id">
                 <button *ngIf="slot.appointmentType !== 'Home'" class="btn-edit" (click)="marcarClick(slot.id, null, null)">Marcar</button>

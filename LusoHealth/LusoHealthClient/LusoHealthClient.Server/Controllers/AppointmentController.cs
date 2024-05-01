@@ -11,7 +11,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 using System.Text;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace LusoHealthClient.Server.Controllers
 {
@@ -285,6 +287,41 @@ namespace LusoHealthClient.Server.Controllers
             return availableSlots;
         }
 
+        /// <summary>
+		/// Obtém uma sugestão de consulta com base na disponibilidade do profissional.
+		/// </summary>
+		/// <param name="professionalId">ID do profissional.</param>
+		/// <returns>Os slots de horário disponíveis.</returns>
+		[HttpGet("get-appointment-sugestion/{serviceId}")]
+        public async Task<ActionResult<AvailableSlot>> GetAppointmentSugestion(int serviceId)
+        {
+            DateTime currentDate = DateTime.Now.Date;
+            DateTime endDate = currentDate.AddDays(7).Date; // End date is one week from today
+
+            var appointmentCounts = await _context.AvailableSlots
+                .Where(x => x.IdService == serviceId && x.Start > currentDate && x.Start < endDate && !x.IsAvailable) // Filter appointments for the next week
+                .GroupBy(x => x.Start)
+                .Select(g => new
+                {
+                    Date = g.Key,
+                    Count = g.Count()
+                })
+                .OrderByDescending(x => x.Count)
+                .ToListAsync();
+
+            if (appointmentCounts == null) return BadRequest("Não foi possível encontrar os slots disponíveis.");
+
+            DateTime suggestedDate = appointmentCounts.FirstOrDefault()?.Date ?? currentDate.Date;
+
+            var suggestedAppointment = await _context.AvailableSlots
+                .Where(x => x.IdService == serviceId &&
+                            x.Start > suggestedDate &&
+                            x.IsAvailable)
+                .OrderBy(x => x.Start).ToListAsync();
+
+            return suggestedAppointment.FirstOrDefault();
+        }
+        
         private async Task<bool> SendAppointmentChangedEmail(User patient, User professional, AvailableSlot availableSlot)
         {
             var body = $"Olá {patient.FirstName + " " + patient.LastName}, <br/>" +

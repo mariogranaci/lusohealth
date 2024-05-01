@@ -34,7 +34,7 @@ export class MarcarConsultaComponent {
   displayedAvailabity: boolean = false;
   selectedDate: Date = new Date();
   selectedOption: string = "";
-  slots: AvailableSlot[] = [];
+  slots: any[] = [];
 
   addressForm: FormGroup = new FormGroup({});
   zoom = 20;
@@ -46,6 +46,9 @@ export class MarcarConsultaComponent {
   hasStreetNumber = false;
   address: string | undefined;
   appointmentId: number | undefined;
+  suggestedAppointment: any;
+  suggestionPrice: number = 0;
+  isSuggestionLoaded: boolean = false;
 
   constructor(private authenticationService: AuthenticationService,
     private profileService: ProfileService,
@@ -84,6 +87,8 @@ export class MarcarConsultaComponent {
     });
     this.getServiceId().then(() => {
       this.getServiceInfo();
+      this.getAppointmentSugestion();
+      
     });
   }
 
@@ -129,7 +134,7 @@ export class MarcarConsultaComponent {
           this.categoria = this.serviceInfo.category;
           this.especialidade = this.serviceInfo.specialty;
         }
-        console.log(serviceInfo);
+
       },
       error => {
         console.error(error);
@@ -221,7 +226,6 @@ export class MarcarConsultaComponent {
       this.selectedOption = selectedOption.target.value;
     }
 
-    console.log("here", this.selectedOption);
     this.getAvailability();
   }
 
@@ -252,17 +256,39 @@ export class MarcarConsultaComponent {
           idService: s.idService,
           isAvailable: s.isAvailable,
           slotDuration: s.slotDuration,
+          price: this.serviceInfo ? s.slotDuration * this.serviceInfo.pricePerHour / 60 : 0,
           start: s.start
         }));
 
-        console.log(this.slots, typeof this.slots.length);
+        console.log("Slots: ", this.slots);
+
       },
       error => {
-        console.error('Erro: ', error);
+        console.error('Error: ', error);
       }
     );
 
   }
+
+  /**
+   * Obtém a sugestão de consulta.
+   */
+  getAppointmentSugestion() {
+    this.service.getAppointmentSugestion(parseInt(this.serviceId)).subscribe(
+      response => {
+        this.suggestedAppointment = response;
+        this.suggestionPrice = this.serviceInfo ? this.suggestedAppointment.slotDuration * this.serviceInfo.pricePerHour / 60 : 0;
+
+        this.isSuggestionLoaded = true;
+      },
+      error => {
+        console.error('Erro: ', error);
+      }
+
+    );
+
+  }
+
 
   /**
   * Converte uma data para uma string formatada.
@@ -308,20 +334,37 @@ export class MarcarConsultaComponent {
   }
 
   /**
-   * Obtém o tipo de consulta.
+   * Obtém o tipo de consulta através de uma String.
    */
   getAppointmentType(type: string | undefined): string {
     switch (type) {
       case "Presential":
         return 'Presencial';
-      case "Online":
+      case "Online" :
         return 'Online';
-      case "Home":
+      case "Home" :
         return 'Domiciliária';
       default:
         return '';
     }
   }
+
+  /**
+   * Obtém a disponibilidade através de um Number.
+   */
+  getAppointmentTypeByNumber(type: number | undefined): string {
+    switch (type) {
+      case 0:
+        return 'Presencial';
+      case 1:
+        return 'Online';
+      case 2:
+        return 'Domiciliária';
+      default:
+        return '';
+    }
+  }
+
 
   submitAddress() {
     this.errorMessages = [];

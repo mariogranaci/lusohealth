@@ -78,6 +78,7 @@ select-dropdown,
   background-color: #fff;
   border-radius: 7px;
   box-shadow: 0 12px 6px -4px rgba(0, 0, 0, 0.21);
+  justify-content: space-between;
 }
 
 #title-data {
@@ -92,7 +93,7 @@ select-dropdown,
   width: 60%;
   display:flex;
   flex-direction:row;
-  justify-content:space-between;
+  justify-content: space-between;
 }
 
 .calender-slots {

@@ -1,7 +1,7 @@
 
 <main>
   <img id="question-btn" (click)="openPopupToolTip('tool')" src="assets/images/Agenda/question-mark.png" />
-  <div *ngIf="loading">
+  <div id="loading-div" *ngIf="loading">
     <loading-spinner></loading-spinner>
   </div>
   <div *ngIf="!loading">
@@ -9,7 +9,7 @@
       <h1>Próximas Consultas</h1>
       <button class="btn" id="disponibility" [routerLink]="['/availability']">Ver Disponibilidade</button>
     </div>
-
+  </div>
 
 
 
@@ -72,20 +72,6 @@
       </div>
     </div>
 
-    <div class="overlay" id="overlay" (click)="closePopup()">
-      <a class="close-button" (click)="closePopup()">
-        <img src="assets/images/login/close.png" alt="Close button" class="close-image">
-      </a>
-
-      <div id="tooltips" class="overlay-container-tool" (click)="stopPropagation($event)">
-        <h2>ToolTips</h2>
-        <div class="text-tool">
-          <div class="text-tool">{{ currentPhrase }}</div>
-        </div>
-        <button (click)="nextPhrase()" type="button" class="btn-tool">Continuar</button>
-      </div>
-    </div>
-  </div>
 </main>
 
 <div class="overlay" id="overlay" (click)="closePopup()">

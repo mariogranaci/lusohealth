@@ -417,10 +417,11 @@ namespace LusoHealthClient.Server.Controllers
                 return BadRequest("Não foi possível encontrar um slot disponível.");
             } else
             {
+                TimeZoneInfo portugueseZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Lisbon");
                 AvailableSlotDto suggestedSlot = new AvailableSlotDto
                 {
                     Id = suggested.Id,
-                    Start = suggested.Start,
+                    Start = TimeZoneInfo.ConvertTimeFromUtc(suggested.Start, portugueseZone),
                     SlotDuration = suggested.SlotDuration,
                     IdService = suggested.IdService,
                     AppointmentType = suggested.AppointmentType.ToString(),

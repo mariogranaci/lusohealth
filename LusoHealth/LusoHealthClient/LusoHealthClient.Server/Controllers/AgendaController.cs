@@ -42,7 +42,7 @@ namespace LusoHealthClient.Server.Controllers
         /// Obtém as marcações anteriores do paciente.
         /// </summary>
         [HttpGet("get-previous-appointments")]
-        public async Task<ActionResult<List<Appointment>>> GetPreviousAppointments()
+        public async Task<ActionResult<List<AppointmentDto>>> GetPreviousAppointments()
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
@@ -58,6 +58,31 @@ namespace LusoHealthClient.Server.Controllers
                     var appointments = _context.Appointment
                     .Where(p => p.IdPatient == user.Id && p.Timestamp < currentTime)
                     .OrderByDescending(p => p.Timestamp)
+                    .Select(ap => new AppointmentDto
+                    {
+                        Id = ap.Id,
+                        Timestamp = ap.Timestamp,
+                        Location = null,
+                        Address = null,
+                        Type = ap.Type.ToString(),
+                        Description = ap.Description,
+                        State = ap.State.ToString(),
+                        Duration = ap.Duration,
+                        IdPatient = ap.IdPatient,
+                        IdProfessional = ap.IdProfesional,
+                        IdService = ap.IdService,
+                        Professional = new ProfessionalDto
+                        {
+                            ProfessionalInfo = new UserProfileDto
+                            {
+                                Id = ap.Professional.User.Id,
+                                FirstName = ap.Professional.User.FirstName,
+                                LastName = ap.Professional.User.LastName,
+                                Email = ap.Professional.User.Email,
+                            }
+                        },
+                        Speciality = ap.Service.Specialty.Name
+                    })
                     .ToList();
 
                     if (appointments == null || !appointments.Any()) { return NotFound("Não foi possível encontrar as marcações"); }
@@ -70,6 +95,32 @@ namespace LusoHealthClient.Server.Controllers
                     var appointments = _context.Appointment
                     .Where(p => p.IdProfesional == user.Id && p.Timestamp < currentTime)
                     .OrderByDescending(p => p.Timestamp)
+                    .Select(ap => new AppointmentDto
+                    {
+                        Id = ap.Id,
+                        Timestamp = ap.Timestamp,
+                        Location = null,
+                        Address = null,
+                        Type = ap.Type.ToString(),
+                        Description = ap.Description,
+                        State = ap.State.ToString(),
+                        Duration = ap.Duration,
+                        IdPatient = ap.IdPatient,
+                        IdProfessional = ap.IdProfesional,
+                        IdService = ap.IdService,
+                        Patient = new PatientDto
+                        {
+                            UserId = ap.Patient.User.Id,
+                            User = new UserProfileDto
+                            {
+                                Id = ap.Patient.User.Id,
+                                FirstName = ap.Patient.User.FirstName,
+                                LastName = ap.Patient.User.LastName,
+                                Email = ap.Patient.User.Email,
+                            }
+                        },
+                        Speciality = ap.Service.Specialty.Name
+                    })
                     .ToList();
 
                     if (appointments == null || !appointments.Any()) { return NotFound("Não foi possível encontrar as marcações"); }

@@ -16,7 +16,7 @@
         </figure>
       </div>
       <ul id="myUL">
-        <li class="option" *ngFor="let specialty of searchResults" (click)="selectSpecialty(specialty)">
+        <li class="option" *ngFor="let specialty of searchResults">
           <a [routerLink]="['/services']"
              [queryParams]="{categoryId: specialty.professionalTypeId, specialty: specialty.name }">
             <p>{{ specialty.name }}</p>

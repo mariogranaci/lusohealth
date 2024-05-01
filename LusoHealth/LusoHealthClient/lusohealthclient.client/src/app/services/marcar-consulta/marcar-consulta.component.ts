@@ -45,8 +45,8 @@ export class MarcarConsultaComponent {
   isInPortugal = false;
   hasStreetNumber = false;
   address: string | undefined;
-  appointmentId: number | undefined;
-  suggestedAppointment: any;
+  slot: AvailableSlot | undefined;
+  suggestedAppointment: AvailableSlot | undefined;
   suggestionPrice: number = 0;
   isSuggestionLoaded: boolean = false;
 
@@ -153,10 +153,8 @@ export class MarcarConsultaComponent {
   /**
    * Manipula o clique no botão de marcar consulta.
    */
-  marcarClick(appointmentId: number, location: string | null, address: string | null) {
+  marcarClick(slot: AvailableSlot | undefined, location: string | null, address: string | null) {
     if (this.serviceInfo) {
-      console.log('slots', this.slots, 'appointment ID', appointmentId);
-      const slot = this.slots.find((s: AvailableSlot) => s.id === appointmentId);
       if (!slot || slot.start === undefined || slot.appointmentType === undefined || slot.slotDuration === undefined) {
         // Handle the case where the slot is not found or start is undefined
         this.errorMessages.push("Algo correu mal.");
@@ -248,7 +246,7 @@ export class MarcarConsultaComponent {
    */
   getAvailability() {
     this.service.getAvailableSlots(parseInt(this.serviceId)).subscribe(
-      response => {
+      (response: AvailableSlot[]) => {
         this.slots = response.filter((s: any) => {
           const slotDate = new Date(s.start);
 
@@ -289,13 +287,17 @@ export class MarcarConsultaComponent {
    */
   getAppointmentSugestion() {
     this.service.getAppointmentSugestion(parseInt(this.serviceId)).subscribe(
-      response => {
+      (response: AvailableSlot) => {
+
         this.suggestedAppointment = response;
-        this.suggestionPrice = this.serviceInfo ? this.suggestedAppointment.slotDuration * this.serviceInfo.pricePerHour / 60 : 0;
+        if (this.suggestedAppointment && this.suggestedAppointment.slotDuration && this.suggestedAppointment.start) {
+          this.suggestionPrice = this.serviceInfo ? this.suggestedAppointment.slotDuration * this.serviceInfo.pricePerHour / 60 : 0;
 
-        this.isSuggestionLoaded = true;
+          this.isSuggestionLoaded = true;
 
-        this.selectedDate = new Date(this.suggestedAppointment.start);
+          this.selectedDate = new Date(this.suggestedAppointment.start);
+        }
+
         console.log('selectedDate Sugestion', this.selectedDate);
         this.getAvailability();
       },
@@ -403,9 +405,9 @@ export class MarcarConsultaComponent {
         address: this.address,
       } as Location;
 
-      console.log('appointmentId', this.appointmentId);
-      if (location && this.address && this.appointmentId) {
-        this.marcarClick(this.appointmentId, location, this.address);
+      console.log('appointmentId', this.slot);
+      if (location && this.address && this.slot) {
+        this.marcarClick(this.slot, location, this.address);
         this.closePopup();
       }
     }
@@ -520,8 +522,8 @@ export class MarcarConsultaComponent {
   }
 
 
-  openPopupAndDefineAppointmentId(opcao: string, appointmentId: number) {
-    this.appointmentId = appointmentId;
+  openPopupAndDefineAppointmentId(opcao: string, slot: AvailableSlot | undefined) {
+    this.slot = slot;
     this.openPopup(opcao);
   }
 

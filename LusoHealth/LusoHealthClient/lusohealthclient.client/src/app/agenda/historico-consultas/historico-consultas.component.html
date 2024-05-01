@@ -45,7 +45,8 @@
           </div>
           <div id="name-button">
             <div class="hours"><b>{{ convertToHours(appointment.timestamp) }}</b></div>
-            <div class="name" id="name-title">{{ getProfessionalNameById(appointment.idService) }}</div>
+            <div class="name" id="name-title" *ngIf="role === 'Professional'">{{appointment.patient?.user?.firstName | firstWord}} {{appointment.patient?.user?.lastName | lastWord}}</div>
+            <div class="name" id="name-title" *ngIf="role === 'Patient'">{{appointment.professional?.professionalInfo?.firstName | firstWord}} {{appointment.professional?.professionalInfo?.lastName | lastWord}}</div>
             <div class="type-appointment">{{ getAppointmentType(appointment.type) }}</div>
           </div>
         </div>

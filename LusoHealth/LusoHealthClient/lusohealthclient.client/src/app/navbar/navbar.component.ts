@@ -10,7 +10,6 @@ import { jwtDecode } from 'jwt-decode';
 })
 export class NavbarComponent implements OnInit, OnDestroy {
   userRole: string | undefined;
-  // Inicialização explícita para satisfazer o TypeScript
   userSub: Subscription = new Subscription();
 
   constructor(public authenticationService: AuthenticationService) { }

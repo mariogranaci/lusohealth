@@ -89,7 +89,6 @@ export class MarcacoesComponent {
     ).subscribe({
       next: (services: any) => {
         this.services = services;
-        console.log(this.selectedCategory, this.selectedSpecialty, this.searchTerm, this.selectedType, this.currentPage, this.itemsPerPage, services);
         this.hasMorePages = services.length === this.itemsPerPage;
         this.updatePageButtons();
       },

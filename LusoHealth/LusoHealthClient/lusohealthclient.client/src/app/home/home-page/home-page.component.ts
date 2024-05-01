@@ -57,7 +57,6 @@ export class HomePageComponent {
           resolve();
         },
         error: (error) => {
-          console.log(error);
           if (error.error.errors) {
             this.errorMessages = error.error.errors;
           } else {
@@ -83,7 +82,6 @@ export class HomePageComponent {
           resolve();
         },
         error: (error) => {
-          console.log(error);
           if (error.error.errors) {
             this.errorMessages = error.error.errors;
           } else {
@@ -97,7 +95,6 @@ export class HomePageComponent {
 
   getServicesByProfessionalType(professionalTypeId: number): BestServices[] {
     const services = this.services.filter(service => service.professionalTypeId === professionalTypeId);
-    console.log('filtered services', services);
     return services;
   }
 
@@ -149,7 +146,6 @@ export class HomePageComponent {
           resolve();
         },
         error: (error) => {
-          console.log(error);
           if (error.error.errors) {
             this.errorMessages = error.error.errors;
           } else {
@@ -196,13 +192,5 @@ export class HomePageComponent {
    */
   removeAccents(str: string): string {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-  }
-
-  /**
-  * Seleciona uma especialidade para exibir detalhes ou agendar.
-  * @param specialty A especialidade selecionada.
-  */
-  selectSpecialty(specialty: Specialty) {
-    console.log("Selected specialty:", specialty.name);
   }
 }

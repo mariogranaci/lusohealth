@@ -94,7 +94,7 @@ export class ChatComponent {
         console.log("Chat fetched successfully:", chat);
         if (this.chat && this.chat.id)
           this.loadMessages(this.chat.id);
-          
+
       }).catch((error) => {
         console.error('Error fetching slots: ', error);
       });
@@ -151,9 +151,15 @@ export class ChatComponent {
       //this.startConnection();
       this.chatService.startConnection().then(() => {
         this.chatService.joinChat(this.generateGroupName()).then(() => {
+
           this.chatService.receiveMessage().subscribe(message => {
             this.messages.push(message);
           });
+
+          this.chatService.receiveChatUpdate().subscribe(chat => {
+            this.chat = chat;
+          });
+
         });
       });
     });
@@ -269,6 +275,12 @@ export class ChatComponent {
           this.chat = chat;
           console.log("Chat fetched successfully:", chat);
 
+          if (this.chat && this.chat.id) {
+            this.chatService.sendChatUpdate(this.generateGroupName(), this.chat.id).then(() => {
+              console.log("Chat updated successfully");
+            });
+          }
+
         }).catch((error) => {
           console.error('Error fetching slots: ', error);
         });
@@ -296,6 +308,12 @@ export class ChatComponent {
 
           this.chat = chat;
           console.log("Chat fetched successfully:", chat);
+
+          if (this.chat && this.chat.id) {
+            this.chatService.sendChatUpdate(this.generateGroupName(), this.chat.id).then(() => {
+              console.log("Chat updated successfully");
+            });
+          }
 
         }).catch((error) => {
           console.error('Error fetching slots: ', error);
@@ -419,27 +437,27 @@ console.log("oi");
 //this.hubConnection!.on('ReceiveMessage', this.)
 console.log("Conexão");
 }).catch(err => console.error('Error while starting connection: ', err));*//*
-  
-    this.connection.on("newMessage", (userId: string, message: string) => {
-      console.log("newMessage", userId, message);
-      this.messages.push({
-        id: 5,
-        userId: userId,
-        text: message,
-        isImage: false,
-        imageUrl: null,
-        timestamp: new Date('04/11/2024 19:50'),
-        chatId: 1
+    
+      this.connection.on("newMessage", (userId: string, message: string) => {
+        console.log("newMessage", userId, message);
+        this.messages.push({
+          id: 5,
+          userId: userId,
+          text: message,
+          isImage: false,
+          imageUrl: null,
+          timestamp: new Date('04/11/2024 19:50'),
+          chatId: 1
+        });
       });
-    });
-  
-    this.connection.start();
-  }
-  
-  sendMessage(): void {
-    this.connection.send("newMessage", this.userId, "Oi gato " + this.userId)
-      .then(() => { console.log("Mensagem enviada") })
-  }*/
+    
+      this.connection.start();
+    }
+    
+    sendMessage(): void {
+      this.connection.send("newMessage", this.userId, "Oi gato " + this.userId)
+        .then(() => { console.log("Mensagem enviada") })
+    }*/
 
   loadMessages(chatId: number) {
     this.chatService.getMessages(chatId).pipe(takeUntil(this.unsubscribe$)).subscribe({
@@ -514,7 +532,7 @@ console.log("Conexão");
 .start()
 .then(() => console.log('Connection started'))
 .catch(err => console.log('Error while starting connection: ' + err));*//*
-    };*/
+      };*/
 
   /*sendMessage(): void {
     if (this.appointmentService.hubConnection.state === HubConnectionState.Connected) {

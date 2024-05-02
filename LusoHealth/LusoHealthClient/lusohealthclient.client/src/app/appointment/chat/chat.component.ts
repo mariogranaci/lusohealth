@@ -13,8 +13,6 @@ import { ChatService } from '../chat.service';
 import { Message } from '../../shared/models/chat/message';
 import { User } from '../../shared/models/authentication/user';
 import { AuthenticationService } from '../../authentication/authentication.service';
-import * as signalR from '@microsoft/signalr';
-import { environment } from '../../../environments/environment.development';
 import { Chat } from '../../shared/models/chat/chat';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -134,26 +132,8 @@ export class ChatComponent {
         timestamp: new Date('04/11/2024 18:52'),
         chatId: 1
       },
-      {
-        id: 4,
-        userId: "5",
-        text: "Olá sou o paciente",
-        isImage: false,
-        imageUrl: null,
-        timestamp: new Date('04/11/2024 18:53'),
-        chatId: 1
-      },
       ];*/
-      /*this.chatService.startConnection().then(() => {
-        console.log("oi start");
-        this.chatService.receiveMessage((message) => {
-          this.messages.push(message);
-          console.log("oi envio");
-        });
-        // Assuming you have a method to get the current chat ID
-        this.chatService.joinChat(34);
-      });*/
-      //this.startConnection();
+
       this.chatService.startConnection().then(() => {
         this.chatService.joinChat(this.generateGroupName()).then(() => {
 
@@ -345,22 +325,6 @@ export class ChatComponent {
   }
 
   getChatByAppointmentId(): Promise<any> {
-    /*this.chatService.getChatByAppointmentId(this.appointmentId).pipe(takeUntil(this.unsubscribe$)).subscribe({
-      next: (chat) => {
-        this.chat = chat;
-        console.log("Chat fetched successfully:", chat);
-        if (this.chat && this.chat.id)
-          this.loadMessages(this.chat.id);
-      },
-      error: (error) => {
-        console.log(error);
-        if (error.error.errors) {
-          this.errorMessages = error.error.errors;
-        } else {
-          this.errorMessages.push(error.error);
-        }
-      }
-    });*/
 
     return new Promise<any>((resolve, reject) => {
       this.chatService.getChatByAppointmentId(this.appointmentId).pipe(takeUntil(this.unsubscribe$)).subscribe({
@@ -433,34 +397,6 @@ export class ChatComponent {
     //this.startConnection();
   }
 
-  /*startConnection(): void {
-    *//*this.connection.start().then(() => {
-console.log("oi");
-//this.hubConnection!.on('ReceiveMessage', this.)
-console.log("Conexão");
-}).catch(err => console.error('Error while starting connection: ', err));*//*
-    
-      this.connection.on("newMessage", (userId: string, message: string) => {
-        console.log("newMessage", userId, message);
-        this.messages.push({
-          id: 5,
-          userId: userId,
-          text: message,
-          isImage: false,
-          imageUrl: null,
-          timestamp: new Date('04/11/2024 19:50'),
-          chatId: 1
-        });
-      });
-    
-      this.connection.start();
-    }
-    
-    sendMessage(): void {
-      this.connection.send("newMessage", this.userId, "Oi gato " + this.userId)
-        .then(() => { console.log("Mensagem enviada") })
-    }*/
-
   loadMessages(chatId: number) {
     this.chatService.getMessages(chatId).pipe(takeUntil(this.unsubscribe$)).subscribe({
       next: (messages) => {
@@ -486,63 +422,5 @@ console.log("Conexão");
     // Assuming you have appointmentId or a combination of patientId and professionalId to form a unique group name
     return `chat-${this.appointmentId}`;
   }
-
-  /*convertToPortugalTime(date: Date): string {
-    // Convert the date object to a moment object and then to the Lisbon timezone
-    const lisbonTime = moment(date).tz('Europe/Lisbon'); // 'Europe/Lisbon' is the timezone identifier for 'Lisbon
-
-    // Format the time as a string. You can change the format to whatever you need.
-    return lisbonTime.format('YYYY-MM-DD HH:mm:ss');
-  }*/
-
-  /*private handleIncomingMessage = (message: string): void => {
-    this.messages.push(message);
-    console.log(message);
-    // ... (any additional logic to handle incoming messages)
-  };*/
-
-  /*sendMessage() {
-    if (this.messageContent) {
-      this.chatService.sendMessage(1, "34", "oi", false, '')
-        .then(() => { this.messageContent = ''; console.log("oi gato"); })  // Clear the input after sending
-        .catch(error => console.error("Error sending message:", error));
-    }
-  }*/
-
-  /*private startConnection(): void {
-    this.appointmentService.startConnection().then(() => {
-      console.log('SignalR connection established');
-      // Now that the connection is established, set up the listener
-      this.appointmentService.receiveMessage(this.handleIncomingMessage);
-    }).catch((error) => {
-      console.error('SignalR connection failed to start:', error);
-    });
-  }*/
-
-  /*startConnection(): void {
-
-    let isDisconnected = this.hubConnection?.state === 'Disconnected';
-
-    if (this.hubConnection && !isDisconnected) {
-      return;
-    }
-
-    const isDevelopment = window.loca
-
-
-    *//*return this.hubConnection
-.start()
-.then(() => console.log('Connection started'))
-.catch(err => console.log('Error while starting connection: ' + err));*//*
-      };*/
-
-  /*sendMessage(): void {
-    if (this.appointmentService.hubConnection.state === HubConnectionState.Connected) {
-      //this.chatService.sendMessage(this.chatId, this.messageContent);
-      this.messageContent = ''; // Clear the message input after sending
-    } else {
-      console.warn('Cannot send a message when the connection is not in the "Connected" state.');
-    }
-  }*/
 
 }

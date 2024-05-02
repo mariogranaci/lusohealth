@@ -88,6 +88,18 @@ export class ChatService {
     });
   }
 
+  sendChatUpdate(groupId: string, chatId: number): Promise<void> {
+    return this.hubConnection.invoke('SendChatUpdate', groupId, chatId);
+  }
+
+  receiveChatUpdate(): Observable<any> {
+    return new Observable(observer => {
+      this.hubConnection.on('ReceiveChatUpdate', (data) => {
+        observer.next(data);
+      });
+    });
+  }
+
   getMessages(chatId: number): Observable<Message[]> {
     const headers = this.getHeaders();
     return this.http.get<Message[]>(`${environment.appUrl}/api/chat/get-messages/${chatId}`, { headers });

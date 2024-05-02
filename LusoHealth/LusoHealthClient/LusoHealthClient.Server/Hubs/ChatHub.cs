@@ -2,6 +2,7 @@
 using LusoHealthClient.Server.DTOs.Chat;
 using LusoHealthClient.Server.Models.Chat;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 
 namespace LusoHealthClient.Server.Hubs
 {
@@ -59,6 +60,25 @@ namespace LusoHealthClient.Server.Hubs
             TimeZoneInfo portugalTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Lisbon");
             DateTime portugalDateTime = TimeZoneInfo.ConvertTimeFromUtc(utcDateTime, portugalTimeZone);
             return portugalDateTime;
+        }
+
+        public async Task SendChatUpdate(string groupName, int chatId)
+        {
+            var chat = await _context.Chat.FirstOrDefaultAsync(c => c.Id == chatId);
+
+            if (chat == null)
+            {
+                return;
+            }
+
+            var chatDto = new ChatDto
+            {
+                Id = chat.Id,
+                AppointmentId = chat.AppointmentId,
+                IsActive = chat.IsActive,
+            };
+
+            await Clients.Group(groupName).SendAsync("ReceiveChatUpdate", chatDto);
         }
     }
 }

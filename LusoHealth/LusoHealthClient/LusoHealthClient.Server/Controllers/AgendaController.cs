@@ -100,6 +100,8 @@ namespace LusoHealthClient.Server.Controllers
             var user = await _userManager.FindByIdAsync(userIdClaim);
             if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
 
+            TimeZoneInfo portugueseZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Lisbon");
+
             try
             {
                 if (User.IsInRole("Patient"))
@@ -111,12 +113,12 @@ namespace LusoHealthClient.Server.Controllers
                         .ThenInclude(b => b.User)
                         .Include(a => a.Patient)
                         .ThenInclude(b => b.User)
-                        .Where(p => p.IdPatient == user.Id && p.Timestamp > currentTime && p.State == AppointmentState.Scheduled)
+                        .Where(p => p.IdPatient == user.Id && p.Timestamp > currentTime && (p.State == AppointmentState.Scheduled || p.State == AppointmentState.InProgress))
                         .OrderBy(p => p.Timestamp)
                         .Select(ap => new AppointmentDto
                         {
                             Id = ap.Id,
-                            Timestamp = ap.Timestamp,
+                            Timestamp = TimeZoneInfo.ConvertTimeFromUtc(ap.Timestamp, portugueseZone),
                             Location = null,
                             Address = null,
                             Type = ap.Type.ToString(),
@@ -155,12 +157,12 @@ namespace LusoHealthClient.Server.Controllers
                         .ThenInclude(b => b.User)
                         .Include(a => a.Patient)
                         .ThenInclude(b => b.User)
-                        .Where(p => p.IdProfesional == user.Id && p.Timestamp > currentTime && p.State == AppointmentState.Scheduled)
+                        .Where(p => p.IdProfesional == user.Id && p.Timestamp > currentTime && (p.State == AppointmentState.Scheduled || p.State == AppointmentState.InProgress))
                         .OrderBy(p => p.Timestamp)
                         .Select(ap => new AppointmentDto
                         {
                             Id = ap.Id,
-                            Timestamp = ap.Timestamp,
+                            Timestamp = TimeZoneInfo.ConvertTimeFromUtc(ap.Timestamp, portugueseZone),
                             Location = null,
                             Address = null,
                             Type = ap.Type.ToString(),
@@ -216,6 +218,8 @@ namespace LusoHealthClient.Server.Controllers
             var user = await _userManager.FindByIdAsync(userIdClaim);
             if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
 
+            TimeZoneInfo portugueseZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Lisbon");
+
             try
             {
                 if (User.IsInRole("Professional"))
@@ -227,7 +231,7 @@ namespace LusoHealthClient.Server.Controllers
                         .Select(ap => new AppointmentDto
                         {
                             Id = ap.Id,
-                            Timestamp = ap.Timestamp,
+                            Timestamp = TimeZoneInfo.ConvertTimeFromUtc(ap.Timestamp, portugueseZone),
                             Location = null,
                             Address = null,
                             Type = ap.Type.ToString(),
@@ -384,7 +388,8 @@ namespace LusoHealthClient.Server.Controllers
             try
             {
                 var appointments = _context.Appointment.Include(a => a.Patient).ThenInclude(b => b.User)
-                        .Where(p => p.IdProfesional == user.Id && p.Timestamp > DateTime.UtcNow && p.State == AppointmentState.Scheduled)
+                        .Where(p => p.IdProfesional == user.Id && p.Timestamp > DateTime.UtcNow && (p.State == AppointmentState.Scheduled || 
+                        p.State == AppointmentState.InProgress || p.State == AppointmentState.Done))
                         .Select(a => new
                         {
                             a.Id,

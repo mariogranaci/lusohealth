@@ -47,7 +47,7 @@
 
     <div class="right">
 
-      <div class="chat">
+      <div class="chat" [class.chat-border-radius-bottom]="!chat.isActive">
 
         <div class="chat-header">
         </div>
@@ -85,7 +85,7 @@
 
 
       </div>
-      <form [formGroup]="sendMessageForm" id="messageDiv" autocomplete="off" (ngSubmit)="sendMessage()">
+      <form [formGroup]="sendMessageForm" id="messageDiv" autocomplete="off" (ngSubmit)="sendMessage()" *ngIf="chat.isActive">
         <button class="send-button message-icon-left">
           <figure class="">
             <img src="assets/images/Chat/image-icon.png" alt="Butão de submissão de imagens">

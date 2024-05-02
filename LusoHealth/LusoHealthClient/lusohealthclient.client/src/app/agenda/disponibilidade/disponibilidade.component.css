@@ -1,7 +1,8 @@
 main {
   width: 100%;
+  margin: 0 auto;
   min-height: calc(100vh - 65px);
-  position:relative;
+  position: relative;
 }
 
   main > div {

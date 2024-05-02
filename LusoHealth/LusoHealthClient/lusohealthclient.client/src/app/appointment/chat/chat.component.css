@@ -1,5 +1,6 @@
 main {
   position: relative;
+  margin: 0 auto;
   padding: 0 7%;
   min-width: 1150px;
   max-width: 1800px;
@@ -180,6 +181,11 @@ main {
     border-top-right-radius: 10px;
     width: 51%;
     height: 10px;
+}
+
+.chat-border-radius-bottom {
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
 }
 
 .container {

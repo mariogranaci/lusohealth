@@ -59,7 +59,7 @@ export class ChatService {
 
   constructor(private http: HttpClient, private router: Router) {
     this.hubConnection = new HubConnectionBuilder()
-      .withUrl("http://localhost:5184/chathub")
+      .withUrl(environment.appUrl + "/chathub")
       .withAutomaticReconnect()
       .build();
   }

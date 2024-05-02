@@ -64,21 +64,34 @@ namespace LusoHealthClient.Server.Hubs
 
         public async Task SendChatUpdate(string groupName, int chatId)
         {
-            var chat = await _context.Chat.FirstOrDefaultAsync(c => c.Id == chatId);
-
-            if (chat == null)
+            try
             {
-                return;
+                var chat = await _context.Chat.FirstOrDefaultAsync(c => c.Id == chatId);
+
+                if (chat == null)
+                {
+                    return;
+                }
+
+                chat.IsActive = !chat.IsActive;
+
+                _context.Chat.Update(chat);
+                await _context.SaveChangesAsync();
+
+                var chatDto = new ChatDto
+                {
+                    Id = chat.Id,
+                    AppointmentId = chat.AppointmentId,
+                    IsActive = chat.IsActive,
+                };
+
+                await Clients.Group(groupName).SendAsync("ReceiveChatUpdate", chatDto);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
             }
 
-            var chatDto = new ChatDto
-            {
-                Id = chat.Id,
-                AppointmentId = chat.AppointmentId,
-                IsActive = chat.IsActive,
-            };
-
-            await Clients.Group(groupName).SendAsync("ReceiveChatUpdate", chatDto);
         }
     }
 }

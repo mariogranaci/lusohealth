@@ -31,12 +31,11 @@
         <div class="text-appointment">Género:  {{patient?.genero === 'F' ? 'Feminino' : 'Masculino'}}</div>
       </div>
 
-
-      <section *ngIf="chat && chat.isActive == false && (senderRole === 'Professional')">
+      <section *ngIf="chat && chat.isActive == false && (senderRole === 'Professional') && appointment && appointment.state != 'Done' ">
         <button class="btn btn-blue" (click)="startChat()">Iniciar Conversa</button>
       </section>
 
-      <section *ngIf="chat && chat.isActive && (senderRole === 'Professional')">
+      <section *ngIf="chat && chat.isActive && (senderRole === 'Professional') && appointment && appointment.state != 'Done' ">
         <button class="btn btn-red" (click)="openPopup('remove')">Terminar Conversa</button>
       </section>
 
@@ -47,7 +46,7 @@
 
     <div class="right">
 
-      <div class="chat" [class.chat-border-radius-bottom]="!chat.isActive">
+      <div class="chat" [class.chat-border-radius-bottom]="chat && !chat.isActive">
 
         <div class="chat-header">
         </div>
@@ -85,7 +84,7 @@
 
 
       </div>
-      <form [formGroup]="sendMessageForm" id="messageDiv" autocomplete="off" (ngSubmit)="sendMessage()" *ngIf="chat.isActive">
+      <form [formGroup]="sendMessageForm" id="messageDiv" autocomplete="off" (ngSubmit)="sendMessage()" *ngIf="chat && chat.isActive">
         <button class="send-button message-icon-left">
           <figure class="">
             <img src="assets/images/Chat/image-icon.png" alt="Butão de submissão de imagens">

@@ -85,6 +85,11 @@ export class ChatComponent {
   ngOnInit() {
     this.initializeForm();
     this.getAppointmentInfo().then(() => {
+
+      if (this.appointment?.state == 'Canceled') {
+        this.router.navigateByUrl('/error');
+      }
+
       this.getServiceInfo();
       this.getProfessional();
       this.getPatient();
@@ -187,6 +192,7 @@ export class ChatComponent {
       ).subscribe({
         next: (appointment: any) => {
           this.appointment = appointment;
+          console.log("Appointment fetched successfully:", appointment);
           resolve();
         },
         error: (error) => {
@@ -275,12 +281,6 @@ export class ChatComponent {
           this.chat = chat;
           console.log("Chat fetched successfully:", chat);
 
-          if (this.chat && this.chat.id) {
-            this.chatService.sendChatUpdate(this.generateGroupName(), this.chat.id).then(() => {
-              console.log("Chat updated successfully");
-            });
-          }
-
         }).catch((error) => {
           console.error('Error fetching slots: ', error);
         });
@@ -309,12 +309,6 @@ export class ChatComponent {
           this.chat = chat;
           console.log("Chat fetched successfully:", chat);
 
-          if (this.chat && this.chat.id) {
-            this.chatService.sendChatUpdate(this.generateGroupName(), this.chat.id).then(() => {
-              console.log("Chat updated successfully");
-            });
-          }
-
         }).catch((error) => {
           console.error('Error fetching slots: ', error);
         });
@@ -329,6 +323,14 @@ export class ChatComponent {
         }
       }
     });
+  }
+
+  changeStatusOfChat() {
+    if (this.chat && this.chat.id) {
+      this.chatService.sendChatUpdate(this.generateGroupName(), this.chat.id).then(() => {
+        console.log("Chat updated successfully");
+      });
+    }
   }
 
   getProfessionalNameById(): string {
@@ -421,12 +423,12 @@ export class ChatComponent {
   }
 
   endChat() {
-    this.changeAppointmentDone();
+    this.changeStatusOfChat();
     this.closePopup();
   }
 
   startChat() {
-    this.changeAppointmentBegin();
+    this.changeStatusOfChat();
 
     //this.startConnection();
   }

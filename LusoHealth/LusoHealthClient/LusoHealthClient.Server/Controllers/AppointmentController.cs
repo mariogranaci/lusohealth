@@ -56,9 +56,11 @@ namespace LusoHealthClient.Server.Controllers
 
             if (info == null) return BadRequest("Não foi possível encontrar a informação da consulta.");
 
+            TimeZoneInfo portugueseZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Lisbon");
+
             AppointmentDto appointmentDto = new AppointmentDto
             {
-                Timestamp = info.Timestamp,
+                Timestamp = TimeZoneInfo.ConvertTimeFromUtc(info.Timestamp, portugueseZone),
                 Location = info.Address != null ? info.Address.Location : null,
                 Address = info.Address != null ? info.Address.AddressName : null,
                 Type = info.Type.ToString(),

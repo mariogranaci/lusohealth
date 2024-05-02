@@ -403,12 +403,30 @@ export class DisponibilidadeComponent {
       next: () => {
         this.submittedAddSlots = false;
         this.closePopup();
+
         this.getSlots().then((response) => {
-          this.calendarOptions.events = response;
-          console.log(this.calendarOptions.events);
+
+          console.log(response);
+
+          this.getNextAppointments().then((appointments) => {
+
+            console.log(appointments);
+
+            this.calendarOptions.events = response.concat(appointments);
+
+            console.log(this.calendarOptions.events);
+
+          }).catch((error) => {
+            // Handle errors if needed
+            console.error('Error fetching appointments: ', error);
+          });
+
+          this.getSpecialties();
         }).catch((error) => {
+          // Handle errors if needed
           console.error('Error fetching slots: ', error);
         });
+
         this.addSlotsForm.reset();
         this.addSlotsForm.setValue(this.formValues);
       },
@@ -474,7 +492,6 @@ export class DisponibilidadeComponent {
 
         this.getSlots().then((response) => {
 
-          this.calendarOptions.events = response;
           console.log(response);
 
           this.getNextAppointments().then((appointments) => {

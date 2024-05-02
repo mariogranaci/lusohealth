@@ -95,6 +95,7 @@ export class AppointmentService {
    */
   beginAppointment(model: Appointment | undefined) {
     const headers = this.getHeaders();
+    console.log("Oi gato ", model);
     return this.http.patch<Appointment>(`${environment.appUrl}/api/appointment/begin-appointment`, model, { headers });
   }
 

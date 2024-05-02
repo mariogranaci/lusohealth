@@ -1,12 +1,11 @@
 main {
   padding: 0 7%;
-  /*margin: 50px 0 10px 0;*/
+  margin: 0 auto;
   min-width: 1150px;
   max-width: 1800px;
   display: flex;
   min-height: calc(100vh - 164px);
   justify-content: space-between;
- 
 }
 
 #question-btn {
@@ -19,7 +18,7 @@ main {
 }
 
 .title {
-  margin: 25px auto;
+  margin: 25px auto 50px auto;
   font-size: 20px;
   text-align: center;
   position: relative;
@@ -304,12 +303,11 @@ box-shadow: 0 12px 6px -4px rgba(0, 0, 0, 0.21);
   margin-top: 30px;
   display: flex;
   justify-content: center;
-  height: 300px;
 }
 
   #chat-image img {
-    width: 100%;
-    height: fit-content;
+    width: 80%;
+    height: 90%;
   }
 
 #loading-div {

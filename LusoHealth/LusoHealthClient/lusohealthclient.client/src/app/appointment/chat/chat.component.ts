@@ -94,7 +94,7 @@ export class ChatComponent {
         console.log("Chat fetched successfully:", chat);
         if (this.chat && this.chat.id)
           this.loadMessages(this.chat.id);
-
+          
       }).catch((error) => {
         console.error('Error fetching slots: ', error);
       });

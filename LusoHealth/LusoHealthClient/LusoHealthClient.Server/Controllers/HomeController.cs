@@ -100,6 +100,10 @@ namespace LusoHealthClient.Server.Controllers
 
                     if (info == null) return BadRequest("Não foi possível encontrar a informação do serviço.");
 
+                    var specialty = await _context.Specialties.FirstOrDefaultAsync(x => x.Id == info.IdSpecialty);
+                    if (specialty == null) return NotFound("Não foi possível encontrar a especialidade.");
+                    specialty.TimesScheduled++;
+
                     if (appointmentDto.Timestamp < DateTime.Now) return BadRequest("Não é possível marcar uma consulta para uma data passada.");
 
                     if (!appointmentDto.Timestamp.HasValue)

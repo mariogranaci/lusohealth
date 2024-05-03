@@ -10,6 +10,8 @@ Chart.register(...registerables);
 export class BarChartComponent {
   @Input() data: any;
   @Input() dataType: string = 'Patients';
+  @Input() dateType: string = 'Year';
+
   chart: any;
 
   constructor() { }
@@ -25,17 +27,27 @@ export class BarChartComponent {
     this.RenderChart();
   }
 
+  setSelectedDateOption(option: string) {
+    this.dateType = option;
+    console.log(this.dataType);
+
+    this.chart.destroy();
+    this.RenderChart();
+    
+  }
+
   RenderChart() {
     var data = this.dataType === 'Client' ? this.data.patients : this.data.professionals;
     console.log(data);
     const label = this.dataType === 'Client' ? 'Clientes' : 'Profissionais';
+    const unit = this.dateType === 'Year' ? 'ano' : this.dateType === 'Month' ? 'mês' : 'dia';
 
     this.chart = new Chart("bar-chart", {
       type: 'bar',
       data: {
-        labels: data.map((y: { year: any; }) => y.year),
+        labels: data.map((y: { key: any; }) => y.key),
         datasets: [{
-          label: `Número de ${this.dataType === 'Client' ? 'clientes' : 'profissionais'} registados por ano`,
+          label: `Número de ${label} registados por ${unit}`,
           data: data.map((c: { count: any; }) => c.count),
           backgroundColor: 'rgba(54, 162, 235, 0.2)',
           borderColor: 'rgba(54, 162, 235, 1)',

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, Subscription, takeUntil } from 'rxjs';
 import { ProfessionalType } from '../../shared/models/authentication/professionalType';
 import { Specialty } from '../../shared/models/profile/specialty';
 import { ServicesService } from '../../services/services.service';
@@ -7,6 +7,8 @@ import { AgendaService } from '../agenda.service';
 import { Appointment } from '../../shared/models/servic/appointment';
 import { Service } from '../../shared/models/servic/service';
 import { Professional } from '../../shared/models/profile/professional';
+import { AuthenticationService } from '../../authentication/authentication.service';
+import { jwtDecode } from 'jwt-decode';
 
 /**
  * Componente responsável por exibir o histórico de consultas do usuário.
@@ -33,17 +35,35 @@ export class HistoricoConsultasComponent {
   displayedAppointments: Appointment[] = [];
   initialAppointmentCount = 3;
 
-  constructor(public servicesService: ServicesService, public agendaService: AgendaService) { }
+  loading = false;
+
+  role: string | undefined;
+  userSub: Subscription = new Subscription();
+
+  constructor(private servicesService: ServicesService, private agendaService: AgendaService, private authService: AuthenticationService) {}
 
   /**
    * Método executado ao inicializar o componente.
    */
   ngOnInit() {
+    this.loading = true;
+    this.userSub = this.authService.user$.subscribe(user => {
+      if (user) {
+        // Se houver um usuário, decodifique o token JWT e atualize a role
+        const decodedToken = jwtDecode(user.jwt) as any;
+        this.role = decodedToken.role;
+      } else {
+        // Se o usuário for `null` (logout), limpe a role
+        this.role = undefined;
+      }
+    });
     this.getServices().then(() => {
       this.getProfessionalTypes();
       this.getSpecialties();
       this.getPreviousAppointments();
+      this.loading = false;
     });
+    console.log(this.role);
   }
 
   /**
@@ -83,6 +103,7 @@ export class HistoricoConsultasComponent {
       takeUntil(this.unsubscribe$)
     ).subscribe({
       next: (appointments: Appointment[]) => {
+
         this.appointments = appointments;
         this.appointmentsFiltered = appointments;
         this.updateDisplayedAppointments();
@@ -346,6 +367,7 @@ export class HistoricoConsultasComponent {
  */
   updateDisplayedAppointments() {
     this.displayedAppointments = this.appointmentsFiltered.slice(0, this.initialAppointmentCount);
+    console.log(this.displayedAppointments);
   }
 
   /**

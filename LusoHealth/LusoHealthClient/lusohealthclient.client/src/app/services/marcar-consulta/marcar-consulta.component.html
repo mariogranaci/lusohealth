@@ -1,10 +1,10 @@
 <main>
+  <img id="question-btn" (click)="openPopup('tool')" src="assets/images/Agenda/question-mark.png" />
   <div class="title">
     <h1>Marcar Consulta</h1>
-    <figure><img id="img-perfil" src="/assets/images/Perfil/profileImage.jpg" /></figure>
-    <div class="name" id="name-title"></div>
+    <figure><img id="img-perfil" src="/assets/images/Perfil/profileImage.jpg" [routerLink]="['/professional-profile']" [queryParams]="{ id: serviceInfo?.professionalId }" /></figure>
+    <div class="name" id="name-title" [routerLink]="['/professional-profile']" [queryParams]="{ id: serviceInfo?.professionalId }"></div>
   </div>
-
   <div class="select-dropdown">
     <select [(ngModel)]="selectedOption" (change)="onOptionSelectionChange($event)">
       <option disabled hidden value="">Tipo de Consulta</option>
@@ -17,15 +17,17 @@
 
   <div>
     <h3>Consulta de {{especialidade}} - {{categoria}} </h3>
-    <div class="appointement">
+    <div class="appointement" *ngIf="isSuggestionLoaded">
       <div id="title-data">
         <div><h3 id="">Sugestão de Marcação</h3></div>
-        <div class="text-appointement">4 janeiro 2024 </div>
+        <div class="text-appointement">{{convertToDate(suggestedAppointment?.start)}} </div>
       </div>
       <div id="name-button">
-        <div class="hours"><b>18:00</b></div>
-        <div class="type-appointment">Presencial</div>
-        <button class="btn-edit">Marcar</button>
+        <div class="hours"><b>{{convertToHours(suggestedAppointment?.start)}}</b></div>
+        <div class="type-appointment">{{suggestedAppointment?.appointmentType | tipoConsulta}}</div>
+        <div class="price">{{suggestionPrice  | number: '1.2-2' }}€</div>
+        <button *ngIf="suggestedAppointment?.appointmentType !== 'Home'" class="btn-edit" (click)="marcarClick(suggestedAppointment, null, null)">Marcar</button>
+        <button *ngIf="suggestedAppointment?.appointmentType === 'Home'" class="btn-edit" (click)="openPopupAndDefineAppointmentId('address', suggestedAppointment)">Marcar</button>
       </div>
     </div>
   </div>
@@ -48,10 +50,11 @@
               <div class="data-slots">{{convertToDate(slot.start)}} </div>
             </div>
             <div class="right center-height">
+              <div class="price">{{slot.price | number: '1.2-2' }}€</div>
               <div class="type-appointment">{{getAppointmentType(slot.appointmentType)}}</div>
               <div *ngIf="slot.id">
-                <button *ngIf="slot.appointmentType !== 'Home'" class="btn-edit" (click)="marcarClick(slot.id, null, null)">Marcar</button>
-                <button *ngIf="slot.appointmentType === 'Home'" class="btn-edit" (click)="openPopupAndDefineAppointmentId('address', slot.id)">Marcar</button>
+                <button *ngIf="slot.appointmentType !== 'Home'" class="btn-edit" (click)="marcarClick(slot, null, null)">Marcar</button>
+                <button *ngIf="slot.appointmentType === 'Home'" class="btn-edit" (click)="openPopupAndDefineAppointmentId('address', slot)">Marcar</button>
               </div>
             </div>
           </div>
@@ -82,6 +85,14 @@
         <button class="btn btn-blue" (click)="submitAddress()">Salvar Endereço</button>
       </section>
     </form>
+
+    <div id="tooltips" class="overlay-container-tool" (click)="stopPropagation($event)">
+      <h2>ToolTips</h2>
+      <div class="text-tool">
+        <div class="text-tool">{{ currentPhrase }}</div>
+      </div>
+      <button (click)="nextPhrase()" type="button" class="btn-tool">Continuar</button>
+    </div>
   </div>
   <div *ngIf="errorMessages.length > 0">
     <app-validation-messages [errorMessages]="errorMessages"></app-validation-messages>

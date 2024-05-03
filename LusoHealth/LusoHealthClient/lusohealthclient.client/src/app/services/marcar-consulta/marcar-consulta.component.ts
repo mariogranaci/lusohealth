@@ -34,7 +34,7 @@ export class MarcarConsultaComponent {
   displayedAvailabity: boolean = false;
   selectedDate: Date = new Date();
   selectedOption: string = "";
-  slots: AvailableSlot[] = [];
+  slots: any[] = [];
 
   addressForm: FormGroup = new FormGroup({});
   zoom = 20;
@@ -45,7 +45,18 @@ export class MarcarConsultaComponent {
   isInPortugal = false;
   hasStreetNumber = false;
   address: string | undefined;
-  appointmentId: number | undefined;
+  slot: AvailableSlot | undefined;
+  suggestedAppointment: AvailableSlot | undefined;
+  suggestionPrice: number = 0;
+  isSuggestionLoaded: boolean = false;
+
+  phrases: string[] = [
+    "A sugestão de consulta é dada com base na disponibilidade do profissional, de forma a garantir uma melhor alocação das vagas.",
+    "Para procurar por um Tipo de Consulta específico, aceda à opção 'Tipo de Consulta' e selecione o tipo pretendido, seja Online, Presencial ou Domicílio.",
+    "Se pretender escolher a data da consulta, clique na opção 'Quero marcar para outra data', e será fornecido um calendário, onde após selecionada a data, serão apresentadas as disponibilidades para a mesma."
+  ];
+  currentPhraseIndex: number = 0;
+  currentPhrase: string = this.phrases[0];
 
   constructor(private authenticationService: AuthenticationService,
     private profileService: ProfileService,
@@ -84,6 +95,7 @@ export class MarcarConsultaComponent {
     });
     this.getServiceId().then(() => {
       this.getServiceInfo();
+      this.getAppointmentSugestion();
     });
   }
 
@@ -129,7 +141,7 @@ export class MarcarConsultaComponent {
           this.categoria = this.serviceInfo.category;
           this.especialidade = this.serviceInfo.specialty;
         }
-        console.log(serviceInfo);
+
       },
       error => {
         console.error(error);
@@ -141,18 +153,19 @@ export class MarcarConsultaComponent {
   /**
    * Manipula o clique no botão de marcar consulta.
    */
-  marcarClick(appointmentId: number, location: string | null, address: string | null) {
+  marcarClick(slot: AvailableSlot | undefined, location: string | null, address: string | null) {
     if (this.serviceInfo) {
-
-      const slot = this.slots.find((s: AvailableSlot) => s.id === appointmentId);
       if (!slot || slot.start === undefined || slot.appointmentType === undefined || slot.slotDuration === undefined) {
         // Handle the case where the slot is not found or start is undefined
         this.errorMessages.push("Algo correu mal.");
         return;
       }
 
+      const startDate = new Date(slot.start);
+
+
       const newAppointment = new Appointment(
-        slot.start,               // Date | null for timestamp
+        startDate,               // Date | null for timestamp
         location,                 // string | null for location
         address,                  // string | null for address
         slot.appointmentType,     // string | null for type
@@ -162,7 +175,10 @@ export class MarcarConsultaComponent {
         null,                     // string | null for idPatient
         null,                     // number | null for id
         null,                     // string | null for idProfessional
-        parseInt(this.serviceId)  // number | null for idService
+        parseInt(this.serviceId), // number | null for idService
+        null,                     // Professional | null for Professional
+        null,                     // Patiente | null for Patiente
+        null,                     // Specialty | null for Service
       );
 
       this.service.addAppointment(newAppointment).subscribe({
@@ -208,7 +224,8 @@ export class MarcarConsultaComponent {
   * Manipula a mudança de data.
   */
   handleDateChange(selectedDate: Date): void {
-    this.selectedDate = selectedDate;;
+    this.selectedDate = selectedDate;
+    console.log('selectedDate calendar', selectedDate);
 
     this.getAvailability();
   }
@@ -221,7 +238,6 @@ export class MarcarConsultaComponent {
       this.selectedOption = selectedOption.target.value;
     }
 
-    console.log("here", this.selectedOption);
     this.getAvailability();
   }
 
@@ -230,16 +246,16 @@ export class MarcarConsultaComponent {
    */
   getAvailability() {
     this.service.getAvailableSlots(parseInt(this.serviceId)).subscribe(
-      response => {
+      (response: AvailableSlot[]) => {
         this.slots = response.filter((s: any) => {
           const slotDate = new Date(s.start);
 
           if (s.appointmentType === this.selectedOption || !this.selectedOption) {
+            console.log('selected option: ', this.selectedOption);
             if (slotDate.toDateString() === this.selectedDate.toDateString()) {
               const slotTime = slotDate.getTime();
               const selectedTime = this.selectedDate.getTime();
-              return slotTime > selectedTime;
-
+              return slotTime >= selectedTime;
             } else {
               return false;
             }
@@ -252,17 +268,47 @@ export class MarcarConsultaComponent {
           idService: s.idService,
           isAvailable: s.isAvailable,
           slotDuration: s.slotDuration,
+          price: this.serviceInfo ? s.slotDuration * this.serviceInfo.pricePerHour / 60 : 0,
           start: s.start
         }));
 
-        console.log(this.slots, typeof this.slots.length);
+        console.log("Slots: ", this.slots);
+
       },
       error => {
-        console.error('Erro: ', error);
+        console.error('Error: ', error);
       }
     );
 
   }
+
+  /**
+   * Obtém a sugestão de consulta.
+   */
+  getAppointmentSugestion() {
+    this.service.getAppointmentSugestion(parseInt(this.serviceId)).subscribe(
+      (response: AvailableSlot) => {
+
+        this.suggestedAppointment = response;
+        if (this.suggestedAppointment && this.suggestedAppointment.slotDuration && this.suggestedAppointment.start) {
+          this.suggestionPrice = this.serviceInfo ? this.suggestedAppointment.slotDuration * this.serviceInfo.pricePerHour / 60 : 0;
+
+          this.isSuggestionLoaded = true;
+
+          this.selectedDate = new Date(this.suggestedAppointment.start);
+        }
+
+        console.log('selectedDate Sugestion', this.selectedDate);
+        this.getAvailability();
+      },
+      error => {
+        console.error('Erro: ', error);
+      }
+
+    );
+
+  }
+
 
   /**
   * Converte uma data para uma string formatada.
@@ -308,20 +354,37 @@ export class MarcarConsultaComponent {
   }
 
   /**
-   * Obtém o tipo de consulta.
+   * Obtém o tipo de consulta através de uma String.
    */
   getAppointmentType(type: string | undefined): string {
     switch (type) {
       case "Presential":
         return 'Presencial';
-      case "Online":
+      case "Online" :
         return 'Online';
-      case "Home":
+      case "Home" :
         return 'Domiciliária';
       default:
         return '';
     }
   }
+
+  /**
+   * Obtém a disponibilidade através de um Number.
+   */
+  getAppointmentTypeByNumber(type: number | undefined): string {
+    switch (type) {
+      case 0:
+        return 'Presencial';
+      case 1:
+        return 'Online';
+      case 2:
+        return 'Domiciliária';
+      default:
+        return '';
+    }
+  }
+
 
   submitAddress() {
     this.errorMessages = [];
@@ -342,9 +405,9 @@ export class MarcarConsultaComponent {
         address: this.address,
       } as Location;
 
-      console.log('appointmentId', this.appointmentId);
-      if (location && this.address && this.appointmentId) {
-        this.marcarClick(this.appointmentId, location, this.address);
+      console.log('appointmentId', this.slot);
+      if (location && this.address && this.slot) {
+        this.marcarClick(this.slot, location, this.address);
         this.closePopup();
       }
     }
@@ -459,14 +522,15 @@ export class MarcarConsultaComponent {
   }
 
 
-  openPopupAndDefineAppointmentId(opcao: string, appointmentId: number) {
-    this.appointmentId = appointmentId;
+  openPopupAndDefineAppointmentId(opcao: string, slot: AvailableSlot | undefined) {
+    this.slot = slot;
     this.openPopup(opcao);
   }
 
-  openPopup(opcao: string) {
+  openPopup(option: string) {
     const overlay = document.getElementById('overlay');
     const editAddress = document.getElementById('edit-address-container');
+    const tool = document.getElementById('tooltips');
 
     if (editAddress) {
       editAddress.style.display = "none";
@@ -474,9 +538,14 @@ export class MarcarConsultaComponent {
 
     if (overlay) {
       overlay.style.display = 'flex';
-      if (opcao == "address") {
+      if (option == "address") {
         if (editAddress) {
           editAddress.style.display = "block";
+        }
+      }
+      if (option == "tool") {
+        if (tool) {
+          tool.style.display = "block";
         }
       }
     }
@@ -485,17 +554,32 @@ export class MarcarConsultaComponent {
   closePopup() {
     const overlay = document.getElementById('overlay');
     const address = document.getElementById('edit-address-container');
+    const tool = document.getElementById('tooltips');
 
     if (overlay) {
       overlay.style.display = 'none';
       if (address) {
         address.style.display = "none";
       }
+      if (tool) {
+        tool.style.display = "none";
+      }
     }
   }
 
   stopPropagation(event: Event) {
     event.stopPropagation();
+  }
+
+  nextPhrase() {
+    this.currentPhraseIndex++;
+    if (this.currentPhraseIndex < this.phrases.length) {
+      this.currentPhrase = this.phrases[this.currentPhraseIndex];
+    } else {
+      this.currentPhraseIndex = 0;
+      this.currentPhrase = this.phrases[this.currentPhraseIndex];
+      this.closePopup();
+    }
   }
 
 }

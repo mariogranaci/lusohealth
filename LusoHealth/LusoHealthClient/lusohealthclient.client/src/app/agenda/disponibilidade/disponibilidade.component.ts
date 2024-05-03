@@ -14,6 +14,7 @@ import { AgendaService } from '../agenda.service';
 import { Availability } from '../../shared/models/servic/availability';
 import { Professional } from '../../shared/models/profile/professional';
 import { C } from '@fullcalendar/core/internal-common';
+import { Appointment } from '../../shared/models/servic/appointment';
 
 /**
  * Componente Angular responsável pela gestão da disponibilidade de um profissional.
@@ -25,6 +26,8 @@ import { C } from '@fullcalendar/core/internal-common';
   styleUrl: './disponibilidade.component.css'
 })
 export class DisponibilidadeComponent {
+  loading = false;
+
   private unsubscribe$ = new Subject<void>();
   currentEvents: EventInput[] = [];
   errorMessages: string[] = [];
@@ -78,14 +81,22 @@ export class DisponibilidadeComponent {
       hour12: false,
     },
     validRange: {
-      start: this.today,
+      start: this.getTodayPlusOneHour(),
     },
     select: this.handleDateSelect.bind(this),
     dateClick: this.dateClick.bind(this),
     events: [],
     dayMaxEvents: true,
     moreLinkClick: 'day',
-    /*eventDidMount: this.hideEventsInMonthView.bind(this),*/
+    //eventDidMount: this.handleEventRender.bind(this),
+    /*eventDidMount: (info) => {
+      const isAppointment = info.event.extendedProps['isAppointment'];
+      if (isAppointment) {
+        info.el.style.eventColor = '#ff7f07'; // Orange for appointments
+      } else {
+        info.el.style.eventColor = '#3788d8'; // Blue for free slots
+      }
+    }*/
   }
 
   /**
@@ -124,13 +135,27 @@ export class DisponibilidadeComponent {
    * Inicializa o formulário e obtém os slots de disponibilidade.
    */
   ngOnInit(): void {
+    this.loading = true;
     this.initializeForm();
     /*this.getSlots();
     this.getSpecialties();*/
     this.getSlots().then((response) => {
 
       this.calendarOptions.events = response;
-      console.log(this.calendarOptions.events);
+      console.log(response);
+
+      this.getNextAppointments().then((appointments) => {
+
+        console.log(appointments);
+
+        this.calendarOptions.events = response.concat(appointments);
+
+        console.log(this.calendarOptions.events);
+        
+      }).catch((error) => {
+        // Handle errors if needed
+        console.error('Error fetching appointments: ', error);
+      });
 
       this.getSpecialties();
     }).catch((error) => {
@@ -147,6 +172,27 @@ export class DisponibilidadeComponent {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
+
+  //create a method to return the isotring of todays date plus 1 hour
+  getTodayPlusOneHour(): string {
+    let today = new Date();
+    today.setHours(today.getHours() + 1);
+    return today.toISOString();
+  }
+
+  /*handleEventRender(args: any) {
+    const eventType = args.event._def.extendedProps.appointmentType;
+    switch (eventType) {
+      case 'FreeSlot':
+        args.el.style.backgroundColor = '#00ff00'; // Example color for Free Slot
+        break;
+      case 'Appointment':
+        args.el.style.backgroundColor = '#ff0000'; // Example color for Appointment
+        break;
+      default:
+        args.el.style.backgroundColor = '#0000ff'; // Default color if type is not recognized
+    }
+  }*/
 
   hideEventsInMonthView(arg: { view: { type: string; }; el: { style: { display: string; }; }; }) {
     if (arg.view.type === 'dayGridMonth') {
@@ -250,10 +296,42 @@ export class DisponibilidadeComponent {
     return new Promise((resolve, reject) => {
       this.agendaService.getAllSlots().subscribe({
         next: (response: any) => {
-          
-          resolve(response);
+          const processedEvents = response.map((event: { isAppointment: any; }) => ({
+            ...event,
+            color: event.isAppointment ? '#ff7f07' : '#3788d8'  // Orange for appointments, Blue for free slots
+          }));
+          this.loading = false;
+          resolve(processedEvents);
+          //resolve(response);
         },
         error: (error) => {
+          if (error.error.errors) {
+            this.errorMessages = error.error.errors;
+          } else {
+            this.errorMessages.push(error.error);
+          }
+          this.loading = false;
+          reject(error);
+        }
+      });
+    });
+  }
+
+  getNextAppointments(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.agendaService.getAllScheduledAppointments().pipe(
+        takeUntil(this.unsubscribe$)
+      ).subscribe({
+        next: (appointments: any) => {
+          const processedEvents = appointments.map((event: { isAppointment: any; }) => ({
+            ...event,
+            color: event.isAppointment ? '#ff7f07' : '#3788d8'  // Orange for appointments, Blue for free slots
+          }));
+          resolve(processedEvents);
+          resolve(appointments);
+        },
+        error: (error) => {
+          console.log(error);
           if (error.error.errors) {
             this.errorMessages = error.error.errors;
           } else {
@@ -325,12 +403,30 @@ export class DisponibilidadeComponent {
       next: () => {
         this.submittedAddSlots = false;
         this.closePopup();
+
         this.getSlots().then((response) => {
-          this.calendarOptions.events = response;
-          console.log(this.calendarOptions.events);
+
+          console.log(response);
+
+          this.getNextAppointments().then((appointments) => {
+
+            console.log(appointments);
+
+            this.calendarOptions.events = response.concat(appointments);
+
+            console.log(this.calendarOptions.events);
+
+          }).catch((error) => {
+            // Handle errors if needed
+            console.error('Error fetching appointments: ', error);
+          });
+
+          this.getSpecialties();
         }).catch((error) => {
+          // Handle errors if needed
           console.error('Error fetching slots: ', error);
         });
+
         this.addSlotsForm.reset();
         this.addSlotsForm.setValue(this.formValues);
       },
@@ -393,12 +489,30 @@ export class DisponibilidadeComponent {
       next: () => {
         this.submittedDeleteSlots = false;
         this.closePopup();
+
         this.getSlots().then((response) => {
-          this.calendarOptions.events = response;
-          console.log(this.calendarOptions.events);
+
+          console.log(response);
+
+          this.getNextAppointments().then((appointments) => {
+
+            console.log(appointments);
+
+            this.calendarOptions.events = response.concat(appointments);
+
+            console.log(this.calendarOptions.events);
+
+          }).catch((error) => {
+            // Handle errors if needed
+            console.error('Error fetching appointments: ', error);
+          });
+
+          this.getSpecialties();
         }).catch((error) => {
+          // Handle errors if needed
           console.error('Error fetching slots: ', error);
         });
+
         //this.addSlotsForm.reset();
       },
       error: (error) => {

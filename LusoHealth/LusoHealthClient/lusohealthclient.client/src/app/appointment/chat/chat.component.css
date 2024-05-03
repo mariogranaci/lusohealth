@@ -1,5 +1,6 @@
 main {
   position: relative;
+  margin: 0 auto;
   padding: 0 7%;
   min-width: 1150px;
   max-width: 1800px;
@@ -68,6 +69,14 @@ main {
   height: 100%;
   background: rgba(0, 0, 0, 0.7);
   display: none;
+}
+
+.close-button {
+  position: absolute;
+  top: 70px;
+  right: 60px;
+  cursor: pointer;
+  user-select: none;
 }
 
 .close-image {
@@ -168,11 +177,15 @@ main {
 .chat-header {
     position: absolute;
     background-color: white;
-    z-index: 1;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     width: 51%;
     height: 10px;
+}
+
+.chat-border-radius-bottom {
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
 }
 
 .container {

@@ -1,4 +1,5 @@
 <main>
+  <img id="question-btn" (click)="openPopup('tool')" src="assets/images/Agenda/question-mark.png" />
   <section>
     <div class="firstRow">
       <h4>Filtrar:</h4>
@@ -49,7 +50,10 @@
       </div>
     </div>
 
-    <section class="categorias">
+    <div *ngIf="loading">
+      <loading-spinner></loading-spinner>
+    </div>
+    <section *ngIf="!loading" class="categorias">
       <div class="categoria" *ngFor="let service of services">
         <div class="tab" [routerLink]="['/make-appointment']" [queryParams]="{ serviceId: service.serviceId }">
           <div id="icons">
@@ -81,5 +85,19 @@
     <button class="page-btn current">{{currentPage}}</button>
     <button class="page-btn" (click)="goToPage(currentPage+1)" [disabled]="!hasMorePages">{{currentPage+1}}</button>
     <button class="page-arrow" id="next" (click)="nextPage()" [disabled]="!hasMorePages">></button>
+  </div>
+
+  <div class="overlay" id="overlay" (click)="closePopup()">
+    <a class="close-button" (click)="closePopup()">
+      <img src="assets/images/login/close.png" alt="Close button" class="close-image">
+    </a>
+
+    <div id="tooltips" class="overlay-container-tool" (click)="stopPropagation($event)">
+      <h2>ToolTips</h2>
+      <div class="text-tool">
+        <div class="text-tool">{{ currentPhrase }}</div>
+      </div>
+      <button (click)="nextPhrase()" type="button" class="btn-tool">Continuar</button>
+    </div>
   </div>
 </main>

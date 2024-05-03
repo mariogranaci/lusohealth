@@ -7,6 +7,7 @@ main {
 #left-panel {
   width: 45%;
   height: 100%;
+  position: relative;
 }
 
 #right-panel {
@@ -242,8 +243,95 @@ main {
   font-weight: bold;
 }
 
+loading-spinner {
+  position: absolute;
+  top: 50%; /* Centraliza verticalmente */
+  left: 50%; /* Centraliza horizontalmente */
+  transform: translate(-50%, -50%); /* Corrige o deslocamento pela metade da largura e altura */
+}
+
 @media only screen and (max-width: 1200px) {
   #pac-input {
       width: 50%;
     }
 }
+
+/* overlay */
+.overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  justify-content: center;
+  align-items: center;
+}
+
+.close-button {
+  position: absolute;
+  top: 70px;
+  right: 60px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.close-image {
+  height: 50px;
+}
+
+/* tooltips */
+#question-btn {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  width: 24px;
+  height: auto;
+  cursor: pointer;
+  user-select: none;
+}
+
+.overlay-container-tool {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  width: 800px;
+  height: fit-content;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  background-color: #ECEEF0;
+  padding: 20px 20px;
+  display: none;
+}
+
+  .overlay-container-tool > h2, h3, .text-tool, .btn-tool {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+.btn-tool {
+  color: white;
+  padding: 15px 40px;
+  border: none;
+  cursor: pointer;
+  text-transform: uppercase;
+  height: fit-content;
+  width: max-content;
+  margin: 0 auto;
+  border-radius: 25px;
+  font-size: 20px;
+  transition: background-color 0.3s ease, transform 0s;
+  display: block;
+  background-color: #1875e7;
+}
+
+  .btn-tool:hover {
+    background-color: #1b69c8;
+    cursor: pointer;
+  }
+
+  .btn-tool:active {
+    transform: translateY(2px);
+  }

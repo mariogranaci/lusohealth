@@ -1,11 +1,11 @@
 main {
   padding: 0 7%;
-  margin: 0 auto 30px auto;
+  margin-bottom: 30px;
   min-width: 1150px;
-  max-width: 1500px;
   padding-bottom: 30px;
   min-height: calc(100vh - 65px);
   position:relative;
+  width: 100%;
 }
 
 #question-btn {
@@ -133,7 +133,7 @@ main {
 }
 
 #title-data{
-   margin:20px;
+   margin: 10px 20px 20px 20px;
 }
 
 .schedules h2 {
@@ -378,4 +378,15 @@ main {
   width: 100%;
   text-align: left;
   margin-bottom: 10px;
+}
+
+#loading-div {
+  height: calc(100vh - 65px);
+}
+
+loading-spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }

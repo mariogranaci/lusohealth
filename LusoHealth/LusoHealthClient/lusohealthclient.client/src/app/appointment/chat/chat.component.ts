@@ -13,8 +13,6 @@ import { ChatService } from '../chat.service';
 import { Message } from '../../shared/models/chat/message';
 import { User } from '../../shared/models/authentication/user';
 import { AuthenticationService } from '../../authentication/authentication.service';
-import * as signalR from '@microsoft/signalr';
-import { environment } from '../../../environments/environment.development';
 import { Chat } from '../../shared/models/chat/chat';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -37,8 +35,6 @@ export class ChatComponent {
   appointment: Appointment | undefined;
   professional: Professional | undefined;
   patient: UserProfile | undefined;
-
-  chatEnabled = false;
 
   //isSender = true;
 
@@ -87,11 +83,26 @@ export class ChatComponent {
   ngOnInit() {
     this.initializeForm();
     this.getAppointmentInfo().then(() => {
+
+      if (this.appointment?.state == 'Canceled') {
+        this.router.navigateByUrl('/error');
+      }
+
       this.getServiceInfo();
       this.getProfessional();
       this.getPatient();
-      this.getChatByAppointmentId();
-      this.chatEnabled = (this.appointment?.state != 'Done' && this.appointment?.state != 'Canceled');
+      this.getChatByAppointmentId().then((chat) => {
+
+        this.chat = chat;
+        console.log("Chat fetched successfully:", chat);
+        if (this.chat && this.chat.id)
+          this.loadMessages(this.chat.id);
+
+      }).catch((error) => {
+        console.error('Error fetching slots: ', error);
+      });
+      //this.chatEnabled = (this.appointment?.state != 'Done' && this.appointment?.state != 'Canceled');
+
       //this.chatService.startConnection("34");
       //this.startConnection();
       /*this.messages= [{
@@ -121,31 +132,19 @@ export class ChatComponent {
         timestamp: new Date('04/11/2024 18:52'),
         chatId: 1
       },
-      {
-        id: 4,
-        userId: "5",
-        text: "Olá sou o paciente",
-        isImage: false,
-        imageUrl: null,
-        timestamp: new Date('04/11/2024 18:53'),
-        chatId: 1
-      },
       ];*/
-      /*this.chatService.startConnection().then(() => {
-        console.log("oi start");
-        this.chatService.receiveMessage((message) => {
-          this.messages.push(message);
-          console.log("oi envio");
-        });
-        // Assuming you have a method to get the current chat ID
-        this.chatService.joinChat(34);
-      });*/
-      //this.startConnection();
+
       this.chatService.startConnection().then(() => {
         this.chatService.joinChat(this.generateGroupName()).then(() => {
+
           this.chatService.receiveMessage().subscribe(message => {
             this.messages.push(message);
           });
+
+          this.chatService.receiveChatUpdate().subscribe(chat => {
+            this.chat = chat;
+          });
+
         });
       });
     });
@@ -173,6 +172,7 @@ export class ChatComponent {
       ).subscribe({
         next: (appointment: any) => {
           this.appointment = appointment;
+          console.log("Appointment fetched successfully:", appointment);
           resolve();
         },
         error: (error) => {
@@ -255,6 +255,15 @@ export class ChatComponent {
       next: (appointment: any) => {
         console.log("Appointment finished successfully:", appointment);
         this.appointment = appointment;
+
+        this.getChatByAppointmentId().then((chat) => {
+
+          this.chat = chat;
+          console.log("Chat fetched successfully:", chat);
+
+        }).catch((error) => {
+          console.error('Error fetching slots: ', error);
+        });
       },
       error: (error) => {
         console.log("Error finishing appointment:", error);
@@ -274,6 +283,16 @@ export class ChatComponent {
       next: (appointment: any) => {
         console.log("Appointment started successfully:", appointment);
         this.appointment = appointment;
+
+        this.getChatByAppointmentId().then((chat) => {
+
+          this.chat = chat;
+          console.log("Chat fetched successfully:", chat);
+
+        }).catch((error) => {
+          console.error('Error fetching slots: ', error);
+        });
+
       },
       error: (error) => {
         console.log("Error starting appointment:", error);
@@ -284,6 +303,14 @@ export class ChatComponent {
         }
       }
     });
+  }
+
+  changeStatusOfChat() {
+    if (this.chat && this.chat.id) {
+      this.chatService.sendChatUpdate(this.generateGroupName(), this.chat.id).then(() => {
+        console.log("Chat updated successfully");
+      });
+    }
   }
 
   getProfessionalNameById(): string {
@@ -297,22 +324,23 @@ export class ChatComponent {
     return this.service?.professional;
   }
 
-  getChatByAppointmentId() {
-    this.chatService.getChatByAppointmentId(this.appointmentId).pipe(takeUntil(this.unsubscribe$)).subscribe({
-      next: (chat) => {
-        this.chat = chat;
-        console.log("Chat fetched successfully:", chat);
-        if(this.chat && this.chat.id)
-          this.loadMessages(this.chat.id);
-      },
-      error: (error) => {
-        console.log(error);
-        if (error.error.errors) {
-          this.errorMessages = error.error.errors;
-        } else {
-          this.errorMessages.push(error.error);
+  getChatByAppointmentId(): Promise<any> {
+
+    return new Promise<any>((resolve, reject) => {
+      this.chatService.getChatByAppointmentId(this.appointmentId).pipe(takeUntil(this.unsubscribe$)).subscribe({
+        next: (chat) => {
+          resolve(chat);
+        },
+        error: (error) => {
+          console.log(error);
+          if (error.error.errors) {
+            this.errorMessages = error.error.errors;
+          } else {
+            this.errorMessages.push(error.error);
+          }
+          reject(error);
         }
-      }
+      });
     });
   }
 
@@ -359,45 +387,15 @@ export class ChatComponent {
   }
 
   endChat() {
-    this.chatEnabled = false;
-    this.changeAppointmentDone();
+    this.changeStatusOfChat();
     this.closePopup();
   }
 
   startChat() {
-    this.chatEnabled = true;
-    this.changeAppointmentBegin();
+    this.changeStatusOfChat();
 
     //this.startConnection();
   }
-
-  /*startConnection(): void {
-    *//*this.connection.start().then(() => {
-  console.log("oi");
-  //this.hubConnection!.on('ReceiveMessage', this.)
-  console.log("Conexão");
-}).catch(err => console.error('Error while starting connection: ', err));*//*
-
-  this.connection.on("newMessage", (userId: string, message: string) => {
-    console.log("newMessage", userId, message);
-    this.messages.push({
-      id: 5,
-      userId: userId,
-      text: message,
-      isImage: false,
-      imageUrl: null,
-      timestamp: new Date('04/11/2024 19:50'),
-      chatId: 1
-    });
-  });
-
-  this.connection.start();
-}
-
-sendMessage(): void {
-  this.connection.send("newMessage", this.userId, "Oi gato " + this.userId)
-    .then(() => { console.log("Mensagem enviada") })
-}*/
 
   loadMessages(chatId: number) {
     this.chatService.getMessages(chatId).pipe(takeUntil(this.unsubscribe$)).subscribe({
@@ -424,63 +422,5 @@ sendMessage(): void {
     // Assuming you have appointmentId or a combination of patientId and professionalId to form a unique group name
     return `chat-${this.appointmentId}`;
   }
-
-  /*convertToPortugalTime(date: Date): string {
-    // Convert the date object to a moment object and then to the Lisbon timezone
-    const lisbonTime = moment(date).tz('Europe/Lisbon'); // 'Europe/Lisbon' is the timezone identifier for 'Lisbon
-
-    // Format the time as a string. You can change the format to whatever you need.
-    return lisbonTime.format('YYYY-MM-DD HH:mm:ss');
-  }*/
-
-  /*private handleIncomingMessage = (message: string): void => {
-    this.messages.push(message);
-    console.log(message);
-    // ... (any additional logic to handle incoming messages)
-  };*/
-
-  /*sendMessage() {
-    if (this.messageContent) {
-      this.chatService.sendMessage(1, "34", "oi", false, '')
-        .then(() => { this.messageContent = ''; console.log("oi gato"); })  // Clear the input after sending
-        .catch(error => console.error("Error sending message:", error));
-    }
-  }*/
-
-  /*private startConnection(): void {
-    this.appointmentService.startConnection().then(() => {
-      console.log('SignalR connection established');
-      // Now that the connection is established, set up the listener
-      this.appointmentService.receiveMessage(this.handleIncomingMessage);
-    }).catch((error) => {
-      console.error('SignalR connection failed to start:', error);
-    });
-  }*/
-
-  /*startConnection(): void {
-
-    let isDisconnected = this.hubConnection?.state === 'Disconnected';
-
-    if (this.hubConnection && !isDisconnected) {
-      return;
-    }
-
-    const isDevelopment = window.loca
-
-
-    *//*return this.hubConnection
-.start()
-.then(() => console.log('Connection started'))
-.catch(err => console.log('Error while starting connection: ' + err));*//*
-  };*/
-
-  /*sendMessage(): void {
-    if (this.appointmentService.hubConnection.state === HubConnectionState.Connected) {
-      //this.chatService.sendMessage(this.chatId, this.messageContent);
-      this.messageContent = ''; // Clear the message input after sending
-    } else {
-      console.warn('Cannot send a message when the connection is not in the "Connected" state.');
-    }
-  }*/
 
 }

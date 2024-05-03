@@ -5,7 +5,11 @@
   <button type="submit" id="submit-image" style="display: none;">Enviar</button>
 </form>-->
 
-<main>
+<div id="loading-div" *ngIf="loading">
+  <loading-spinner></loading-spinner>
+</div>
+
+<main *ngIf="!loading">
   <section class="top-left">
     <button class="btn btn-blue" (click)="goBack()">Voltar</button>
   </section>

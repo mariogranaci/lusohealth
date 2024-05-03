@@ -1,7 +1,7 @@
 <main>
 
   <div class="row">
-    <section class="top-left" *ngIf="appointment?.state !== 'Done' && appointment?.state !== 'Canceled'">
+    <section class="top-left">
       <button class="btn btn-blue" (click)="goBack()">Voltar</button>
     </section>
 
@@ -31,12 +31,11 @@
         <div class="text-appointment">Género:  {{patient?.genero === 'F' ? 'Feminino' : 'Masculino'}}</div>
       </div>
 
-
-      <section *ngIf="!chatEnabled">
+      <section *ngIf="chat && chat.isActive == false && (senderRole === 'Professional') && appointment && appointment.state != 'Done' ">
         <button class="btn btn-blue" (click)="startChat()">Iniciar Conversa</button>
       </section>
 
-      <section *ngIf="appointment?.state !== 'Done' && appointment?.state !== 'Canceled' && chatEnabled && (senderRole === 'Professional')">
+      <section *ngIf="chat && chat.isActive && (senderRole === 'Professional') && appointment && appointment.state != 'Done' ">
         <button class="btn btn-red" (click)="openPopup('remove')">Terminar Conversa</button>
       </section>
 
@@ -47,7 +46,7 @@
 
     <div class="right">
 
-      <div class="chat">
+      <div class="chat" [class.chat-border-radius-bottom]="chat && !chat.isActive">
 
         <div class="chat-header">
         </div>
@@ -85,7 +84,7 @@
 
 
       </div>
-      <form [formGroup]="sendMessageForm" id="messageDiv" autocomplete="off" (ngSubmit)="sendMessage()">
+      <form [formGroup]="sendMessageForm" id="messageDiv" autocomplete="off" (ngSubmit)="sendMessage()" *ngIf="chat && chat.isActive">
         <button class="send-button message-icon-left">
           <figure class="">
             <img src="assets/images/Chat/image-icon.png" alt="Butão de submissão de imagens">
@@ -104,9 +103,13 @@
 </main>
 
 <div class="overlay" id="overlay" (click)="closePopup()">
+  <a class="close-button" (click)="closePopup()">
+    <img src="assets/images/login/close.png" alt="Close button" class="close-image">
+  </a>
+
   <div id="remove-appointment-container" class="overlay-container" autocomplete="off" (click)="stopPropagation($event)">
 
-    <h2>Tem a certeza que deseja terminar a conversa?</h2>
+    <h2>Tem a certeza que deseja desativar a conversa?</h2>
     <div class="form-buttons-row">
       <button type="reset" (click)="closePopup()" class="btn btn-blue">Cancelar</button>
       <button type="submit" (click)="endChat()" class="btn btn-red">Terminar</button>

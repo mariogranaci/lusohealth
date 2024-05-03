@@ -62,6 +62,9 @@
         </div>
       </div>
     </ng-container>
+    <div *ngIf="reviews && reviews.length == 0" style="text-align: center;">
+      <h2>Não existem reviews com os filtros selecionados</h2>
+    </div>
     <div class="more-container">
       <button class="btn" id="more" (click)="addDisplayedReviews()" *ngIf="!hide">
         <img class="arrow" src="/assets/images/Agenda/arrow-down.png" />

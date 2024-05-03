@@ -21,6 +21,7 @@ export class AgendaPacienteComponent {
   private unsubscribe$ = new Subject<void>();
   /** Lista de mensagens de erro ocorridas durante operações do componente. */
   errorMessages: string[] = [];
+  loading: boolean = false;
 
   /** Lista de tipos de profissionais disponíveis. */
   professionalTypes: ProfessionalType[] = [];
@@ -52,10 +53,12 @@ export class AgendaPacienteComponent {
    * Realiza as operações de inicialização, incluindo a obtenção de serviços, tipos de profissionais, especialidades e agendamentos.
    */
   ngOnInit() {
+    this.loading = true;
     this.getServices().then(() => {
       this.getProfessionalTypes();
       this.getSpecialties();
       this.getNextAppointments();
+      this.loading = false;
     }); 
   }
 
@@ -101,6 +104,7 @@ export class AgendaPacienteComponent {
       next: (appointments: Appointment[]) => {
         this.appointments = appointments;
         this.appointmentsFiltered = appointments;
+        console.log(appointments);
         this.updateDisplayedAppointments();
       },
       error: (error) => {
@@ -267,13 +271,6 @@ export class AgendaPacienteComponent {
       return service.specialty;
     }
     return null;
-  }
-
-  /// Obtém o nome do profissional pelo ID do serviço
-  getProfessionalNameById(serviceId: number | null): string {
-    const professional = this.services.find(s => s.professional.services.find(p => p.serviceId === serviceId))?.professional;
-
-    return professional?.professionalInfo.firstName + " " + professional?.professionalInfo.lastName;
   }
 
   /// Obtém o profissional pelo ID do serviço

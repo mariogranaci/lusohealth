@@ -54,13 +54,13 @@
   <div class="filters">
     <div>
       <label for="filter-category">Filtrar:</label>
-      <select id="filter-category" [(ngModel)]="selectedCategoryOption" (change)="applyCategoryFilter($event)">
+      <select class="options" id="filter-category" [(ngModel)]="selectedCategoryOption" (change)="applyCategoryFilter($event)">
         <option *ngFor="let option of filterOptionsCategory" [value]="option.id">{{ option.name }}</option>
       </select>
     </div>
     <div>
-      <label for="filter-speciality">Especialidade:</label>
-      <select id="filter-speciality" [(ngModel)]="selectedSpecialityOption" (change)="applySpecialityFilter($event)">
+      <label class="label" for="filter-speciality">Especialidade:</label>
+      <select class="options" id="filter-speciality" [(ngModel)]="selectedSpecialityOption" (change)="applySpecialityFilter($event)">
         <option *ngFor="let option of presentedFilterOptionsSpeciality" [value]="option.id">{{ option.name }}</option>
       </select>
     </div>
@@ -68,7 +68,7 @@
 
   <div class="order">
     <label for="order">Ordenar:</label>
-    <select id="order" (change)="applyOrder($event)">
+    <select class="options" id="order" (change)="applyOrder($event)">
       <option value="none">Nenhum</option>
       <option value="professionalName">Nome</option>
       <option value="professionalType">Categoria</option>

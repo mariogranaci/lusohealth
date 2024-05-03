@@ -107,7 +107,7 @@ export class ReportsComponent {
    * Carrega mais relatórios pendentes.
    */
   loadMoreReportsPending() {
-    this.moderationService.getReportsPending(this.offsetCanceled, this.limit).subscribe({
+    this.moderationService.getReportsPending(this.offsetPending, this.limit).subscribe({
       next: (newReports: reportModel[]) => {
         this.reports = this.reports.concat(newReports);
         this.offsetPending += newReports.length;

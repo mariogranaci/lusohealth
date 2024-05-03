@@ -1,8 +1,8 @@
 main {
+  width: 100%;
   padding: 0 7%;
-  margin: 0 auto 30px auto;
+  margin-bottom: 30px;
   min-width: 1150px;
-  max-width: 1500px;
   padding-bottom: 30px;
   min-height: calc(100vh - 65px);
   position: relative;
@@ -98,12 +98,6 @@ main {
   padding: 25px 0;
   font-size: 20px;
   text-align: center;
-}
-
-.title {
-  margin: 25px auto;
-  font-size: 20px;
-  text-align: center
 }
 
 .firstRow {
@@ -299,4 +293,15 @@ main {
   font-size: 40px;
   color: grey;
   height: 350px;
+}
+
+#loading-div {
+  height: calc(100vh - 65px);
+}
+
+loading-spinner {
+  position: absolute;
+  top: 50%; /* Centraliza verticalmente */
+  left: 50%; /* Centraliza horizontalmente */
+  transform: translate(-50%, -50%); /* Corrige o deslocamento pela metade da largura e altura */
 }

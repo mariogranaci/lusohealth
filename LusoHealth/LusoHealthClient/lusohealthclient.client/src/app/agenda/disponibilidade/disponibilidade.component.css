@@ -1,14 +1,17 @@
 main {
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  /*justify-content: center;*/
-  align-items: center;
+  margin: 0 auto;
   min-height: calc(100vh - 65px);
-  margin-bottom: 50px;
-  position:relative;
+  position: relative;
 }
 
+  main > div {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 50px;
+  }
 
 h1 {
   text-align: center;
@@ -294,4 +297,11 @@ input[type="time"], input[type="date"] {
 
 .is-invalid {
   border: 2px solid #cc0000 !important;
+}
+
+loading-spinner {
+  position: absolute;
+  top: 50%; /* Centraliza verticalmente */
+  left: 50%; /* Centraliza horizontalmente */
+  transform: translate(-50%, -50%); /* Corrige o deslocamento pela metade da largura e altura */
 }

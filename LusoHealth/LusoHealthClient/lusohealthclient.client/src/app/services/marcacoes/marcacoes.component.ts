@@ -31,14 +31,25 @@ export class MarcacoesComponent {
   pageButtons: number[] = [];
   hasMorePages: boolean = true;
 
+  loading: boolean = false;
+
   selectedCategory: string = '';
   selectedSpecialty: string = '';
   selectedType: string = '';
   selectedOrder: string = 'Rank';
 
+  phrases: string[] = [
+    "Aqui é possível procurar todos os profissionais disponíveis na plataforma",
+    "Para procurar por uma Categoria, Especialidade e/ou Tipo de Consulta específica, aceda aos filtros disponíveis no canto superior esquerdo da página",
+    "Para obter mais informações sobre o Profissional, clique sobre o mesmo para aceder à página de marcação de consulta"
+  ];
+  currentPhraseIndex: number = 0;
+  currentPhrase: string = this.phrases[0];
+
   constructor(public servicesService: ServicesService, private route: ActivatedRoute, private router: Router, private location: Location) { }
 
   ngOnInit() {
+    this.loading = true;
     Promise.all([
       this.getProfessionalTypes(),
       this.getSpecialties()
@@ -78,7 +89,6 @@ export class MarcacoesComponent {
     ).subscribe({
       next: (services: any) => {
         this.services = services;
-        console.log(this.selectedCategory, this.selectedSpecialty, this.searchTerm, this.selectedType, this.currentPage, this.itemsPerPage, services);
         this.hasMorePages = services.length === this.itemsPerPage;
         this.updatePageButtons();
       },
@@ -86,6 +96,7 @@ export class MarcacoesComponent {
         this.errorMessages = [error.message || "An error occurred while fetching services."];
       }
     });
+    this.loading = false;
   }
 
   updateUrlParams() {
@@ -259,4 +270,57 @@ export class MarcacoesComponent {
       this.getServicesFiltered();
     }
   }
+
+  /**
+   * Abre a janela popup para recuperar a senha ou a conta.
+   * @param option Opção selecionada ('pass' para recuperar a senha, 'conta' para recuperar a conta).
+   */
+  openPopup(option: string) {
+    const overlay = document.getElementById('overlay');
+    const tool = document.getElementById('tooltips');
+
+    if (overlay) {
+      overlay.style.display = 'flex';
+      if (option == "tool") {
+        if (tool) {
+          tool.style.display = "block";
+        }
+      }
+    }
+  }
+
+  /**
+   * Fecha a janela popup.
+   */
+  closePopup() {
+    const overlay = document.getElementById('overlay');
+    const tool = document.getElementById('tooltips');
+
+    if (overlay) {
+      overlay.style.display = 'none';
+      if (tool) {
+        tool.style.display = "none";
+      }
+    }
+  }
+
+  nextPhrase() {
+    this.currentPhraseIndex++;
+    if (this.currentPhraseIndex < this.phrases.length) {
+      this.currentPhrase = this.phrases[this.currentPhraseIndex];
+    } else {
+      this.currentPhraseIndex = 0;
+      this.currentPhrase = this.phrases[this.currentPhraseIndex];
+      this.closePopup();
+    }
+  }
+
+  /**
+   * Impede a propagação do evento.
+   * @param event Evento de clique.
+   */
+  stopPropagation(event: Event) {
+    event.stopPropagation();
+  }
+
 }

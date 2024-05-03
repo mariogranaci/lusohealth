@@ -1,6 +1,6 @@
 main {
   padding: 0 7%;
-  /*margin: 50px 0 0 0;*/
+  margin: 0 auto;
   min-width: 1150px;
   max-width: 1800px;
   min-height: calc(100vh - 164px);
@@ -10,7 +10,6 @@ main {
 
 #question-btn {
   position: absolute;
-  top: 25px;
   left: 25px;
   width: 32px;
   height: auto;
@@ -19,20 +18,21 @@ main {
 }
 
 .title {
-  margin: 25px auto;
+  margin: 25px auto 50px auto;
   font-size: 20px;
   text-align: center;
   position:relative;
 }
 
-#title-data {
-  margin-bottom: 30px;
+.title-data-under {
+    margin-bottom: 10px;
 }
 
 .appointments {
   display: flex;
   flex-direction: column;
   min-width: 370px;
+  width: 70%;
 }
 
 .appointment {
@@ -65,14 +65,12 @@ main {
 .text-appointment {
   display: flex;
   font-size: 18px;
-  margin-top: 10px;
+  margin-top: 0;
 }
 
 .right-panel {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  /*height: 100%;*/
   width: 55%;
   position: relative;
 }
@@ -83,7 +81,7 @@ main {
 }
 
 .btn1 {
-  margin: auto 10px 0;
+  margin: 0 10px 0;
   width: 230px;
   align-self: center;
   height: 50px;
@@ -120,6 +118,8 @@ main {
   display: flex;
   flex-wrap: nowrap;
   justify-content: flex-end;
+  align-items: flex-start;
+  margin-bottom: 100px;
 }
 
 /*-----------------------------------*/
@@ -308,9 +308,17 @@ input::-webkit-inner-spin-button {
   background-color: #d42a2a;
 }
 
+.btn-green {
+  background-color: #3f9443;
+}
+
   .btn-red:hover {
     background-color: #c31414;
   }
+
+.btn-green:hover {
+  background-color: #347c38;
+}
 
 .left-align-row {
   width: 100%;
@@ -387,3 +395,22 @@ input::-webkit-inner-spin-button {
 }
 
 /*-----------------------------------------------------------------*/
+
+#chat-image {
+    width: 100%;
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+}
+
+#chat-image img {
+    width: 80%;
+    height: 90%;
+}
+
+loading-spinner {
+  position: absolute;
+  top: 50%; /* Centraliza verticalmente */
+  left: 50%; /* Centraliza horizontalmente */
+  transform: translate(-50%, -50%); /* Corrige o deslocamento pela metade da largura e altura */
+}

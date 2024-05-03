@@ -8,7 +8,8 @@ main {
 
 .title{
     margin: 15px auto;
-    text-align:center
+    text-align:center;
+    width: fit-content;
 }
 
 #img-perfil{
@@ -17,6 +18,10 @@ main {
     height:100px;
     border-radius:50%;
     object-fit:cover;
+}
+
+#img-perfil:hover {
+    cursor:pointer;
 }
 
 select-dropdown,
@@ -78,10 +83,11 @@ select-dropdown,
   background-color: #fff;
   border-radius: 7px;
   box-shadow: 0 12px 6px -4px rgba(0, 0, 0, 0.21);
+  justify-content: space-between;
 }
 
 #title-data {
-  width: 40%;
+  width: 30%;
 }
 
 #title-data p {
@@ -92,7 +98,7 @@ select-dropdown,
   width: 60%;
   display:flex;
   flex-direction:row;
-  justify-content:space-between;
+  justify-content: space-between;
 }
 
 .calender-slots {
@@ -174,8 +180,18 @@ input[type="checkbox"] {
   max-width: 400px;
 }
 
+.price {
+  margin-right: 20px;
+  font-size: 25px;
+  align-self: center;
+}
+
 .name {
   font-size: 25px;
+}
+
+.name:hover {
+  cursor: pointer;
 }
 
 .hours-slots {
@@ -210,6 +226,7 @@ hr {
 .hours {
   align-self: center;
   font-size: 40px;
+  margin-left: 20px;
 }
 
 
@@ -446,4 +463,60 @@ input[type="radio"] {
 
   .btn-blue:hover {
     background-color: #1b69c8;
+  }
+
+/* tooltips */
+#question-btn {
+  position: absolute;
+  top: 75px;
+  left: 25px;
+  width: 32px;
+  height: auto;
+  cursor: pointer;
+  user-select: none;
+  margin-bottom: 20px
+}
+
+.overlay-container-tool {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  width: 800px;
+  height: fit-content;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  background-color: #ECEEF0;
+  padding: 20px 20px;
+  display: none;
+}
+
+  .overlay-container-tool > h2, .text-tool, .btn-tool {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+.btn-tool {
+  color: white;
+  padding: 15px 40px;
+  border: none;
+  cursor: pointer;
+  text-transform: uppercase;
+  height: fit-content;
+  width: max-content;
+  margin: 0 auto;
+  border-radius: 25px;
+  font-size: 20px;
+  transition: background-color 0.3s ease, transform 0s;
+  display: block;
+  background-color: #1875e7;
+}
+
+  .btn-tool:hover {
+    background-color: #1b69c8;
+    cursor: pointer;
+  }
+
+  .btn-tool:active {
+    transform: translateY(2px);
   }

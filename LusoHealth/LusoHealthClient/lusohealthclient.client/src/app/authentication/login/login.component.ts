@@ -21,6 +21,35 @@ export class LoginComponent implements OnInit {
   loading = false;
   errorMessages: string[] = [];
 
+  phrases: any[] = [
+    {
+      title: "Recuperação de Conta Suspensa",
+      description: "Após o período de suspensão, você pode recuperar sua conta. Clique no botão 'Recuperar Conta' na página inicial da LusoHealth."
+    },
+    {
+      title: "Recuperação de Senha",
+      description: "Para recuperar sua senha, clique no botão 'Esqueceu a Senha?' na tela de login. Um e-mail será enviado para você com as instruções para a recuperação."
+    },
+    {
+      title: "Criação de Conta na LusoHealth",
+      description: "Se você é novo, clique no botão 'Criar Conta' na página inicial da LusoHealth. Alternativamente, você pode fazer login usando sua conta do Google."
+    },
+    {
+      title: "Login na Conta LusoHealth",
+      description: "Para fazer login na sua conta LusoHealth, insira seu e-mail e senha nos campos correspondentes. Clique no botão 'Login' para prosseguir."
+    },
+    {
+      title: "Login com Conta Google",
+      description: "Se preferir usar sua conta do Google para fazer login, clique no botão 'Login com Conta Google' na tela de login."
+    },
+    {
+      title: "Processo de Login ou Criação de Conta",
+      description: "Insira seu e-mail e senha nos campos designados e clique no botão correspondente para prosseguir. Se estiver criando uma conta, certifique-se de clicar no botão de criação de conta após inserir as informações."
+    }
+  ];
+  currentPhraseIndex: number = 0;
+  currentPhrase: any = this.phrases[0];
+
   /**
    * Construtor da classe.
    * @param service Serviço de autenticação para gerenciar as operações relacionadas à autenticação do usuário.
@@ -167,12 +196,13 @@ export class LoginComponent implements OnInit {
 
   /**
    * Abre a janela popup para recuperar a senha ou a conta.
-   * @param opcao Opção selecionada ('pass' para recuperar a senha, 'conta' para recuperar a conta).
+   * @param option Opção selecionada ('pass' para recuperar a senha, 'conta' para recuperar a conta).
    */
-  openPopup(opcao: string) {
+  openPopup(option: string) {
     const overlay = document.getElementById('overlay');
     const recuperarPass = document.getElementById('recuperar-pass');
     const recuperarConta = document.getElementById('recuperar-conta');
+    const tool = document.getElementById('tooltips');
 
     if (recuperarConta) {
       recuperarConta.style.display = "none";
@@ -183,14 +213,19 @@ export class LoginComponent implements OnInit {
 
     if (overlay) {
       overlay.style.display = 'flex';
-      if (opcao == "pass") {
+      if (option == "pass") {
         if (recuperarPass) {
           recuperarPass.style.display = "block";
         }
       }
-      else if (opcao == "conta") {
+      else if (option == "conta") {
         if (recuperarConta) {
           recuperarConta.style.display = "block";
+        }
+      }
+      else if (option == "tool") {
+        if (tool) {
+          tool.style.display = "block";
         }
       }
     }
@@ -203,6 +238,7 @@ export class LoginComponent implements OnInit {
     const overlay = document.getElementById('overlay');
     const recuperarPass = document.getElementById('recuperar-pass');
     const recuperarConta = document.getElementById('recuperar-conta');
+    const tool = document.getElementById('tooltips');
 
     if (overlay) {
       overlay.style.display = 'none';
@@ -212,6 +248,20 @@ export class LoginComponent implements OnInit {
       if (recuperarPass) {
         recuperarPass.style.display = "none";
       }
+      if (tool) {
+        tool.style.display = "none";
+      }
+    }
+  }
+
+  nextPhrase() {
+    this.currentPhraseIndex++;
+    if (this.currentPhraseIndex < this.phrases.length) {
+      this.currentPhrase = this.phrases[this.currentPhraseIndex];
+    } else {
+      this.currentPhraseIndex = 0;
+      this.currentPhrase = this.phrases[this.currentPhraseIndex];
+      this.closePopup();
     }
   }
 

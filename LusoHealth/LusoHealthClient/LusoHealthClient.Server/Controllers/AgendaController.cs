@@ -1,5 +1,6 @@
 ﻿using LusoHealthClient.Server.Data;
 using LusoHealthClient.Server.DTOs.Agenda;
+using LusoHealthClient.Server.DTOs.Appointments;
 using LusoHealthClient.Server.DTOs.Profile;
 using LusoHealthClient.Server.DTOs.Services;
 using LusoHealthClient.Server.Models.Appointments;
@@ -11,7 +12,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Security.Claims;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace LusoHealthClient.Server.Controllers
 {
@@ -39,7 +42,7 @@ namespace LusoHealthClient.Server.Controllers
         /// Obtém as marcações anteriores do paciente.
         /// </summary>
         [HttpGet("get-previous-appointments")]
-        public async Task<ActionResult<List<Appointment>>> GetPreviousAppointments()
+        public async Task<ActionResult<List<AppointmentDto>>> GetPreviousAppointments()
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
@@ -47,13 +50,41 @@ namespace LusoHealthClient.Server.Controllers
             var user = await _userManager.FindByIdAsync(userIdClaim);
             if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
 
+            TimeZoneInfo portugueseZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Lisbon");
+
             try
             {
                 if (User.IsInRole("Patient"))
                 {
                     var currentTime = DateTime.UtcNow;
                     var appointments = _context.Appointment
-                    .Where(p => p.IdPatient == user.Id && p.Timestamp < currentTime)
+                    .Where(p => p.IdPatient == user.Id && (p.State == AppointmentState.Done || p.State == AppointmentState.Canceled))
+                    .OrderByDescending(p => p.Timestamp)
+                    .Select(ap => new AppointmentDto
+                    {
+                        Id = ap.Id,
+                        Timestamp = TimeZoneInfo.ConvertTimeFromUtc(ap.Timestamp, portugueseZone),
+                        Location = null,
+                        Address = null,
+                        Type = ap.Type.ToString(),
+                        Description = ap.Description,
+                        State = ap.State.ToString(),
+                        Duration = ap.Duration,
+                        IdPatient = ap.IdPatient,
+                        IdProfessional = ap.IdProfesional,
+                        IdService = ap.IdService,
+                        Professional = new ProfessionalDto
+                        {
+                            ProfessionalInfo = new UserProfileDto
+                            {
+                                Id = ap.Professional.User.Id,
+                                FirstName = ap.Professional.User.FirstName,
+                                LastName = ap.Professional.User.LastName,
+                                Email = ap.Professional.User.Email,
+                            }
+                        },
+                        Speciality = ap.Service.Specialty.Name
+                    })
                     .ToList();
 
                     if (appointments == null || !appointments.Any()) { return NotFound("Não foi possível encontrar as marcações"); }
@@ -64,12 +95,39 @@ namespace LusoHealthClient.Server.Controllers
                 {
                     var currentTime = DateTime.UtcNow;
                     var appointments = _context.Appointment
-                    .Where(p => p.IdProfesional == user.Id && p.Timestamp < currentTime)
+                    .Where(p => p.IdProfesional == user.Id && (p.State == AppointmentState.Done || p.State == AppointmentState.Canceled))
+                    .OrderByDescending(p => p.Timestamp)
+                    .Select(ap => new AppointmentDto
+                    {
+                        Id = ap.Id,
+                        Timestamp = TimeZoneInfo.ConvertTimeFromUtc(ap.Timestamp, portugueseZone),
+                        Location = null,
+                        Address = null,
+                        Type = ap.Type.ToString(),
+                        Description = ap.Description,
+                        State = ap.State.ToString(),
+                        Duration = ap.Duration,
+                        IdPatient = ap.IdPatient,
+                        IdProfessional = ap.IdProfesional,
+                        IdService = ap.IdService,
+                        Patient = new PatientDto
+                        {
+                            UserId = ap.Patient.User.Id,
+                            User = new UserProfileDto
+                            {
+                                Id = ap.Patient.User.Id,
+                                FirstName = ap.Patient.User.FirstName,
+                                LastName = ap.Patient.User.LastName,
+                                Email = ap.Patient.User.Email,
+                            }
+                        },
+                        Speciality = ap.Service.Specialty.Name
+                    })
                     .ToList();
 
                     if (appointments == null || !appointments.Any()) { return NotFound("Não foi possível encontrar as marcações"); }
 
-                    return (List<Appointment>)appointments.Reverse<Appointment>();
+                    return Ok(appointments);
                 }
                 else
                 {
@@ -87,7 +145,7 @@ namespace LusoHealthClient.Server.Controllers
         /// Obtém as próximas marcações do paciente.
         /// </summary>
         [HttpGet("get-next-appointments")]
-        public async Task<ActionResult<List<Appointment>>> GetNextAppointments()
+        public async Task<ActionResult<List<AppointmentDto>>> GetNextAppointments()
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
@@ -95,15 +153,46 @@ namespace LusoHealthClient.Server.Controllers
             var user = await _userManager.FindByIdAsync(userIdClaim);
             if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
 
+            TimeZoneInfo portugueseZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Lisbon");
+
             try
             {
                 if (User.IsInRole("Patient"))
                 {
 
                     var currentTime = DateTime.UtcNow;
-                    var appointments = _context.Appointment.Include(a => a.Patient).ThenInclude(b => b.User)
-                        .Where(p => p.IdPatient == user.Id && p.Timestamp > currentTime && p.State == AppointmentState.Scheduled)
+                    var appointments = _context.Appointment
+                        .Include(c => c.Professional)
+                        .ThenInclude(b => b.User)
+                        .Include(a => a.Patient)
+                        .ThenInclude(b => b.User)
+                        .Where(p => p.IdPatient == user.Id && (p.State == AppointmentState.Scheduled || p.State == AppointmentState.InProgress))
                         .OrderBy(p => p.Timestamp)
+                        .Select(ap => new AppointmentDto
+                        {
+                            Id = ap.Id,
+                            Timestamp = TimeZoneInfo.ConvertTimeFromUtc(ap.Timestamp, portugueseZone),
+                            Location = null,
+                            Address = null,
+                            Type = ap.Type.ToString(),
+                            Description = ap.Description,
+                            State = ap.State.ToString(),
+                            Duration = ap.Duration,
+                            IdPatient = ap.IdPatient,
+                            IdProfessional = ap.IdProfesional,
+                            IdService = ap.IdService,
+                            Professional = new ProfessionalDto
+                            {
+                                ProfessionalInfo = new UserProfileDto
+                                {
+                                    Id = ap.Professional.User.Id,
+                                    FirstName = ap.Professional.User.FirstName,
+                                    LastName = ap.Professional.User.LastName,
+                                    Email = ap.Professional.User.Email,
+                                }
+                            },
+                            Speciality = ap.Service.Specialty.Name
+                        })
                         .ToList();
 
                     if (appointments == null || !appointments.Any()) { return NotFound("Não foi possível encontrar as marcações"); }
@@ -115,14 +204,45 @@ namespace LusoHealthClient.Server.Controllers
                 else if (User.IsInRole("Professional"))
                 {
                     var currentTime = DateTime.UtcNow;
-                    var appointments = _context.Appointment.Include(a => a.Patient).ThenInclude(b => b.User)
-                        .Where(p => p.IdProfesional == user.Id && p.Timestamp > currentTime && p.State == AppointmentState.Scheduled)
+                    var appointments = _context.Appointment.Include(s => s.Service)
+                        .ThenInclude(s => s.Specialty)
+                        .Include(c => c.Professional)
+                        .ThenInclude(b => b.User)
+                        .Include(a => a.Patient)
+                        .ThenInclude(b => b.User)
+                        .Where(p => p.IdProfesional == user.Id && (p.State == AppointmentState.Scheduled || p.State == AppointmentState.InProgress))
                         .OrderBy(p => p.Timestamp)
+                        .Select(ap => new AppointmentDto
+                        {
+                            Id = ap.Id,
+                            Timestamp = TimeZoneInfo.ConvertTimeFromUtc(ap.Timestamp, portugueseZone),
+                            Location = null,
+                            Address = null,
+                            Type = ap.Type.ToString(),
+                            Description = ap.Description,
+                            State = ap.State.ToString(),
+                            Duration = ap.Duration,
+                            IdPatient = ap.IdPatient,
+                            IdProfessional = ap.IdProfesional,
+                            IdService = ap.IdService,
+                            Patient = new PatientDto
+                            {
+                                UserId = ap.Patient.User.Id,
+                                User = new UserProfileDto
+                                {
+                                    Id = ap.Patient.User.Id,
+                                    FirstName = ap.Patient.User.FirstName,
+                                    LastName = ap.Patient.User.LastName,
+                                    Email = ap.Patient.User.Email,
+                                }
+                            },
+                            Speciality = ap.Service.Specialty.Name
+                        })
                         .ToList();
 
                     if (appointments == null || !appointments.Any()) { return NotFound("Não foi possível encontrar as marcações"); }
 
-                    return appointments;
+                    return Ok(appointments);
                 }
                 else
                 {
@@ -143,7 +263,7 @@ namespace LusoHealthClient.Server.Controllers
         /// Obtém as marcações pendentes do profissional.
         /// </summary>s
         [HttpGet("get-pending-appointments")]
-        public async Task<ActionResult<List<Appointment>>> GetPendingAppointments()
+        public async Task<ActionResult<List<AppointmentDto>>> GetPendingAppointments()
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
@@ -151,14 +271,42 @@ namespace LusoHealthClient.Server.Controllers
             var user = await _userManager.FindByIdAsync(userIdClaim);
             if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
 
+            TimeZoneInfo portugueseZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Lisbon");
+
             try
             {
                 if (User.IsInRole("Professional"))
                 {
                     var currentTime = DateTime.UtcNow;
-                    var appointments = _context.Appointment.Include(a => a.Patient).ThenInclude(b => b.User)
-                        .Where(p => p.IdProfesional == user.Id && p.Timestamp > currentTime && p.State == AppointmentState.Pending)
+                    var appointments = _context.Appointment.Include(s => s.Service).ThenInclude(s => s.Specialty).Include(a => a.Patient).ThenInclude(b => b.User)
+                        .Where(p => p.IdProfesional == user.Id && p.State == AppointmentState.Pending)
                         .OrderBy(p => p.Timestamp)
+                        .Select(ap => new AppointmentDto
+                        {
+                            Id = ap.Id,
+                            Timestamp = TimeZoneInfo.ConvertTimeFromUtc(ap.Timestamp, portugueseZone),
+                            Location = null,
+                            Address = null,
+                            Type = ap.Type.ToString(),
+                            Description = ap.Description,
+                            State = ap.State.ToString(),
+                            Duration = ap.Duration,
+                            IdPatient = ap.IdPatient,
+                            IdProfessional = ap.IdProfesional,
+                            IdService = ap.IdService,
+                            Patient = new PatientDto
+                            {
+                                UserId = ap.Patient.User.Id,
+                                User = new UserProfileDto
+                                {
+                                    Id = ap.Patient.User.Id,
+                                    FirstName = ap.Patient.User.FirstName,
+                                    LastName = ap.Patient.User.LastName,
+                                    Email = ap.Patient.User.Email,
+                                }
+                            },
+                            Speciality = ap.Service.Specialty.Name
+                        })
                         .ToList();
 
                     if (appointments == null || !appointments.Any()) { return NotFound("Não foi possível encontrar as marcações"); }
@@ -211,9 +359,10 @@ namespace LusoHealthClient.Server.Controllers
         {
             try
             {
+                AppointmentType type = (AppointmentType)Enum.Parse(typeof(AppointmentType), slot.Type, true);
                 var slots = await _context.AvailableSlots
-                                          .Where(s => s.IdService == slot.ServiceId && s.Start.Date == slot.StartDate)
-                                          .ToListAsync();
+                .Where(s => s.IdService == slot.ServiceId && s.Start.Date == slot.StartDate && s.IsAvailable && s.AppointmentType == type)
+                .ToListAsync();
 
                 return slots;
             }
@@ -251,7 +400,8 @@ namespace LusoHealthClient.Server.Controllers
                     End = TimeZoneInfo.ConvertTimeFromUtc(s.Start.AddMinutes(s.SlotDuration), portugueseZone),
                     //Title = s.Service.Specialty.Name,
                     //create title that merges the specialty name and the appointment type
-                    Title = s.Service.Specialty.Name + " - " + s.AppointmentType.ToString()
+                    Title = s.Service.Specialty.Name + " - " + s.AppointmentType.ToString(),
+                    IsAppointment = false,
                 })
                 .ToListAsync();
 
@@ -275,6 +425,48 @@ namespace LusoHealthClient.Server.Controllers
                     return "Presencial";
                 default:
                     return "Online";
+            }
+        }
+
+        [HttpGet("get-next-appointments-calendar")]
+        public async Task<ActionResult<List<Appointment>>> GetNextAppointmentsCalendar()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userIdClaim == null) { return BadRequest("Não foi possível encontrar o utilizador"); }
+
+            var user = await _userManager.FindByIdAsync(userIdClaim);
+            if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
+
+            TimeZoneInfo portugueseZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Lisbon");
+
+            try
+            {
+                var appointments = _context.Appointment.Include(a => a.Patient).ThenInclude(b => b.User)
+                        .Where(p => p.IdProfesional == user.Id && p.Timestamp > DateTime.UtcNow && (p.State == AppointmentState.Scheduled || 
+                        p.State == AppointmentState.InProgress || p.State == AppointmentState.Done))
+                        .Select(a => new
+                        {
+                            a.Id,
+                            a.IdService,
+                            a.State,
+                            a.Timestamp,
+                            a.Duration,
+                            a.IdProfesional,
+                            a.IdPatient,
+                            a.AddressId,
+                            Start = TimeZoneInfo.ConvertTimeFromUtc(a.Timestamp, portugueseZone),
+                            End = TimeZoneInfo.ConvertTimeFromUtc(a.Timestamp.AddMinutes(a.Duration.Value), portugueseZone),
+                            Title = "Consulta de " + a.Service.Specialty.Name + " - " + a.Type.ToString(),
+                            IsAppointment = true,
+                        })
+                        .OrderBy(p => p.Timestamp)
+                        .ToList();
+
+                return Ok(appointments);
+            }
+            catch (Exception)
+            {
+                return BadRequest("Não foi possível encontrar as consultas. Tente novamente.");
             }
         }
 

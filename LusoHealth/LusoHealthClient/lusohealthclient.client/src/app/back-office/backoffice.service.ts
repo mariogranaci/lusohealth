@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment.development';
@@ -53,9 +53,14 @@ export class BackOfficeService {
     return this.http.get<any>(`${environment.appUrl}/api/backoffice/get-professional-types`, { headers });
   }
 
-  getAnuallyRegisteredUsers() {
+  getAnuallyRegisteredUsers(startDate: string, endDate: string, timeUnit: string) {
     const headers = this.getHeaders();
-    return this.http.get<any>(`${environment.appUrl}/api/backoffice/get-anually-registered-users`, { headers });
+    const params = new HttpParams()
+      .set('startDate', startDate)
+      .set('endDate', endDate)
+      .set('timeUnit', timeUnit);
+
+    return this.http.get<any>(`${environment.appUrl}/api/backoffice/get-anually-registered-users`, { headers, params });
   }
 
   getProfessionals() {

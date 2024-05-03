@@ -47,8 +47,8 @@ export class EstatisticasUtilizadoresAnoComponent {
         endDate = this.getDateString(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 1);
         break;
       case 'Month':
-        startDate = this.getDateString(new Date().getFullYear() - 1, 1, 1);
-        endDate = this.getDateString(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+        startDate = this.getDateString(new Date().getFullYear(), 1, 1);
+        endDate = this.getDateString(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 1);
         break;
       case 'Year':
         startDate = this.getDateString(new Date().getFullYear() - 5, 0, 1);

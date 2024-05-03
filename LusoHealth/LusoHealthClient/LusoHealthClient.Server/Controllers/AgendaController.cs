@@ -50,18 +50,20 @@ namespace LusoHealthClient.Server.Controllers
             var user = await _userManager.FindByIdAsync(userIdClaim);
             if (user == null) { return NotFound("Não foi possível encontrar o utilizador"); }
 
+            TimeZoneInfo portugueseZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Lisbon");
+
             try
             {
                 if (User.IsInRole("Patient"))
                 {
                     var currentTime = DateTime.UtcNow;
                     var appointments = _context.Appointment
-                    .Where(p => p.IdPatient == user.Id && p.Timestamp < currentTime)
+                    .Where(p => p.IdPatient == user.Id && (p.State == AppointmentState.Done || p.State == AppointmentState.Canceled))
                     .OrderByDescending(p => p.Timestamp)
                     .Select(ap => new AppointmentDto
                     {
                         Id = ap.Id,
-                        Timestamp = ap.Timestamp,
+                        Timestamp = TimeZoneInfo.ConvertTimeFromUtc(ap.Timestamp, portugueseZone),
                         Location = null,
                         Address = null,
                         Type = ap.Type.ToString(),
@@ -93,12 +95,12 @@ namespace LusoHealthClient.Server.Controllers
                 {
                     var currentTime = DateTime.UtcNow;
                     var appointments = _context.Appointment
-                    .Where(p => p.IdProfesional == user.Id && p.Timestamp < currentTime)
+                    .Where(p => p.IdProfesional == user.Id && (p.State == AppointmentState.Done || p.State == AppointmentState.Canceled))
                     .OrderByDescending(p => p.Timestamp)
                     .Select(ap => new AppointmentDto
                     {
                         Id = ap.Id,
-                        Timestamp = ap.Timestamp,
+                        Timestamp = TimeZoneInfo.ConvertTimeFromUtc(ap.Timestamp, portugueseZone),
                         Location = null,
                         Address = null,
                         Type = ap.Type.ToString(),
@@ -164,7 +166,7 @@ namespace LusoHealthClient.Server.Controllers
                         .ThenInclude(b => b.User)
                         .Include(a => a.Patient)
                         .ThenInclude(b => b.User)
-                        .Where(p => p.IdPatient == user.Id && p.Timestamp > currentTime && (p.State == AppointmentState.Scheduled || p.State == AppointmentState.InProgress))
+                        .Where(p => p.IdPatient == user.Id && (p.State == AppointmentState.Scheduled || p.State == AppointmentState.InProgress))
                         .OrderBy(p => p.Timestamp)
                         .Select(ap => new AppointmentDto
                         {
@@ -208,7 +210,7 @@ namespace LusoHealthClient.Server.Controllers
                         .ThenInclude(b => b.User)
                         .Include(a => a.Patient)
                         .ThenInclude(b => b.User)
-                        .Where(p => p.IdProfesional == user.Id && p.Timestamp > currentTime && (p.State == AppointmentState.Scheduled || p.State == AppointmentState.InProgress))
+                        .Where(p => p.IdProfesional == user.Id && (p.State == AppointmentState.Scheduled || p.State == AppointmentState.InProgress))
                         .OrderBy(p => p.Timestamp)
                         .Select(ap => new AppointmentDto
                         {
@@ -277,7 +279,7 @@ namespace LusoHealthClient.Server.Controllers
                 {
                     var currentTime = DateTime.UtcNow;
                     var appointments = _context.Appointment.Include(s => s.Service).ThenInclude(s => s.Specialty).Include(a => a.Patient).ThenInclude(b => b.User)
-                        .Where(p => p.IdProfesional == user.Id && p.Timestamp > currentTime && p.State == AppointmentState.Pending)
+                        .Where(p => p.IdProfesional == user.Id && p.State == AppointmentState.Pending)
                         .OrderBy(p => p.Timestamp)
                         .Select(ap => new AppointmentDto
                         {
@@ -357,9 +359,10 @@ namespace LusoHealthClient.Server.Controllers
         {
             try
             {
+                AppointmentType type = (AppointmentType)Enum.Parse(typeof(AppointmentType), slot.Type, true);
                 var slots = await _context.AvailableSlots
-                                          .Where(s => s.IdService == slot.ServiceId && s.Start.Date == slot.StartDate)
-                                          .ToListAsync();
+                .Where(s => s.IdService == slot.ServiceId && s.Start.Date == slot.StartDate && s.IsAvailable && s.AppointmentType == type)
+                .ToListAsync();
 
                 return slots;
             }

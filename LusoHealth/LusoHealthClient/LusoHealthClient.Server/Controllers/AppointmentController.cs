@@ -151,6 +151,7 @@ namespace LusoHealthClient.Server.Controllers
         {
             if (model == null) return BadRequest("Não foi possível começar a consulta.");
 
+            TimeZoneInfo portugueseZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Lisbon");
             try
             {
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -178,7 +179,7 @@ namespace LusoHealthClient.Server.Controllers
                 var appointmentDto = new AppointmentDto
                 {
                     Id = appointment.Id,
-                    Timestamp = appointment.Timestamp,
+                    Timestamp = TimeZoneInfo.ConvertTimeFromUtc(appointment.Timestamp, portugueseZone),
                     Location = appointment.Address != null ? appointment.Address.Location : null,
                     Address = appointment.Address != null ? appointment.Address.AddressName : null,
                     Type = appointment.Type.ToString(),
@@ -208,6 +209,7 @@ namespace LusoHealthClient.Server.Controllers
         {
             if (model == null) return BadRequest("Não foi possível começar a consulta.");
 
+            TimeZoneInfo portugueseZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Lisbon");
             try
             {
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -235,7 +237,7 @@ namespace LusoHealthClient.Server.Controllers
                 var appointmentDto = new AppointmentDto
                 {
                     Id = appointment.Id,
-                    Timestamp = appointment.Timestamp,
+                    Timestamp = TimeZoneInfo.ConvertTimeFromUtc(appointment.Timestamp, portugueseZone),
                     Location = appointment.Address != null ? appointment.Address.Location : null,
                     Address = appointment.Address != null ? appointment.Address.AddressName : null,
                     Type = appointment.Type.ToString(),

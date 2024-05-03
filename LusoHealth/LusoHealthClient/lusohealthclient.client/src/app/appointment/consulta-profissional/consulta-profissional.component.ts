@@ -30,6 +30,7 @@ export class ConsultaProfissionalComponent {
   errorMessages: string[] = [];
   responseText: string = "";
   loading: boolean = false;
+  validTime: boolean = false;
 
   service: Service | undefined;
 
@@ -86,6 +87,14 @@ export class ConsultaProfissionalComponent {
     
     this.initializeForm();
     this.getAppointmentInfo().then(() => {
+      console.log("appointment", this.appointment);
+      if (this.appointment?.timestamp) {
+        const appointmentDate = new Date(this.appointment?.timestamp);
+        const today = new Date();
+        if (today > appointmentDate) {
+          this.validTime = true;
+        }
+      }
       loader.load().then(async () => {
         this.initMap();
       });
@@ -115,7 +124,6 @@ export class ConsultaProfissionalComponent {
       ).subscribe({
         next: (appointment: Appointment) => {
           this.appointment = appointment;
-          console.log(appointment);
           this.address = appointment.address ? appointment.address : '';
           resolve();
         },
@@ -193,6 +201,7 @@ export class ConsultaProfissionalComponent {
         }
       }
     });
+    this.closePopup();
   }
 
   /**
@@ -306,7 +315,7 @@ export class ConsultaProfissionalComponent {
   getAvaiableSlots() {
     if (this.appointment?.idService)
     {
-      this.agendaService.getSlots(new Availability(this.chosenDate, null, null, null, this.appointment?.idService, null, "", null)).pipe(
+      this.agendaService.getSlots(new Availability(this.chosenDate, null, null, null, this.appointment?.idService, null, this.appointment.type, null)).pipe(
         takeUntil(this.unsubscribe$)
       ).subscribe({
         next: (availableSlots: any) => {
@@ -405,6 +414,9 @@ export class ConsultaProfissionalComponent {
   openPopup(opcao: string) {
     const overlay = document.getElementById('overlay');
     const remove = document.getElementById('remove-appointment-container');
+    const end = document.getElementById('end-appointment-container');
+    const start = document.getElementById('start-appointment-container');
+    const accept = document.getElementById('accept-appointment-container');
     const edit = document.getElementById('edit-appointment-container');
     const tool = document.getElementById('tooltips'); 
 
@@ -413,6 +425,15 @@ export class ConsultaProfissionalComponent {
     }
     if (remove) {
       remove.style.display = "none";
+    }
+    if (end) {
+      end.style.display = "none";
+    }
+    if (start) {
+      start.style.display = "none";
+    }
+    if (accept) {
+      accept.style.display = "none";
     }
 
     if (overlay) {
@@ -432,6 +453,21 @@ export class ConsultaProfissionalComponent {
           tool.style.display = "block";
         }
       }
+      else if (opcao == "end") {
+        if (end) {
+          end.style.display = "block";
+        }
+      }
+      else if (opcao == "start") {
+        if (start) {
+          start.style.display = "block";
+        }
+      }
+      else if (opcao == "aceitar") {
+        if (accept) {
+          accept.style.display = "block";
+        }
+      }
     }
   }
 
@@ -442,6 +478,9 @@ export class ConsultaProfissionalComponent {
     const overlay = document.getElementById('overlay');
     const add = document.getElementById('add-appointment-container');
     const edit = document.getElementById('edit-appointment-container');
+    const end = document.getElementById('end-appointment-container');
+    const accept = document.getElementById('accept-appointment-container');
+    const start = document.getElementById('start-appointment-container');
     const tool = document.getElementById('tooltips'); 
 
     if (overlay) {
@@ -454,6 +493,15 @@ export class ConsultaProfissionalComponent {
       }
       if (tool) {
         tool.style.display = "none";
+      }
+      if (end) {
+        end.style.display = "none";
+      }
+      if (start) {
+        start.style.display = "none";
+      }
+      if (accept) {
+        accept.style.display = "none";
       }
     }
   }
@@ -528,5 +576,45 @@ export class ConsultaProfissionalComponent {
         title: 'marker',
       });
     }
+  }
+
+  startAppointment() {
+    this.appointmentService.beginAppointment(this.appointment).pipe(
+      takeUntil(this.unsubscribe$)
+    ).subscribe({
+      next: (appointment: any) => {
+        console.log("Appointment started successfully:", appointment);
+        this.appointment = appointment;
+      },
+      error: (error) => {
+        console.log("Error starting appointment:", error);
+        if (error.error.errors) {
+          this.errorMessages = error.error.errors;
+        } else {
+          this.errorMessages.push(error.error);
+        }
+      }
+    });
+    this.closePopup();
+  }
+
+  endAppointment() {
+    this.appointmentService.finishAppointment(this.appointment).pipe(
+      takeUntil(this.unsubscribe$)
+    ).subscribe({
+      next: (appointment: any) => {
+        console.log("Appointment finished successfully:", appointment);
+        this.appointment = appointment;
+      },
+      error: (error) => {
+        console.log("Error finishing appointment:", error);
+        if (error.error.errors) {
+          this.errorMessages = error.error.errors;
+        } else {
+          this.errorMessages.push(error.error);
+        }
+      }
+    });
+    this.closePopup();
   }
 }

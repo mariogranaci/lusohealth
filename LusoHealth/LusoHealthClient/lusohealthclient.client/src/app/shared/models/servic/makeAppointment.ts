@@ -9,4 +9,5 @@ export interface MakeAppointment {
   home: boolean;
   pricePerHour: number;
   availability: string[] | null;
+  professionalId: string | null;
 }

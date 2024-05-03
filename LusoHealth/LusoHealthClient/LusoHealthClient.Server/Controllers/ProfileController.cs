@@ -872,6 +872,10 @@ namespace LusoHealthClient.Server.Controllers
                 var user = await _userManager.FindByIdAsync(userId);
                 if (user == null) return NotFound("Não foi possível encontrar o utilizador.");
 
+                //check if the user has already reported the professional
+                var reportExists = await _context.Report.AnyAsync(r => r.IdPatient == user.Id && r.IdProfesional == reportDto.IdProfesional);
+                if (reportExists) return BadRequest("Já reportou este profissional.");
+
                 var report = new Report
                 {
                     Timestamp = DateTime.Now,
@@ -887,7 +891,7 @@ namespace LusoHealthClient.Server.Controllers
             }
             catch (Exception)
             {
-                return BadRequest("Ocorreu um erro ao reportar.");
+                return BadRequest("Ocorreu um erro ao reportar o profissional.");
             }
         }
 

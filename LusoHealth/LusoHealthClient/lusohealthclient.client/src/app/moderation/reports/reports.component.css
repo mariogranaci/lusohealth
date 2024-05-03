@@ -1,5 +1,4 @@
-main
-{
+main {
   position: relative;
   padding: 0 7%;
   min-width: 1150px;
@@ -63,6 +62,10 @@ main
   border-radius: 50%;
   margin-right: 15px;
 }
+
+  .report-profile-image:hover {
+    cursor: pointer;
+  }
 
 .report-title {
   font-weight: bold;
@@ -218,7 +221,14 @@ main
   background-color: #ECEEF0;
   border: none;
   font-size: 20px;
-  margin: 20px 0;
+  margin: 15px 0;
+  padding: 15px 0;
+  transition: ease-in-out 0.3s;
+}
+
+.no-btn:hover {
+  background-color: #cecece;
+  cursor: pointer;
 }
 
 
@@ -230,7 +240,7 @@ main
 }
 
 .dropdown {
-  width:fit-content;
+  width: fit-content;
   position: relative;
   background-color: #fff;
   border-radius: 10px;

@@ -67,6 +67,7 @@ namespace LusoHealthClient.Server.Controllers
                 SpecialtyId = info.IdSpecialty,
                 Specialty = info.Specialty.Name,
                 ProfessionalName = info.Professional.User.FirstName + " " + info.Professional.User.LastName,
+                ProfessionalId = info.Professional.UserID,
                 Category = info.Specialty.ProfessionalType.Name,
                 Online = info.Online,
                 Presential = info.Presential,

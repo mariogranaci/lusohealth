@@ -2,8 +2,8 @@
   <img id="question-btn" (click)="openPopup('tool')" src="assets/images/Agenda/question-mark.png" />
   <div class="title">
     <h1>Marcar Consulta</h1>
-    <figure><img id="img-perfil" src="/assets/images/Perfil/profileImage.jpg" /></figure>
-    <div class="name" id="name-title"></div>
+    <figure><img id="img-perfil" src="/assets/images/Perfil/profileImage.jpg" [routerLink]="['/professional-profile']" [queryParams]="{ id: serviceInfo?.professionalId }" /></figure>
+    <div class="name" id="name-title" [routerLink]="['/professional-profile']" [queryParams]="{ id: serviceInfo?.professionalId }"></div>
   </div>
   <div class="select-dropdown">
     <select [(ngModel)]="selectedOption" (change)="onOptionSelectionChange($event)">

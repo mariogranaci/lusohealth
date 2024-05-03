@@ -10,7 +10,7 @@
     </div>
   </div>
 
- 
+
 
   <div class="reports-container">
     <div class="dropdown">
@@ -21,6 +21,7 @@
         <option value="3">Pendentes</option>
       </select>
     </div>
+
     <ng-container *ngFor="let report of reports">
       <div class="report-item">
         <img class="report-profile-image" alt="Imagem de Perfil" src="/assets/images/Perfil/profileImage.jpg"
@@ -50,6 +51,9 @@
         </div>
       </div>
     </ng-container>
+    <div *ngIf="reports && reports.length == 0" style="text-align: center;">
+      <h2>Não existem reports com os filtros selecionados</h2>
+    </div>
     <div class="more-container">
       <button class="btn" id="more" (click)="addDisplayedReports()" *ngIf="!hide">
         <img class="arrow" src="/assets/images/Agenda/arrow-down.png" />

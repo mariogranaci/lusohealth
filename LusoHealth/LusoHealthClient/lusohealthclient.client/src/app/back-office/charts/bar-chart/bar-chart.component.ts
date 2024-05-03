@@ -27,20 +27,19 @@ export class BarChartComponent {
     this.RenderChart();
   }
 
-  setSelectedDateOption(option: string) {
+  setSelectedDateOption(option: string){
     this.dateType = option;
-    console.log(this.dataType);
 
     this.chart.destroy();
-    this.RenderChart();
-    
+    this.RenderChart()
   }
 
   RenderChart() {
     var data = this.dataType === 'Client' ? this.data.patients : this.data.professionals;
-    console.log(data);
+
     const label = this.dataType === 'Client' ? 'Clientes' : 'Profissionais';
     const unit = this.dateType === 'Year' ? 'ano' : this.dateType === 'Month' ? 'mês' : 'dia';
+    
 
     this.chart = new Chart("bar-chart", {
       type: 'bar',
@@ -62,6 +61,7 @@ export class BarChartComponent {
         }
       },
     });
+
   }
 }
 

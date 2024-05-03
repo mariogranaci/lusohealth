@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { formatDate } from '@angular/common';
 import { BackOfficeService } from '../backoffice.service';
 import { BarChartComponent } from '../charts/bar-chart/bar-chart.component';
@@ -12,7 +12,7 @@ export class EstatisticasUtilizadoresAnoComponent {
   @ViewChild(BarChartComponent) childComponent: BarChartComponent | undefined;
 
   data: any[] = [];
-  dataLoaded: boolean = false;
+  dataLoaded: any = false;
   chart: any;
   selectedOption: string = "Patients";
   selectedDateOption: string = "Year";
@@ -34,8 +34,7 @@ export class EstatisticasUtilizadoresAnoComponent {
     this.selectedDateOption = option;
     this.dataLoaded = false;
     this.getAnuallyRegisteredUsers(this.selectedDateOption);
-    this.childComponent?.setSelectedDateOption(option);
-    this.dataLoaded = true;
+    
   }
 
 
@@ -46,19 +45,14 @@ export class EstatisticasUtilizadoresAnoComponent {
     
     switch (timeUnit) {
       case 'Day':
-        const startDateDay = new Date();
-        startDateDay.setDate(startDateDay.getDate() - 7);
-        startDate = this.getDateString(startDateDay.getFullYear(), startDateDay.getMonth(), startDateDay.getDate());
+        startDate = this.getDateString(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() - 7);
         endDate = this.getDateString(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
         break;
       case 'Month':
-        const startDateMonth = new Date();
-        startDateMonth.setDate(startDateMonth.getDate() - 30);
-        startDate = this.getDateString(startDateMonth.getFullYear(), startDateMonth.getMonth(), startDateMonth.getDate());
+        startDate = this.getDateString(new Date().getFullYear() - 1, 1, 1);
         endDate = this.getDateString(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
         break;
       case 'Year':
-        console.log('Year: ', new Date().getTime());
         startDate = this.getDateString(new Date().getFullYear() - 5, 0, 1);
         endDate = this.getDateString(new Date().getFullYear(), 11, 31);
         break;
@@ -71,8 +65,9 @@ export class EstatisticasUtilizadoresAnoComponent {
       (response: any) => {
         console.log("Success!");
         this.data = response;
+
+        this.childComponent?.setSelectedDateOption(this.selectedDateOption);
         this.dataLoaded = true;
-        console.log("enfim",this.data);
       },
       (error: any) => {
         console.error('Error: ', error);

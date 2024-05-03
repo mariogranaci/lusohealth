@@ -87,44 +87,46 @@ namespace LusoHealthClient.Server.Controllers
 			/// </summary>
 			/// <returns>Um objeto contendo o número de registos de pacientes e profissionais por ano.</returns>
 			[HttpGet("get-anually-registered-users")]
-            public async Task<ActionResult<List<object>>> GetAnuallyRegistered()
+            public async Task<ActionResult<List<object>>> GetAnuallyRegistered([FromQuery] string timeUnit, [FromQuery] string startDate, [FromQuery] string endDate)
             {
-                //Professionals
-                var professionalsRegistered = await _context.Professionals
-                    .Include(u => u.User)
-                    .ToListAsync();
+                var startDateTime = DateTime.Parse(startDate);
+                var endDateTime = DateTime.Parse(endDate);
 
-                var professionalRegistrationsByYear = professionalsRegistered
-                    .Where(p => p.User.DateCreated != null && p.User.UserType == 'P')
-                    .GroupBy(p => p.User.DateCreated.Year)
+
+
+                //Professionals
+                var professionalRegistrations = await _context.Professionals
+                    .Include(u => u.User)
+                    .Where(p => p.User.DateCreated >= startDateTime && p.User.DateCreated <= endDateTime && p.User.UserType == 'P')
+                    .GroupBy(p => timeUnit == "Year" ? p.User.DateCreated.Year :
+                                    timeUnit == "Month" ? p.User.DateCreated.Month :
+                                    p.User.DateCreated.Day)
                     .OrderBy(group => group.Key)
                     .Select(group => new
                     {
-                        Year = group.Key,
+                        Key = group.Key,
                         Count = group.Count()
                     })
-                    .ToList();
+                    .ToListAsync();
 
                 //Patients
-                var patientsRegistered = await _context.Users
-                    .Where(u => u.UserType != 'U') 
-                    .ToListAsync();
-
-                var patientRegistrationsByYear = patientsRegistered
-                    .Where(u => u.DateCreated != null) 
-                    .GroupBy(u => u.DateCreated.Year)
+                var patientRegistrations = await _context.Users
+                    .Where(u => u.UserType != 'U' && u.DateCreated >= startDateTime && u.DateCreated <= endDateTime)
+                    .GroupBy(u => timeUnit == "Year" ? u.DateCreated.Year :
+                                  timeUnit == "Month" ? u.DateCreated.Month :
+                                  u.DateCreated.Day)
                     .OrderBy(group => group.Key)
                     .Select(group => new
                     {
-                        Year = group.Key,
+                        Key = group.Key,
                         Count = group.Count()
-                    })
-                    .ToList();
+                    }) // Default value if no records found
+                    .ToListAsync();
 
                 var registrationSummary = new
                 {
-                    Patients = patientRegistrationsByYear,
-                    Professionals = professionalRegistrationsByYear
+                    Patients = patientRegistrations,
+                    Professionals = professionalRegistrations
                 };
 
                 return Ok(registrationSummary);

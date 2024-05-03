@@ -93,7 +93,6 @@ namespace LusoHealthClient.Server.Controllers
                 var endDateTime = DateTime.Parse(endDate);
 
 
-
                 //Professionals
                 var professionalRegistrations = await _context.Professionals
                     .Include(u => u.User)
@@ -111,7 +110,7 @@ namespace LusoHealthClient.Server.Controllers
 
                 //Patients
                 var patientRegistrations = await _context.Users
-                    .Where(u => u.UserType != 'U' && u.DateCreated >= startDateTime && u.DateCreated <= endDateTime)
+                    .Where(u => u.UserType == 'U' && u.DateCreated >= startDateTime && u.DateCreated <= endDateTime)
                     .GroupBy(u => timeUnit == "Year" ? u.DateCreated.Year :
                                   timeUnit == "Month" ? u.DateCreated.Month :
                                   u.DateCreated.Day)
@@ -120,7 +119,7 @@ namespace LusoHealthClient.Server.Controllers
                     {
                         Key = group.Key,
                         Count = group.Count()
-                    }) // Default value if no records found
+                    })
                     .ToListAsync();
 
                 var registrationSummary = new

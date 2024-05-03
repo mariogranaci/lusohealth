@@ -14,7 +14,7 @@ export class EstatisticasUtilizadoresAnoComponent {
   data: any[] = [];
   dataLoaded: any = false;
   chart: any;
-  selectedOption: string = "Patients";
+  selectedOption: string = "Professional";
   selectedDateOption: string = "Year";
 
   constructor(public backoffice: BackOfficeService) { }
@@ -37,8 +37,6 @@ export class EstatisticasUtilizadoresAnoComponent {
     
   }
 
-
-
   getAnuallyRegisteredUsers(timeUnit: string) {
     let startDate: string;
     let endDate: string;
@@ -46,7 +44,7 @@ export class EstatisticasUtilizadoresAnoComponent {
     switch (timeUnit) {
       case 'Day':
         startDate = this.getDateString(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() - 7);
-        endDate = this.getDateString(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+        endDate = this.getDateString(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 1);
         break;
       case 'Month':
         startDate = this.getDateString(new Date().getFullYear() - 1, 1, 1);
@@ -60,12 +58,13 @@ export class EstatisticasUtilizadoresAnoComponent {
         console.error('Invalid time unit');
         return;
     }
+    console.log(startDate, endDate);
 
     this.backoffice.getAnuallyRegisteredUsers(startDate, endDate, timeUnit).subscribe(
       (response: any) => {
         console.log("Success!");
         this.data = response;
-
+        console.log(response, timeUnit);
         this.childComponent?.setSelectedDateOption(this.selectedDateOption);
         this.dataLoaded = true;
       },

@@ -9,7 +9,7 @@ Chart.register(...registerables);
 })
 export class BarChartComponent {
   @Input() data: any;
-  @Input() dataType: string = 'Patients';
+  @Input() dataType: string = 'Professional';
   @Input() dateType: string = 'Year';
 
   chart: any;

@@ -53,7 +53,8 @@ export class MarcarConsultaComponent {
   phrases: string[] = [
     "A sugestão de consulta é dada com base na disponibilidade do profissional, de forma a garantir uma melhor alocação das vagas.",
     "Para procurar por um Tipo de Consulta específico, aceda à opção 'Tipo de Consulta' e selecione o tipo pretendido, seja Online, Presencial ou Domicílio.",
-    "Se pretender escolher a data da consulta, clique na opção 'Quero marcar para outra data', e será fornecido um calendário, onde após selecionada a data, serão apresentadas as disponibilidades para a mesma."
+    "Se pretender escolher a data da consulta, clique na opção 'Quero marcar para outra data', e será fornecido um calendário, onde após selecionada a data, serão apresentadas as disponibilidades para a mesma.",
+    "Para aceder ao perfil do profissional, clique no seu nome ou na sua imagem de perfil."
   ];
   currentPhraseIndex: number = 0;
   currentPhrase: string = this.phrases[0];

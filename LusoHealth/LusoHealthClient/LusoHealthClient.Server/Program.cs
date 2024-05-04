@@ -110,8 +110,7 @@ builder.Services.AddCors(options =>
         build.WithOrigins(builder.Configuration["JWT:ClientUrl"], builder.Configuration["JWT:Issuer"])
                .AllowAnyMethod()
                .AllowAnyHeader()
-               .AllowCredentials()
-               .SetIsOriginAllowed((host) => true));
+               .AllowCredentials());
 });
 
 builder.Services.AddAuthorization(options =>

@@ -150,7 +150,7 @@ export class MarcacoesComponent {
   * @param event O evento de entrada.
   */
   onSearchInput() {
-    this.searchTerm = this.removeAccents(this.searchTerm.trim().toLowerCase());
+    this.searchTerm = this.removeAccents(this.searchTerm.toLowerCase());
     this.currentPage = 1;
     this.getServicesFiltered();
   }

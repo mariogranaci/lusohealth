@@ -1,9 +1,43 @@
 footer {
-  background-color: grey;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  height: 35px;
+  background-color: #283138;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+  height: 150px;
+  width: 100%;
+  color: #f5f7fa;
 }
+
+#logo {
+  width: auto;
+  height: 100px;
+}
+
+
+h2 {
+  margin-bottom: 15px;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+ul li {
+    margin-bottom: 10px;
+}
+
+ul li a {
+    text-decoration: none;
+    color: #f5f7fa;
+    transition: color 0.3s ease;
+}
+
+
+ul li a:hover {
+    color: #ccc;
+}
+
 
 

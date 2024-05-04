@@ -50,7 +50,8 @@
             <div class="type-appointment">{{ getAppointmentType(appointment.type) }}</div>
           </div>
         </div>
-        <button class="btn" [routerLink]="['/patient-appointment']" [queryParams]="{ appointment: appointment.id }">Ver Detalhes</button>
+        <button *ngIf="role === 'Patient'" class="btn" [routerLink]="['/patient-appointment']" [queryParams]="{ appointment: appointment.id }">Ver Detalhes</button>
+        <button *ngIf="role === 'Professional'" class="btn" [routerLink]="['/professional-appointment']" [queryParams]="{ appointment: appointment.id }">Ver Detalhes</button>
       </div>
     </div>
     <div class="more-container" *ngIf="appointmentsFiltered.length > displayedAppointments.length">

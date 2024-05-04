@@ -51,3 +51,8 @@
     display: block;
     width: 35px;
 }
+
+.card-body {
+  font-weight: bold; 
+  font-size: 52px; 
+}

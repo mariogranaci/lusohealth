@@ -280,6 +280,7 @@ namespace LusoHealthClient.Server.Controllers
                 UserName = model.UserId,
                 BirthDate = model.DataNascimento,
                 Provider = model.Provider,
+                DateCreated = DateTime.UtcNow
 
             };
 

@@ -9,6 +9,7 @@
 		public int SpecialtyId { get; set; }
 		public string? Specialty { get; set; }
 		public string ProfessionalName { get; set; }
+		public string? ProfessionalId { get; set; }
 		public string Category { get; set; }
 		public bool Online { get; set; }
 		public bool Presential { get; set; }

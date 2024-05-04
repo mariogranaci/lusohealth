@@ -21,10 +21,10 @@
     </div>
     <ng-container *ngFor="let review of reviews">
       <div class="review-item">
-        <img class="review-profile-image" alt="Imagem de Perfil" src="/assets/images/Perfil/profileImage.jpg"/>
+        <img class="review-profile-image" alt="Imagem de Perfil" src="/assets/images/Perfil/profileImage.jpg" />
         <div class="review-details">
           <div class="review-info">
-            <div class="review-title"><p>{{review.stars}}</p><img class="review-star-image" alt="Stars" src="/assets/images/profile/star.png"/></div>
+            <div class="review-title"><p>{{review.stars}}</p><img class="review-star-image" alt="Stars" src="/assets/images/profile/star.png" /></div>
             <div class="review-title" *ngIf="review?.state?.toString() == '1'">REPORTADO</div>
             <div class="review-title" *ngIf="review?.state?.toString() == '2'">REMOVIDO</div>
             <div class="review-date-time">
@@ -47,6 +47,9 @@
         </div>
       </div>
     </ng-container>
+    <div *ngIf="reviews && reviews.length == 0" style="text-align: center;">
+      <h2>Não existem reviews com os filtros selecionados</h2>
+    </div>
     <div class="more-container">
       <button class="btn" id="more" (click)="addDisplayedReviews()" *ngIf="!hide">
         <img class="arrow" src="/assets/images/Agenda/arrow-down.png" />

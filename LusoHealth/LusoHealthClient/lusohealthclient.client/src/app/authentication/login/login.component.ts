@@ -23,29 +23,29 @@ export class LoginComponent implements OnInit {
 
   phrases: any[] = [
     {
-      title: "Recuperação de Conta Suspensa",
-      description: "Após o período de suspensão, você pode recuperar sua conta. Clique no botão 'Recuperar Conta' na página inicial da LusoHealth."
+      title: "Processo de Login ou Registo",
+      description: "Insira o seu e-mail e password nos campos designados e clique no botão correspondente para prosseguir. Se estiver a efetuar um registo, certifique-se que clica no botão 'Registar' após a inserção das suas informações."
     },
     {
-      title: "Recuperação de Senha",
-      description: "Para recuperar sua senha, clique no botão 'Esqueceu a Senha?' na tela de login. Um e-mail será enviado para você com as instruções para a recuperação."
-    },
-    {
-      title: "Criação de Conta na LusoHealth",
-      description: "Se você é novo, clique no botão 'Criar Conta' na página inicial da LusoHealth. Alternativamente, você pode fazer login usando sua conta do Google."
-    },
-    {
-      title: "Login na Conta LusoHealth",
-      description: "Para fazer login na sua conta LusoHealth, insira seu e-mail e senha nos campos correspondentes. Clique no botão 'Login' para prosseguir."
+      title: "Login",
+      description: "Para fazer login na sua conta LusoHealth, insira o seu e-mail e password nos campos correspondentes. Clique no botão 'Login' para prosseguir."
     },
     {
       title: "Login com Conta Google",
-      description: "Se preferir usar sua conta do Google para fazer login, clique no botão 'Login com Conta Google' na tela de login."
+      description: "Se preferir usar a sua conta do Google para fazer login, clique no botão 'Login com Conta Google'."
     },
     {
-      title: "Processo de Login ou Criação de Conta",
-      description: "Insira seu e-mail e senha nos campos designados e clique no botão correspondente para prosseguir. Se estiver criando uma conta, certifique-se de clicar no botão de criação de conta após inserir as informações."
-    }
+      title: "Registo na LusoHealth",
+      description: "Se está a criar conta, clique no botão 'Não possui Conta? Registe-se' na página de Login. Alternativamente, pode fazer registo usando a sua conta Google."
+    },
+    {
+      title: "Recuperação de Password",
+      description: "Para recuperar a password, clique no botão 'Esqueceu-se da password?' no ecrã. Será enviado um email com as instruções para a recuperação da mesma."
+    },
+    {
+      title: "Recuperação de Conta Suspensa",
+      description: "Após o período de suspensão, pode recuperar a sua conta. Clique no botão 'Recuperar Conta' na página de Login."
+    },
   ];
   currentPhraseIndex: number = 0;
   currentPhrase: any = this.phrases[0];

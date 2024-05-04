@@ -17,6 +17,7 @@ import { Certificate } from '../shared/models/profile/certificate';
 import { AddReview } from '../shared/models/profile/addReview';
 import { UpdatePicture } from '../shared/models/profile/updatePicture';
 import { Location } from '../shared/models/profile/location';
+import { Report } from '../shared/models/profile/report';
 
 @Injectable({
   providedIn: 'root'
@@ -392,5 +393,11 @@ export class ProfileService {
   reportReview(model: Review) {
     const headers = this.getHeaders();
     return this.http.patch<Review>(`${environment.appUrl}/api/profile/report-review`, model, { headers });
+  }
+
+
+  addReportProfessional(report: Report): Observable<any> {
+    const headers = this.getHeaders();
+    return this.http.post<any>(`${environment.appUrl}/api/profile/add-report`, report, { headers });
   }
 }

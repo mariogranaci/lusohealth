@@ -10,6 +10,7 @@ using LusoHealthClient.Server.DTOs.Administration;
 using LusoHealthClient.Server.DTOs.Profile;
 using LusoHealthClient.Server.Models.FeedbackAndReports;
 using LusoHealthClient.Server.Models.Professionals;
+using LusoHealthClient.Server.Models.Services;
 using LusoHealthClient.Server.Models.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -873,8 +874,12 @@ namespace LusoHealthClient.Server.Controllers
                 if (user == null) return NotFound("Não foi possível encontrar o utilizador.");
 
                 //check if the user has already reported the professional
-                var reportExists = await _context.Report.AnyAsync(r => r.IdPatient == user.Id && r.IdProfesional == reportDto.IdProfesional);
-                if (reportExists) return BadRequest("Já reportou este profissional.");
+                var reportExists = await _context.Report.AnyAsync(r => r.IdPatient == user.Id && r.IdProfesional == reportDto.IdProfesional && r.State == ReportState.Pending);
+                if (reportExists) return BadRequest("Já existe uma denúncia em análise.");
+
+                //check if the user already has an appointment with the professional
+                var appointmentExists = await _context.Appointment.AnyAsync(a => a.IdPatient == user.Id && a.IdProfesional == reportDto.IdProfesional);
+                if (!appointmentExists) return BadRequest("Não pode reportar este profissional pois ainda não marcou nenhuma consulta com o mesmo.");
 
                 var report = new Report
                 {
@@ -936,8 +941,11 @@ namespace LusoHealthClient.Server.Controllers
                 var user = await _userManager.FindByIdAsync(userId);
                 if (user == null) return NotFound("Não foi possível encontrar o utilizador");
 
-                var reviewExists = await _context.Reviews.AnyAsync(r => r.IdPatient == user.Id && r.Service.IdSpecialty == reviewDto.IdSpecialty);
+                //check if the user already had an appointment with the professional and if the appointment is already finished
+                var appointmentExists = await _context.Appointment.AnyAsync(a => a.IdPatient == user.Id && a.IdService == reviewDto.IdService && a.State == AppointmentState.Done);
+                if (!appointmentExists) return BadRequest("Não pode adicionar uma review a um serviço que ainda não usufruiu.");
 
+                var reviewExists = await _context.Reviews.AnyAsync(r => r.IdPatient == user.Id && r.Service.IdSpecialty == reviewDto.IdSpecialty);
                 if (reviewExists) return BadRequest("Já adicionou uma review para este serviço");
 
                 var review = new Review
@@ -945,7 +953,9 @@ namespace LusoHealthClient.Server.Controllers
                     IdPatient = user.Id,
                     IdService = reviewDto.IdService,
                     Stars = reviewDto.Stars,
-                    Description = reviewDto.Description
+                    Description = reviewDto.Description,
+                    State = ReviewState.Normal,
+                    Timestamp = DateTime.UtcNow,
                 };
 
                 _context.Reviews.Add(review);

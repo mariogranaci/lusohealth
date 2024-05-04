@@ -10,6 +10,7 @@ import { AuthenticationService } from '../../authentication/authentication.servi
 import { ProfileService } from '../profile.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { User } from '../../shared/models/authentication/user';
+import { Report } from '../../shared/models/profile/report';
 
 @Component({
   selector: 'app-public-profile-professional',
@@ -20,8 +21,10 @@ import { User } from '../../shared/models/authentication/user';
 export class PublicProfileProfessionalComponent implements OnInit {
   private unsubscribe$ = new Subject<void>();
   addSpecialityForm: FormGroup = new FormGroup({});
+  addReportForm: FormGroup = new FormGroup({});
   editSpecialityForm: FormGroup = new FormGroup({});
   updateDescriptionForm: FormGroup = new FormGroup({});
+  submittedAddReport = false;
   submittedAdd = false;
   submittedEdit = false;
   submittedDescription = false;
@@ -162,6 +165,10 @@ export class PublicProfileProfessionalComponent implements OnInit {
 
     this.updateDescriptionForm = this.formBuilder.group({
       description: ['', [Validators.maxLength(200)]],
+    });
+
+    this.addReportForm =  this.formBuilder.group({
+      description: ['', [Validators.required, Validators.minLength(30) , Validators.maxLength(1000)]],
     });
   }
 
@@ -428,6 +435,54 @@ export class PublicProfileProfessionalComponent implements OnInit {
     }
   }
 
+
+  addReport() {
+    this.submittedAddReport = true;
+    this.errorMessages = [];
+    /*this.responseText = '';*/
+
+    if (this.addReportForm.valid) {
+
+      const form = this.addReportForm.value;
+
+      
+
+      if (this.professionalId) {
+        var newReport = new Report(
+          null,
+          null,
+          null,
+          this.professionalId,
+          form.description,
+          null
+        );
+          
+
+        this.profileService.addReportProfessional(newReport).subscribe({
+          next: (response: any) => {
+            /*this.responseText = response.value.message;*/
+            console.log(newReport);
+            this.submittedAddReport = false;
+           
+
+            this.addReportForm.reset();
+            this.closePopup();
+          },
+          error: (error) => {
+            if (error.error.errors) {
+              this.errorMessages = error.error.errors;
+            } else {
+              this.errorMessages.push(error.error);
+            }
+          }
+        })
+      }
+      else {
+        this.errorMessages.push("Algo correu mal!");
+      }
+    }
+  }
+
   /**
  * Edita uma especialidade do perfil do profissional.
  */
@@ -615,12 +670,16 @@ export class PublicProfileProfessionalComponent implements OnInit {
     const overlay = document.getElementById('overlay');
     const add = document.getElementById('add-speciality-container');
     const edit = document.getElementById('edit-speciality-container');
+    const report = document.getElementById('add-report-container');
 
     if (edit) {
       edit.style.display = "none";
     }
     if (add) {
       add.style.display = "none";
+    }
+    if (report) {
+      report.style.display = "none";
     }
 
     if (overlay) {
@@ -635,6 +694,11 @@ export class PublicProfileProfessionalComponent implements OnInit {
           edit.style.display = "block";
         }
       }
+      else if (opcao == "report") {
+        if (report) {
+          report.style.display = "block";
+        }
+      }
     }
   }
 
@@ -645,6 +709,7 @@ export class PublicProfileProfessionalComponent implements OnInit {
     const overlay = document.getElementById('overlay');
     const add = document.getElementById('add-speciality-container');
     const edit = document.getElementById('edit-speciality-container');
+    const report = document.getElementById('add-report-container');
 
     if (overlay) {
       overlay.style.display = 'none';
@@ -653,6 +718,9 @@ export class PublicProfileProfessionalComponent implements OnInit {
       }
       if (add) {
         add.style.display = "none";
+      }
+      if (report) {
+        report.style.display = "none";
       }
     }
   }

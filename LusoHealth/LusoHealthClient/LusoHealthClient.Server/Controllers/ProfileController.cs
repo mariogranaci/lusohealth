@@ -873,14 +873,19 @@ namespace LusoHealthClient.Server.Controllers
                 var user = await _userManager.FindByIdAsync(userId);
                 if (user == null) return NotFound("Não foi possível encontrar o utilizador.");
 
-                //check if the user has already reported the professional
-                var reportExists = await _context.Report.AnyAsync(r => r.IdPatient == user.Id && r.IdProfesional == reportDto.IdProfesional && r.State == ReportState.Pending);
+				if (reportDto.IdProfesional == null || reportDto.Description == null)
+				{
+					return BadRequest("Algo correu mal.");
+				}
+
+				//check if the user has already reported the professional
+				var reportExists = await _context.Report.AnyAsync(r => r.IdPatient == user.Id && r.IdProfesional == reportDto.IdProfesional && r.State == ReportState.Pending);
                 if (reportExists) return BadRequest("Já existe uma denúncia em análise.");
 
                 //check if the user already has an appointment with the professional
                 var appointmentExists = await _context.Appointment.AnyAsync(a => a.IdPatient == user.Id && a.IdProfesional == reportDto.IdProfesional);
                 if (!appointmentExists) return BadRequest("Não pode reportar este profissional pois ainda não marcou nenhuma consulta com o mesmo.");
-
+                
                 var report = new Report
                 {
                     Timestamp = DateTime.Now,

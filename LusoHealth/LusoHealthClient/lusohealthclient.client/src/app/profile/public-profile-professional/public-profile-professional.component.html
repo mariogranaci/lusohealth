@@ -3,7 +3,7 @@
   <section class="form-row">
 
     <div id="button" *ngIf="(isPatient)">
-      <button class="top-right-btn btn-red">Reportar</button>
+      <button class="top-right-btn btn-red" (click)="openPopup('report')">Reportar</button>
     </div>
 
     <figure>
@@ -220,6 +220,29 @@
       <div class="speciality-form-box">
         <label for="add-price">Descrição:</label>
         <textarea formControlName="description" id="description-review" name="description" placeholder="Insira a sua descrição..."></textarea>
+      </div>
+
+      <div class="form-buttons-row">
+        <button type="reset" class="btn btn-red" (click)="closePopup()">Cancelar</button>
+
+        <button type="submit" class="btn btn-blue">Adicionar</button>
+      </div>
+
+    </form>
+
+    
+
+    <form [formGroup]="addReportForm" (ngSubmit)="addReport()" id="add-report-container" class="overlay-container" autocomplete="off" (click)="stopPropagation($event)">
+
+      <h2>Reportar Profissional</h2>
+
+      <div class="speciality-form-box">
+        <label for="add-price">Descrição:</label>
+        <textarea formControlName="description" id="description-review" name="description" placeholder="Insira a sua descrição..."
+                  [class.is-invalid]="submittedAddReport && addReportForm.get('description')?.errors" required></textarea>
+        <span class="text-danger" *ngIf="submittedAddReport && addReportForm.get('description')?.errors">
+          A descrição tem de ter no mínimo 30 caracteres e no máximo 1000 caracteres.
+        </span>
       </div>
 
       <div class="form-buttons-row">

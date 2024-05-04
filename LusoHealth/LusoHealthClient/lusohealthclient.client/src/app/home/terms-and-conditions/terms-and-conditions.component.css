@@ -1,6 +1,7 @@
 main {
   min-height: calc(100vh - 65px);
   margin-bottom: 50px;
+  padding: 0 10%;
 }
 
 .text {
@@ -25,5 +26,9 @@ p {
 a{
    text-decoration:underline;
    color:black;
+}
+
+#logo {
+  width: 400px;
 }
 

@@ -564,6 +564,7 @@ namespace LusoHealthClient.Server.Controllers
             var token = await _userManager.GenerateUserTokenAsync(user, "Default", "UnlockUser");
             token = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
             var url = $"{_config["JWT:ClientUrl"]}/{_config["Email:RecoverAccountPath"]}?token={token}&email={user.Email}";
+            Console.WriteLine(url);
 
             var body = $"Olá {user.FirstName + " " + user.LastName}, <br/>" +
                 $"Clique no link abaixo para desbloquear a sua conta: <br/>" +

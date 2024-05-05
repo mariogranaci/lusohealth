@@ -16,7 +16,8 @@ namespace LusoHealthClient.Server.Services
         public async Task<bool> SendEmailAsync(EmailSendDto emailSend)
         {
             MailjetClient client = new MailjetClient(_congif["MailJet:ApiKey"], _congif["MailJet:SecretKey"]);
-
+            Console.WriteLine(_congif["MailJet:ApiKey"]);
+            Console.WriteLine(_congif["MailJet:SecretKey"]);
             var email = new TransactionalEmailBuilder()
                 .WithFrom(new SendContact(_congif["Email:From"], _congif["Email:ApplicationName"]))
                 .WithSubject(emailSend.Subject)
@@ -25,6 +26,7 @@ namespace LusoHealthClient.Server.Services
                 .Build();
 
             var response = await client.SendTransactionalEmailAsync(email);
+            Console.WriteLine(response.Messages);
             if(response.Messages != null)
             {
                 if (response.Messages[0].Status == "success")

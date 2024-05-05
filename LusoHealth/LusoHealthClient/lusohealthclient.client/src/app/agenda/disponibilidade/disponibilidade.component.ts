@@ -43,11 +43,11 @@ export class DisponibilidadeComponent {
 
   phrases: string[] = [
     "Para adicionar a sua disponibilidade, clique no botão com o sinal de mais e preencha os campos.",
-    "Para remover a sua disponibilidade, basta selecionar no calendário os dias que pretende apagar."
+    "Para remover vagas da sua disponibilidade, selecione o intervalo de tempo que pretende eliminar."
   ];
   gifs: string[][] = [
     ["assets/images/Agenda/add-gif.gif"],
-    ["caminho-para-gif2-1.gif"],
+    ["assets/images/Agenda/remove-gif.gif"],
   ];
   currentPhraseIndex: number = 0;
   currentPhrase: string = this.phrases[0];

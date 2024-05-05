@@ -96,6 +96,7 @@ figure {
   min-width: 300px;
   min-height: 280px;
   width: 300px;
+  box-shadow: 0 12px 6px -4px rgba(0, 0, 0, 0.21);
 }
 
 .content span {
@@ -114,6 +115,7 @@ figure {
   border-radius: 10px;
   width: 95px;
   height: 95px;
+  box-shadow: 0 12px 6px -4px rgba(0, 0, 0, 0.21);
 }
 
 #plus-button {

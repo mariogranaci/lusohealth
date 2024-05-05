@@ -137,12 +137,22 @@ figure {
 .edit-button, .delete-button, .plus-button {
   background: none;
   border: none;
+  outline: none;
+  transition: transform 0s;
 }
 
-.agregado-imagem {
-  max-width: 32px;
-  margin-left: 12px;
-}
+  .edit-button:hover, .delete-button:hover, .plus-button:hover {
+      cursor: pointer;
+  }
+
+  .edit-button:active, .delete-button:active, .plus-button:active {
+    transform: translateY(2px);
+  }
+
+  .agregado-imagem {
+    max-width: 32px;
+    margin-left: 12px;
+  }
 
 #icons {
   position: absolute;

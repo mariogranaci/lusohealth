@@ -1,5 +1,5 @@
 main {
-    min-height: calc(100vh - 65px);
+  min-height: calc(100vh - 65px);
 }
 
 h1 {
@@ -12,7 +12,7 @@ h1 {
   width: 65%;
   height: fit-content;
   text-align: justify;
-  text-overflow:ellipsis;
+  text-overflow: ellipsis;
 }
 
 .form-row {
@@ -79,8 +79,8 @@ h1 {
 }
 
 figure {
-  display:flex;
-  justify-content:center;
+  display: flex;
+  justify-content: center;
   margin-bottom: 10px;
 }
 
@@ -96,10 +96,11 @@ figure {
   min-width: 300px;
   min-height: 280px;
   width: 300px;
+  box-shadow: 0 12px 6px -4px rgba(0, 0, 0, 0.21);
 }
 
 .content span {
-  font-weight:bold;
+  font-weight: bold;
 }
 
 .content div {
@@ -114,6 +115,7 @@ figure {
   border-radius: 10px;
   width: 95px;
   height: 95px;
+  box-shadow: 0 12px 6px -4px rgba(0, 0, 0, 0.21);
 }
 
 #plus-button {
@@ -137,7 +139,17 @@ figure {
 .edit-button, .delete-button, .plus-button {
   background: none;
   border: none;
+  outline: none;
+  transition: transform 0s;
 }
+
+  .edit-button:hover, .delete-button:hover, .plus-button:hover {
+    cursor: pointer;
+  }
+
+  .edit-button:active, .delete-button:active, .plus-button:active {
+    transform: translateY(2px);
+  }
 
 .agregado-imagem {
   max-width: 32px;
@@ -168,8 +180,8 @@ figure {
 loading-spinner {
   position: absolute;
   top: 50%;
-  left: 50%; 
-  transform: translate(-50%, -50%); 
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .is-invalid {
@@ -315,13 +327,13 @@ input[type="radio"] {
 }
 
 
-.btn:hover {
-  cursor: pointer;
-}
+  .btn:hover {
+    cursor: pointer;
+  }
 
-.btn:active {
-  transform: translateY(2px);
-}
+  .btn:active {
+    transform: translateY(2px);
+  }
 
 .btn-blue {
   background-color: #1875e7;
@@ -344,4 +356,3 @@ input[type="radio"] {
   text-align: left;
   margin-bottom: 10px;
 }
-

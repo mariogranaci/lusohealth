@@ -6,6 +6,16 @@ main {
   min-height: calc(100vh - 65px);
 }
 
+#question-btn {
+  position: absolute;
+  top: 25px;
+  right: 25px;
+  width: 32px;
+  height: auto;
+  cursor: pointer;
+  user-select: none;
+}
+
 .row {
   display: flex;
   flex-direction: row;
@@ -207,6 +217,61 @@ main {
     margin-bottom: 5px;
     font-weight: 600;
   }
+
+.overlay-container-tool {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  width: 800px;
+  height: fit-content;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  background-color: #ECEEF0;
+  padding: 20px 20px;
+  display: none;
+}
+
+  .overlay-container-tool > h2, .text-tool, .btn-tool, .text-tool {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+.text-tool {
+  font-size: 20px;
+}
+
+
+.btn-tool {
+  color: white;
+  padding: 15px 40px;
+  border: none;
+  cursor: pointer;
+  text-transform: uppercase;
+  height: fit-content;
+  width: max-content;
+  margin: 0 auto;
+  border-radius: 25px;
+  font-size: 20px;
+  transition: background-color 0.3s ease, transform 0s;
+  display: block;
+  background-color: #1875e7;
+}
+
+  .btn-tool:hover {
+    background-color: #1b69c8;
+    cursor: pointer;
+  }
+
+  .btn-tool:active {
+    transform: translateY(2px);
+  }
+
+.img-gif {
+  width: 750px;
+  height: auto;
+  border-radius: 10px;
+}
 
 #options {
 }

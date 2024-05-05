@@ -61,7 +61,7 @@
           <span>NIF:</span><p>{{ relative.nif }}</p>
         </div>
         <div>
-          <span>Género:</span><p>{{ relative.genero }}</p>
+          <span>Género:</span><p>{{ relative.genero === 'M' ? 'Masculino' : 'Feminino' }}</p>
         </div>
         <div>
           <span>Data de nascimento:</span><p>{{ relative.dataNascimento | date: 'dd/MM/yyyy' }}</p>

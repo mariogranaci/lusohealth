@@ -3,6 +3,7 @@ using LusoHealthClient.Server.Models.Professionals;
 using LusoHealthClient.Server.Models.Users;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace LusoHealthClient.Server.Controllers
@@ -92,6 +93,7 @@ namespace LusoHealthClient.Server.Controllers
                 var startDateTime = DateTime.Parse(startDate);
                 var endDateTime = DateTime.Parse(endDate);
 
+                CultureInfo culturaPT = new CultureInfo("pt-PT");
 
                 //Professionals
                 var professionalRegistrations = await _context.Professionals
@@ -121,6 +123,58 @@ namespace LusoHealthClient.Server.Controllers
                         Count = group.Count()
                     })
                     .ToListAsync();
+
+                
+
+                if (timeUnit == "Month")
+                {
+                    var professionalRegistrationsTransformed = professionalRegistrations
+                    .Select(reg => new
+                     {
+                        Key = new DateTime(1, reg.Key, 1).ToString("MMMM", culturaPT),
+                        Count = reg.Count
+                     })
+                     .ToList();
+
+                    var patientRegistrationsTransformed = patientRegistrations
+                        .Select(reg => new
+                        {
+                            Key = new DateTime(1, reg.Key, 1).ToString("MMMM", culturaPT),
+                            Count = reg.Count
+                        })
+                        .ToList();
+
+                    var registrationSummaryTransformed = new
+                    {
+                        Patients = patientRegistrationsTransformed,
+                        Professionals = professionalRegistrationsTransformed
+                    };
+                    return Ok(registrationSummaryTransformed);
+                } else if (timeUnit != "Year")
+                {
+                    var professionalRegistrationsTransformed = professionalRegistrations
+                        .Select(reg => new
+                        {
+                            Key = new DateTime(DateTime.Now.Year, DateTime.Now.Month, reg.Key).ToString("dd/MM/yyyy", culturaPT),
+                            Count = reg.Count
+                        })
+                        .ToList();
+
+                    var patientRegistrationsTransformed = patientRegistrations
+                        .Select(reg => new
+                        {
+                            Key = new DateTime(DateTime.Now.Year, DateTime.Now.Month, reg.Key).ToString("dd/MM/yyyy", culturaPT),
+                            Count = reg.Count
+                        })
+                        .ToList();
+
+                    var registrationSummaryTransformed = new
+                    {
+                        Patients = patientRegistrationsTransformed,
+                        Professionals = professionalRegistrationsTransformed
+                    };
+                    return Ok(registrationSummaryTransformed);
+                }
 
                 var registrationSummary = new
                 {

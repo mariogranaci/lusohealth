@@ -224,14 +224,18 @@ namespace LusoHealthClient.Server.Controllers
                 var isUserInAppointment = appointment.IdPatient == user.Id || appointment.IdProfesional == user.Id;
                 if (!isUserInAppointment) return BadRequest("Não tem permissão para aceder a esta consulta.");
 
-                var chat = await _context.Chat.FirstOrDefaultAsync(c => c.AppointmentId == model.Id);
-                if (chat == null) return NotFound("Não foi possível encontrar a conversa.");
+                if(appointment.Type == AppointmentType.Online)
+                {
+                    var chat = await _context.Chat.FirstOrDefaultAsync(c => c.AppointmentId == model.Id);
+                    if (chat == null) return NotFound("Não foi possível encontrar a conversa.");
+                    chat.IsActive = true;
+                    _context.Chat.Update(chat);
+                    
+                }
 
                 appointment.State = AppointmentState.InProgress;
-                chat.IsActive = true;
 
                 _context.Appointment.Update(appointment);
-                _context.Chat.Update(chat);
                 await _context.SaveChangesAsync();
 
                 var appointmentDto = new AppointmentDto
